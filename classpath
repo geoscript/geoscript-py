@@ -1,0 +1,12 @@
+cwd=`pwd`
+
+cd lib
+sh download.sh
+cd $cwd
+
+cp=''
+for x in `ls lib/target/*.jar`; do
+  cp=$cp:$cwd/$x
+done
+export CLASSPATH=$cp
+
