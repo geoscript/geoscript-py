@@ -8,9 +8,14 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.vividsolutions</groupId>
-      <artifactId>jts</artifactId>
-      <version>1.10</version>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-main</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-epsg-hsql</artifactId>
+      <version>${gt.version}</version>
     </dependency>
     <!--dependency>
       <groupId>org.geotools</groupId>
@@ -39,11 +44,6 @@
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-epsg-hsql</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
       <artifactId>gt-geojson</artifactId>
       <version>${gt.version}</version>
     </dependency>
@@ -65,14 +65,22 @@
   </dependencies>
   
   <build>
-  <plugins>
-    <plugin>
-      <artifactId>maven-dependency-plugin</artifactId>
-      <configuration>
-        <outputDirectory>${project.build.directory}</outputDirectory>
-      </configuration>
-    </plugin>
-  </plugins>
+    <plugins>
+     <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 
   <properties>

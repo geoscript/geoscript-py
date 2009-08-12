@@ -1,6 +1,8 @@
 from java.lang import Double
 from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
 from com.vividsolutions.jts.io import WKTReader
+from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
+from org.geotools.referencing import CRS
 
 _gf = GeometryFactory()
 _wktreader = WKTReader()
@@ -31,3 +33,13 @@ def Polygon(ring,holes=None):
 
 def Geometry(wkt):
   return _wktreader.read(wkt)
+
+def reproject(g, fromsrs, tosrs):
+  fromcrs = CRS.decode(fromsrs)
+  tocrs = CRS.decode(tosrs)
+  tx = CRS.findMathTransform(fromcrs,tocrs)
+  gt = GeometryTX()
+  gt.mathTransform = tx
+
+  return gt.transform(g)
+
