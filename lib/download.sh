@@ -2,6 +2,14 @@ if [ ! -e target ]; then
 	mkdir target
 fi
 base=http://repo.opengeo.org
+if [ ! -e target/batik-transcoder-1.6.jar ]; then
+	echo "Downloading batik-transcoder-1.6.jar"
+	curl -G $base/batik/batik-transcoder/1.6/batik-transcoder-1.6.jar -o target/batik-transcoder-1.6.jar
+fi
+if [ ! -e target/batik-util-1.6.jar ]; then
+	echo "Downloading batik-util-1.6.jar"
+	curl -G $base/batik/batik-util/1.6/batik-util-1.6.jar -o target/batik-util-1.6.jar
+fi
 if [ ! -e target/commons-beanutils-1.7.0.jar ]; then
 	echo "Downloading commons-beanutils-1.7.0.jar"
 	curl -G $base/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar -o target/commons-beanutils-1.7.0.jar
@@ -26,6 +34,14 @@ if [ ! -e target/gt-api-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-api-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-api/2.6-SNAPSHOT/gt-api-2.6-SNAPSHOT.jar -o target/gt-api-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-coverage-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-coverage-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-coverage/2.6-SNAPSHOT/gt-coverage-2.6-SNAPSHOT.jar -o target/gt-coverage-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-cql-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-cql-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-cql/2.6-SNAPSHOT/gt-cql-2.6-SNAPSHOT.jar -o target/gt-cql-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/gt-epsg-hsql-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-epsg-hsql-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-epsg-hsql/2.6-SNAPSHOT/gt-epsg-hsql-2.6-SNAPSHOT.jar -o target/gt-epsg-hsql-2.6-SNAPSHOT.jar
@@ -41,6 +57,10 @@ fi
 if [ ! -e target/gt-referencing-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-referencing-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-referencing/2.6-SNAPSHOT/gt-referencing-2.6-SNAPSHOT.jar -o target/gt-referencing-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-render-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-render-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-render/2.6-SNAPSHOT/gt-render-2.6-SNAPSHOT.jar -o target/gt-render-2.6-SNAPSHOT.jar
 fi
 if [ ! -e target/hsqldb-1.8.0.7.jar ]; then
 	echo "Downloading hsqldb-1.8.0.7.jar"
@@ -61,4 +81,12 @@ fi
 if [ ! -e target/vecmath-1.3.1.jar ]; then
 	echo "Downloading vecmath-1.3.1.jar"
 	curl -G $base/java3d/vecmath/1.3.1/vecmath-1.3.1.jar -o target/vecmath-1.3.1.jar
+fi
+if [ ! -e target/xercesImpl-2.7.1.jar ]; then
+	echo "Downloading xercesImpl-2.7.1.jar"
+	curl -G $base/xerces/xercesImpl/2.7.1/xercesImpl-2.7.1.jar -o target/xercesImpl-2.7.1.jar
+fi
+if [ ! -e target/xml-apis-xerces-2.7.1.jar ]; then
+	echo "Downloading xml-apis-xerces-2.7.1.jar"
+	curl -G $base/xml-apis/xml-apis-xerces/2.7.1/xml-apis-xerces-2.7.1.jar -o target/xml-apis-xerces-2.7.1.jar
 fi

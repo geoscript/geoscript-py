@@ -6,6 +6,17 @@
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
 
+  <repositories>
+   <repository>
+    <id>opengeo</id>
+    <name>OpenGeo Maven Repository</name>
+    <url>http://repo.opengeo.org/</url>
+    <snapshots>
+      <enabled>true</enabled>
+    </snapshots>
+   </repository>
+  </repositories>
+
   <dependencies>
     <dependency>
       <groupId>org.geotools</groupId>
@@ -15,6 +26,11 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-epsg-hsql</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-render</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <!--dependency>
@@ -35,11 +51,6 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-directory</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-render</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
