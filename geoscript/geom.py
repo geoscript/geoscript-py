@@ -145,3 +145,41 @@ def reproject(g, fromsrs, tosrs):
   gt.mathTransform = tx
 
   return gt.transform(g)
+
+def draw(g,size=(500,500),buf=50.0):
+  """
+  Draws the geometry onto a frame.
+  """
+  from java import awt
+  from java.awt.geom import AffineTransform
+  from javax import swing
+  from org.geotools.geometry.jts import LiteShape
+
+  e = g.getEnvelopeInternal()
+  scx = size[0] / e.getWidth()
+  scy = size[1] / e.getHeight()
+       
+  tx = -1*e.getMinX() + buf/scx
+  ty = -1*e.getMinY() + buf/scy
+       
+  at = AffineTransform()
+  at.scale(scx,scy)
+  at.translate(tx,ty)
+        
+  class Panel(swing.JPanel):
+
+    def __init__(self,shp):
+      self.shp = shp
+    
+    def paintComponent(self, g):
+      g.draw(shp)
+
+  shp = LiteShape(g,at,False)
+  panel = Panel(shp)
+  s = (int(size[0]+2*buf),int(size[1]+2*buf))
+  panel.preferredSize = s
+  frame = swing.JFrame()
+  frame.contentPane = panel
+  frame.size = s
+  frame.visible = True
+
