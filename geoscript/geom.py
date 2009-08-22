@@ -134,15 +134,25 @@ def draw(g,size=(500,500),buf=50.0):
   from org.geotools.geometry.jts import LiteShape
 
   e = g.getEnvelopeInternal()
-  scx = size[0] / e.getWidth()
-  scy = size[1] / e.getHeight()
+  scx = size[0] / e.width
+  scy = size[1] / e.height
        
-  tx = -1*e.getMinX() + buf/scx
-  ty = -1*e.getMinY() + buf/scy
+  tx = -1*e.minX
+  ty = -1*e.minY
        
   at = AffineTransform()
-  at.scale(scx,scy)
+  
+  # scale to size of canvas (inverting the y axis)
+  at.scale(scx,-1*scy)
+  
+  # translate to the origin
   at.translate(tx,ty)
+
+  # translate to account for invert
+  at.translate(0,-1*size[1]/scy)
+
+  # buffer
+  at.translate(buf/scx,-1*buf/scy)
         
   class Panel(swing.JPanel):
 
@@ -154,7 +164,7 @@ def draw(g,size=(500,500),buf=50.0):
 
   shp = LiteShape(g,at,False)
   panel = Panel(shp)
-  s = (int(size[0]+2*buf),int(size[1]+2*buf))
+  s = tuple([int(size[x]+2*buf) for x in range(2)])
   panel.preferredSize = s
   frame = swing.JFrame()
   frame.contentPane = panel
