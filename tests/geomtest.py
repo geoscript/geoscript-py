@@ -27,9 +27,3 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('Point',g.geometryType)
     self.assertEqual(1,g.x)
     self.assertEqual(2,g.y)
-
-  def testReproject(self):
-    p = geom.Point(-125,50)
-    rp = geom.reproject(p,'epsg:4326','epsg:3005') 
-    self.assertEqual(1071693,int(rp.x))
-    self.assertEqual(554289,int(rp.y))

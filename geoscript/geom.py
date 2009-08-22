@@ -19,8 +19,6 @@ Constructors also take lists of tuples.
 from java.lang import Double
 from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
 from com.vividsolutions.jts.io import WKTReader
-from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
-from org.geotools.referencing import CRS
 
 _gf = GeometryFactory()
 _wktreader = WKTReader()
@@ -125,26 +123,6 @@ def Geometry(wkt):
   'POINT (1 2)'
   """
   return _wktreader.read(wkt)
-
-def reproject(g, fromsrs, tosrs):
-  """
-  Reprojects a geometry from a source project to a target projection. 
-
-  The arguments 'fromsrs' and 'tosrs' are specified as epsg codes.
-
-  >>> p1 = Point(-125,50)
-  >>> p2 = reproject(p1,'epsg:4326','epsg:3005')
-  >>> str(p2)
-  'POINT (1071693.1296328472 554289.941892416)'
-  """
-
-  fromcrs = CRS.decode(fromsrs)
-  tocrs = CRS.decode(tosrs)
-  tx = CRS.findMathTransform(fromcrs,tocrs)
-  gt = GeometryTX()
-  gt.mathTransform = tx
-
-  return gt.transform(g)
 
 def draw(g,size=(500,500),buf=50.0):
   """

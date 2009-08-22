@@ -15,6 +15,13 @@ def transform(g, fromsrs, tosrs):
   >>> p2 = transform(p1,'epsg:4326','epsg:3005')
   >>> str(p2)
   'POINT (1071693.1296328472 554289.941892416)'
+
+  This function can also take arrays or tuples of coordinates
+
+  >>> p1 = [-125,50]
+  >>> p2 = transform(p1,'epsg:4326','epsg:3005')
+  >>> str(p2)
+  '[1071693.1296328472, 554289.941892416]'
   """
 
   fromcrs = CRS.decode(fromsrs)
@@ -22,9 +29,10 @@ def transform(g, fromsrs, tosrs):
   tx = CRS.findMathTransform(fromcrs,tocrs)
 
   if type(g) in (list,tuple):
-    transformed = [0 for x in range(len(g))]
+    import jarray
+    transformed = jarray.zeros(len(g),'d')
     tx.transform(g,0,transformed,0,1)
-    return transformed
+    return [transformed[x] for x in range(len(g))]
   else:
     #geometry
     gt = GeometryTX()
