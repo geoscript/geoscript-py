@@ -7,7 +7,8 @@ import unittest
 import doctest
 import geomtest
 import projtest
-from geoscript import geom, proj
+import featuretest
+from geoscript import geom, proj, feature
 
 loader = unittest.TestLoader()
 runner = unittest.TextTestRunner(verbosity=2)
@@ -16,3 +17,5 @@ runner.run(doctest.DocTestSuite(geom))
 runner.run(loader.loadTestsFromTestCase(geomtest.GeomTest))
 runner.run(doctest.DocTestSuite(proj))
 runner.run(loader.loadTestsFromTestCase(projtest.ProjTest))
+runner.run(doctest.DocTestSuite(feature))
+runner.run(loader.loadTestsFromTestCase(featuretest.FeatureTest))
