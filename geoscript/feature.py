@@ -1,5 +1,5 @@
 """
-feature module -- Feature model classes
+feature module -- Provides classes for simple feature access.
 """
 
 from com.vividsolutions.jts.geom import Geometry
