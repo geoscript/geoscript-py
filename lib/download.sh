@@ -62,6 +62,14 @@ if [ ! -e target/commons-beanutils-1.7.0.jar ]; then
 	echo "Downloading commons-beanutils-1.7.0.jar"
 	curl -G $base/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar -o target/commons-beanutils-1.7.0.jar
 fi
+if [ ! -e target/commons-collections-3.1.jar ]; then
+	echo "Downloading commons-collections-3.1.jar"
+	curl -G $base/commons-collections/commons-collections/3.1/commons-collections-3.1.jar -o target/commons-collections-3.1.jar
+fi
+if [ ! -e target/commons-dbcp-1.2.2.jar ]; then
+	echo "Downloading commons-dbcp-1.2.2.jar"
+	curl -G $base/commons-dbcp/commons-dbcp/1.2.2/commons-dbcp-1.2.2.jar -o target/commons-dbcp-1.2.2.jar
+fi
 if [ ! -e target/commons-io-1.1.jar ]; then
 	echo "Downloading commons-io-1.1.jar"
 	curl -G $base/commons-io/commons-io/1.1/commons-io-1.1.jar -o target/commons-io-1.1.jar
@@ -98,9 +106,17 @@ if [ ! -e target/gt-cql-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-cql-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-cql/2.6-SNAPSHOT/gt-cql-2.6-SNAPSHOT.jar -o target/gt-cql-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-data-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-data-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-data/2.6-SNAPSHOT/gt-data-2.6-SNAPSHOT.jar -o target/gt-data-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/gt-epsg-hsql-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-epsg-hsql-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-epsg-hsql/2.6-SNAPSHOT/gt-epsg-hsql-2.6-SNAPSHOT.jar -o target/gt-epsg-hsql-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-jdbc-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-jdbc-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-jdbc/2.6-SNAPSHOT/gt-jdbc-2.6-SNAPSHOT.jar -o target/gt-jdbc-2.6-SNAPSHOT.jar
 fi
 if [ ! -e target/gt-main-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-main-2.6-SNAPSHOT.jar"
@@ -109,6 +125,10 @@ fi
 if [ ! -e target/gt-metadata-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-metadata-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-metadata/2.6-SNAPSHOT/gt-metadata-2.6-SNAPSHOT.jar -o target/gt-metadata-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-postgis-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-postgis-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-postgis/2.6-SNAPSHOT/gt-postgis-2.6-SNAPSHOT.jar -o target/gt-postgis-2.6-SNAPSHOT.jar
 fi
 if [ ! -e target/gt-referencing-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-referencing-2.6-SNAPSHOT.jar"
@@ -137,6 +157,18 @@ fi
 if [ ! -e target/jts-1.10.jar ]; then
 	echo "Downloading jts-1.10.jar"
 	curl -G $base/com/vividsolutions/jts/1.10/jts-1.10.jar -o target/jts-1.10.jar
+fi
+if [ ! -e target/log4j-1.2.12.jar ]; then
+	echo "Downloading log4j-1.2.12.jar"
+	curl -G $base/log4j/log4j/1.2.12/log4j-1.2.12.jar -o target/log4j-1.2.12.jar
+fi
+if [ ! -e target/postgis-driver-1.0.jar ]; then
+	echo "Downloading postgis-driver-1.0.jar"
+	curl -G $base/org/postgis/postgis-driver/1.0/postgis-driver-1.0.jar -o target/postgis-driver-1.0.jar
+fi
+if [ ! -e target/postgresql-8.4-701.jdbc3.jar ]; then
+	echo "Downloading postgresql-8.4-701.jdbc3.jar"
+	curl -G $base/postgresql/postgresql/8.4-701.jdbc3/postgresql-8.4-701.jdbc3.jar -o target/postgresql-8.4-701.jdbc3.jar
 fi
 if [ ! -e target/vecmath-1.3.2.jar ]; then
 	echo "Downloading vecmath-1.3.2.jar"
