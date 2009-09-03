@@ -8,7 +8,8 @@ import doctest
 import geomtest
 import projtest
 import featuretest
-from geoscript import geom, proj, feature
+from layer import memorytest
+from geoscript import geom, proj, feature, layer 
 
 loader = unittest.TestLoader()
 runner = unittest.TextTestRunner(verbosity=2)
@@ -19,3 +20,6 @@ runner.run(doctest.DocTestSuite(proj))
 runner.run(loader.loadTestsFromTestCase(projtest.ProjTest))
 runner.run(doctest.DocTestSuite(feature))
 runner.run(loader.loadTestsFromTestCase(featuretest.FeatureTest))
+runner.run(doctest.DocTestSuite(layer.layer))
+runner.run(loader.loadTestsFromTestCase(memorytest.MemoryLayerTest))
+runner.run(doctest.DocTestSuite(layer.memory))
