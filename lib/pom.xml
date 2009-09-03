@@ -33,14 +33,14 @@
       <artifactId>gt-render</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-cql</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-shapefile</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <!--dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-cql</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
