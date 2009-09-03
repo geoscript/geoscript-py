@@ -2,7 +2,18 @@
 proj module -- Provides coordinate reference system and reprojection support.
 """
 from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
-from org.geotools.referencing import CRS
+from org.geotools.referencing import CRS as XCRS
+from org.opengis.referencing.crs import CoordinateReferenceSystem
+
+"""
+crs utility object 
+"""
+crs = XCRS
+
+"""
+shorthand for crs class
+"""
+CRS = CoordinateReferenceSystem
 
 def transform(g, fromsrs, tosrs):
   """
@@ -11,7 +22,7 @@ def transform(g, fromsrs, tosrs):
   The arguments 'fromsrs' and 'tosrs' are specified as epsg codes.
 
   >>> import geom 
-  >>> p1 = geom.Point(-125,50)
+  >>> p1 = geom.point(-125,50)
   >>> p2 = transform(p1,'epsg:4326','epsg:3005')
   >>> str(p2)
   'POINT (1071693.1296328472 554289.941892416)'
@@ -24,9 +35,9 @@ def transform(g, fromsrs, tosrs):
   '[1071693.1296328472, 554289.941892416]'
   """
 
-  fromcrs = CRS.decode(fromsrs)
-  tocrs = CRS.decode(tosrs)
-  tx = CRS.findMathTransform(fromcrs,tocrs)
+  fromcrs = crs.decode(fromsrs)
+  tocrs = crs.decode(tosrs)
+  tx = crs.findMathTransform(fromcrs,tocrs)
 
   if type(g) in (list,tuple):
     import jarray
