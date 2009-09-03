@@ -8,7 +8,7 @@ import doctest
 import geomtest
 import projtest
 import featuretest
-from layer import memorytest
+from layer import memorytest, shapefiletest
 from geoscript import geom, proj, feature, layer 
 
 loader = unittest.TestLoader()
@@ -23,3 +23,4 @@ runner.run(loader.loadTestsFromTestCase(featuretest.FeatureTest))
 runner.run(doctest.DocTestSuite(layer.layer))
 runner.run(loader.loadTestsFromTestCase(memorytest.MemoryLayerTest))
 runner.run(doctest.DocTestSuite(layer.memory))
+runner.run(loader.loadTestsFromTestCase(shapefiletest.ShapefileLayerTest))
