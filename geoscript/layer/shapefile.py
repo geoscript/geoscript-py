@@ -1,5 +1,5 @@
 """
-layer/shapefile module -- Shapefile implementation of Layer.
+layer.shapefile module -- Shapefile implementation of Layer.
 
 A shapefile layer is created from a path to a shapefile.
 
