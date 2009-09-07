@@ -5,4 +5,4 @@ from geoscript.layer import ShapefileLayer
 class ShapefileLayerTest(LayerTest):
 
   def setUp(self):
-    self.l = ShapefileLayer('states.shp')
+    self.l = ShapefileLayer('data/states.shp')

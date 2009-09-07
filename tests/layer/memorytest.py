@@ -8,5 +8,5 @@ class MemoryLayerTest(LayerTest):
 
   def setUp(self):
     mem = MemoryWorkspace()
-    self.l = mem.addLayer(ShapefileLayer('states.shp'))
+    self.l = mem.addLayer(ShapefileLayer('data/states.shp'))
 
