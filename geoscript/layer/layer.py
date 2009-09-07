@@ -1,5 +1,5 @@
 """
-layer module -- Provides dataset access and manipulation.
+layer module -- Provides data access and manipulation.
 """
 import sys
 
@@ -14,20 +14,25 @@ from org.opengis.filter import Filter
 
 class Layer:
 
-  def __init__(self,fs=None):
-    if self.__class__ == Layer:
+  def __init__(self,fs=None, name='layer'):
+    if self.__class__ == Layer and not fs:
       import memory
-      mem = memory.MemoryLayer('layer',[('geom',geom.Geometry)])
+      mem = memory.MemoryLayer(name,[('geom',geom.Geometry)])
       self.fs = mem.fs
-      self.name = mem.name
       self.ftype = mem.ftype
     else:
       if not fs:
         raise Exception('Layer requires a feature source.')
 
       self.fs = fs
-      self.name = fs.name.localPart
       self.ftype = FeatureType(ft=fs.schema) 
+
+  def name(self):
+    """
+    The name of the layer.
+    """
+
+    return self.fs.name.localPart
 
   def count(self):
     """
@@ -59,7 +64,7 @@ class Layer:
 
     return self.fs.bounds
 
-  def features(self, filter=None):
+  def features(self, filter=None, transform=None):
     """
     Iterates over features in the layer.
 
@@ -70,11 +75,19 @@ class Layer:
     >>> [ str(f.geom()) for f in l.features() ]
     ['POINT (1 2)', 'POINT (3 4)']
 
-    This method takes an option filter, specified as CQL:
+    This method takes an optional filter argument, specified as CQL:
 
     >>> [ str(f.geom()) for f in l.features('INTERSECT(geom,POINT(3 4))') ]
     ['POINT (3 4)']
 
+    This method takes an optional transform argument, which is a function that
+    takes a Feature instance. Each feature being iterated over is passed to the
+    transform function before it is returned.
+
+    >>> def tx (f):
+    ...    f.geom( geom.point(2*f.geom().x, 2*f.geom().y) )
+    >>> [str(f.geom()) for f in l.features(transform=tx)]
+    ['POINT (2 4)', 'POINT (6 8)']
     """
 
     f = None 
@@ -83,10 +96,16 @@ class Layer:
     else:
        f = Filter.INCLUDE
 
-    q = DefaultQuery(self.name,f)
+    q = DefaultQuery(self.name(),f)
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
-      yield Feature(ftype=self.ftype, f=r.next())
+      feature = Feature(ftype=self.ftype, f=r.next())
+      if transform:
+         result  = transform(feature)
+         if result and isinstance(result, Feature):
+           feature = result
+
+      yield feature
 
     r.close()
 
