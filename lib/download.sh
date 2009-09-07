@@ -118,6 +118,14 @@ if [ ! -e target/gt-jdbc-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-jdbc-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-jdbc/2.6-SNAPSHOT/gt-jdbc-2.6-SNAPSHOT.jar -o target/gt-jdbc-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-jdbc-h2-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-jdbc-h2-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/jdbc/gt-jdbc-h2/2.6-SNAPSHOT/gt-jdbc-h2-2.6-SNAPSHOT.jar -o target/gt-jdbc-h2-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-jdbc-postgis-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-jdbc-postgis-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/jdbc/gt-jdbc-postgis/2.6-SNAPSHOT/gt-jdbc-postgis-2.6-SNAPSHOT.jar -o target/gt-jdbc-postgis-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/gt-main-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-main-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-main/2.6-SNAPSHOT/gt-main-2.6-SNAPSHOT.jar -o target/gt-main-2.6-SNAPSHOT.jar
@@ -125,10 +133,6 @@ fi
 if [ ! -e target/gt-metadata-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-metadata-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-metadata/2.6-SNAPSHOT/gt-metadata-2.6-SNAPSHOT.jar -o target/gt-metadata-2.6-SNAPSHOT.jar
-fi
-if [ ! -e target/gt-postgis-2.6-SNAPSHOT.jar ]; then
-	echo "Downloading gt-postgis-2.6-SNAPSHOT.jar"
-	curl -G $base/org/geotools/gt-postgis/2.6-SNAPSHOT/gt-postgis-2.6-SNAPSHOT.jar -o target/gt-postgis-2.6-SNAPSHOT.jar
 fi
 if [ ! -e target/gt-referencing-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-referencing-2.6-SNAPSHOT.jar"
@@ -142,6 +146,10 @@ if [ ! -e target/gt-shapefile-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-shapefile-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-shapefile/2.6-SNAPSHOT/gt-shapefile-2.6-SNAPSHOT.jar -o target/gt-shapefile-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/h2-1.1.104.jar ]; then
+	echo "Downloading h2-1.1.104.jar"
+	curl -G $base/org/h2database/h2/1.1.104/h2-1.1.104.jar -o target/h2-1.1.104.jar
+fi
 if [ ! -e target/hsqldb-1.8.0.7.jar ]; then
 	echo "Downloading hsqldb-1.8.0.7.jar"
 	curl -G $base/hsqldb/hsqldb/1.8.0.7/hsqldb-1.8.0.7.jar -o target/hsqldb-1.8.0.7.jar
@@ -152,19 +160,11 @@ if [ ! -e target/jdom-1.0.jar ]; then
 fi
 if [ ! -e target/jsr-275-1.0-beta-2.jar ]; then
 	echo "Downloading jsr-275-1.0-beta-2.jar"
-	curl -G $base/net/java/dev/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2.jar -o target/jsr-275-1.0-beta-2.jar
+	curl -G $base/net/java/dev/jsr-275/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2.jar -o target/jsr-275-1.0-beta-2.jar
 fi
 if [ ! -e target/jts-1.10.jar ]; then
 	echo "Downloading jts-1.10.jar"
 	curl -G $base/com/vividsolutions/jts/1.10/jts-1.10.jar -o target/jts-1.10.jar
-fi
-if [ ! -e target/log4j-1.2.12.jar ]; then
-	echo "Downloading log4j-1.2.12.jar"
-	curl -G $base/log4j/log4j/1.2.12/log4j-1.2.12.jar -o target/log4j-1.2.12.jar
-fi
-if [ ! -e target/postgis-driver-1.0.jar ]; then
-	echo "Downloading postgis-driver-1.0.jar"
-	curl -G $base/org/postgis/postgis-driver/1.0/postgis-driver-1.0.jar -o target/postgis-driver-1.0.jar
 fi
 if [ ! -e target/postgresql-8.4-701.jdbc3.jar ]; then
 	echo "Downloading postgresql-8.4-701.jdbc3.jar"
