@@ -8,8 +8,8 @@ import doctest
 import geomtest
 import projtest
 import featuretest
-from layer import memorytest, shapefiletest, postgistest
-from geoscript import geom, proj, feature, layer 
+from layer import memorytest, shapefiletest, postgistest, h2test 
+from geoscript import geom, proj, feature, layer
 
 loader = unittest.TestLoader()
 runner = unittest.TextTestRunner(verbosity=2)
@@ -25,3 +25,4 @@ runner.run(loader.loadTestsFromTestCase(memorytest.MemoryLayerTest))
 runner.run(doctest.DocTestSuite(layer.memory))
 runner.run(loader.loadTestsFromTestCase(shapefiletest.ShapefileLayerTest))
 runner.run(loader.loadTestsFromTestCase(postgistest.PostgisLayerTest))
+runner.run(loader.loadTestsFromTestCase(h2test.H2LayerTest))
