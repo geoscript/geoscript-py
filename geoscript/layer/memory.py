@@ -17,7 +17,7 @@ from org.geotools.data.memory import MemoryDataStore
 
 class MemoryLayer(Layer):
 
-  def __init__(self,name,atts):
+  def __init__(self,name,atts=[('geom', geom.Geometry)]):
     ftype = feature.FeatureType(name,atts) 
     ds = MemoryDataStore(ftype.ft)
     Layer.__init__(self,ds.getFeatureSource(name))
