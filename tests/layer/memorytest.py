@@ -1,22 +1,12 @@
 import unittest
-from geoscript import geom, feature
-from geoscript.layer import MemoryLayer
+from .layertest import LayerTest
+from geoscript import geom
+from geoscript.workspace import MemoryWorkspace
+from geoscript.layer import MemoryLayer, ShapefileLayer
 
-class MemoryLayerTest(unittest.TestCase):
+class MemoryLayerTest(LayerTest):
 
   def setUp(self):
-    self.mem = MemoryLayer('widgets',[('geom',geom.Point),('name',str)])
-
-  def testAdd(self):
-      self.assertEqual(0, self.mem.count())
-
-      f = feature.Feature(atts={'name':'foo', 'geom': geom.point(1,2)})
-      self.mem.add(f)
-      self.assertEqual(1,self.mem.count())
-
-      f = [x for x in self.mem.features()][0]
-
-      self.assert_(f)
-      self.assertEqual((1,2),(f.geom().x,f.geom().y))
-      self.assertEqual('foo',f.get('name'))
+    mem = MemoryWorkspace()
+    self.l = mem.addLayer(ShapefileLayer('states.shp'))
 
