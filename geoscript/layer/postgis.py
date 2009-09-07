@@ -1,5 +1,5 @@
 """
-layer/postgis module -- Postgis implementation of Layer.
+layer.postgis module -- Postgis implementation of Layer.
 
 A postgis layer is created by specifying a table name and database name:
 
@@ -15,7 +15,7 @@ can be specified with named parameters:
 
 import os
 from geoscript.layer import Layer
-from org.geotools.data.postgis import PostgisDataStoreFactory
+from org.geotools.data.postgis import PostgisNGDataStoreFactory
 
 class PostgisLayer(Layer):
 
@@ -24,7 +24,7 @@ class PostgisLayer(Layer):
 
     params = {'host': host, 'port': port, 'schema': schema, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'postgis'}
-    pgf = PostgisDataStoreFactory()
+    pgf = PostgisNGDataStoreFactory()
     pg = pgf.createDataStore(params)
     
     fs = pg.getFeatureSource(table)
