@@ -1,0 +1,3 @@
+from memorytest import MemoryWorkspaceTest
+from postgistest import PostgisWorkspaceTest
+from h2test import H2WorkspaceTest
