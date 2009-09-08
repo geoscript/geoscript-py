@@ -1,5 +1,5 @@
 import unittest
-from .layertest import LayerTest
+from tests.layer.layertest import LayerTest
 from geoscript.layer import ShapefileLayer
 
 class ShapefileLayerTest(LayerTest):
