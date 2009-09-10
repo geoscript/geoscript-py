@@ -34,7 +34,7 @@ class Layer:
 
     return self.fs.name.localPart
 
-  def count(self):
+  def count(self, filter=None):
     """
     The number of features in the layer.
 
@@ -45,11 +45,27 @@ class Layer:
     >>> l.add([geom.point(1,2)])
     >>> l.count()
     1
+    
+    This method takes an option filter paramter specified as CQL:
+
+    >>> l.add([geom.point(3,4)])
+    >>> l.count() 
+    2
+    >>> l.count('INTERSECT(geom,POINT(3 4))')
+    1
     """
 
-    return self.fs.getCount(Query.ALL)
+    f = self._filter(filter)
+    count = self.fs.getCount(DefaultQuery(self.name(), f))
+    if count == -1:
+      count = 0
+      # calculate manually 
+      for f in self.features(filter):
+        count += 1
 
-  def bounds(self):
+    return count
+
+  def bounds(self, filter=None):
     """
     The bounds of the layer.
 
@@ -60,9 +76,14 @@ class Layer:
 
     >>> l.bounds()
     ReferencedEnvelope[1.0 : 3.0, 2.0 : 4.0]
+
+    This method takes an optional filter parameter specified as CQL:
+
+    >>> l.bounds('INTERSECT(geom,POINT(3 4))')
+    ReferencedEnvelope[3.0 : 3.0, 4.0 : 4.0]
     """
 
-    return self.fs.bounds
+    return self.fs.getBounds(DefaultQuery(self.name(), self._filter(filter)))
 
   def features(self, filter=None, transform=None):
     """
@@ -90,12 +111,7 @@ class Layer:
     ['POINT (2 4)', 'POINT (6 8)']
     """
 
-    f = None 
-    if filter:
-       f = CQL.toFilter(filter)
-    else:
-       f = Filter.INCLUDE
-
+    f = self._filter(filter)
     q = DefaultQuery(self.name(),f)
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
@@ -108,6 +124,24 @@ class Layer:
       yield feature
 
     r.close()
+
+  def delete(self, filter):
+    """
+    Deletes features from the layer which match the specified filter.
+
+    >>> l = Layer()
+    >>> from geoscript import geom
+    >>> l.add([geom.point(1,2)])
+    >>> l.add([geom.point(3,4)])
+    >>> l.count()
+    2
+    >>> l.delete('INTERSECT(geom, POINT(3 4))')
+    >>> l.count()
+    1
+    """
+
+    f = self._filter(filter,Filter.EXCLUDE)
+    self.fs.removeFeatures(f)
 
   def add(self, o):
     """
@@ -160,3 +194,6 @@ class Layer:
       features = self.fs.features
       w = GeoJSONWriter() 
       w.write(features,out)
+
+  def _filter(self, filter, default=Filter.INCLUDE):
+     return CQL.toFilter(filter) if filter else default
