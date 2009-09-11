@@ -51,3 +51,14 @@ def transform(g, fromsrs, tosrs):
 
     return gt.transform(g)
 
+def srs(cs):
+  """
+  Looks up the epsg code of a coordinate reference system
+
+  >>> cs = crs.decode('EPSG:4326')
+  >>> srs(cs)
+  'EPSG:4326'
+  """
+
+  id = crs.lookupIdentifier(cs, True)
+  return str(id) if id else None
