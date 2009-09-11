@@ -17,3 +17,16 @@ def toURL(o):
   elif isinstance(o,str):
     return io.File(o).toURL()
 
+def toFile(o):
+  """
+  Transforms an object to a File if possible. This method can take a file, 
+  string, uri, or url object.
+  """
+  if isinstance(o, io.File):
+    return o
+  elif isinstance(o, net.URI):
+    return toFile(o.toURL())
+  elif isinstance(o, net.URL):
+    return toFile(o.getFile())
+  elif isinstance(o, str):
+    return io.File(o)
