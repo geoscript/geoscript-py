@@ -45,7 +45,7 @@ class Workspace:
     'None'
     >>> x = ws.newLayer('foo')
     >>> l = ws.layer('foo') 
-    >>> str(l.name())
+    >>> str(l.name)
     'foo'
 
     This method returns None if no such layer is defined.
@@ -89,10 +89,15 @@ class Workspace:
      ['foo']
      """
 
-     name = name if name else layer.name()
+     name = name if name else layer.name
      l = self.layer(name)
      if not l:
-       atts = [(att,typ) for att, typ in layer.ftype.atts()]
+       if layer.crs:
+         atts = []
+         for att,typ in layer.ftype.atts():
+           atts.append((att,typ,layer.crs) if issubclass(typ, geom.Geometry) else (att,typ))
+       else:
+         atts = [(att,typ) for att, typ in layer.ftype.atts()]
        l = self.newLayer(name, atts)
      
      for f in layer.features():
