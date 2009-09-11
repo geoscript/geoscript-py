@@ -18,3 +18,10 @@ class H2Workspace(Workspace):
     h2 = h2f.createDataStore(params)
 
     Workspace.__init__(self, h2)
+
+  def addLayer(self, layer, name=None):
+    l = Workspace.addLayer(self, layer, name)
+    if not l.crs:
+      l.crs = layer.crs
+
+    return l
