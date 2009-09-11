@@ -6,4 +6,4 @@ class H2LayerTest(LayerTest):
 
   def setUp(self):
     self.l = H2Layer('states', 'data/states')
-
+    self.l.crs = 'epsg:4326'
