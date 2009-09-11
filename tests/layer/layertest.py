@@ -1,10 +1,15 @@
 import unittest
-from geoscript import geom, feature
+from geoscript import geom, proj, feature
 
 class LayerTest(unittest.TestCase):
 
   def testCount(self):
     self.assertEqual(49, self.l.count())
+
+  def testCRS(self):
+    cs = self.l.crs
+    self.assert_(cs)
+    self.assertEqual('EPSG:4326', proj.srs(cs))
 
   def testBounds(self):
     b = self.l.bounds()
