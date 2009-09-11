@@ -5,14 +5,14 @@ import sys
 
 from java import io
 from java import net
-from geoscript import geom
+from geoscript import geom, proj
 from geoscript.feature import Feature, FeatureType
 from org.geotools.data import DefaultQuery, Query, Transaction
 from org.geotools.feature import FeatureCollections
 from org.geotools.filter.text.cql2 import CQL
 from org.opengis.filter import Filter
 
-class Layer:
+class Layer(object):
 
   def __init__(self,fs=None, name='layer'):
     if self.__class__ == Layer and not fs:
@@ -27,12 +27,33 @@ class Layer:
       self.fs = fs
       self.ftype = FeatureType(ft=fs.schema) 
 
-  def name(self):
+    # we keep a crs local to allow the native crs to be overriden, or to 
+    # provide a crs for layers that don't have one specified
+    self._crs = None
+
+  def getname(self):
     """
     The name of the layer.
     """
 
     return self.fs.name.localPart
+
+  name = property(getname)
+
+  def getcrs(self):
+    """
+    The coordinate reference system of the layer.
+    """
+
+    return self._crs if self._crs else self.fs.schema.coordinateReferenceSystem
+
+  def setcrs(self, value):
+    if isinstance(value, str):      
+      self._crs = proj.crs.decode(value)
+    else:
+      self._crs = value
+
+  crs = property(getcrs, setcrs)
 
   def count(self, filter=None):
     """
@@ -56,7 +77,7 @@ class Layer:
     """
 
     f = self._filter(filter)
-    count = self.fs.getCount(DefaultQuery(self.name(), f))
+    count = self.fs.getCount(DefaultQuery(self.name, f))
     if count == -1:
       count = 0
       # calculate manually 
@@ -83,7 +104,7 @@ class Layer:
     ReferencedEnvelope[3.0 : 3.0, 4.0 : 4.0]
     """
 
-    return self.fs.getBounds(DefaultQuery(self.name(), self._filter(filter)))
+    return self.fs.getBounds(DefaultQuery(self.name, self._filter(filter)))
 
   def features(self, filter=None, transform=None):
     """
@@ -112,7 +133,7 @@ class Layer:
     """
 
     f = self._filter(filter)
-    q = DefaultQuery(self.name(),f)
+    q = DefaultQuery(self.name,f)
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
       feature = Feature(ftype=self.ftype, f=r.next())
