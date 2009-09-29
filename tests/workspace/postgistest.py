@@ -5,4 +5,4 @@ from geoscript.workspace import PostgisWorkspace
 class PostgisWorkspaceTest(WorkspaceTest):
 
   def setUp(self):
-    self.ws = PostgisWorkspace('skunk')
+    self.ws = PostgisWorkspace('geoscript')
