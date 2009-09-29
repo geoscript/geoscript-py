@@ -15,7 +15,17 @@ shorthand for crs class
 """
 CRS = CoordinateReferenceSystem
 
-def transform(g, fromsrs, tosrs):
+def _toCRS(o):
+  """
+  Transforms an object to a crs if possible. This method can take a crs object (no action required), or a string.
+  """
+
+  if isinstance(o,CRS):   
+     return o
+  elif isinstance(o,str):
+     return crs.decode(o)
+
+def transform(g, src, dst):
   """
   Reprojects a geometry from a source project to a target projection. 
 
@@ -35,8 +45,8 @@ def transform(g, fromsrs, tosrs):
   '[1071693.1296328472, 554289.941892416]'
   """
 
-  fromcrs = crs.decode(fromsrs)
-  tocrs = crs.decode(tosrs)
+  fromcrs = _toCRS(src)
+  tocrs = _toCRS(dst)
   tx = crs.findMathTransform(fromcrs,tocrs)
 
   if type(g) in (list,tuple):
