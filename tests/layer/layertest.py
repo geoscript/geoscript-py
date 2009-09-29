@@ -31,3 +31,10 @@ class LayerTest(unittest.TestCase):
      features = [f for f in self.l.features("STATE_ABBR EQ 'TX'")]
      self.assertEqual(1,len(features))
      self.assertEqual('Texas', features[0].get('STATE_NAME'))
+
+  def testReproject(self):
+     rgeoms = [proj.transform(f.geom(),self.l.crs,'epsg:3005') for f in self.l.features()]
+     i = 0
+     for f in self.l.reproject('epsg:3005'):
+        self.assertEqual(str(rgeoms[i].coordinate), str(f.geom().coordinate))
+        i += 1

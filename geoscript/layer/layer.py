@@ -187,6 +187,23 @@ class Layer(object):
     fc.add(f.f)
     self.fs.addFeatures(fc)
 
+  def reproject(self, srs, name=None):
+    crs = proj.crs.decode(srs)
+    natts = [(att,typ,crs) if isinstance(typ,geom.Geometry) else (att,typ) for att,typ in self.ftype.atts()]
+    nftype = FeatureType(name if name else self.name, natts)    
+
+    q = DefaultQuery(self.name, Filter.INCLUDE)
+    q.coordinateSystemReproject = crs 
+
+    fc = self.fs.getFeatures(q)
+    i = fc.features()
+
+    while i.hasNext():
+      feature = Feature(ftype=nftype, f=i.next())
+      yield feature
+    
+    fc.close(i)
+
   def toGML(self,out=sys.stdout):
     try:
       from net.opengis.wfs import WfsFactory
