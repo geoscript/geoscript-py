@@ -4,7 +4,7 @@ from geoscript import geom
 from geoscript.workspace import MemoryWorkspace
 from geoscript.layer import MemoryLayer, ShapefileLayer
 
-class MemoryLayerTest(LayerTest):
+class MemoryLayer_Test(LayerTest):
 
   def setUp(self):
     mem = MemoryWorkspace()

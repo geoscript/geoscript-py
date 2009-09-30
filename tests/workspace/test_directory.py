@@ -2,7 +2,7 @@ import unittest
 from tests.workspace.workspacetest import WorkspaceTest
 from geoscript.workspace import DirectoryWorkspace
 
-class DirectoryWorkspaceTest(WorkspaceTest):
+class DirectoryWorkspace_Test(WorkspaceTest):
 
   def setUp(self):
     self.ws = DirectoryWorkspace('data')
