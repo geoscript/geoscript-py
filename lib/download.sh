@@ -110,6 +110,10 @@ if [ ! -e target/gt-data-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-data-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-data/2.6-SNAPSHOT/gt-data-2.6-SNAPSHOT.jar -o target/gt-data-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-directory-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-directory-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-directory/2.6-SNAPSHOT/gt-directory-2.6-SNAPSHOT.jar -o target/gt-directory-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/gt-epsg-hsql-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-epsg-hsql-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-epsg-hsql/2.6-SNAPSHOT/gt-epsg-hsql-2.6-SNAPSHOT.jar -o target/gt-epsg-hsql-2.6-SNAPSHOT.jar
