@@ -53,6 +53,16 @@
       <artifactId>gt-directory</artifactId>
       <version>${gt.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.geotools.xsd</groupId>
+      <artifactId>gt-xsd-wfs</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-swing</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
     <!--dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-cql</artifactId>
@@ -64,18 +74,8 @@
       <version>${gt.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.geotools.xsd</groupId>
-      <artifactId>gt-xsd-wfs</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-geotiff</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-swing</artifactId>
       <version>${gt.version}</version>
     </dependency-->
   </dependencies>

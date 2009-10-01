@@ -2,6 +2,10 @@ if [ ! -e target ]; then
 	mkdir target
 fi
 base=http://repo.opengeo.org
+if [ ! -e target/ant-optional-1.5.1.jar ]; then
+	echo "Downloading ant-optional-1.5.1.jar"
+	curl -G $base/ant/ant-optional/1.5.1/ant-optional-1.5.1.jar -o target/ant-optional-1.5.1.jar
+fi
 if [ ! -e target/batik-anim-1.7.jar ]; then
 	echo "Downloading batik-anim-1.7.jar"
 	curl -G $base/org/apache/xmlgraphics/batik-anim/1.7/batik-anim-1.7.jar -o target/batik-anim-1.7.jar
@@ -58,6 +62,10 @@ if [ ! -e target/batik-xml-1.7.jar ]; then
 	echo "Downloading batik-xml-1.7.jar"
 	curl -G $base/org/apache/xmlgraphics/batik-xml/1.7/batik-xml-1.7.jar -o target/batik-xml-1.7.jar
 fi
+if [ ! -e target/common-2.2.1.jar ]; then
+	echo "Downloading common-2.2.1.jar"
+	curl -G $base/org/eclipse/emf/common/2.2.1/common-2.2.1.jar -o target/common-2.2.1.jar
+fi
 if [ ! -e target/commons-beanutils-1.7.0.jar ]; then
 	echo "Downloading commons-beanutils-1.7.0.jar"
 	curl -G $base/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar -o target/commons-beanutils-1.7.0.jar
@@ -74,6 +82,14 @@ if [ ! -e target/commons-io-1.1.jar ]; then
 	echo "Downloading commons-io-1.1.jar"
 	curl -G $base/commons-io/commons-io/1.1/commons-io-1.1.jar -o target/commons-io-1.1.jar
 fi
+if [ ! -e target/commons-jxpath-1.2.jar ]; then
+	echo "Downloading commons-jxpath-1.2.jar"
+	curl -G $base/commons-jxpath/commons-jxpath/1.2/commons-jxpath-1.2.jar -o target/commons-jxpath-1.2.jar
+fi
+if [ ! -e target/commons-lang-2.3.jar ]; then
+	echo "Downloading commons-lang-2.3.jar"
+	curl -G $base/commons-lang/commons-lang/2.3/commons-lang-2.3.jar -o target/commons-lang-2.3.jar
+fi
 if [ ! -e target/commons-logging-1.0.3.jar ]; then
 	echo "Downloading commons-logging-1.0.3.jar"
 	curl -G $base/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar -o target/commons-logging-1.0.3.jar
@@ -81,6 +97,10 @@ fi
 if [ ! -e target/commons-pool-1.3.jar ]; then
 	echo "Downloading commons-pool-1.3.jar"
 	curl -G $base/commons-pool/commons-pool/1.3/commons-pool-1.3.jar -o target/commons-pool-1.3.jar
+fi
+if [ ! -e target/ecore-2.2.2.jar ]; then
+	echo "Downloading ecore-2.2.2.jar"
+	curl -G $base/org/eclipse/emf/ecore/2.2.2/ecore-2.2.2.jar -o target/ecore-2.2.2.jar
 fi
 if [ ! -e target/fop-0.94.jar ]; then
 	echo "Downloading fop-0.94.jar"
@@ -118,6 +138,10 @@ if [ ! -e target/gt-epsg-hsql-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-epsg-hsql-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-epsg-hsql/2.6-SNAPSHOT/gt-epsg-hsql-2.6-SNAPSHOT.jar -o target/gt-epsg-hsql-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-graph-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-graph-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-graph/2.6-SNAPSHOT/gt-graph-2.6-SNAPSHOT.jar -o target/gt-graph-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/gt-jdbc-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-jdbc-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-jdbc/2.6-SNAPSHOT/gt-jdbc-2.6-SNAPSHOT.jar -o target/gt-jdbc-2.6-SNAPSHOT.jar
@@ -150,6 +174,42 @@ if [ ! -e target/gt-shapefile-2.6-SNAPSHOT.jar ]; then
 	echo "Downloading gt-shapefile-2.6-SNAPSHOT.jar"
 	curl -G $base/org/geotools/gt-shapefile/2.6-SNAPSHOT/gt-shapefile-2.6-SNAPSHOT.jar -o target/gt-shapefile-2.6-SNAPSHOT.jar
 fi
+if [ ! -e target/gt-swing-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-swing-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-swing/2.6-SNAPSHOT/gt-swing-2.6-SNAPSHOT.jar -o target/gt-swing-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-wms-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-wms-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-wms/2.6-SNAPSHOT/gt-wms-2.6-SNAPSHOT.jar -o target/gt-wms-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xml-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xml-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/gt-xml/2.6-SNAPSHOT/gt-xml-2.6-SNAPSHOT.jar -o target/gt-xml-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-core-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-core-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-core/2.6-SNAPSHOT/gt-xsd-core-2.6-SNAPSHOT.jar -o target/gt-xsd-core-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-filter-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-filter-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-filter/2.6-SNAPSHOT/gt-xsd-filter-2.6-SNAPSHOT.jar -o target/gt-xsd-filter-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-gml2-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-gml2-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-gml2/2.6-SNAPSHOT/gt-xsd-gml2-2.6-SNAPSHOT.jar -o target/gt-xsd-gml2-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-gml3-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-gml3-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-gml3/2.6-SNAPSHOT/gt-xsd-gml3-2.6-SNAPSHOT.jar -o target/gt-xsd-gml3-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-ows-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-ows-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-ows/2.6-SNAPSHOT/gt-xsd-ows-2.6-SNAPSHOT.jar -o target/gt-xsd-ows-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/gt-xsd-wfs-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading gt-xsd-wfs-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/xsd/gt-xsd-wfs/2.6-SNAPSHOT/gt-xsd-wfs-2.6-SNAPSHOT.jar -o target/gt-xsd-wfs-2.6-SNAPSHOT.jar
+fi
 if [ ! -e target/h2-1.1.104.jar ]; then
 	echo "Downloading h2-1.1.104.jar"
 	curl -G $base/org/h2database/h2/1.1.104/h2-1.1.104.jar -o target/h2-1.1.104.jar
@@ -170,6 +230,26 @@ if [ ! -e target/jts-1.10.jar ]; then
 	echo "Downloading jts-1.10.jar"
 	curl -G $base/com/vividsolutions/jts/1.10/jts-1.10.jar -o target/jts-1.10.jar
 fi
+if [ ! -e target/miglayout-3.7-swing.jar ]; then
+	echo "Downloading miglayout-3.7-swing.jar"
+	curl -G $base/com/miglayout/miglayout/3.7/miglayout-3.7-swing.jar -o target/miglayout-3.7-swing.jar
+fi
+if [ ! -e target/net.opengis.ows-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading net.opengis.ows-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/ogc/net.opengis.ows/2.6-SNAPSHOT/net.opengis.ows-2.6-SNAPSHOT.jar -o target/net.opengis.ows-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/net.opengis.wfs-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading net.opengis.wfs-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/ogc/net.opengis.wfs/2.6-SNAPSHOT/net.opengis.wfs-2.6-SNAPSHOT.jar -o target/net.opengis.wfs-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/org.w3.xlink-2.6-SNAPSHOT.jar ]; then
+	echo "Downloading org.w3.xlink-2.6-SNAPSHOT.jar"
+	curl -G $base/org/geotools/ogc/org.w3.xlink/2.6-SNAPSHOT/org.w3.xlink-2.6-SNAPSHOT.jar -o target/org.w3.xlink-2.6-SNAPSHOT.jar
+fi
+if [ ! -e target/picocontainer-1.2.jar ]; then
+	echo "Downloading picocontainer-1.2.jar"
+	curl -G $base/picocontainer/picocontainer/1.2/picocontainer-1.2.jar -o target/picocontainer-1.2.jar
+fi
 if [ ! -e target/postgresql-8.4-701.jdbc3.jar ]; then
 	echo "Downloading postgresql-8.4-701.jdbc3.jar"
 	curl -G $base/postgresql/postgresql/8.4-701.jdbc3/postgresql-8.4-701.jdbc3.jar -o target/postgresql-8.4-701.jdbc3.jar
@@ -182,6 +262,10 @@ if [ ! -e target/xalan-2.6.0.jar ]; then
 	echo "Downloading xalan-2.6.0.jar"
 	curl -G $base/xalan/xalan/2.6.0/xalan-2.6.0.jar -o target/xalan-2.6.0.jar
 fi
+if [ ! -e target/xercesImpl-2.7.1.jar ]; then
+	echo "Downloading xercesImpl-2.7.1.jar"
+	curl -G $base/xerces/xercesImpl/2.7.1/xercesImpl-2.7.1.jar -o target/xercesImpl-2.7.1.jar
+fi
 if [ ! -e target/xml-apis-1.3.04.jar ]; then
 	echo "Downloading xml-apis-1.3.04.jar"
 	curl -G $base/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar -o target/xml-apis-1.3.04.jar
@@ -190,7 +274,15 @@ if [ ! -e target/xml-apis-ext-1.3.04.jar ]; then
 	echo "Downloading xml-apis-ext-1.3.04.jar"
 	curl -G $base/xml-apis/xml-apis-ext/1.3.04/xml-apis-ext-1.3.04.jar -o target/xml-apis-ext-1.3.04.jar
 fi
+if [ ! -e target/xml-apis-xerces-2.7.1.jar ]; then
+	echo "Downloading xml-apis-xerces-2.7.1.jar"
+	curl -G $base/xml-apis/xml-apis-xerces/2.7.1/xml-apis-xerces-2.7.1.jar -o target/xml-apis-xerces-2.7.1.jar
+fi
 if [ ! -e target/xmlgraphics-commons-1.2.jar ]; then
 	echo "Downloading xmlgraphics-commons-1.2.jar"
 	curl -G $base/org/apache/xmlgraphics/xmlgraphics-commons/1.2/xmlgraphics-commons-1.2.jar -o target/xmlgraphics-commons-1.2.jar
+fi
+if [ ! -e target/xsd-2.2.2.jar ]; then
+	echo "Downloading xsd-2.2.2.jar"
+	curl -G $base/org/eclipse/xsd/xsd/2.2.2/xsd-2.2.2.jar -o target/xsd-2.2.2.jar
 fi
