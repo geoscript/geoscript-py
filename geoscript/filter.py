@@ -10,6 +10,30 @@ from org.geotools.xml import Parser, Encoder
 
 Filter = _Filter
 
+def toFilter(obj):
+  """
+  Converts an object to a filter. If obj is already a filter object it is 
+  returned untouched. If obj is a string an attempt to parse the string as CQL
+  is made. Upon failure an attempt to parse the string as XML is made. Upon a
+  second failure an Exception is thrown.
+  """
+
+  if not obj:
+    return None
+
+  if isinstance(obj, Filter):
+    return obj
+  elif isinstance(obj, str):
+    try:
+      # parse as CQL
+      return fromCQL(obj)
+    except:
+      try:
+        # parse as XML
+        return fromXML(obj)
+      except:
+        raise Exception('Could not convert %s to filter.' % obj)
+
 def fromCQL(cql):
   """
   Parses a CQL string into a filter object.
