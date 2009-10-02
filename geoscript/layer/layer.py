@@ -27,6 +27,8 @@ class Layer(object):
       self.fs = fs
       self.ftype = FeatureType(ft=fs.schema) 
 
+    self.style = None
+
     # we keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
     self._crs = None
