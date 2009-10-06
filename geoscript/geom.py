@@ -1,19 +1,16 @@
 """
-geom module -- Provides utilities for the construction and manipulation of 
+The :mod:`geom` module provides utilities for the construction and manipulation of 
 geometry objects.
 
-Geometry constructors take lists of lists defining the coordinates which make
-up the geometry.
+In general constructors in this module take lists of ``list`` defining the coordinates that make up the geometry.
 
->>> line = linestring([[1,2],[3,4]])
->>> str(line)
-'LINESTRING (1 2, 3 4)'
+>>> linestring([ [1,2], [3,4] ])
+LINESTRING (1 2, 3 4)
 
-Constructors also take lists of tuples.
+Or alternatively lists of ``tuple``.
 
->>> line = linestring([(1,2),(3,4)])
->>> str(line)
-'LINESTRING (1 2, 3 4)'
+>>> linestring([ (1,2), (3,4) ])
+LINESTRING (1 2, 3 4)
 """
 
 from java.lang import Double
@@ -31,56 +28,59 @@ MultiPoint = geom.MultiPoint
 MultiLineString = geom.MultiLineString
 MultiPolygon = geom.MultiPolygon
 
-def point(x,y=Double.NaN,z=Double.NaN):
+def point(*coord):
   """
-  Constructs a point geometry.
+  Constructs a ``Point`` geometry.
 
-  This function accepts a variety of inputs. The first being direct x,y,z
-  arguments:
+  *coord* may be specified in a variety of ways. The first is directly as x, y, z values: 
 
-  >>> pt = point(1,2)
-  >>> str(pt)
-  'POINT (1 2)'
+  >>> point(1,2)
+  POINT (1 2)
 
-  It also accepts a list or tuple of x,y,z:
+  It can also be specified as a ``list``/``tuple`` of x, y, z:
 
-  >>> pt = point([1,2])
-  >>> str(pt)
-  'POINT (1 2)'
+  >>> point([1,2])
+  POINT (1 2)
 
-  Or a list of lists or tuples:
+  Or a list of ``list``/``tuples``:
 
-  >>> pt = point([[1,2]])
-  >>> str(pt)
-  'POINT (1 2)'
+  >>> point([[1,2]])
+  POINT (1 2)
   """
 
-  if type(x) in (tuple,list) and Double.isNaN(y):
-    coords = x
+  if len(coord) == 1 and isinstance(coord[0], (tuple,list)):
+     # list or tuple case
+     coords = coord[0]
+     if len(coords) == 1 and isinstance(coords[0], (tuple,list)):
+        coords = coords[0]
 
-    if len(coords) == 1 and type(coords[0]) in (tuple,list):
-      coords = coords[0]
-
-    c = geom.Coordinate(coords[0],coords[1])
-    if len(coords) > 2:
-      c.z = coords[2]
+     c = geom.Coordinate(coords[0],coords[1])
+     if len(coords) > 2:
+       c.z = coords[2]
 
   else:
-     c = geom.Coordinate(x,y)
-     c.z = z
-
+     # x [,y,[z]] case
+     c = geom.Coordinate(coord[0], coord[1])
+     if len(coord) > 2:
+       c.z = coord[2]
+     
   return _gf.createPoint(c)
 
-def linestring(coords):
+def linestring(*coords):
   """
-  Constructs a linestring geometry.
+  Constructs a ``LineString`` geometry.
 
-  This function takes a list of lists or tuples:
+  *coords* is specified as multiple lists/tuples or a list of lists/tuples:
 
-  >>> line = linestring([ [1,2],[3,4] ])
-  >>> str(line)
-  'LINESTRING (1 2, 3 4)'
+  >>> linestring([1,2],[3,4])
+  LINESTRING (1 2, 3 4)
+
+  >>> linestring([ [1,2],[3,4] ])
+  LINESTRING (1 2, 3 4)
   """
+
+  if len(coords) == 1 and isinstance(coords[0], (tuple,list)):
+    coords = coords[0]
 
   l = []
   for c in coords:
@@ -96,22 +96,19 @@ def linestring(coords):
 def polygon(ring,holes=None):
 
   """
-  Constructs a polygon geometry.
+  Constructs a Polygon geometry.
 
-  The first argument of this function is a list of lists defining the outer
-  ring of the polygon:
+  The first argument *ring* is a list of ``list``/``tuple`` defining the outer ring of the polygon:
   
-  >>> poly = polygon([ [1,2],[3,4],[5,6],[1,2] ])
-  >>> str(poly)
-  'POLYGON ((1 2, 3 4, 5 6, 1 2))'
+  >>> polygon([ [1,2],[3,4],[5,6],[1,2] ])
+  POLYGON ((1 2, 3 4, 5 6, 1 2))
   
-  The second argument is optional and defines a list of lists of lists defining
-  the inner rings or holes of the polygon 
+  The second argument ``holes`` is optional and defines a list of lists of lists/tuples defining the inner rings or holes of the polygon:
+
   >>> exterior = [ [-10,-10],[10,-10],[10,10],[-10,10],[-10,-10] ]
   >>> holes = [ [ [-5,-5],[-1,-5],[-3,-2],[-5,-5] ], [ [5,5],[9,5],[7,7],[5,5] ] ]
-  >>> poly = polygon(exterior,holes)
-  >>> str(poly)
-  'POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))'
+  >>> polygon(exterior,holes)
+  POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))
   """
 
   outer = linestring(ring)
@@ -122,25 +119,78 @@ def polygon(ring,holes=None):
 
   return _gf.createPolygon(outer,inner)
 
-def geometry(wkt):
+def multipoint(*points):
   """
-  Constructs a geometry from well known text.
+  Constructs a MultiPoint goemetry.
 
-  >>> g = geometry('POINT (1 2)')
-  >>> str(g)
-  'POINT (1 2)'
+  ``points`` may be specified as multiple Point arguments or a list of Point arguments:
+
+  >>> multipoint(point(1,2), point(3,4))
+  MULTIPOINT (1 2, 3 4)
+
+  >>> multipoint([point(1,2), point(3,4)])
+  MULTIPOINT (1 2, 3 4)
+  """
+  
+  if len(points) == 1 and isinstance(points[0], (tuple,list)):
+     points = points[0]
+
+  return _gf.createMultiPoint(points)  
+
+def multilinestring(*linestrings):
+  """
+  Constructs a MultiLineString geometry.
+
+  ``linestrings`` may be specified as multiple LineString arguments or a list of LineString arguments: 
+
+   >>> multilinestring(linestring([[1,2],[3,4]]), linestring([[5,6],[7,8]]))
+   MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
+  """
+
+  if len(linestrings) == 1 and isinstance(linestrings[0], (tuple,list)):
+     linestrings = linestrings[0]
+
+  return _gf.createMultiLineString(linestrings)  
+
+def multipolygon(*polygons):
+  """
+  Constructs a MultiPolygon geometry.
+
+  ``polygons`` may be specified as multiple Polygon arguments or a list of Polygon arguments:
+
+   >>> multipolygon(polygon([[1,2], [3,4], [5,6], [1,2]]), polygon([[7,8], [9,10], [11,12], [7,8]]))
+   MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
+  
+  """
+
+  if len(polygons) == 1 and isinstance(polygons[0], (tuple,list)):
+     polygons = polygons[0]
+
+  return _gf.createMultiPolygon(polygons)
+
+def fromWKT(wkt):
+  """
+  Constructs a geometry by parsing Well Known Text.
+
+  ``wkt`` is the Well Known Text string representing the geometry as described by http://en.wikipedia.org/wiki/Well-known_text.
+
+  >>> fromWKT('POINT (1 2)')
+  POINT (1 2)
   """
   return _wktreader.read(wkt)
 
-def draw(g,size=(500,500),buf=50.0):
+def draw(g, size=(500,500)):
   """
-  Draws the geometry onto a frame.
+  Draws a geometry onto a canvas.
+
+  ``size`` is a tuple that specifies the dimensions of the canvas the geometry will drawn upon. 
   """
   from java import awt
   from java.awt.geom import AffineTransform
   from javax import swing
   from org.geotools.geometry.jts import LiteShape
 
+  buf = 50.0
   e = g.getEnvelopeInternal()
   scx = size[0] / e.width
   scy = size[1] / e.height
