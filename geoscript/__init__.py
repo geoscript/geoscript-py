@@ -1,3 +1,20 @@
+# first thing to do is ensure that the geotools libs are on the classpath
+try:
+  import org.geotools
+except ImportError:
+  # try to find them
+  import sys, os
+  libs = os.path.abspath(os.path.join(__file__, '../../geotools'))
+  if os.path.exists(libs): 
+     # round up all the libs and add them to the classpath
+     for lib in os.listdir(libs):
+       sys.path.append(os.path.join(libs,lib))
+
+  try:
+     import org.geotools
+  except ImportError:
+     raise Exception("Could not find GeoTools libraries on classpath")
+
 from java.lang import System
 from org.geotools.factory import Hints
 
