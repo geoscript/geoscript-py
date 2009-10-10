@@ -22,8 +22,8 @@ class GeomTest(unittest.TestCase):
     self.assertEqual((5,6),(c[2].x,c[2].y))
     self.assertEqual((1,2),(c[3].x,c[3].y))
 
-  def testWKT(self):
-    g = geom.geometry('POINT(1 2)') 
+  def testFromWKT(self):
+    g = geom.fromWKT('POINT(1 2)') 
     self.assertEqual('Point',g.geometryType)
     self.assertEqual(1,g.x)
     self.assertEqual(2,g.y)
