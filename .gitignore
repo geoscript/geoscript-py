@@ -1,3 +1,4 @@
 *.class
 lib/target
 tests/work
+tags
