@@ -5,6 +5,8 @@ from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as G
 from org.geotools.referencing import CRS as _CRS
 from org.opengis.referencing.crs import CoordinateReferenceSystem
 
+crs = _CRS
+
 CRS = CoordinateReferenceSystem
 """
 Class defining a Coordinate Reference System.
@@ -42,8 +44,8 @@ def transform(g, src, dst):
   *src* and *dst* may also be specified as ``CRS`` objects: 
 
   >>> wkt = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
-  >>> src = crs(wkt)
-  >>> dst = crs('epsg:3005')
+  >>> src = crs.parseWKT(wkt)
+  >>> dst = crs.decode('epsg:3005')
   >>> p = transform((-125, 50), src, dst)
   >>> str(p)
   '(1071693.1296956574, 554289.937440172)'
@@ -66,41 +68,3 @@ def transform(g, src, dst):
 
     return gt.transform(g)
 
-def crs(s):
-  """
-  Parses a string into a ``CRS``.
-
-  *s* may be specified as a spatial reference system identifier:
-
-  >>> cs = crs('epsg:4326')
-  >>> str(cs.name)
-  'EPSG:WGS 84'
-
-  *s* may be also be specified as a Well Known Text string:
-
-  >>> cs = crs('GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]') 
-  >>> str(cs.name)
-  'GCS_WGS_1984'
-  """
- 
-  try:
-    return _CRS.decode(s)
-  except:
-    try :
-      return _CRS.parseWKT(s)
-    except:
-       raise Exception('Unable to parse %s' % (s))
-
-def srs(cs):
-  """
-  Looks up the epsg code of a ``CRS``. 
-
-  >>> cs = crs('EPSG:4326')
-  >>> srs(cs)
-  'EPSG:4326'
-
-  This function returns ``None`` if *cs* can not matched to an epsg code.
-  """
-
-  id = _CRS.lookupIdentifier(cs, True)
-  return str(id) if id else None
