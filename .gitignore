@@ -2,3 +2,4 @@
 lib/target
 tests/work
 tags
+doc/.build
