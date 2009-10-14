@@ -24,7 +24,7 @@ class FeatureTest(unittest.TestCase):
 
   def testBasic(self):
     id = 'fid'
-    g = geom.point(-125,50)
+    g = geom.Point(-125,50)
     a = {'x': 1, 'y': 1.1, 'z': 'one', 'geom': g}
     f = feature.Feature(a,'fid')
     self.assertEqual(id,f.id())

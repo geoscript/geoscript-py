@@ -63,13 +63,13 @@ class Layer(object):
     >>> l.count()
     0
     >>> from geoscript import geom
-    >>> l.add([geom.point(1,2)])
+    >>> l.add([geom.Point(1,2)])
     >>> l.count()
     1
     
     This method takes an option filter paramter specified as CQL:
 
-    >>> l.add([geom.point(3,4)])
+    >>> l.add([geom.Point(3,4)])
     >>> l.count() 
     2
     >>> l.count('INTERSECT(geom,POINT(3 4))')
@@ -92,8 +92,8 @@ class Layer(object):
 
     >>> l = Layer()
     >>> from geoscript import geom 
-    >>> l.add([geom.point(1.0, 2.0)])
-    >>> l.add([geom.point(3.0, 4.0)])
+    >>> l.add([geom.Point(1.0, 2.0)])
+    >>> l.add([geom.Point(3.0, 4.0)])
 
     >>> l.bounds()
     ReferencedEnvelope[1.0 : 3.0, 2.0 : 4.0]
@@ -112,8 +112,8 @@ class Layer(object):
 
     >>> l = Layer()
     >>> from geoscript import geom
-    >>> l.add([geom.point(1,2)])
-    >>> l.add([geom.point(3,4)])
+    >>> l.add([geom.Point(1,2)])
+    >>> l.add([geom.Point(3,4)])
     >>> [ str(f.geom()) for f in l.features() ]
     ['POINT (1 2)', 'POINT (3 4)']
 
@@ -127,7 +127,7 @@ class Layer(object):
     transform function before it is returned.
 
     >>> def tx (f):
-    ...    f.geom( geom.point(2*f.geom().x, 2*f.geom().y) )
+    ...    f.geom( geom.Point(2*f.geom().x, 2*f.geom().y) )
     >>> [str(f.geom()) for f in l.features(transform=tx)]
     ['POINT (2 4)', 'POINT (6 8)']
     """
@@ -152,8 +152,8 @@ class Layer(object):
 
     >>> l = Layer()
     >>> from geoscript import geom
-    >>> l.add([geom.point(1,2)])
-    >>> l.add([geom.point(3,4)])
+    >>> l.add([geom.Point(1,2)])
+    >>> l.add([geom.Point(3,4)])
     >>> l.count()
     2
     >>> l.delete('INTERSECT(geom, POINT(3 4))')
@@ -172,7 +172,7 @@ class Layer(object):
     >>> l.count()
     0
     >>> from geoscript import geom
-    >>> l.add([geom.point(1,2)])
+    >>> l.add([geom.Point(1,2)])
     >>> l.count()
     1
     """

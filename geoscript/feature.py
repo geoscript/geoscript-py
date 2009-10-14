@@ -148,7 +148,7 @@ class FeatureType:
     Creates a feature of the type from a list of attribute values.
 
     >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> f = ft.feature([geom.point(1,1), 1, 'one'], 'fid1')
+    >>> f = ft.feature([geom.Point(1,1), 1, 'one'], 'fid1')
     >>> str(f) 
     'fid1 {geom: POINT (1 1), att1: 1, att2: one}'
     """
@@ -163,7 +163,7 @@ class Feature:
   A feature is a set of attributes (key value pairs) and a geometry.
 
   >>> import geom
-  >>> f = Feature([ ('name','widget'), ('geom', geom.point(1,2)) ], 'fid1') 
+  >>> f = Feature([ ('name','widget'), ('geom', geom.Point(1,2)) ], 'fid1') 
   >>> str(f)
   'fid1 {name: widget, geom: POINT (1 2)}'
 
@@ -179,7 +179,7 @@ class Feature:
 
   >>> f.geom()
   POINT (1 2)
-  >>> f.geom(geom.point(3,4))
+  >>> f.geom(geom.Point(3,4))
   POINT (3 4)
 
   """
@@ -218,7 +218,7 @@ class Feature:
     Id of the feature.
 
     >>> import geom
-    >>> f = Feature({'geom': geom.point(1,1)}, 'fid.one')
+    >>> f = Feature({'geom': geom.Point(1,1)}, 'fid.one')
     >>> str(f.id())
     'fid.one'
     """
@@ -229,10 +229,10 @@ class Feature:
     """
     Gets and sets the geometry of the feature.
     >>> import geom
-    >>> f = Feature({'geom': geom.point(1,1)}, 'fid.one')
+    >>> f = Feature({'geom': geom.Point(1,1)}, 'fid.one')
     >>> f.geom()
     POINT (1 1)
-    >>> f.geom(geom.point(2,2))
+    >>> f.geom(geom.Point(2,2))
     POINT (2 2)
     """
 
@@ -245,7 +245,7 @@ class Feature:
     """
     Gets an attribute of a feature.
     >>> import geom
-    >>> f = Feature({'geom': geom.point(1,1), 'name': 'one'}, 'fid.one')
+    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
     >>> str(f.get('name'))
     'one'
     """
@@ -255,7 +255,7 @@ class Feature:
     """
     Sets an attribute of a feature.
     >>> import geom
-    >>> f = Feature({'geom': geom.point(1,1), 'name': 'one'}, 'fid.one')
+    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
     >>> str(f.get('name'))
     'one'
     >>> f.set('name', 'two')
@@ -269,7 +269,7 @@ class Feature:
     """
     Iterates over attributes.
     >>> import geom
-    >>> f = Feature({'geom': geom.point(1,1), 'name': 'one'}, 'fid.one')
+    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
     >>> str(', '.join(['%s: %s' % (att,val) for att,val in f.atts()]))
     'geom: POINT (1 1), name: one'
     """

@@ -5,8 +5,8 @@ A memory layer can be created with a name and a list of attribute names:
   
 >>> from geoscript import geom
 >>> l = MemoryLayer('widgets', [ ('geom',geom.Point), ('name',str)])
->>> l.add( [geom.point(1,1), 'one'] )
->>> l.add( [geom.point(2,2), 'two'] )
+>>> l.add( [geom.Point(1,1), 'one'] )
+>>> l.add( [geom.Point(2,2), 'two'] )
 >>> l.count()
 2
 """

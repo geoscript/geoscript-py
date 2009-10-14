@@ -1,178 +1,194 @@
 """
-The :mod:`geom` module provides utilities for the construction and manipulation of 
-geometry objects.
-
-In general constructors in this module take lists of ``list`` defining the coordinates that make up the geometry.
-
->>> linestring([ [1,2], [3,4] ])
-LINESTRING (1 2, 3 4)
-
-Or alternatively lists of ``tuple``.
-
->>> linestring([ (1,2), (3,4) ])
-LINESTRING (1 2, 3 4)
+The :mod:`geom` module provides geometry classes and utilities for the construction and manipulation of geometry objects.
 """
 
 from java.lang import Double
 from com.vividsolutions.jts.io import WKTReader
-from com.vividsolutions.jts import geom 
+from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
+from com.vividsolutions.jts.geom import Geometry as _Geometry
+from com.vividsolutions.jts.geom import Point as _Point
+from com.vividsolutions.jts.geom import LineString as _LineString
+from com.vividsolutions.jts.geom import LinearRing as _LinearRing
+from com.vividsolutions.jts.geom import Polygon as _Polygon
+from com.vividsolutions.jts.geom import MultiPoint as _MultiPoint
+from com.vividsolutions.jts.geom import MultiLineString as _MultiLineString
+from com.vividsolutions.jts.geom import MultiPolygon as _MultiPolygon
 
 _wktreader = WKTReader()
-_gf = geom.GeometryFactory()
+_gf = GeometryFactory()
 
-Geometry = geom.Geometry
-Point = geom.Point
-LineString = geom.LineString
-Polygon = geom.Polygon
-MultiPoint = geom.MultiPoint
-MultiLineString = geom.MultiLineString
-MultiPolygon = geom.MultiPolygon
+Geometry = _Geometry
 
-def point(*coord):
+class Point(_Point):
   """
-  Constructs a ``Point`` geometry.
+  A Point geometry.
 
-  *coord* may be specified in a variety of ways. The first is directly as x, y, z values: 
+  *coord* is specified as variable argument x,y,z values:
 
-  >>> point(1,2)
-  POINT (1 2)
-
-  It can also be specified as a ``list``/``tuple`` of x, y, z:
-
-  >>> point([1,2])
-  POINT (1 2)
-
-  Or a list of ``list``/``tuples``:
-
-  >>> point([[1,2]])
+  >>> Point(1,2)
   POINT (1 2)
   """
 
-  if len(coord) == 1 and isinstance(coord[0], (tuple,list)):
-     # list or tuple case
-     coords = coord[0]
-     if len(coords) == 1 and isinstance(coords[0], (tuple,list)):
-        coords = coords[0]
+  def __init__(self, *coord):
 
-     c = geom.Coordinate(coords[0],coords[1])
-     if len(coords) > 2:
-       c.z = coords[2]
+    if len(coord) == 1 and isinstance(coord[0], _Point):
+      p = coord[0]
+    else:
+      c = Coordinate(coord[0], coord[1])
+      if len(coord) > 2:
+        c.z = coord[2]
+      p = _gf.createPoint(c)
+       
+    _Point.__init__(self, p.coordinateSequence, _gf)
 
-  else:
-     # x [,y,[z]] case
-     c = geom.Coordinate(coord[0], coord[1])
-     if len(coord) > 2:
-       c.z = coord[2]
-     
-  return _gf.createPoint(c)
-
-def linestring(*coords):
+class LineString(_LineString):
   """
-  Constructs a ``LineString`` geometry.
+  A LineString geometry.
 
-  *coords* is specified as multiple lists/tuples or a list of lists/tuples:
+  *coords* is specified as multiple ``list``/``tuple`` arguments:
 
-  >>> linestring([1,2],[3,4])
-  LINESTRING (1 2, 3 4)
-
-  >>> linestring([ [1,2],[3,4] ])
+  >>> LineString([1,2], [3,4])
   LINESTRING (1 2, 3 4)
   """
 
-  if len(coords) == 1 and isinstance(coords[0], (tuple,list)):
-    coords = coords[0]
-
-  l = []
-  for c in coords:
-    l.append( geom.Coordinate(c[0],c[1]) )
-    if len(c) > 2:
-      l[-1].z = c[2]
-
-  if l[0] == l[-1]:
-    return _gf.createLinearRing(l)
-  else:
-    return _gf.createLineString(l)
-
-def polygon(ring,holes=None):
-
-  """
-  Constructs a Polygon geometry.
-
-  The first argument *ring* is a list of ``list``/``tuple`` defining the outer ring of the polygon:
+  def __init__(self, *coords):
   
-  >>> polygon([ [1,2],[3,4],[5,6],[1,2] ])
+    if len(coords) == 1 and isinstance(coords[0], _LineString):
+      ls = coords[0]
+    else:
+      l = []
+      for c in coords:
+        l.append( Coordinate(c[0],c[1]) )
+        if len(c) > 2:
+          l[-1].z = c[2]
+      ls = _gf.createLineString(l)
+  
+    _LineString.__init__(self, ls.coordinateSequence, _gf)
+
+class LinearRing(_LinearRing):
+  """
+  A LineString geometry in which the first and last coordinates are identical forming a closed ring. The arguments for contstructing a ``LinearRing`` are identical to those for constructing a ``LineString``. 
+
+  >>> LinearRing([1,2], [3,4], [4,5], [1,2])
+  LINEARRING (1 2, 3 4, 4 5, 1 2)
+  """
+
+  def __init__(self, *coords):
+    if len(coords) == 1 and isinstance(coords[0], _LinearRing):
+      _LinearRing.__init__(self, coords[0].coordinateSequence) 
+    else:
+      l = LineString(*coords)
+      _LinearRing.__init__(self, l.coordinateSequence, _gf)
+
+class Polygon(_Polygon):
+  """
+  A Polygon geometry.
+
+  *rings* is a variable number of lists of ``list``/``tuple`` defining the rings of the polygon. The first argument is the outer ring and remaining arguments are holes. 
+
+  >>> Polygon( [[1,2], [3,4], [5,6], [1,2]])
   POLYGON ((1 2, 3 4, 5 6, 1 2))
-  
-  The second argument ``holes`` is optional and defines a list of lists of lists/tuples defining the inner rings or holes of the polygon:
+ 
+  >>> Polygon( [[-10,-10],[10,-10],[10,10],[-10,10],[-10,-10]], [[-5,-5],[-1,-5],[-3,-2],[-5,-5]], [[5,5],[9,5],[7,7],[5,5]] )
+  POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))
 
-  >>> exterior = [ [-10,-10],[10,-10],[10,10],[-10,10],[-10,-10] ]
-  >>> holes = [ [ [-5,-5],[-1,-5],[-3,-2],[-5,-5] ], [ [5,5],[9,5],[7,7],[5,5] ] ]
-  >>> polygon(exterior,holes)
+  *rings* may also be specified as a variable number of ``LinearRing`` objects:
+
+  >>> Polygon( LinearRing([-10,-10],[10,-10],[10,10],[-10,10],[-10,-10]), LinearRing([-5,-5],[-1,-5],[-3,-2],[-5,-5]), LinearRing([5,5],[9,5],[7,7],[5,5]) )
   POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))
   """
 
-  outer = linestring(ring)
-  inner = []
-  if holes:
-    for h in holes:
-      inner.append(linestring(h))
+  def __init__(self, *rings):
+    if isinstance(rings[0], _Polygon):
+      p = rings[0]
+      _Polygon.__init__(self, p.exteriorRing, [p.getInteriorRingN(i) for i in range(p.numInteriorRing)], _gf)
+    else:
+      lr = [r if isinstance(r,LinearRing) else LinearRing(*r) for r in rings ]
+      _Polygon.__init__(self, lr[0], lr[1:], _gf)
 
-  return _gf.createPolygon(outer,inner)
-
-def multipoint(*points):
+class MultiPoint(_MultiPoint):
   """
-  Constructs a MultiPoint goemetry.
+  A MultiPoint goemetry.
 
-  ``points`` may be specified as multiple Point arguments or a list of Point arguments:
+  *points* is specified as a variable number of ``list``/``tuple`` arguments: 
 
-  >>> multipoint(point(1,2), point(3,4))
+  >>> MultiPoint([1,2], [3,4])
   MULTIPOINT (1 2, 3 4)
 
-  >>> multipoint([point(1,2), point(3,4)])
+  *points* may also be specified as a variable number of ``Point`` arguments: 
+
+  >>> MultiPoint(Point(1,2), Point(3,4))
   MULTIPOINT (1 2, 3 4)
+   
   """
+
+  def __init__(self, *points):
+    
+    if isinstance(points[0], _MultiPoint):
+      mp = points[0]
+      points = [mp.getGeometryN(i) for i in range(mp.numGeometries)]
+    elif isinstance(points[0], (list,tuple)):
+      points = [Point(*p) for p in points]
+          
+    _MultiPoint.__init__(self, points, _gf)
+
+class MultiLineString(_MultiLineString):
+  """
+  A MultiLineString geometry.
+
+  *linestrings* is specified as a variable number of lists of ``list``//``tuple`` arugments:
+
+  >>> MultiLineString([[1,2],[3,4]], [[5,6],[7,8]])
+  MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
+
+  *linestrings* may also be specified as multiple ``LineString`` arguments:
+
+  >>> MultiLineString(LineString([1,2],[3,4]), LineString([5,6],[7,8]))
+  MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
+
+  """
+
+  def __init__(self, *linestrings):
   
-  if len(points) == 1 and isinstance(points[0], (tuple,list)):
-     points = points[0]
+    if isinstance(linestrings[0], _MultiLineString):
+      mls = linestrings[0]  
+      linestrings = [mls.getGeometryN(i) for i in range(mls.numGeometries)]
+    elif isinstance(linestrings[0], (list,tuple)):
+      linestrings = [LineString(*l) for l in linestrings]
 
-  return _gf.createMultiPoint(points)  
+    _MultiLineString.__init__(self, linestrings, _gf)
 
-def multilinestring(*linestrings):
+class MultiPolygon(_MultiPolygon):
   """
-  Constructs a MultiLineString geometry.
+  A MultiPolygon geometry.
 
-  ``linestrings`` may be specified as multiple LineString arguments or a list of LineString arguments: 
+  *polygons* is specified as a variable number of multidimensional lists of ``list``/``tuple``:
 
-   >>> multilinestring(linestring([[1,2],[3,4]]), linestring([[5,6],[7,8]]))
-   MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
-  """
+  >>> MultiPolygon( [ [[1,2],[3,4],[5,6],[1,2]] ],  [ [[7,8], [9,10], [11,12], [7,8]] ] )
+  MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
 
-  if len(linestrings) == 1 and isinstance(linestrings[0], (tuple,list)):
-     linestrings = linestrings[0]
+  *polygons* may also be specified as a variable number of ``Polygon`` arguments:
 
-  return _gf.createMultiLineString(linestrings)  
-
-def multipolygon(*polygons):
-  """
-  Constructs a MultiPolygon geometry.
-
-  ``polygons`` may be specified as multiple Polygon arguments or a list of Polygon arguments:
-
-   >>> multipolygon(polygon([[1,2], [3,4], [5,6], [1,2]]), polygon([[7,8], [9,10], [11,12], [7,8]]))
-   MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
+  >>> MultiPolygon(Polygon([[1,2], [3,4], [5,6], [1,2]]), Polygon([[7,8], [9,10], [11,12], [7,8]]))
+  MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
   
   """
 
-  if len(polygons) == 1 and isinstance(polygons[0], (tuple,list)):
-     polygons = polygons[0]
+  def __init__(self, *polygons):
+  
+    if isinstance(polygons[0], _MultiPolygon):
+       mp = polygons[0]
+       polygons = [mp.getGeometryN(i) for i in range(mp.numGeometries)]
+    elif isinstance(polygons[0], (list,tuple)):
+       polygons = [Polygon(*p) for p in polygons]
 
-  return _gf.createMultiPolygon(polygons)
+    _MultiPolygon.__init__(self, polygons, _gf)
 
 def fromWKT(wkt):
   """
-  Constructs a geometry by parsing Well Known Text.
+  Constructs a geometry from Well Known Text.
 
-  ``wkt`` is the Well Known Text string representing the geometry as described by http://en.wikipedia.org/wiki/Well-known_text.
+  *wkt* is the Well Known Text string representing the geometry as described by http://en.wikipedia.org/wiki/Well-known_text.
 
   >>> fromWKT('POINT (1 2)')
   POINT (1 2)
@@ -183,7 +199,7 @@ def draw(g, size=(500,500)):
   """
   Draws a geometry onto a canvas.
 
-  ``size`` is a tuple that specifies the dimensions of the canvas the geometry will drawn upon. 
+  *size* is a tuple that specifies the dimensions of the canvas the geometry will drawn upon. 
   """
   from java import awt
   from java.awt.geom import AffineTransform
@@ -215,10 +231,17 @@ def draw(g, size=(500,500)):
   class Panel(swing.JPanel):
 
     def __init__(self,shp):
-      self.shp = shp
+       self.shp = shp
     
-    def paintComponent(self, g):
-      g.draw(shp)
+    def paintComponent(self, gc):
+      gc.setColor(awt.Color.WHITE)
+      gc.fill(shp)
+
+      gc.setRenderingHint(awt.RenderingHints.KEY_ANTIALIASING, awt.RenderingHints.VALUE_ANTIALIAS_ON)
+      gc.setStroke(awt.BasicStroke(2))
+      gc.setColor(awt.Color.BLACK)
+      gc.draw(shp)
+
 
   shp = LiteShape(g,at,False)
   panel = Panel(shp)
@@ -229,3 +252,10 @@ def draw(g, size=(500,500)):
   frame.size = s
   frame.visible = True
 
+import core
+core.register(Point)
+core.register(LineString)
+core.register(Polygon)
+core.register(MultiPoint)
+core.register(MultiLineString)
+core.register(MultiPolygon)

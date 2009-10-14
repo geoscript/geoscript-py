@@ -8,9 +8,9 @@ class WorkspaceTest:
     l = self.ws.newLayer('widgets',[ ('geom', geom.Point), ('name', str) ])
     assert l
 
-    l.add([geom.point(1,1), 'one'])
-    l.add([geom.point(2,2), 'two'])
-    l.add([geom.point(3,3), 'three'])
+    l.add([geom.Point(1,1), 'one'])
+    l.add([geom.Point(2,2), 'two'])
+    l.add([geom.Point(3,3), 'three'])
 
     assert 3, l.count()
 

@@ -29,7 +29,7 @@ def transform(g, src, dst):
   *g* is the ``Geometry`` object to be tranformed. *src* and *dst* define the source and target reference systems and are specified as epsg codes strings:
 
   >>> import geom 
-  >>> p1 = geom.point(-125, 50)
+  >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
   >>> str(p2)
   'POINT (1071693.1296328472 554289.941892416)'
