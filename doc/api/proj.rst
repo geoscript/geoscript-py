@@ -5,5 +5,10 @@ Projection
 ==========
 
   .. automodule:: geoscript.proj
-     :members: CRS, srs, crs, transform
-  
+
+     .. autoclass:: Projection
+        :members: id, wkt, transform
+
+     .. autofunction:: transform
+
+     .. autofunction:: projections

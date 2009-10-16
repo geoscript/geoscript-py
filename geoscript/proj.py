@@ -2,69 +2,132 @@
 The :mod:`proj` module provides support for coordinate reference system transformation and geometry reprojection.
 """
 from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
-from org.geotools.referencing import CRS as _CRS
+from org.geotools.referencing import CRS as crs
 from org.opengis.referencing.crs import CoordinateReferenceSystem
 
-crs = _CRS
-
 CRS = CoordinateReferenceSystem
-"""
-Class defining a Coordinate Reference System.
-"""
 
-def _toCRS(o):
+class Projection(object):
   """
-  Transforms an object to a crs if possible. This method can take a crs object (no action required), or a string.
+  A cartographic projection or coordinate reference system.
+
+  *proj* is a string that identifies the coordinate reference system (eg. an epsg code):
+
+  >>> pj = Projection('epsg:4326')
+  >>> pj.id
+  'EPSG:4326'
+
+  Alternatively *proj* may be specified as a well known text string:
+
+  >>> wkt = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
+  >>> pj = Projection(wkt)
+  >>> pj.id
+  'EPSG:4326'
   """
 
-  if isinstance(o,CRS):   
-     return o
-  elif isinstance(o,str):
-     return _CRS.decode(o)
+  def __init__(self, proj):
+    if isinstance(proj, CRS):
+      self._crs = proj
+    elif isinstance(proj, Projection):
+      self._crs = proj._crs
+    elif isinstance(proj, (str,unicode)):
+      try:
+         self._crs = crs.decode(proj)
+      except:
+         try:
+           self._crs = crs.parseWKT(proj)
+         except:
+           raise Exception('Unable to determine projection from %s' % proj)
 
-def transform(g, src, dst):
+  def getid(self):
+    return str(crs.lookupIdentifier(self._crs, True))
+
+  id = property(getid)
   """
-  Reprojects a geometry from a source projection to a target projection. 
+  The string identifying the projection.
+  """
+     
+  def getwkt(self):
+    return str(self._crs.toString())
 
-  *g* is the ``Geometry`` object to be tranformed. *src* and *dst* define the source and target reference systems and are specified as epsg codes strings:
+  wkt = property(getwkt)
+  """
+  The well known text string representing the projection.
+  """
+
+  def __str__(self):
+    return self.id
+
+  def transform(self, obj, dest):
+    """
+    Transforms an object from this projection to a specified destination projection.
+
+    *obj* is a :class:`geoscript.geom.Geometry` object to transform. *dest* is the destination :class:`Projection` to transform to:
+
+     >>> proj = Projection('epsg:4326')
+     >>> dest = Projection('epsg:3005')
+     >>> import geom
+     >>> p1 = geom.Point(-125, 50)
+     >>> p2 = proj.transform(p1, dest)
+     >>> p2
+     POINT (1071693.1296328472 554289.941892416)
+
+    *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection:
+
+    >>> proj = Projection('epsg:4326')
+    >>> p1 = (-125, 50)
+    >>> p2 = proj.transform(p1, 'epsg:3005')
+    >>> p2
+    (1071693.1296328472, 554289.941892416)
+    """
+    fromcrs = self._crs
+    tocrs = Projection(dest)._crs
+    tx = crs.findMathTransform(fromcrs,tocrs)
+
+    if isinstance(obj, (list,tuple)):
+      # tuple or list
+      import jarray
+      transformed = jarray.zeros(len(obj), 'd')
+      tx.transform(obj, 0, transformed, 0, 1)
+      l = [transformed[x] for x in range(len(obj))]
+      return l if isinstance(obj, list) else tuple(l)
+    else:
+      # geometry
+      gt = GeometryTX()
+      gt.mathTransform = tx
+
+      return gt.transform(obj)
+
+def transform(obj, src, dst):
+  """
+  Reprojects an object from a source projection to a target projection. 
 
   >>> import geom 
   >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
-  >>> str(p2)
-  'POINT (1071693.1296328472 554289.941892416)'
+  >>> p2
+  POINT (1071693.1296328472 554289.941892416)
 
-  *g* may also be specified as a *list* or *tuple* of coordinates:
+  .. seealso:: 
 
-  >>> p1 = [-125, 50]
-  >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
-  >>> str(p2)
-  '[1071693.1296328472, 554289.941892416]'
-
-  *src* and *dst* may also be specified as ``CRS`` objects: 
-
-  >>> wkt = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
-  >>> src = crs.parseWKT(wkt)
-  >>> dst = crs.decode('epsg:3005')
-  >>> p = transform((-125, 50), src, dst)
-  >>> str(p)
-  '(1071693.1296956574, 554289.937440172)'
+     :func:`Projection.transform`
   """
+  
+  return Projection(src).transform(obj, dst)
 
-  fromcrs = _toCRS(src)
-  tocrs = _toCRS(dst)
-  tx = _CRS.findMathTransform(fromcrs,tocrs)
+def projections():
+  """
+  Iterator over all defined projections::
 
-  if isinstance(g, (list,tuple)):
-    import jarray
-    transformed = jarray.zeros(len(g),'d')
-    tx.transform(g,0,transformed,0,1)
-    l = [transformed[x] for x in range(len(g))]
-    return l if isinstance(g, list) else tuple(l)
-  else:
-    #geometry
-    gt = GeometryTX()
-    gt.mathTransform = tx
+    for p in proj.projections():
+       ..
 
-    return gt.transform(g)
+  This function returns :class:`Projection` objects.
 
+  """
+  for code in crs.getSupportedCodes('epsg'):
+     try:
+       yield Projection('epsg:%s' % code)
+     except:
+       # todo: log this
+       pass
