@@ -13,15 +13,15 @@ class Projection(object):
 
   *proj* is a string that identifies the coordinate reference system (eg. an epsg code):
 
-  >>> pj = Projection('epsg:4326')
-  >>> pj.id
+  >>> prj = Projection('epsg:4326')
+  >>> prj.id
   'EPSG:4326'
 
   Alternatively *proj* may be specified as a well known text string:
 
   >>> wkt = 'GEOGCS["GCS_WGS_1984",DATUM["D_WGS_1984",SPHEROID["WGS_1984",6378137,298.257223563]],PRIMEM["Greenwich",0],UNIT["Degree",0.017453292519943295]]'
-  >>> pj = Projection(wkt)
-  >>> pj.id
+  >>> prj = Projection(wkt)
+  >>> prj.id
   'EPSG:4326'
   """
 
