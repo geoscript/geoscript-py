@@ -13,6 +13,7 @@ from com.vividsolutions.jts.geom import Polygon as _Polygon
 from com.vividsolutions.jts.geom import MultiPoint as _MultiPoint
 from com.vividsolutions.jts.geom import MultiLineString as _MultiLineString
 from com.vividsolutions.jts.geom import MultiPolygon as _MultiPolygon
+from org.geotools.geometry.jts import ReferencedEnvelope
 
 _wktreader = WKTReader()
 _gf = GeometryFactory()
@@ -184,6 +185,35 @@ class MultiPolygon(_MultiPolygon):
 
     _MultiPolygon.__init__(self, polygons, _gf)
 
+class Bounds(ReferencedEnvelope):
+
+  def __init__(self, l, b, r, t, proj=None):
+    self.proj = proj
+    ReferencedEnvelope.__init__(self, l, r, b, t, self.proj._crs if self.proj else None)
+
+  def getl(self):
+    return self.minX()
+  l = property(getl)
+
+  def getb(self):
+    return self.minY()
+  b = property(getb)
+
+  def getr(self):
+    return self.maxX()
+  r = property(getr)
+
+  def gett(self):
+    return self.maxY()
+  t = property(gett)
+
+  def __repr__(self):
+    s = '(%s, %s, %s, %s' % (self.l, self.b, self.r, self.t)
+    if self.proj:
+      s = '%s, %s' % (s, self.proj.id)
+
+    return '%s)' % s
+
 def fromWKT(wkt):
   """
   Constructs a geometry from Well Known Text.
@@ -259,3 +289,4 @@ core.register(Polygon)
 core.register(MultiPoint)
 core.register(MultiLineString)
 core.register(MultiPolygon)
+core.register(Bounds)
