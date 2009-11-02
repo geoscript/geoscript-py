@@ -19,6 +19,9 @@ _wktreader = WKTReader()
 _gf = GeometryFactory()
 
 Geometry = _Geometry
+"""
+Base class for all geometry classes.
+"""
 
 class Point(_Point):
   """
