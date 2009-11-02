@@ -22,7 +22,30 @@ A JRE can be downloaded from `Sun Microsystems <http://java.sun.com/javase/downl
 Install Jython
 --------------
 
-Jython version greater than *2.5.0* is required for GeoScript. The current version can be downloaded from http://www.jython.org/.
+Jython version greater than *2.5.1* is required for GeoScript. The current version can be downloaded from http://www.jython.org/.
+
+Install GeoTools
+----------------
+
+#. Download `GeoTools <http://sourceforge.net/projects/geotools/files/GeoTools%202.6%20Releases/2.6.0/geotools-2.6.0-bin.zip/download>`_
+
+#. Unpack the GeoTools archive::
+
+     unzip geotools-2.6.0-bin.zip
+
+#. Update the ``CLASSPATH`` environment variable to include all the jar files located inside the GeoTools archive. 
+
+   .. note:: The following :download:`bash <gt_classpath.sh>` and :download:`batch <gt_classpath.bat>` scripts will automatically generate the updated ``CLASSPATH``. Run them specifying the location of the GeoTools archive::  
+
+      % gt_classpath.sh /home/bob/geotools-2.6.0
+    
+#. Update your environment so that the ``CLASSPATH`` is persisted. 
+
+   .. note:: In a *bash* environment save the result of the :file:`gt_classpath.sh` script to your :file:`~/.bash_profile` or file:`~/.bashrc` file::
+   
+      % gt_classpath.sh /home/bob/geotools-2.6.0 >> ~/.bash_profile
+
+   .. note:: In a *windows* environment use the result of the :file:`gt_classpath.bat` script to define a new or update an existing ``CLASSPATH`` windows environment variable.
 
 Install GeoScript
 -----------------
