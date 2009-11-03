@@ -29,23 +29,20 @@ Install GeoTools
 
 #. Download `GeoTools <http://sourceforge.net/projects/geotools/files/GeoTools%202.6%20Releases/2.6.0/geotools-2.6.0-bin.zip/download>`_
 
-#. Unpack the GeoTools archive::
+#. Unpack the GeoTools archive to the location of your choice::
 
-     unzip geotools-2.6.0-bin.zip
+     unzip -d /opt geotools-2.6.0-bin.zip 
 
-#. Update the ``CLASSPATH`` environment variable to include all the jar files located inside the GeoTools archive. 
+#. Update the ``CLASSPATH`` environment variable to include all the jar files located inside the GeoTools archive. The script :download:`gt_classpath.py` will autmoatically generate the classpath. Run it specifying the location of GeoTools::
 
-   .. note:: The following :download:`bash <gt_classpath.sh>` and :download:`batch <gt_classpath.bat>` scripts will automatically generate the updated ``CLASSPATH``. Run them specifying the location of the GeoTools archive::  
-
-      % gt_classpath.sh /home/bob/geotools-2.6.0
+     jython gt_classpath.py /opt/geotools-2.6.0
     
-#. Update your environment so that the ``CLASSPATH`` is persisted. 
+#. Update your environment so that the ``CLASSPATH`` is persisted. In a *bash* environment update the :file:`.bash_profile` or :file:`.bashrc` file appending the result of :file:`gt_classpath.py` to the ``CLASSPATH`` environment variable::
 
-   .. note:: In a *bash* environment save the result of the :file:`gt_classpath.sh` script to your :file:`~/.bash_profile` or file:`~/.bashrc` file::
-   
-      % gt_classpath.sh /home/bob/geotools-2.6.0 >> ~/.bash_profile
+     gt_classpath=`jython gt_classpath.py /opt/geotools-2.6.0`
+     echo "CLASSPATH=\$CLASSPATH:$gt_classpath" >> ~/.bash_profile
 
-   .. note:: In a *windows* environment use the result of the :file:`gt_classpath.bat` script to define a new or update an existing ``CLASSPATH`` windows environment variable.
+   In a *windows* environment use the result of the :file:`gt_classpath.py` script to define a new or update an existing ``CLASSPATH`` windows environment variable.
 
 Install GeoScript
 -----------------
@@ -71,5 +68,4 @@ That's it. GeoScript should now be installed on the system. To verify the instal
       >>> 
 
 If you do not get an import error congratulations! GeoScript is installed on the system.
-     
 
