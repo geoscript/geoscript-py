@@ -55,9 +55,6 @@ class Projection(object):
   The well known text string representing the projection.
   """
 
-  def __str__(self):
-    return self.id
-
   def transform(self, obj, dest):
     """
     Transforms an object from this projection to a specified destination projection.
@@ -97,6 +94,12 @@ class Projection(object):
       gt.mathTransform = tx
 
       return gt.transform(obj)
+
+  def __str__(self):
+    return self.id
+
+  def __eq__(self, other):
+    return crs.equalsIgnoreMetadata(self._crs, other._crs)
 
 def transform(obj, src, dst):
   """
