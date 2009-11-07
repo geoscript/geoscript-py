@@ -14,6 +14,7 @@ from com.vividsolutions.jts.geom import MultiPoint as _MultiPoint
 from com.vividsolutions.jts.geom import MultiLineString as _MultiLineString
 from com.vividsolutions.jts.geom import MultiPolygon as _MultiPolygon
 from org.geotools.geometry.jts import ReferencedEnvelope
+from geoscript import proj
 
 _wktreader = WKTReader()
 _gf = GeometryFactory()
@@ -189,26 +190,57 @@ class MultiPolygon(_MultiPolygon):
     _MultiPolygon.__init__(self, polygons, _gf)
 
 class Bounds(ReferencedEnvelope):
+  """
+  A two dimenstional bounding box.
+  """
+  def __init__(self, l=None, b=None, r=None, t=None, prj=None, env=None):
+    if prj:
+      prj = proj.Projection(prj)
 
-  def __init__(self, l, b, r, t, proj=None):
-    self.proj = proj
-    ReferencedEnvelope.__init__(self, l, r, b, t, self.proj._crs if self.proj else None)
+    if env:
+      if prj:
+        ReferencedEnvelope.__init__(self, env, prj._crs)
+      else:
+        ReferencedEnvelope.__init__(self, env)
+    else:
+      ReferencedEnvelope.__init__(self, l, r, b, t, prj._crs if prj else None)
 
   def getl(self):
     return self.minX()
   l = property(getl)
+  """
+  The leftmost oordinate of the bounds.
+  """
 
   def getb(self):
     return self.minY()
   b = property(getb)
+  """
+  The bottomtmost oordinate of the bounds.
+  """
 
   def getr(self):
     return self.maxX()
   r = property(getr)
+  """
+  The rightmost oordinate of the bounds.
+  """
 
   def gett(self):
     return self.maxY()
   t = property(gett)
+  """
+  The topmost oordinate of the bounds.
+  """
+
+  def getproj(self):
+    crs = self.coordinateReferenceSystem
+    if crs:
+      return proj.Projection(crs)
+  proj = property(getproj)
+  """
+  The :ref:`Projection` of the bounds. ``None`` if the projection is unknown.
+  """
 
   def __repr__(self):
     s = '(%s, %s, %s, %s' % (self.l, self.b, self.r, self.t)

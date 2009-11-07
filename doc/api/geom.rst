@@ -5,6 +5,6 @@ Geometry
 ========
 
   .. automodule:: geoscript.geom
-     :members: Point, LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon, Geometry, fromWKT, draw
+     :members: Point, LineString, LinearRing, Polygon, MultiPoint, MultiLineString, MultiPolygon, Geometry, Bounds, fromWKT, draw
 
   

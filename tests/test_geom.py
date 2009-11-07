@@ -51,6 +51,13 @@ class GeomTest(unittest.TestCase):
     mp = geom.MultiPolygon([ [[1,2],[3,4],[5,6],[1,2]] ])
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
 
+  def testBounds(self):
+    b = geom.Bounds(1.0, 2.0, 3.0, 4.0)
+    self.assertEqual('(1.0, 2.0, 3.0, 4.0)', str(b))
+ 
+    b = geom.Bounds(1.0, 2.0, 3.0, 4.0, 'epsg:4326')
+    self.assertEqual('(1.0, 2.0, 3.0, 4.0, EPSG:4326)', str(b))
+    
   def testMultiPolygonFromJTS(self):
     mp = geom.MultiPolygon(geom._gf.createMultiPolygon([geom._gf.createPolygon(geom._gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
