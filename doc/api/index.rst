@@ -8,3 +8,4 @@ API Reference
    geom
    proj
    feature
+   layer
