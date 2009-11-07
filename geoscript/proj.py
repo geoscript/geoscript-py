@@ -97,6 +97,9 @@ class Projection(object):
 
   def __str__(self):
     return self.id
+  
+  def __repr__(self):
+    return self.wkt
 
   def __eq__(self, other):
     return crs.equalsIgnoreMetadata(self._crs, other._crs)
