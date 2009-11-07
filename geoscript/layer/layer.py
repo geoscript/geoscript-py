@@ -5,8 +5,7 @@ import sys
 
 from java import io
 from java import net
-from geoscript import geom, proj
-from geoscript.feature import Feature, FeatureType
+from geoscript import geom, proj, feature
 from org.geotools.data import DefaultQuery, Query, Transaction
 from org.geotools.feature import FeatureCollections
 from org.geotools.filter.text.cql2 import CQL
@@ -25,7 +24,7 @@ class Layer(object):
         raise Exception('Layer requires a feature source.')
 
       self.fs = fs
-      self.ftype = FeatureType(ft=fs.schema) 
+      self.ftype = feature.Schema(ft=fs.schema) 
 
     # we keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
@@ -114,12 +113,12 @@ class Layer(object):
     >>> from geoscript import geom
     >>> l.add([geom.Point(1,2)])
     >>> l.add([geom.Point(3,4)])
-    >>> [ str(f.geom()) for f in l.features() ]
+    >>> [ str(f.geom) for f in l.features() ]
     ['POINT (1 2)', 'POINT (3 4)']
 
     This method takes an optional filter argument, specified as CQL:
 
-    >>> [ str(f.geom()) for f in l.features('INTERSECT(geom,POINT(3 4))') ]
+    >>> [ str(f.geom) for f in l.features('INTERSECT(geom,POINT(3 4))') ]
     ['POINT (3 4)']
 
     This method takes an optional transform argument, which is a function that
@@ -127,22 +126,21 @@ class Layer(object):
     transform function before it is returned.
 
     >>> def tx (f):
-    ...    f.geom( geom.Point(2*f.geom().x, 2*f.geom().y) )
-    >>> [str(f.geom()) for f in l.features(transform=tx)]
+    ...    f.geom = geom.Point(2*f.geom.x, 2*f.geom.y)
+    >>> [str(f.geom) for f in l.features(transform=tx)]
     ['POINT (2 4)', 'POINT (6 8)']
     """
 
-    f = self._filter(filter)
-    q = DefaultQuery(self.name,f)
+    q = DefaultQuery(self.name, self._filter(filter))
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
-      feature = Feature(ftype=self.ftype, f=r.next())
+      f = feature.Feature(schema=self.ftype, f=r.next())
       if transform:
-         result  = transform(feature)
+         result  = transform(f)
          if result and isinstance(result, Feature):
-           feature = result
+           f = result
 
-      yield feature
+      yield f
 
     r.close()
 
@@ -175,12 +173,13 @@ class Layer(object):
     >>> l.add([geom.Point(1,2)])
     >>> l.count()
     1
+    
     """
-    if isinstance(o,Feature):
+    if isinstance(o, feature.Feature):
       f = o
-      if not f.ftype:
-        f.ftype = self.ftype
-    elif isinstance(o, list):
+      if not f.schema:
+        f.schema = self.ftype
+    elif isinstance(o, (dict,list)):
       f = self.ftype.feature(o)
       
     fc = FeatureCollections.newCollection() 
@@ -189,8 +188,8 @@ class Layer(object):
 
   def reproject(self, srs, name=None):
     crs = proj.crs.decode(srs)
-    natts = [(att,typ,crs) if isinstance(typ,geom.Geometry) else (att,typ) for att,typ in self.ftype.atts()]
-    nftype = FeatureType(name if name else self.name, natts)    
+    natts = [(a.name,a.typ,crs) if isinstance(a.typ,geom.Geometry) else (a.name,a.typ) for a in self.ftype.attributes]
+    nftype = feature.Schema(name if name else self.name, natts)    
 
     q = DefaultQuery(self.name, Filter.INCLUDE)
     q.coordinateSystemReproject = crs 
@@ -199,8 +198,8 @@ class Layer(object):
     i = fc.features()
 
     while i.hasNext():
-      feature = Feature(ftype=nftype, f=i.next())
-      yield feature
+      f = feature.Feature(schema=nftype, f=i.next())
+      yield f
     
     fc.close(i)
 

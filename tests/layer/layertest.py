@@ -33,8 +33,8 @@ class LayerTest:
      assert 'Texas', features[0].get('STATE_NAME')
 
   def testReproject(self):
-     rgeoms = [proj.transform(f.geom(),self.l.crs,'epsg:3005') for f in self.l.features()]
+     rgeoms = [proj.transform(f.geom,self.l.crs,'epsg:3005') for f in self.l.features()]
      i = 0
      for f in self.l.reproject('epsg:3005'):
-        assert str(rgeoms[i].coordinate), str(f.geom().coordinate)
+        assert str(rgeoms[i].coordinate), str(f.geom.coordinate)
         i += 1

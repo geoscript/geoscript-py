@@ -1,5 +1,5 @@
 """
-feature module -- Provides classes for simple feature access.
+feature module -- Classes for simple feature access.
 """
 
 import java
@@ -44,16 +44,16 @@ def _map(o):
 
   return o
 
-class FeatureType:
+class Schema(object):
   """
-  A feature type is the schema for a feature. It specifies the names and 
-  types of a features attributes. A feature type can be constructed from a 
-  list of name, type tuples
-   
+  Describes the structure of a feature. A schema is composed of a name, and a set of attributes each containing a name and a type.
+
+  *atts* is specicied as a ``list`` of (``str``, ``type``) tuples:
+
   >>> import geom
-  >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-  >>> str(ft)
-  'myFeatureType {geom: Point, att1: int, att2: str}'
+  >>> schema = Schema('widgets', [ ('geom', geom.Point), ('name', str), ('price', float) ])
+  >>> str(schema)
+  'widgets [geom: Point, name: str, price: float]'
 
   """
 
@@ -88,195 +88,225 @@ class FeatureType:
     else:
       raise Exception('No attributes specified for feature type.')
 
-  def name(self):
-    """
-    The name of the feature type.
-
-    >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> str(ft.name())
-    'myFeatureType'
-    """
-
+  def getname(self):
     return self.ft.name.localPart
 
-  def geom(self):
-    """
-    The geometry attribute of the feature type. The attribute is represented by
-    a tuple of the form (<name>,<type> [,<crs>])
+  name = property(getname)
+  """
+  The name of the schema. A schema name is usually descriptive of the type of feature being descripted, for example 'roads', 'streams', 'persons', etc...
 
-    >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> g = ft.geom()
-    >>> str(g[0])
-    'geom'
-    >>> g[1].__name__
-    'Point'
-    """
+  >>> s = Schema('widgets')
+  >>> s.name
+  'widgets'
+  """
 
+  def getgeom(self):
     gd = self.ft.geometryDescriptor
     if gd:
-      geom = (gd.localName,gd.type.binding)
-      if gd.coordinateReferenceSystem:
-        geom = (geom[0],geom[1],gd.coordinateReferenceSystem)
+      return self.attribute(gd.localName)
 
-      return geom
+  geom = property(getgeom)
+  """
+  The geometry :class:`Attribute` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes.
 
-  def atts(self):
+  >>> s = Schema('widgets', [ ('geom',geom.Point) ])
+  >>> s.geom
+  (geom, Point)
+  """
+
+  def attribute(self, name):
     """
-    Iterates over attributes.
+    Returns the :class:`Attribute` named *name*, or ``None`` if no such attribute exists in the schema.
 
-    >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> str(', '.join(['%s: %s' % (att,typ.__name__) for att,typ in ft.atts()]))
-    'geom: Point, att1: int, att2: str'
-    """
-
-    for ad in self.ft.attributeDescriptors:
-      yield (ad.localName, _map(ad.type.binding))
-
-  def attnames(self):
-    """ 
-    Iterates over attribute names.
-    >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> str(', '.join(['%s' % (att) for att in ft.attnames()]))
-    'geom, att1, att2'
+    >>> s = Schema('widgets', [('name', str), ('price', float)])
+    >>> s.attribute('price')
+    price: float
     """
 
-    for ad in self.ft.attributeDescriptors:
-      yield ad.localName
+    ad = self.ft.getDescriptor(name)
+    if ad:
+      att = Attribute(ad.localName, _map(ad.type.binding))
+      if isinstance(ad, GeometryDescriptor) and ad.coordinateReferenceSystem:
+        att.proj = proj.Projection(ad.coordinateReferenceSystem)
+
+      return att
+
+  def getattributes(self):
+    return [self.attribute(ad.localName) for ad in self.ft.attributeDescriptors]
+
+  attributes = property(getattributes)
+  """
+  Returns a ``list`` of all schema :class:`Attribute`.
+
+  >>> s = Schema('widgets', [ ('name', str), ('price', float) ])
+  >>> s.attributes
+  [name: str, price: float]
+  """
 
   def feature(self, vals, id=None):
     """
-    Creates a feature of the type from a list of attribute values.
+    Creates a feature of the schema from a ``dict`` of values values.
 
-    >>> ft = FeatureType('myFeatureType', [ ('geom',geom.Point), ('att1',int), ('att2',str) ])
-    >>> f = ft.feature([geom.Point(1,1), 1, 'one'], 'fid1')
+    >>> s = Schema('widgets', [('name', str), ('price', float) ])
+    >>> f = s.feature({'name': 'anvil', 'price': 100.0}, '1')
     >>> str(f) 
-    'fid1 {geom: POINT (1 1), att1: 1, att2: one}'
+    'widgets.1 {name: anvil, price: 100.0}'
     """
-    return Feature(zip([att for att in self.attnames()],vals), id, self)
+    return Feature(vals, id, self)
      
   def __str__(self):
-    atts = ['%s: %s' % (att,typ.__name__) for att,typ in self.atts()]
-    return '%s {%s}' % (self.name(), string.join(atts,', '))
+    atts = ['%s' % str(att) for att in self.attributes]
+    return '%s [%s]' % (self.name, string.join(atts,', '))
 
-class Feature:
+class Attribute(object):
   """
-  A feature is a set of attributes (key value pairs) and a geometry.
+  A schema attribute composed of a name and a type. A geometric attribute also contains a :class:`geoscript.proj.Projection`.
+  """
 
-  >>> import geom
-  >>> f = Feature([ ('name','widget'), ('geom', geom.Point(1,2)) ], 'fid1') 
+  def __init__(self, name, typ, proj=None):
+    self.name = name
+    self.typ = typ
+    self.proj = proj
+
+  def __repr__(self):
+    return '%s: %s' % (self.name, self.typ.__name__)
+
+class Feature(object):
+  """
+  An object composed of a set of named attributes with values.
+
+  A feature is constructed from a ``dict`` of name value pairs and an optional identifier:
+
+  >>> f = Feature({ 'name': 'anvil', 'price': 100.0 }, 'widgets.1')
+  >>> str(f.get('name'))
+  'anvil'
+
+  A feature can also be constructed optionally with a :class:`Schema`:
+
+  >>> s = Schema('widgets', [('name', str), ('price', float)])
+  >>> f = Feature({'name': 'anvil'}, '1', s)
   >>> str(f)
-  'fid1 {name: widget, geom: POINT (1 2)}'
+  'widgets.1 {name: anvil, price: None}'
 
-  The attributes of a feature can be get and set:
+  When *schema* is specified feature values can be passed a ``list``:
 
-  >>> str(f.get('name'))
-  'widget'
-  >>> f.set('name','foobar')
-  >>> str(f.get('name'))
-  'foobar'
-
-  The geometry of a feature can also be modified:
-
-  >>> f.geom()
-  POINT (1 2)
-  >>> f.geom(geom.Point(3,4))
-  POINT (3 4)
+  >>> s = Schema('widgets', [('name', str), ('price', float)])
+  >>> f = Feature(['anvil', 100.0], '1', s)
+  >>> str(f)
+  'widgets.1 {name: anvil, price: 100.0}'
 
   """
-  def __init__(self, atts=None, id=None, ftype=None, f=None):
+  def __init__(self, atts=None, id=None, schema=None, f=None):
 
     if atts:
       # attributes specified directly
 
-      # turn into list of tuples if necessary
-      if isinstance(atts, dict):
-        l = [(x,y) for x,y in atts.iteritems()]
-        atts = l
+      # if list specified assume values in order of schema
+      if isinstance(atts, list):
+        if not schema:
+          raise Exception('Values may be specified as list only when schema is supplied')
+
+        natts = {}  
+        for i in range(len(atts)):
+          natts[schema.attributes[i].name] = atts[i]
+        atts = natts
 
       # generate feature type if necessary
-      self.ftype = ftype 
-      if not self.ftype: 
-        self.ftype = FeatureType('feature', [(x[0],type(x[1])) for x in atts])
+      self.schema = schema 
+      if not self.schema: 
+        self.schema = Schema('feature', [(att, type(val)) for att,val in atts.iteritems()])
       
       # generate feature
-      b = SimpleFeatureBuilder(self.ftype.ft)
-      for att in atts: 
-        b.set(att[0],att[1])
+      b = SimpleFeatureBuilder(self.schema.ft)
+      for att, val in atts.iteritems(): 
+        b.set(att, val)
 
       self.f = b.buildFeature(id)
 
     elif f:
       # feature specififed directly
       self.f = f
-      self.ftype = ftype if ftype else FeatureType(f.type)
+      self.schema = schema if schema else Schema(ft=f.type)
 
     else:
       raise Exception('No attributes specified for feature')
 
-  def id(self):
-    """
-    Id of the feature.
-
-    >>> import geom
-    >>> f = Feature({'geom': geom.Point(1,1)}, 'fid.one')
-    >>> str(f.id())
-    'fid.one'
-    """
-
+  def getid(self):
     return self.f.identifier.toString()
 
-  def geom(self, g=None):
-    """
-    Gets and sets the geometry of the feature.
-    >>> import geom
-    >>> f = Feature({'geom': geom.Point(1,1)}, 'fid.one')
-    >>> f.geom()
-    POINT (1 1)
-    >>> f.geom(geom.Point(2,2))
-    POINT (2 2)
-    """
+  id = property(getid)
+  """
+  Id of the feature.
 
-    if g:
-      self.f.defaultGeometry = g
+  >>> f = Feature({'name': 'anvil'}, 'widgets.1')
+  >>> f.id
+  widgets.1
+  """
 
+  def getgeom(self):
     return self.f.defaultGeometry
 
-  def get(self,att):
+  def setgeom(self, g):
+    self.f.defaultGeometry = g
+
+  geom = property(getgeom, setgeom)
+  """
+  The geometry of the feature.
+
+  >>> import geom
+  >>> f = Feature({'geom': geom.Point(1,1)})
+  >>> f.geom
+  POINT (1 1)
+  >>> f.geom = geom.Point(2,2)
+  >>> f.geom
+  POINT (2 2)
+  """
+
+  def get(self, name):
     """
-    Gets an attribute of a feature.
-    >>> import geom
-    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
+    Returns a feature attribute value. *name* is the name of the attribute whose value to return.
+
+    >>> f = Feature({'name': 'anvil', 'price': 100.0})
     >>> str(f.get('name'))
-    'one'
+    'anvil'
     """
-    return self.f.getAttribute(att)
+    return self.f.getAttribute(name)
 
-  def set(self,att,value):
+  def set(self, name, value):
     """
-    Sets an attribute of a feature.
-    >>> import geom
-    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
+    Sets a feature attribute value. *name* is the name of the attribute whose value to set, and *value* is the new attribute value.
+
+    >>> f = Feature({'name': 'anvil', 'price': 100.0})
     >>> str(f.get('name'))
-    'one'
-    >>> f.set('name', 'two')
+    'anvil'
+    >>> f.set('name', 'mallet')
     >>> str(f.get('name'))
-    'two'
+    'mallet'
     """
 
-    self.f.setAttribute(att,value)
+    self.f.setAttribute(name, value)
 
-  def atts(self):
-    """
-    Iterates over attributes.
-    >>> import geom
-    >>> f = Feature({'geom': geom.Point(1,1), 'name': 'one'}, 'fid.one')
-    >>> str(', '.join(['%s: %s' % (att,val) for att,val in f.atts()]))
-    'geom: POINT (1 1), name: one'
-    """
+  def getattributes(self):
 
-    for att in self.ftype.attnames():
-      yield (att, _map(self.f.getAttribute(att)))
+    atts = {}
+    for att in self.schema.attributes:
+      atts[att.name] = _map(self.f.getAttribute(att.name))
 
+    return atts
+
+  attributes = property(getattributes)
+  """
+  Returns a ``dict`` of name, value for the attributes of the feature.
+
+  >>> f = Feature({'name': 'anvil', 'price': 100.0})
+  >>> atts = f.attributes
+  >>> str(atts['name'])
+  'anvil'
+  >>> atts['price']
+  100.0
+  """
   def __str__(self):
-    atts = ['%s: %s' % (att,val) for att,val in self.atts()]
-    return '%s {%s}' % (self.id(), string.join(atts,', '))
+    atts = ['%s: %s' % (att.name, self.get(att.name)) for att in self.schema.attributes]
+
+    id = self.id if self.id.startswith(self.schema.name) else '%s.%s' % (self.schema.name, self.id)
+    return '%s {%s}' % (id, string.join(atts,', '))
