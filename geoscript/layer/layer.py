@@ -64,6 +64,20 @@ class Layer(object):
   >>> l.proj.id
   EPSG:4326
   """
+  
+  def getformat(self):
+    # first see if the datastore has a ref to its factory
+    ds = self.fs.dataStore
+    try:
+      return str(ds.dataStoreFactory.displayName)
+    except AttributeError:
+      # no factory, resort to heuristic of using data store type name
+      return type(ds).__name__[:-9]
+
+  format = property(getformat)
+  """
+  A ``str`` identifying the format of the layer.
+  """
 
   def count(self, filter=None):
     """

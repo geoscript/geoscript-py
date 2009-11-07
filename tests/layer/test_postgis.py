@@ -7,3 +7,5 @@ class PostgisLayer_Test(LayerTest):
   def setUp(self):
     self.l = PostgisLayer('states', 'geoscript')
 
+  def testFormat(self):
+    assert 'PostGIS' == self.l.format

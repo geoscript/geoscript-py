@@ -12,3 +12,6 @@ class H2Layer_Test(LayerTest):
   def testReproject(self):
     #TODO fix this, currently h2 won't reproject
     pass
+
+  def testFormat(self):
+    assert 'H2' == self.l.format
