@@ -52,8 +52,8 @@ class Schema(object):
 
   >>> import geom
   >>> schema = Schema('widgets', [ ('geom', geom.Point), ('name', str), ('price', float) ])
-  >>> str(schema)
-  'widgets [geom: Point, name: str, price: float]'
+  >>> schema
+  widgets [geom: Point, name: str, price: float]
 
   """
 
@@ -146,12 +146,12 @@ class Schema(object):
 
     >>> s = Schema('widgets', [('name', str), ('price', float) ])
     >>> f = s.feature({'name': 'anvil', 'price': 100.0}, '1')
-    >>> str(f) 
-    'widgets.1 {name: anvil, price: 100.0}'
+    >>> f 
+    widgets.1 {name: anvil, price: 100.0}
     """
     return Feature(vals, id, self)
      
-  def __str__(self):
+  def __repr__(self):
     atts = ['%s' % str(att) for att in self.attributes]
     return '%s [%s]' % (self.name, string.join(atts,', '))
 
@@ -182,15 +182,15 @@ class Feature(object):
 
   >>> s = Schema('widgets', [('name', str), ('price', float)])
   >>> f = Feature({'name': 'anvil'}, '1', s)
-  >>> str(f)
-  'widgets.1 {name: anvil, price: None}'
+  >>> f
+  widgets.1 {name: anvil, price: None}
 
   When *schema* is specified feature values can be passed a ``list``:
 
   >>> s = Schema('widgets', [('name', str), ('price', float)])
   >>> f = Feature(['anvil', 100.0], '1', s)
-  >>> str(f)
-  'widgets.1 {name: anvil, price: 100.0}'
+  >>> f
+  widgets.1 {name: anvil, price: 100.0}
 
   """
   def __init__(self, atts=None, id=None, schema=None, f=None):
@@ -302,7 +302,7 @@ class Feature(object):
   >>> atts['price']
   100.0
   """
-  def __str__(self):
+  def __repr__(self):
     atts = ['%s: %s' % (att.name, self.get(att.name)) for att in self.schema.attributes]
 
     id = self.id if self.id.startswith(self.schema.name) else '%s.%s' % (self.schema.name, self.id)
