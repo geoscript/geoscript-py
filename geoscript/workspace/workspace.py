@@ -82,8 +82,9 @@ class Workspace:
      >>> ws = Workspace()
      >>> ws.layers()
      []
+     >>> from geoscript.feature import Schema
      >>> from geoscript.layer import MemoryLayer
-     >>> l = MemoryLayer('foo')
+     >>> l = MemoryLayer(name='foo')
      >>> l = ws.addLayer(l)
      >>> ws.layers()
      ['foo']

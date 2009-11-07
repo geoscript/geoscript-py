@@ -13,11 +13,15 @@ class MemoryLayer(Layer):
   A memory layer is created by specifying a :class:`geoscript.feature.Schema`. If the *schema* is omitted the layer is created with the schema::
 
      layer [geom: Geometry]
+
+  Or alternatively just a *name* may be specified.
   """
 
-  def __init__(self, schema=None):
+  def __init__(self, schema=None, name=None):
     if not schema:
-      schema = feature.Schema('layer', [('geom', geom.Geometry)])
+      if not name:
+        name = 'layer'
+      schema = feature.Schema(name, [('geom', geom.Geometry)])
 
     ds = MemoryDataStore(schema.ft)
     Layer.__init__(self,ds.getFeatureSource(name))

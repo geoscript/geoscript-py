@@ -19,7 +19,7 @@ class Layer(object):
   def __init__(self, fs=None, name='layer'):
     if self.__class__ == Layer and not fs:
       import memory
-      mem = memory.MemoryLayer(name,[('geom',geom.Geometry)])
+      mem = memory.MemoryLayer(name=name)
       self.fs = mem.fs
       self.schema = mem.schema
     else:
