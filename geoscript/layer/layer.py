@@ -13,7 +13,7 @@ from org.opengis.filter import Filter
 
 class Layer(object):
   """
-  A dataset of a particular format. A layer is complex of a :ref:`geoscript.feature.Feature` objects.
+  A dataset of a particular format. A layer is complex of a :class:`geoscript.feature.Feature` objects.
   """
 
   def __init__(self, fs=None, name='layer'):
@@ -98,7 +98,7 @@ class Layer(object):
 
   def bounds(self, filter=None):
     """
-    The :ref:`geoscript.geom.Bounds` of the layer.
+    The :class:`geoscript.geom.Bounds` of the layer.
 
     >>> l = Layer()
     >>> from geoscript import geom 
@@ -120,7 +120,7 @@ class Layer(object):
 
   def features(self, filter=None, transform=None):
     """
-    Iterates over the :ref:`geoscript.feature.Feature` contained in the layer.
+    Iterates over the :class:`geoscript.feature.Feature` contained in the layer.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -177,7 +177,7 @@ class Layer(object):
 
   def add(self, o):
     """
-    Adds a :ref:`geoscript.feature.Feature` to the layer.
+    Adds a :class:`geoscript.feature.Feature` to the layer.
 
     >>> from geoscript import geom
     >>> from geoscript import feature
