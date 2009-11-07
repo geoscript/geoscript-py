@@ -8,4 +8,4 @@ API Reference
    geom
    proj
    feature
-   layer
+   layer/index

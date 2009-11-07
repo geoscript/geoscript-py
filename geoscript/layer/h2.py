@@ -1,5 +1,5 @@
 """
-layer.h2 module -- H2 implementation of Layer.
+The :mod:`layer.h2` module provides support for H2 table access.
 """
 
 from geoscript import geom, feature
@@ -7,10 +7,15 @@ from geoscript.layer import Layer
 from org.geotools.data.h2 import H2DataStoreFactory
 
 class H2Layer(Layer):
+  """
+  A subclass of :class:`geoscript.layer.layer.Layer` for H2.
 
-  def __init__(self, table, db):
+  A H2 layer is created by specifying a *table* name and a *database* name.
+  """
 
-    params = {'database': db, 'dbtype': 'h2'}
+  def __init__(self, table, database):
+
+    params = {'database': database, 'dbtype': 'h2'}
     h2f = H2DataStoreFactory()
     h2 = h2f.createDataStore(params)
     

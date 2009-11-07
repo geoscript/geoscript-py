@@ -1,0 +1,10 @@
+.. module:: layer.h2
+    :synopsis: H2 table support.
+   
+H2
+==
+
+  .. automodule:: geoscript.layer.h2
+      :members: H2Layer
+
+

@@ -1,5 +1,5 @@
 """
-The :mod:`layer` module provides data access and manipulation.
+The :mod:`layer.layer` module provides the base classes for data access and manipulation.
 """
 import sys
 
