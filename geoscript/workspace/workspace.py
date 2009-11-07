@@ -71,8 +71,8 @@ class Workspace:
      if self.layer(name):
        raise Exception('Layer %s already exists.' % (name))
 
-     ftype = feature.Schema(name, atts)
-     self.ds.createSchema(ftype.ft) 
+     schema = feature.Schema(name, atts)
+     self.ds.createSchema(schema.ft) 
      return self.layer(name)
 
   def addLayer(self, layer, name=None):
@@ -92,12 +92,12 @@ class Workspace:
      name = name if name else layer.name
      l = self.layer(name)
      if not l:
-       if layer.crs:
+       if layer.proj:
          atts = []
-         for att in layer.ftype.attributes:
-           atts.append((att.name, att.typ, layer.crs) if issubclass(att.typ, geom.Geometry) else (att.name,att.typ))
+         for att in layer.schema.attributes:
+           atts.append((att.name, att.typ, layer.proj) if issubclass(att.typ, geom.Geometry) else (att.name, att.typ))
        else:
-         atts = [(att.name,att.typ) for att in layer.ftype.attributes]
+         atts = [(att.name,att.typ) for att in layer.schema.attributes]
        l = self.newLayer(name, atts)
      
      for f in layer.features():

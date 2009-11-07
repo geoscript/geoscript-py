@@ -1,5 +1,5 @@
 """
-feature module -- Classes for simple feature access.
+The :mod:`feature` module provides classes for simple feature access.
 """
 
 import java
@@ -70,11 +70,8 @@ class Schema(object):
         if issubclass(typ, geom.Geometry):
           # look for srs/crs info
           if len(att) > 2:
-            xrs = att[2]
-            if isinstance(xrs,str):
-              tb.srs(xrs)
-            elif isinstance(xrs,proj.CRS):
-              tb.crs(xrs)
+            prj = proj.Projection(att[2])
+            tb.crs(prj._crs)
           
         # we call _map() here to avoid setting the type binding to a Python
         # (eg: PyInteger) type, but rather a native java type (Integer)

@@ -1,5 +1,5 @@
 """
-layer module -- Provides data access and manipulation.
+The :mod:`layer` module provides data access and manipulation.
 """
 import sys
 
@@ -12,47 +12,58 @@ from org.geotools.filter.text.cql2 import CQL
 from org.opengis.filter import Filter
 
 class Layer(object):
+  """
+  A dataset of a particular format. A layer is complex of a :ref:`geoscript.feature.Feature` objects.
+  """
 
-  def __init__(self,fs=None, name='layer'):
+  def __init__(self, fs=None, name='layer'):
     if self.__class__ == Layer and not fs:
       import memory
       mem = memory.MemoryLayer(name,[('geom',geom.Geometry)])
       self.fs = mem.fs
-      self.ftype = mem.ftype
+      self.schema = mem.schema
     else:
       if not fs:
         raise Exception('Layer requires a feature source.')
 
       self.fs = fs
-      self.ftype = feature.Schema(ft=fs.schema) 
+      self.schema = feature.Schema(ft=fs.schema) 
 
     # we keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
-    self._crs = None
+    self._proj = None
 
   def getname(self):
-    """
-    The name of the layer.
-    """
-
     return self.fs.name.localPart
 
   name = property(getname)
+  """
+  The name of the layer.
+  """
 
-  def getcrs(self):
-    """
-    The coordinate reference system of the layer.
-    """
-
-    return self._crs if self._crs else self.fs.schema.coordinateReferenceSystem
-
-  def setcrs(self, value):
-    if isinstance(value, str):      
-      self._crs = proj.crs.decode(value)
+  def getproj(self):
+    if self._proj:
+      return self._proj
     else:
-      self._crs = value
+      crs = self.fs.schema.coordinateReferenceSystem
+      if crs:
+        return proj.Projection(crs)
 
-  crs = property(getcrs, setcrs)
+  def setproj(self, value):
+    self._proj = proj.Projection(value) 
+
+  proj = property(getproj, setproj)
+  """
+  The :class:`geoscript.proj.Projection` of the layer. In cases where the projection of a layer is unkown this attribute has the value ``None``.
+
+  >>> import proj
+  >>> l = Layer()
+  >>> l.proj
+  None
+  >>> l.proj = proj.Projection('epsg:4326')
+  >>> l.proj.id
+  EPSG:4326
+  """
 
   def count(self, filter=None):
     """
@@ -71,7 +82,7 @@ class Layer(object):
     >>> l.add([geom.Point(3,4)])
     >>> l.count() 
     2
-    >>> l.count('INTERSECT(geom,POINT(3 4))')
+    >>> l.count('INTERSECTS(geom,POINT(3 4))')
     1
     """
 
@@ -87,7 +98,7 @@ class Layer(object):
 
   def bounds(self, filter=None):
     """
-    The bounds of the layer.
+    The :ref:`geoscript.geom.Bounds` of the layer.
 
     >>> l = Layer()
     >>> from geoscript import geom 
@@ -95,19 +106,21 @@ class Layer(object):
     >>> l.add([geom.Point(3.0, 4.0)])
 
     >>> l.bounds()
-    ReferencedEnvelope[1.0 : 3.0, 2.0 : 4.0]
+    (1.0, 2.0, 3.0, 4.0)
 
     This method takes an optional filter parameter specified as CQL:
 
-    >>> l.bounds('INTERSECT(geom,POINT(3 4))')
-    ReferencedEnvelope[3.0 : 3.0, 4.0 : 4.0]
+    >>> l.bounds('INTERSECTS(geom,POINT(3 4))')
+    (3.0, 4.0, 3.0, 4.0)
     """
 
-    return self.fs.getBounds(DefaultQuery(self.name, self._filter(filter)))
+    e = self.fs.getBounds(DefaultQuery(self.name, self._filter(filter)))
+    if e:
+      return geom.Bounds(env=e)
 
   def features(self, filter=None, transform=None):
     """
-    Iterates over features in the layer.
+    Iterates over the :ref:`geoscript.feature.Feature` contained in the layer.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -116,12 +129,12 @@ class Layer(object):
     >>> [ str(f.geom) for f in l.features() ]
     ['POINT (1 2)', 'POINT (3 4)']
 
-    This method takes an optional filter argument, specified as CQL:
+    This method takes an optional *filter* argument specified as CQL:
 
-    >>> [ str(f.geom) for f in l.features('INTERSECT(geom,POINT(3 4))') ]
+    >>> [ str(f.geom) for f in l.features('INTERSECTS(geom,POINT(3 4))') ]
     ['POINT (3 4)']
 
-    This method takes an optional transform argument, which is a function that
+    This method takes an optional *transform* argument, which is a function that
     takes a Feature instance. Each feature being iterated over is passed to the
     transform function before it is returned.
 
@@ -134,7 +147,7 @@ class Layer(object):
     q = DefaultQuery(self.name, self._filter(filter))
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
-      f = feature.Feature(schema=self.ftype, f=r.next())
+      f = feature.Feature(schema=self.schema, f=r.next())
       if transform:
          result  = transform(f)
          if result and isinstance(result, Feature):
@@ -146,7 +159,7 @@ class Layer(object):
 
   def delete(self, filter):
     """
-    Deletes features from the layer which match the specified filter.
+    Deletes features from the layer which match the specified *filter*.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -154,7 +167,7 @@ class Layer(object):
     >>> l.add([geom.Point(3,4)])
     >>> l.count()
     2
-    >>> l.delete('INTERSECT(geom, POINT(3 4))')
+    >>> l.delete('INTERSECTS(geom, POINT(3 4))')
     >>> l.count()
     1
     """
@@ -164,41 +177,51 @@ class Layer(object):
 
   def add(self, o):
     """
-    Adds a feature to the layer.
+    Adds a :ref:`geoscript.feature.Feature` to the layer.
 
+    >>> from geoscript import geom
+    >>> from geoscript import feature
     >>> l = Layer() 
     >>> l.count()
     0
-    >>> from geoscript import geom
-    >>> l.add([geom.Point(1,2)])
+    >>> f = feature.Feature({'geom': geom.Point(1,2)})
+    >>> l.add(f)
     >>> l.count()
     1
     
+    *o* can also be specified as a ``dict`` or a ``list``:
+
+    >>> from geoscript import geom
+    >>> l = Layer()
+    >>> l.add({'geom': geom.Point(1,2)})
+    >>> l.add([geom.Point(1,2)])
+    >>> l.count()
+    2
     """
     if isinstance(o, feature.Feature):
       f = o
       if not f.schema:
-        f.schema = self.ftype
+        f.schema = self.schema
     elif isinstance(o, (dict,list)):
-      f = self.ftype.feature(o)
+      f = self.schema.feature(o)
       
     fc = FeatureCollections.newCollection() 
     fc.add(f.f)
     self.fs.addFeatures(fc)
 
   def reproject(self, srs, name=None):
-    crs = proj.crs.decode(srs)
-    natts = [(a.name,a.typ,crs) if isinstance(a.typ,geom.Geometry) else (a.name,a.typ) for a in self.ftype.attributes]
-    nftype = feature.Schema(name if name else self.name, natts)    
+    tproj = proj.Projection(srs)
+    natts = [(a.name, a.typ, tproj) if isinstance(a.typ,geom.Geometry) else (a.name,a.typ) for a in self.schema.attributes]
+    nschema = feature.Schema(name if name else self.name, natts)    
 
     q = DefaultQuery(self.name, Filter.INCLUDE)
-    q.coordinateSystemReproject = crs 
+    q.coordinateSystemReproject = tproj._crs 
 
     fc = self.fs.getFeatures(q)
     i = fc.features()
 
     while i.hasNext():
-      f = feature.Feature(schema=nftype, f=i.next())
+      f = feature.Feature(schema=nschema, f=i.next())
       yield f
     
     fc.close(i)

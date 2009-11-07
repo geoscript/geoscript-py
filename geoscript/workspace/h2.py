@@ -21,7 +21,7 @@ class H2Workspace(Workspace):
 
   def addLayer(self, layer, name=None):
     l = Workspace.addLayer(self, layer, name)
-    if not l.crs:
-      l.crs = layer.crs
+    if not l.proj:
+      l.proj = layer.proj
 
     return l
