@@ -47,7 +47,7 @@ Install GeoTools
 Install GeoScript
 -----------------
 
-#. Download `GeoScript <>`_
+#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-0.1.tar.gz>`_
 
 #. Unpack the GeoScript tarball::
 
