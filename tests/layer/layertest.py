@@ -34,7 +34,8 @@ class LayerTest:
 
   def testReproject(self):
      rgeoms = [self.l.proj.transform(f.geom, 'epsg:3005') for f in self.l.features()]
+     rl = self.l.reproject('epsg:3005', 'reprojected')
      i = 0
-     for f in self.l.reproject('epsg:3005'):
+     for f in rl.features():
         assert str(rgeoms[i].coordinate) == str(f.geom.coordinate)
         i += 1

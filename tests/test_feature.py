@@ -24,6 +24,17 @@ class Feature_Test:
     assert s.geom.proj
     assert prj == s.geom.proj
 
+  def testSchemaReproject(self):
+    prj1 = proj.Projection('epsg:4326')
+    prj2 = proj.Projection('epsg:3005')
+
+    s = feature.Schema('test',[('geom', geom.Point,'epsg:4326')])
+    assert s.attributes[0].proj == prj1
+
+    s = s.reproject(prj2, 'reprojected')
+    assert 'reprojected' == s.name
+    assert s.attributes[0].proj == prj2
+
   def testBasic(self):
     id = 'fid'
     g = geom.Point(-125, 50)

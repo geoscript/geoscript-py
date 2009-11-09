@@ -66,12 +66,17 @@ class Schema(object):
       tb = SimpleFeatureTypeBuilder()
       tb.setName(NameImpl(name))
       for att in atts:
-        name, typ = att[0], att[1]
-        if issubclass(typ, geom.Geometry):
-          # look for srs/crs info
-          if len(att) > 2:
-            prj = proj.Projection(att[2])
-            tb.crs(prj._crs)
+        if isinstance(att, Attribute):
+          name, typ, prj = att.name, att.typ, att.proj
+        else:
+          name, typ = att[0], att[1]
+          prj = None
+          if issubclass(typ, geom.Geometry):
+            # look for srs/crs info
+            if len(att) > 2:
+              prj = proj.Projection(att[2])
+        if prj:
+          tb.crs(prj._crs)
           
         # we call _map() here to avoid setting the type binding to a Python
         # (eg: PyInteger) type, but rather a native java type (Integer)
@@ -151,6 +156,21 @@ class Schema(object):
     """
     return Feature(vals, id, self)
      
+  def reproject(self, prj, name=None):
+    prj = proj.Projection(prj)
+
+    # copy the original schema attributes and override the projection
+    # on any geometric attributes
+    atts = self.attributes
+    for att in atts: 
+      if issubclass(att.typ, geom.Geometry):
+        att.proj = prj
+
+    if not name: 
+      name = self.name
+
+    return Schema(name, atts)
+
   def __repr__(self):
     atts = ['%s' % str(att) for att in self.attributes]
     return '%s [%s]' % (self.name, string.join(atts,', '))
@@ -191,7 +211,6 @@ class Feature(object):
   >>> f = Feature(['anvil', 100.0], '1', s)
   >>> f
   widgets.1 {name: anvil, price: 100.0}
-
   """
   def __init__(self, atts=None, id=None, schema=None, f=None):
 
@@ -233,11 +252,11 @@ class Feature(object):
 
   id = property(getid)
   """
-  Id of the feature.
+  Identifier of the feature
 
   >>> f = Feature({'name': 'anvil'}, 'widgets.1')
   >>> f.id
-  widgets.1
+  'widgets.1'
   """
 
   def getgeom(self):
@@ -248,7 +267,7 @@ class Feature(object):
 
   geom = property(getgeom, setgeom)
   """
-  The geometry of the feature.
+  The geometry of the feature
 
   >>> import geom
   >>> f = Feature({'geom': geom.Point(1,1)})

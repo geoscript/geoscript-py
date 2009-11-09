@@ -16,10 +16,10 @@ class Layer(object):
   A dataset of a particular format. A layer is complex of a :class:`geoscript.feature.Feature` objects.
   """
 
-  def __init__(self, fs=None, name='layer'):
+  def __init__(self, fs=None, name='layer', schema=None):
     if self.__class__ == Layer and not fs:
       import memory
-      mem = memory.MemoryLayer(name=name)
+      mem = memory.MemoryLayer(name=name, schema=schema)
       self.fs = mem.fs
       self.schema = mem.schema
     else:
@@ -159,6 +159,9 @@ class Layer(object):
     """
 
     q = DefaultQuery(self.name, self._filter(filter))
+    if self.proj:
+      q.coordinateSystem = self.proj._crs
+
     r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     while r.hasNext():
       f = feature.Feature(schema=self.schema, f=r.next())
@@ -223,22 +226,36 @@ class Layer(object):
     fc.add(f.f)
     self.fs.addFeatures(fc)
 
-  def reproject(self, srs, name=None):
-    tproj = proj.Projection(srs)
-    natts = [(a.name, a.typ, tproj) if isinstance(a.typ,geom.Geometry) else (a.name,a.typ) for a in self.schema.attributes]
-    nschema = feature.Schema(name if name else self.name, natts)    
+  def reproject(self, prj, name, **options):
+    """
+    Reprojects a layer to a specified :class:`geoscript.proj.Projection`, *prj*.
+    The new layer is named *name*.  
+    """
 
+    prj = proj.Projection(prj)
+
+    # reproject the schema
+    rschema = self.schema.reproject(prj, name)
+
+    # create the reprojected layer
+    rlayer = self._newLayer(rschema, **options)
+
+    # create a query specifying that feautres should be reproje`cted
     q = DefaultQuery(self.name, Filter.INCLUDE)
-    q.coordinateSystemReproject = tproj._crs 
+    if self.proj:
+      q.coordinateSystem = self.proj._crs
+    q.coordinateSystemReproject = prj._crs 
 
     fc = self.fs.getFeatures(q)
     i = fc.features()
 
+    # loop through features and add to new reprojeced layer
     while i.hasNext():
-      f = feature.Feature(schema=nschema, f=i.next())
-      yield f
+      f = feature.Feature(schema=rschema, f=i.next())
+      rlayer.add(f)
     
     fc.close(i)
+    return rlayer
 
   def toGML(self,out=sys.stdout):
     try:
@@ -271,3 +288,6 @@ class Layer(object):
 
   def _filter(self, filter, default=Filter.INCLUDE):
      return CQL.toFilter(filter) if filter else default
+
+  def _newLayer(self, schema, **options):
+     raise Exception('Subclasses must implement')

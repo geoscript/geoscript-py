@@ -4,6 +4,7 @@ workspace.postgis module -- Postgis implementation of Workspace
 
 import os
 from geoscript.workspace import Workspace
+from geoscript.layer import PostgisLayer
 from org.geotools.data.postgis import PostgisNGDataStoreFactory
 
 class PostgisWorkspace(Workspace):
@@ -17,3 +18,8 @@ class PostgisWorkspace(Workspace):
     pg = pgf.createDataStore(params)
     
     Workspace.__init__(self, pg)
+
+  def layer(self, name):
+    l = Workspace.layer(self, name)
+    if l:
+      return PostgisLayer(None, None, fs=l.fs) 

@@ -14,12 +14,20 @@ class PostgisLayer(Layer):
   """
 
   def __init__(self, table, db, host='localhost', port=5432, schema='public', 
-               user=os.environ['USER'], passwd=None):
+               user=os.environ['USER'], passwd=None, fs=None):
 
-    params = {'host': host, 'port': port, 'schema': schema, 'database': db,
+    if not fs:
+      params = {'host': host, 'port': port, 'schema': schema, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'postgis'}
-    pgf = PostgisNGDataStoreFactory()
-    pg = pgf.createDataStore(params)
+      pgf = PostgisNGDataStoreFactory()
+      pg = pgf.createDataStore(params)
     
-    fs = pg.getFeatureSource(table)
+      fs = pg.getFeatureSource(table)
+
     Layer.__init__(self, fs)
+
+  def _newLayer(self, schema, **options):
+
+    pg = self.fs.dataStore
+    pg.createSchema(schema.ft) 
+    return PostgisLayer(None, None, fs=pg.getFeatureSource(schema.name)) 

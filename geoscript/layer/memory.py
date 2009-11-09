@@ -17,11 +17,19 @@ class MemoryLayer(Layer):
   Or alternatively just a *name* may be specified.
   """
 
-  def __init__(self, schema=None, name=None):
-    if not schema:
-      if not name:
-        name = 'layer'
-      schema = feature.Schema(name, [('geom', geom.Geometry)])
+  def __init__(self, schema=None, name=None, fs=None):
+    if not fs:
+      if not schema:
+        if not name:
+          name = 'layer'
+        schema = feature.Schema(name, [('geom', geom.Geometry)])
+      else:
+        name = schema.name
 
-    ds = MemoryDataStore(schema.ft)
-    Layer.__init__(self,ds.getFeatureSource(name))
+      ds = MemoryDataStore(schema.ft)
+      fs = ds.getFeatureSource(name)
+
+    Layer.__init__(self, fs)
+
+  def _newLayer(self, schema, **options):
+    return MemoryLayer(schema) 
