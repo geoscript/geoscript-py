@@ -14,7 +14,7 @@ def toURL(o):
     return o
   elif isinstance(o,(net.URI,io.File)):
     return o.toURL()
-  elif isinstance(o,str):
+  elif isinstance(o, (str, unicode)):
     return io.File(o).toURL()
 
 def toFile(o):
@@ -28,5 +28,5 @@ def toFile(o):
     return toFile(o.toURL())
   elif isinstance(o, net.URL):
     return toFile(o.getFile())
-  elif isinstance(o, str):
+  elif isinstance(o, (str, unicode)):
     return io.File(o)
