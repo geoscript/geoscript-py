@@ -93,28 +93,14 @@ class Schema(object):
   def getname(self):
     return self.ft.name.localPart
 
-  name = property(getname)
-  """
-  The name of the schema. A schema name is usually descriptive of the type of feature being descripted, for example 'roads', 'streams', 'persons', etc...
-
-  >>> s = Schema('widgets')
-  >>> s.name
-  'widgets'
-  """
+  name = property(getname, None, None, 'The name of the schema. A schema name is usually descriptive of the type of feature being descripted, for example "roads", "streams", "persons", etc...')
 
   def getgeom(self):
     gd = self.ft.geometryDescriptor
     if gd:
       return self.attribute(gd.localName)
 
-  geom = property(getgeom)
-  """
-  The geometry :class:`Attribute` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes.
-
-  >>> s = Schema('widgets', [ ('geom',geom.Point) ])
-  >>> s.geom
-  (geom, Point)
-  """
+  geom = property(getgeom, None, None, 'The geometry :class:`Attribute` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes')
 
   def attribute(self, name):
     """
@@ -321,6 +307,7 @@ class Feature(object):
   >>> atts['price']
   100.0
   """
+
   def __repr__(self):
     atts = ['%s: %s' % (att.name, self.get(att.name)) for att in self.schema.attributes]
 

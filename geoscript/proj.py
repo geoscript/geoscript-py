@@ -42,18 +42,13 @@ class Projection(object):
   def getid(self):
     return str(crs.lookupIdentifier(self._crs, True))
 
-  id = property(getid)
-  """
-  The string identifying the projection
-  """
+  id = property(getid, None, None, 'The string identifying the projection')
 
   def getwkt(self):
     return str(self._crs.toString())
 
-  wkt = property(getwkt)
-  """
-  The well known text string representing the projection
-  """
+  wkt = property(getwkt, None, None, 
+     'The well known text string representing the projection')
 
   def transform(self, obj, dest):
     """

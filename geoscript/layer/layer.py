@@ -228,8 +228,7 @@ class Layer(object):
 
   def reproject(self, prj, name, **options):
     """
-    Reprojects a layer to a specified :class:`geoscript.proj.Projection`, *prj*.
-    The new layer is named *name*.  
+    Reprojects a layer to a :class:`geoscript.proj.Projection` specified by  *prj*. This method returns the reprojected layer, which is named *name*
     """
 
     prj = proj.Projection(prj)
