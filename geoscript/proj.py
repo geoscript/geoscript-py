@@ -44,15 +44,15 @@ class Projection(object):
 
   id = property(getid)
   """
-  The string identifying the projection.
+  The string identifying the projection
   """
-     
+
   def getwkt(self):
     return str(self._crs.toString())
 
   wkt = property(getwkt)
   """
-  The well known text string representing the projection.
+  The well known text string representing the projection
   """
 
   def transform(self, obj, dest):
