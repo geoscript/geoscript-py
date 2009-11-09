@@ -6,23 +6,28 @@ from dbexts import dbexts
 if not os.path.exists('work'):
   os.mkdir('work')
 
-zip = ZipFile('data/states.db.zip')
-for file in zip.namelist():
-  target = os.path.join('work',file)
-  if os.path.exists(target):
-     continue
+def unzip(zipfile, todir):
+  zip = ZipFile(zipfile)
+  for file in zip.namelist():
+    target = os.path.join(todir, file)
+    if os.path.exists(target):
+       continue
 
-  if file.endswith('/'):
-     os.mkdir(target)
-  else:
-     f = open(os.path.join('work',file), 'w')
-     f.write(zip.read(file))
-     f.close()
+    if file.endswith('/'):
+       os.mkdir(target)
+    else:
+       f = open(os.path.join(todir, file), 'w')
+       f.write(zip.read(file))
+       f.close()
+
+unzip('data/states.db.zip', 'work')
+unzip('data/states.shp.zip', 'work')
 
 # init h2 database
 db = dbexts('h2', 'dbexts.ini')
 db.isql('DROP TABLE IF EXISTS "widgets"')
 db.isql('DROP TABLE IF EXISTS "states2"')
+db.isql('DROP TABLE IF EXISTS "reprojected"')
 db.close()
 
 # init postgresql database
@@ -37,4 +42,5 @@ def pg_drop(db, tbl):
 
 pg_drop(db,'widgets')
 pg_drop(db,'states2')
+pg_drop(db,'reprojected')
 db.close()

@@ -15,7 +15,7 @@ class WorkspaceTest:
     assert 3 == l.count()
 
   def testAddLayer(self):
-    shp = ShapefileLayer('data/states.shp') 
+    shp = ShapefileLayer('work/states.shp') 
     l = self.ws.addLayer(shp, 'states2')
  
     assert l
