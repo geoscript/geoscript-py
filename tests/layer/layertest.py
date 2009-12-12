@@ -37,5 +37,6 @@ class LayerTest:
      rl = self.l.reproject('epsg:3005', 'reprojected')
      i = 0
      for f in rl.features():
-        assert str(rgeoms[i].coordinate) == str(f.geom.coordinate)
+        assert int(rgeoms[i].coordinate.x) == int(f.geom.coordinate.x)
+        assert int(rgeoms[i].coordinate.y) == int(f.geom.coordinate.y)
         i += 1
