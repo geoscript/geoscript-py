@@ -44,3 +44,16 @@ pg_drop(db,'widgets')
 pg_drop(db,'states2')
 pg_drop(db,'reprojected')
 db.close()
+
+# init mysql database
+db = dbexts('mysql', 'dbexts.ini')
+def mysql_drop(db, tbl):
+  try:
+    db.isql("DROP TABLE %s" % (tbl))
+  except:
+    pass
+
+mysql_drop(db, 'widgets')
+mysql_drop(db, 'states2')
+mysql_drop(db, 'reprojected')
+db.close()

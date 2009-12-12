@@ -49,6 +49,16 @@
       <version>${gt.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.geotools.jdbc</groupId>
+      <artifactId>gt-jdbc-mysql</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools.jdbc</groupId>
+      <artifactId>gt-jdbc-spatialite</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-directory</artifactId>
       <version>${gt.version}</version>
@@ -100,7 +110,7 @@
   </build>
 
   <properties>
-    <gt.version>2.6-SNAPSHOT</gt.version>
+    <gt.version>2.7-SNAPSHOT</gt.version>
   </properties>
 
 </project>
