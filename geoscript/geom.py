@@ -2,6 +2,7 @@
 The :mod:`geom` module provides geometry classes and utilities for the construction and manipulation of geometry objects.
 """
 
+import sys
 from java.lang import Double
 from com.vividsolutions.jts.io import WKTReader
 from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
@@ -272,9 +273,14 @@ def draw(g, size=(500,500)):
   from org.geotools.geometry.jts import LiteShape
 
   buf = 50.0
-  e = g.getEnvelopeInternal()
-  scale = min(size[0] / e.width, size[1] / e.height)
-       
+
+  if not isinstance(g, list):
+    g = [g]
+
+  e = _gf.createGeometryCollection(g).getEnvelopeInternal()
+  scale = size[0] / e.width if e.width > 0 else sys.maxint
+  scale = min(scale, size[1] / e.height) if e.height > 0 else 1 
+
   tx = -1*e.minX
   ty = -1*e.minY
        
@@ -294,21 +300,31 @@ def draw(g, size=(500,500)):
         
   class Panel(swing.JPanel):
 
-    def __init__(self,shp):
-       self.shp = shp
-    
+    def __init__(self, geoms, atx):
+      self.geoms = geoms
+      self.atx = atx
+
     def paintComponent(self, gc):
-      gc.setColor(awt.Color.WHITE)
-      gc.fill(shp)
-
-      gc.setRenderingHint(awt.RenderingHints.KEY_ANTIALIASING, awt.RenderingHints.VALUE_ANTIALIAS_ON)
+      opaque = gc.getComposite()      
+      gc.setRenderingHint(awt.RenderingHints.KEY_ANTIALIASING, 
+        awt.RenderingHints.VALUE_ANTIALIAS_ON)
       gc.setStroke(awt.BasicStroke(2))
-      gc.setColor(awt.Color.BLACK)
-      gc.draw(shp)
 
+      i = 0
+      for g in self.geoms:
+        shp = LiteShape(g, self.atx, False)
 
-  shp = LiteShape(g,at,False)
-  panel = Panel(shp)
+        if isinstance(g, (_Polygon, _MultiPolygon)):
+          i = i + 1
+          gc.setColor(awt.Color.WHITE)
+          gc.setComposite(awt.AlphaComposite.getInstance(awt.AlphaComposite.SRC_OVER, 0.5))
+          gc.fill(shp)
+
+        gc.setComposite(opaque)
+        gc.setColor(awt.Color.BLACK)
+        gc.draw(shp)
+
+  panel = Panel(g, at)
   s = tuple([int(size[x]+2*buf) for x in range(2)])
   panel.preferredSize = s
   frame = swing.JFrame()
