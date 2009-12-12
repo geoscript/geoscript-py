@@ -273,8 +273,7 @@ def draw(g, size=(500,500)):
 
   buf = 50.0
   e = g.getEnvelopeInternal()
-  scx = size[0] / e.width
-  scy = size[1] / e.height
+  scale = min(size[0] / e.width, size[1] / e.height)
        
   tx = -1*e.minX
   ty = -1*e.minY
@@ -282,16 +281,16 @@ def draw(g, size=(500,500)):
   at = AffineTransform()
   
   # scale to size of canvas (inverting the y axis)
-  at.scale(scx,-1*scy)
+  at.scale(scale,-1*scale)
   
   # translate to the origin
   at.translate(tx,ty)
 
   # translate to account for invert
-  at.translate(0,-1*size[1]/scy)
+  at.translate(0,-1*size[1]/scale)
 
   # buffer
-  at.translate(buf/scx,-1*buf/scy)
+  at.translate(buf/scale,-1*buf/scale)
         
   class Panel(swing.JPanel):
 
@@ -314,7 +313,7 @@ def draw(g, size=(500,500)):
   panel.preferredSize = s
   frame = swing.JFrame()
   frame.contentPane = panel
-  frame.size = s
+  frame.pack()
   frame.visible = True
 
 import core
