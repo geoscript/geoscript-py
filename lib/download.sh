@@ -122,14 +122,6 @@ if [ ! -e target/jts-1.10.jar ]; then
 	echo "Downloading jts-1.10.jar"
 	curl -G $base/com/vividsolutions/jts/1.10/jts-1.10.jar -o target/jts-1.10.jar
 fi
-if [ ! -e target/lib-1.0-SNAPSHOT.jar ]; then
-	echo "Downloading lib-1.0-SNAPSHOT.jar"
-	curl -G $base/geoscript/lib/1.0-SNAPSHOT/lib-1.0-SNAPSHOT.jar -o target/lib-1.0-SNAPSHOT.jar
-fi
-if [ ! -e target/maven-archiver ]; then
-	echo "Downloading maven-archiver"
-	curl -G $base/org/apache/maven/maven-archiver -o target/maven-archiver
-fi
 if [ ! -e target/mysql-connector-java-5.1.5.jar ]; then
 	echo "Downloading mysql-connector-java-5.1.5.jar"
 	curl -G $base/mysql/mysql-connector-java/5.1.5/mysql-connector-java-5.1.5.jar -o target/mysql-connector-java-5.1.5.jar
