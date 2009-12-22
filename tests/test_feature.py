@@ -9,7 +9,7 @@ class Feature_Test:
 
     assert 'test' == s.name
     n = 0
-    for att in s.attributes:    
+    for att in s.fields:    
       assert atts[n][0] == att.name
       assert atts[n][1] == att.typ
       n = n+1 
@@ -29,11 +29,11 @@ class Feature_Test:
     prj2 = proj.Projection('epsg:3005')
 
     s = feature.Schema('test',[('geom', geom.Point,'epsg:4326')])
-    assert s.attributes[0].proj == prj1
+    assert s.fields[0].proj == prj1
 
     s = s.reproject(prj2, 'reprojected')
     assert 'reprojected' == s.name
-    assert s.attributes[0].proj == prj2
+    assert s.fields[0].proj == prj2
 
   def testBasic(self):
     id = 'fid'

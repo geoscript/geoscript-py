@@ -46,9 +46,9 @@ def _map(o):
 
 class Schema(object):
   """
-  Describes the structure of a feature. A schema is composed of a name, and a set of attributes each containing a name and a type.
+  Describes the structure of a feature. A schema is composed of a name, and a set of fields each containing a name and a type.
 
-  *atts* is specicied as a ``list`` of (``str``, ``type``) tuples:
+  *fields* is specified as a ``list`` of (``str``, ``type``) tuples:
 
   >>> import geom
   >>> schema = Schema('widgets', [ ('geom', geom.Point), ('name', str), ('price', float) ])
@@ -57,24 +57,24 @@ class Schema(object):
 
   """
 
-  def __init__(self, name=None, atts=[], ft=None):
+  def __init__(self, name=None, fields=[], ft=None):
     self.ft = ft
 
-    if name and atts:
-      # name and attributes specified directly, generate gt feature type 
+    if name and fields:
+      # name and fields specified directly, generate gt feature type 
       # from list
       tb = SimpleFeatureTypeBuilder()
       tb.setName(NameImpl(name))
-      for att in atts:
-        if isinstance(att, Attribute):
-          name, typ, prj = att.name, att.typ, att.proj
+      for fld in fields:
+        if isinstance(fld, Field):
+          name, typ, prj = fld.name, fld.typ, fld.proj
         else:
-          name, typ = att[0], att[1]
+          name, typ = fld[0], fld[1]
           prj = None
           if issubclass(typ, geom.Geometry):
             # look for srs/crs info
-            if len(att) > 2:
-              prj = proj.Projection(att[2])
+            if len(fld) > 2:
+              prj = proj.Projection(fld[2])
         if prj:
           tb.crs(prj._crs)
           
@@ -88,7 +88,7 @@ class Schema(object):
       # gt feature type specified directly
       self.ft = ft
     else:
-      raise Exception('No attributes specified for feature type.')
+      raise Exception('No fields specified for feature type.')
 
   def getname(self):
     return self.ft.name.localPart
@@ -98,36 +98,36 @@ class Schema(object):
   def getgeom(self):
     gd = self.ft.geometryDescriptor
     if gd:
-      return self.attribute(gd.localName)
+      return self.field(gd.localName)
 
-  geom = property(getgeom, None, None, 'The geometry :class:`Attribute` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes')
+  geom = property(getgeom, None, None, 'The geometry :class:`Field` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes')
 
-  def attribute(self, name):
+  def field(self, name):
     """
-    Returns the :class:`Attribute` named *name*, or ``None`` if no such attribute exists in the schema.
+    Returns the :class:`Field` named *name*, or ``None`` if no such attribute exists in the schema.
 
     >>> s = Schema('widgets', [('name', str), ('price', float)])
-    >>> s.attribute('price')
+    >>> s.field('price')
     price: float
     """
 
     ad = self.ft.getDescriptor(name)
     if ad:
-      att = Attribute(ad.localName, _map(ad.type.binding))
+      att = Field(ad.localName, _map(ad.type.binding))
       if isinstance(ad, GeometryDescriptor) and ad.coordinateReferenceSystem:
         att.proj = proj.Projection(ad.coordinateReferenceSystem)
 
       return att
 
-  def getattributes(self):
-    return [self.attribute(ad.localName) for ad in self.ft.attributeDescriptors]
+  def getfields(self):
+    return [self.field(ad.localName) for ad in self.ft.attributeDescriptors]
 
-  attributes = property(getattributes)
+  fields = property(getfields)
   """
-  Returns a ``list`` of all schema :class:`Attribute`.
+  Returns a ``list`` of all schema :class:`Field`.
 
   >>> s = Schema('widgets', [ ('name', str), ('price', float) ])
-  >>> s.attributes
+  >>> s.fields
   [name: str, price: float]
   """
 
@@ -145,25 +145,25 @@ class Schema(object):
   def reproject(self, prj, name=None):
     prj = proj.Projection(prj)
 
-    # copy the original schema attributes and override the projection
-    # on any geometric attributes
-    atts = self.attributes
-    for att in atts: 
-      if issubclass(att.typ, geom.Geometry):
-        att.proj = prj
+    # copy the original schema fields and override the projection
+    # on any geometric fields
+    flds = self.fields
+    for fld in flds: 
+      if issubclass(fld.typ, geom.Geometry):
+        fld.proj = prj
 
     if not name: 
       name = self.name
 
-    return Schema(name, atts)
+    return Schema(name, flds)
 
   def __repr__(self):
-    atts = ['%s' % str(att) for att in self.attributes]
-    return '%s [%s]' % (self.name, string.join(atts,', '))
+    flds = ['%s' % str(fld) for fld in self.fields]
+    return '%s [%s]' % (self.name, string.join(flds,', '))
 
-class Attribute(object):
+class Field(object):
   """
-  A schema attribute composed of a name and a type. A geometric attribute also contains a :class:`geoscript.proj.Projection`.
+  A schema field composed of a name and a type. A geometric attribute also contains a :class:`geoscript.proj.Projection`.
   """
 
   def __init__(self, name, typ, proj=None):
@@ -210,7 +210,7 @@ class Feature(object):
 
         natts = {}  
         for i in range(len(atts)):
-          natts[schema.attributes[i].name] = atts[i]
+          natts[schema.fields[i].name] = atts[i]
         atts = natts
 
       # generate feature type if necessary
@@ -291,8 +291,8 @@ class Feature(object):
   def getattributes(self):
 
     atts = {}
-    for att in self.schema.attributes:
-      atts[att.name] = _map(self.f.getAttribute(att.name))
+    for fld in self.schema.fields:
+      atts[fld.name] = _map(self.f.getAttribute(fld.name))
 
     return atts
 
@@ -309,7 +309,7 @@ class Feature(object):
   """
 
   def __repr__(self):
-    atts = ['%s: %s' % (att.name, self.get(att.name)) for att in self.schema.attributes]
+    atts = ['%s: %s' % (fld.name, self.get(fld.name)) for fld in self.schema.fields]
 
     id = self.id if self.id.startswith(self.schema.name) else '%s.%s' % (self.schema.name, self.id)
     return '%s {%s}' % (id, string.join(atts,', '))
