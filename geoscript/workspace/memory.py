@@ -13,8 +13,8 @@ class MemoryWorkspace(Workspace):
     mem = MemoryDataStore()
     Workspace.__init__(self, mem)
 
-  def layer(self, name):
-    l = Workspace.layer(self, name)
+  def get(self, name):
+    l = Workspace.get(self, name)
     if l:
       return MemoryLayer(None, None, l.fs)
 

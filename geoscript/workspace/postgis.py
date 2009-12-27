@@ -19,7 +19,7 @@ class PostgisWorkspace(Workspace):
     
     Workspace.__init__(self, pg)
 
-  def layer(self, name):
-    l = Workspace.layer(self, name)
+  def get(self, name):
+    l = Workspace.get(self, name)
     if l:
       return PostgisLayer(None, None, fs=l.fs) 

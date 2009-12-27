@@ -19,7 +19,7 @@ class MySQLWorkspace(Workspace):
     
     Workspace.__init__(self, ds)
 
-  def layer(self, name):
-    l = Workspace.layer(self, name)
+  def get(self, name):
+    l = Workspace.get(self, name)
     if l:
       return MySQLLayer(None, None, fs=l.fs) 

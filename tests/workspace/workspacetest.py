@@ -4,8 +4,8 @@ from geoscript.layer import ShapefileLayer
 
 class WorkspaceTest:
 
-  def testNewLayer(self):
-    l = self.ws.newLayer('widgets',[ ('geom', geom.Point), ('name', str) ])
+  def testCreate(self):
+    l = self.ws.create('widgets',[ ('geom', geom.Point), ('name', str) ])
     assert l
 
     l.add({'geom': geom.Point(1,1), 'name': 'one'})
@@ -14,9 +14,9 @@ class WorkspaceTest:
 
     assert 3 == l.count()
 
-  def testAddLayer(self):
+  def testAdd(self):
     shp = ShapefileLayer('work/states.shp') 
-    l = self.ws.addLayer(shp, 'states2')
+    l = self.ws.add(shp, 'states2')
  
     assert l
     assert shp.count() == l.count()

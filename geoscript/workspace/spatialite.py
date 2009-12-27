@@ -21,12 +21,12 @@ class SpatiaLiteWorkspace(Workspace):
     Workspace.__init__(self, sl)
 
   def layer(self, name):
-    l = Workspace.layer(self, name)
+    l = Workspace.get(self, name)
     if l:
       return SpatiaLiteLayer(None, None, l.fs)
 
-  def addLayer(self, layer, name=None):
-    l = Workspace.addLayer(self, layer, name)
+  def add(self, layer, name=None):
+    l = Workspace.add(self, layer, name)
     if not l.proj:
       l.proj = layer.proj
 

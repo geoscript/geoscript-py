@@ -27,24 +27,24 @@ class Workspace:
     The names of all the layers in the workspace.
 
     >>> ws = Workspace()
-    >>> l1 = ws.newLayer('foo')
-    >>> l2 = ws.newLayer('bar')
+    >>> l1 = ws.create('foo')
+    >>> l2 = ws.create('bar')
     >>> ws.layers()
     ['foo', 'bar']
     """
 
     return [str(tn) for tn in self.ds.typeNames]
 
-  def layer(self,name):
+  def get(self, name):
     """
     Returns a layer in the workspace.
 
     >>> ws = Workspace()
-    >>> l = ws.layer('foo')
+    >>> l = ws.get('foo')
     >>> str(l)
     'None'
-    >>> x = ws.newLayer('foo')
-    >>> l = ws.layer('foo') 
+    >>> x = ws.create('foo')
+    >>> l = ws.get('foo') 
     >>> str(l.name)
     'foo'
 
@@ -57,25 +57,25 @@ class Workspace:
   
     return None
 
-  def newLayer(self, name, flds=[('geom', geom.Geometry)]):
+  def create(self, name, flds=[('geom', geom.Geometry)]):
      """
      Creates a new layer in the workspace.
    
      >>> from geoscript import geom
      >>> ws = Workspace()
-     >>> l = ws.newLayer('foo', [('geom', geom.Point)])
+     >>> l = ws.create('foo', [('geom', geom.Point)])
      >>> ws.layers()
      ['foo']
      """
 
-     if self.layer(name):
+     if self.get(name):
        raise Exception('Layer %s already exists.' % (name))
 
      schema = feature.Schema(name, flds)
      self.ds.createSchema(schema.ft) 
-     return self.layer(name)
+     return self.get(name)
 
-  def addLayer(self, layer, name=None):
+  def add(self, layer, name=None):
      """
      Adds an existing layer to the workspace.
     
@@ -85,13 +85,13 @@ class Workspace:
      >>> from geoscript.feature import Schema
      >>> from geoscript.layer import MemoryLayer
      >>> l = MemoryLayer(name='foo')
-     >>> l = ws.addLayer(l)
+     >>> l = ws.add(l)
      >>> ws.layers()
      ['foo']
      """
 
      name = name if name else layer.name
-     l = self.layer(name)
+     l = self.get(name)
      if not l:
        if layer.proj:
          flds = []
@@ -99,7 +99,7 @@ class Workspace:
            flds.append((fld.name, fld.typ, layer.proj) if issubclass(fld.typ, geom.Geometry) else (fld.name, fld.typ))
        else:
          flds = [(fld.name, fld.typ) for fld in layer.schema.fields]
-       l = self.newLayer(name, flds)
+       l = self.create(name, flds)
      
      for f in layer.features():
        l.add(f)

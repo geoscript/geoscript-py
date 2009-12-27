@@ -7,9 +7,9 @@ class DirectoryWorkspace_Test(WorkspaceTest):
   def setUp(self):
     self.ws = DirectoryWorkspace('data')
 
-  def testNewLayer(self):
+  def testCreate(self):
     pass
 
-  def testAddLayer(self):
+  def testAdd(self):
     pass
 

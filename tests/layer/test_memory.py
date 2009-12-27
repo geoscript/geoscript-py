@@ -8,7 +8,7 @@ class MemoryLayer_Test(LayerTest):
 
   def setUp(self):
     mem = MemoryWorkspace()
-    self.l = mem.addLayer(ShapefileLayer('work/states.shp'))
+    self.l = mem.add(ShapefileLayer('work/states.shp'))
 
   def testFormat(self):
     assert 'Memory' == self.l.format
