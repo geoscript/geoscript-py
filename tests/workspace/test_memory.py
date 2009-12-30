@@ -1,8 +1,8 @@
 import unittest
 from tests.workspace.workspacetest import WorkspaceTest
-from geoscript.workspace import MemoryWorkspace
+from geoscript.workspace import Memory
 
 class MemoryWorkspace_Test(WorkspaceTest):
 
   def setUp(self):
-    self.ws = MemoryWorkspace()
+    self.ws = Memory()

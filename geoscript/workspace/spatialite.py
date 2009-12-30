@@ -6,7 +6,7 @@ import os
 from geoscript.workspace import Workspace
 from org.geotools.data.spatialite import SpatiaLiteDataStoreFactory
 
-class SpatiaLiteWorkspace(Workspace):
+class SpatiaLite(Workspace):
 
   def __init__(self, db, dir=None):
 

@@ -5,7 +5,7 @@ workspace.memory module -- Memory implementation of Workspace.
 from geoscript.workspace import Workspace
 from org.geotools.data.memory import MemoryDataStore
 
-class MemoryWorkspace(Workspace):
+class Memory(Workspace):
 
   def __init__(self):
 

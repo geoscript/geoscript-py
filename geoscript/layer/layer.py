@@ -23,8 +23,8 @@ class Layer(object):
 
   def __init__(self, name=None, workspace=None, fs=None, schema=None):
     if not workspace:
-       from geoscript.workspace import MemoryWorkspace
-       workspace = MemoryWorkspace()
+       from geoscript.workspace import Memory
+       workspace = Memory()
  
     name = name or Layer._newname()
        

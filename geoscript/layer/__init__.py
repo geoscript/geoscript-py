@@ -1,2 +1,2 @@
 from layer import Layer
-from shapefile import ShapefileLayer
+from shapefile import Shapefile

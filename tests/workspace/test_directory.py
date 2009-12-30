@@ -1,11 +1,11 @@
 import unittest
 from tests.workspace.workspacetest import WorkspaceTest
-from geoscript.workspace import DirectoryWorkspace
+from geoscript.workspace import Directory
 
 class DirectoryWorkspace_Test(WorkspaceTest):
 
   def setUp(self):
-    self.ws = DirectoryWorkspace('data')
+    self.ws = Directory('data')
 
   def testCreate(self):
     pass

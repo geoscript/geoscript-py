@@ -1,8 +1,8 @@
 import unittest
 from tests.workspace.workspacetest import WorkspaceTest
-from geoscript.workspace import PostgisWorkspace
+from geoscript.workspace import PostGIS
 
 class PostgisWorkspace_Test(WorkspaceTest):
 
   def setUp(self):
-    self.ws = PostgisWorkspace('geoscript')
+    self.ws = PostGIS('geoscript')

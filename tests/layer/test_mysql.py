@@ -1,11 +1,11 @@
 import unittest
 from tests.layer.layertest import LayerTest
-from geoscript.workspace import MySQLWorkspace
+from geoscript.workspace import MySQL
 
 class MySQLLayer_Test(LayerTest):
 
   def setUp(self):
-    self.l = MySQLWorkspace('geoscript').get('states')
+    self.l = MySQL('geoscript').get('states')
 
   def testFormat(self):
     assert 'MySQL' == self.l.format

@@ -1,12 +1,12 @@
 import unittest
 from tests.layer.layertest import LayerTest
 from geoscript import proj
-from geoscript.workspace import H2Workspace
+from geoscript.workspace import H2
 
 class H2Layer_Test(LayerTest):
 
   def setUp(self):
-    ws = H2Workspace('work/states')
+    ws = H2('work/states')
     self.l = ws.get('states')
     self.l.proj = proj.Projection('epsg:4326')
     

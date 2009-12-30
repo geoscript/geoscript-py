@@ -8,7 +8,7 @@ from geoscript import util
 from geoscript.workspace import Workspace
 from org.geotools.data.directory import DirectoryDataStore
 
-class DirectoryWorkspace(Workspace):
+class Directory(Workspace):
 
   def __init__(self, dir=os.getcwd()):
 

@@ -14,7 +14,7 @@ class Workspace:
   def __init__(self, ds=None):
     if self.__class__ == Workspace and not ds:
       import memory
-      mem = memory.MemoryWorkspace()
+      mem = memory.Memory()
       self.ds = mem.ds
     else :
       if not ds:

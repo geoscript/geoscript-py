@@ -7,7 +7,7 @@ from java import net
 from geoscript import util
 from geoscript.layer import Layer
 
-class ShapefileLayer(Layer):
+class Shapefile(Layer):
   """
   A subclass of :class:`geoscript.layer.layer.Layer` for the Shapefile format.
 
@@ -17,8 +17,8 @@ class ShapefileLayer(Layer):
     f = util.toFile(file) 
     name = path.splitext(path.basename(file))[0]
 
-    from geoscript.workspace import DirectoryWorkspace
-    Layer.__init__(self, name, DirectoryWorkspace(f.canonicalFile.parent))
+    from geoscript.workspace import Directory
+    Layer.__init__(self, name, Directory(f.canonicalFile.parent))
 
   def getfile(self):
     return self.fs.dataStore.info.source.toURL().file

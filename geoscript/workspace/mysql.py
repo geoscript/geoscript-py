@@ -6,7 +6,7 @@ import os
 from geoscript.workspace import Workspace
 from org.geotools.data.mysql import MySQLDataStoreFactory
 
-class MySQLWorkspace(Workspace):
+class MySQL(Workspace):
 
   def __init__(self, db, host='localhost', port=3306, user=os.environ['USER'], 
                passwd=None):

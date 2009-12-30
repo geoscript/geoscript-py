@@ -1,6 +1,6 @@
 import unittest
 from geoscript import geom, feature
-from geoscript.layer import ShapefileLayer
+from geoscript.layer import Shapefile
 
 class WorkspaceTest:
 
@@ -15,7 +15,7 @@ class WorkspaceTest:
     assert 3 == l.count()
 
   def testAdd(self):
-    shp = ShapefileLayer('work/states.shp') 
+    shp = Shapefile('work/states.shp') 
     l = self.ws.add(shp, 'states2')
  
     assert l

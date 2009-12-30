@@ -6,7 +6,7 @@ import os
 from geoscript.workspace import Workspace
 from org.geotools.data.h2 import H2DataStoreFactory
 
-class H2Workspace(Workspace):
+class H2(Workspace):
 
   def __init__(self, db, dir=None):
 
