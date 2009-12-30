@@ -18,9 +18,23 @@ class Workspace:
       self.ds = mem.ds
     else :
       if not ds:
-        raise Exception('Worksapce requires a data store.')
+        raise Exception('Workspace requires a data store.')
 
       self.ds = ds
+
+  def getformat(self):
+    # first see if the datastore has a ref to its factory
+    ds = self.ds
+    try:
+      return str(ds.dataStoreFactory.displayName)
+    except AttributeError:
+      # no factory, resort to heuristic of using data store type name
+      return type(ds).__name__[:-9]
+
+  format = property(getformat)
+  """
+  A ``str`` identifying the format of the workspace.
+  """
 
   def layers(self):
     """
@@ -53,11 +67,11 @@ class Workspace:
 
     if name in self.layers():
        fs = self.ds.getFeatureSource(name)
-       return Layer(fs)
+       return Layer(workspace=self, fs=fs)
   
     return None
 
-  def create(self, name, flds=[('geom', geom.Geometry)]):
+  def create(self, name=None, fields=[('geom', geom.Geometry)], schema=None):
      """
      Creates a new layer in the workspace.
    
@@ -67,11 +81,14 @@ class Workspace:
      >>> ws.layers()
      ['foo']
      """
+ 
+     if not name:
+       name = schema.name if schema else Layer._newname()
 
      if self.get(name):
        raise Exception('Layer %s already exists.' % (name))
 
-     schema = feature.Schema(name, flds)
+     schema = schema or feature.Schema(name, fields)
      self.ds.createSchema(schema.ft) 
      return self.get(name)
 
@@ -82,9 +99,8 @@ class Workspace:
      >>> ws = Workspace()
      >>> ws.layers()
      []
-     >>> from geoscript.feature import Schema
-     >>> from geoscript.layer import MemoryLayer
-     >>> l = MemoryLayer(name='foo')
+     >>> from geoscript.layer import Layer
+     >>> l = Layer('foo')
      >>> l = ws.add(l)
      >>> ws.layers()
      ['foo']
@@ -105,3 +121,6 @@ class Workspace:
        l.add(f)
 
      return l
+
+  def _format(self, layer):
+    return self.format

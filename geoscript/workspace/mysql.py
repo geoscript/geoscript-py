@@ -4,7 +4,6 @@ workspace.mysql module -- MySQL implementation of Workspace
 
 import os
 from geoscript.workspace import Workspace
-from geoscript.layer import MySQLLayer
 from org.geotools.data.mysql import MySQLDataStoreFactory
 
 class MySQLWorkspace(Workspace):
@@ -19,7 +18,3 @@ class MySQLWorkspace(Workspace):
     
     Workspace.__init__(self, ds)
 
-  def get(self, name):
-    l = Workspace.get(self, name)
-    if l:
-      return MySQLLayer(None, None, fs=l.fs) 

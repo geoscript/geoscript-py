@@ -1,8 +1,8 @@
 import unittest
 from tests.layer.layertest import LayerTest
 from geoscript import geom
+from geoscript.layer import ShapefileLayer
 from geoscript.workspace import MemoryWorkspace
-from geoscript.layer import MemoryLayer, ShapefileLayer
 
 class MemoryLayer_Test(LayerTest):
 

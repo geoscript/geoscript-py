@@ -14,3 +14,8 @@ class DirectoryWorkspace(Workspace):
 
     ds = DirectoryDataStore(util.toFile(dir), net.URI('http://geoscript.org'))
     Workspace.__init__(self, ds)
+
+  def _format(self, layer):
+    f = type(self.ds.getDataStore(layer.name)).__name__[:-9]
+    f = 'Shapefile' if f == 'IndexedShapefile' else f
+    return f

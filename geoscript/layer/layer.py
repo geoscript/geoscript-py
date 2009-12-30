@@ -13,25 +13,47 @@ from org.opengis.filter import Filter
 
 class Layer(object):
   """
-  A dataset of a particular format. A layer is complex of a :class:`geoscript.feature.Feature` objects.
+  A source of spatial data.
   """
 
-  def __init__(self, fs=None, name='layer', schema=None):
-    if self.__class__ == Layer and not fs:
-      import memory
-      mem = memory.MemoryLayer(name=name, schema=schema)
-      self.fs = mem.fs
-      self.schema = mem.schema
-    else:
-      if not fs:
-        raise Exception('Layer requires a feature source.')
+  _id = -1
+  """
+  Internal counter for generating layer names
+  """
 
-      self.fs = fs
-      self.schema = feature.Schema(ft=fs.schema) 
+  def __init__(self, name=None, workspace=None, fs=None, schema=None):
+    if not workspace:
+       from geoscript.workspace import MemoryWorkspace
+       workspace = MemoryWorkspace()
+ 
+    name = name or Layer._newname()
+       
+    if not fs:
+       layer = workspace.get(name)
+        
+       if not layer:
+         if schema:
+           layer = workspace.create(schema.name, schema.fields)
+         else:
+           layer = workspace.create(name)
 
-    # we keep a crs local to allow the native crs to be overriden, or to 
+       fs = layer.fs
+
+    self.workspace = workspace
+    self.schema = schema or feature.Schema(ft=fs.schema) 
+    self.fs = fs
+
+    # keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
     self._proj = None
+
+  def getformat(self):
+    return self.workspace._format(self)
+
+  format = property(getformat)
+  """
+  A ``str`` identifying the format of the layer.
+  """
 
   def getname(self):
     return self.fs.name.localPart
@@ -65,19 +87,6 @@ class Layer(object):
   EPSG:4326
   """
   
-  def getformat(self):
-    # first see if the datastore has a ref to its factory
-    ds = self.fs.dataStore
-    try:
-      return str(ds.dataStoreFactory.displayName)
-    except AttributeError:
-      # no factory, resort to heuristic of using data store type name
-      return type(ds).__name__[:-9]
-
-  format = property(getformat)
-  """
-  A ``str`` identifying the format of the layer.
-  """
 
   def count(self, filter=None):
     """
@@ -226,18 +235,31 @@ class Layer(object):
     fc.add(f.f)
     self.fs.addFeatures(fc)
 
-  def reproject(self, prj, name, **options):
+  def reproject(self, prj, name=None):
     """
     Reprojects a layer to a :class:`geoscript.proj.Projection` specified by  *prj*. This method returns the reprojected layer, which is named *name*
+
+    >>> from geoscript import geom
+    >>> l = Layer()
+    >>> l.proj = 'epsg:4326'
+    >>> l.add([geom.Point(-111, 45.7)])
+    >>> 
+    >>> l2 = l.reproject('epsg:26912')
+    >>> l2.proj.id
+    'EPSG:26912'
+
+    >>> [f.geom for f in l2.features()]
+    [POINT (499999.42501775385 5060716.092032814)]
     """
 
     prj = proj.Projection(prj)
+    name = name or Layer._newname()
 
     # reproject the schema
     rschema = self.schema.reproject(prj, name)
 
     # create the reprojected layer
-    rlayer = self._newLayer(rschema, **options)
+    rlayer = self.workspace.create(schema=rschema)
 
     # create a query specifying that feautres should be reproje`cted
     q = DefaultQuery(self.name, Filter.INCLUDE)
@@ -288,5 +310,7 @@ class Layer(object):
   def _filter(self, filter, default=Filter.INCLUDE):
      return CQL.toFilter(filter) if filter else default
 
-  def _newLayer(self, schema, **options):
-     raise Exception('Subclasses must implement')
+  @staticmethod
+  def _newname():
+    Layer._id  += 1
+    return 'layer_%d' % Layer._id

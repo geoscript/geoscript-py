@@ -20,8 +20,21 @@ def unzip(zipfile, todir):
        f.write(zip.read(file))
        f.close()
 
+def rmshp(name, dir):
+  name = os.path.join(dir, name)
+  rm('%s.shp' % name)
+  rm('%s.shx' % name)
+  rm('%s.dbf' % name)
+  rm('%s.prj' % name)
+  rm('%s.fix' % name)
+
+def rm(file):
+  if os.path.exists(file):
+     os.remove(file)
+
 unzip('data/states.db.zip', 'work')
 unzip('data/states.shp.zip', 'work')
+rmshp('reprojected', 'work')
 
 # init h2 database
 db = dbexts('h2', 'dbexts.ini')
