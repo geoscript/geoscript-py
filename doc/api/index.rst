@@ -8,5 +8,6 @@ API Reference
    geom
    proj
    feature
+   filter
    layer/index
    workspace/index

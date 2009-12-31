@@ -6,10 +6,9 @@ import sys
 from java import io
 from java import net
 from geoscript import geom, proj, feature
+from geoscript.filter import Filter
 from org.geotools.data import DefaultQuery, Query, Transaction
 from org.geotools.feature import FeatureCollections
-from org.geotools.filter.text.cql2 import CQL
-from org.opengis.filter import Filter
 
 class Layer(object):
   """
@@ -109,8 +108,8 @@ class Layer(object):
     1
     """
 
-    f = self._filter(filter)
-    count = self.fs.getCount(DefaultQuery(self.name, f))
+    f = Filter(filter) if filter else Filter.PASS
+    count = self.fs.getCount(DefaultQuery(self.name, f._filter))
     if count == -1:
       count = 0
       # calculate manually 
@@ -137,7 +136,8 @@ class Layer(object):
     (3.0, 4.0, 3.0, 4.0)
     """
 
-    e = self.fs.getBounds(DefaultQuery(self.name, self._filter(filter)))
+    f = Filter(filter) if filter else Filter.PASS
+    e = self.fs.getBounds(DefaultQuery(self.name, f._filter))
     if e:
       return geom.Bounds(env=e)
 
@@ -165,7 +165,8 @@ class Layer(object):
     ['POINT (2 4)', 'POINT (6 8)']
     """
 
-    q = DefaultQuery(self.name, self._filter(filter))
+    f = Filter(filter) if filter else Filter.PASS
+    q = DefaultQuery(self.name, f._filter)
     if self.proj:
       q.coordinateSystem = self.proj._crs
 
@@ -198,8 +199,8 @@ class Layer(object):
     1
     """
 
-    f = self._filter(filter,Filter.EXCLUDE)
-    self.fs.removeFeatures(f)
+    f = Filter(filter) if filter else Filter.FAIL
+    self.fs.removeFeatures(f._filter)
 
   def add(self, o):
     """
@@ -266,7 +267,7 @@ class Layer(object):
     rlayer = self.workspace.create(schema=rschema)
 
     # create a query specifying that feautres should be reproje`cted
-    q = DefaultQuery(self.name, Filter.INCLUDE)
+    q = DefaultQuery(self.name, Filter.PASS._filter)
     if self.proj:
       q.coordinateSystem = self.proj._crs
     q.coordinateSystemReproject = prj._crs 
@@ -310,9 +311,6 @@ class Layer(object):
       features = self.fs.features
       w = GeoJSONWriter() 
       w.write(features,out)
-
-  def _filter(self, filter, default=Filter.INCLUDE):
-     return CQL.toFilter(filter) if filter else default
 
   @staticmethod
   def _newname():
