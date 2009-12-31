@@ -1,7 +1,7 @@
 .. module:: geom
     :synopsis: Geometry construction and utility functions.
    
-Geometry 
+Geometry
 ========
 
   .. automodule:: geoscript.geom

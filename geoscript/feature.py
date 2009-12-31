@@ -48,7 +48,9 @@ class Schema(object):
   """
   Describes the structure of a feature. A schema is composed of a name, and a set of fields each containing a name and a type.
 
-  *fields* is specified as a ``list`` of (``str``, ``type``) tuples:
+  *name* is a ``str``.
+
+  *fields* is a ``list`` of (``str``, ``type``) tuples.
 
   >>> import geom
   >>> schema = Schema('widgets', [ ('geom', geom.Point), ('name', str), ('price', float) ])
@@ -104,7 +106,9 @@ class Schema(object):
 
   def field(self, name):
     """
-    Returns the :class:`Field` named *name*, or ``None`` if no such attribute exists in the schema.
+    Returns the :class:`Field` of a specific name or ``None`` if no such attribute exists in the schema.
+ 
+    *name* is the name of the field as a ``str``.
 
     >>> s = Schema('widgets', [('name', str), ('price', float)])
     >>> s.field('price')
@@ -119,12 +123,14 @@ class Schema(object):
 
       return att
 
+    raise KeyError('No such field "%s"' % name)
+
   def getfields(self):
     return [self.field(ad.localName) for ad in self.ft.attributeDescriptors]
 
   fields = property(getfields)
   """
-  Returns a ``list`` of all schema :class:`Field`.
+  A ``list`` of all schema :class:`fields <geoscript.feature.Field>`.
 
   >>> s = Schema('widgets', [ ('name', str), ('price', float) ])
   >>> s.fields
@@ -134,6 +140,10 @@ class Schema(object):
   def feature(self, vals, id=None):
     """
     Creates a feature of the schema from a ``dict`` of values values.
+ 
+    *vals* is a ``dict`` in which keys are attribute names, and values are attribute values.
+
+    *id* is an optional feature identifier as a ``str``.
 
     >>> s = Schema('widgets', [('name', str), ('price', float) ])
     >>> f = s.feature({'name': 'anvil', 'price': 100.0}, '1')
@@ -143,6 +153,15 @@ class Schema(object):
     return Feature(vals, id, self)
      
   def reproject(self, prj, name=None):
+    """ 
+    Transforms all the geometric attributes of a schema to a specified projection returning the result as a new schema.
+
+    *prj* is a the target :class:`Projection <geoscript.proj.Projection>`.
+
+    *name* is the optional name of the resulting schema.
+    
+    """ 
+
     prj = proj.Projection(prj)
 
     # copy the original schema fields and override the projection
@@ -178,20 +197,20 @@ class Feature(object):
   """
   An object composed of a set of named attributes with values.
 
-  A feature is constructed from a ``dict`` of name value pairs and an optional identifier:
+  A feature is constructed from a ``dict`` of name value pairs and an optional identifier.
 
   >>> f = Feature({ 'name': 'anvil', 'price': 100.0 }, 'widgets.1')
   >>> str(f.get('name'))
   'anvil'
 
-  A feature can also be constructed optionally with a :class:`Schema`:
+  A feature can also be constructed optionally with a :class:`Schema`.
 
   >>> s = Schema('widgets', [('name', str), ('price', float)])
   >>> f = Feature({'name': 'anvil'}, '1', s)
   >>> f
   widgets.1 {name: anvil, price: None}
 
-  When *schema* is specified feature values can be passed a ``list``:
+  When *schema* is specified feature values can be passed a ``list``.
 
   >>> s = Schema('widgets', [('name', str), ('price', float)])
   >>> f = Feature(['anvil', 100.0], '1', s)
@@ -238,7 +257,7 @@ class Feature(object):
 
   id = property(getid)
   """
-  Identifier of the feature
+  Identifier of the feature as a ``str``.
 
   >>> f = Feature({'name': 'anvil'}, 'widgets.1')
   >>> f.id
@@ -253,7 +272,7 @@ class Feature(object):
 
   geom = property(getgeom, setgeom)
   """
-  The geometry of the feature
+  The geometry of the feature.
 
   >>> import geom
   >>> f = Feature({'geom': geom.Point(1,1)})
@@ -266,17 +285,24 @@ class Feature(object):
 
   def get(self, name):
     """
-    Returns a feature attribute value. *name* is the name of the attribute whose value to return.
+    Returns a feature attribute value by name. ``KeyError`` is thrown if the attribute does not exist.
+
+    *name* is the name of the attribute whose value to return.
 
     >>> f = Feature({'name': 'anvil', 'price': 100.0})
     >>> str(f.get('name'))
     'anvil'
     """
+    self.schema.field(name)
     return self.f.getAttribute(name)
 
   def set(self, name, value):
     """
-    Sets a feature attribute value. *name* is the name of the attribute whose value to set, and *value* is the new attribute value.
+    Sets a feature attribute value by name. ``KeyError`` is thrown is the attribute does not exist.
+
+    *name* is the name of the attribute whose value to set. 
+
+    *value* is the new attribute value.
 
     >>> f = Feature({'name': 'anvil', 'price': 100.0})
     >>> str(f.get('name'))
@@ -286,6 +312,7 @@ class Feature(object):
     'mallet'
     """
 
+    self.schema.field(name)
     self.f.setAttribute(name, value)
 
   def getattributes(self):
@@ -298,7 +325,7 @@ class Feature(object):
 
   attributes = property(getattributes)
   """
-  Returns a ``dict`` of name, value for the attributes of the feature.
+  A ``dict`` of name, value for the attributes of the feature.
 
   >>> f = Feature({'name': 'anvil', 'price': 100.0})
   >>> atts = f.attributes

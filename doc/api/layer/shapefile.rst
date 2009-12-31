@@ -5,6 +5,6 @@ Shapefile
 =========
 
   .. automodule:: geoscript.layer.shapefile
-      :members: ShapefileLayer
+      :members: Shapefile
 
 

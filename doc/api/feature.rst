@@ -7,9 +7,9 @@ Feature
   .. automodule:: geoscript.feature
 
      .. autoclass:: Schema
-        :members: name, geom, attributes, attribute, feature
+        :members: name, geom, fields, field, feature
 
-     .. autoclass:: Attribute
+     .. autoclass:: Field
 
      .. autoclass:: Feature
         :members: id, geom, attributes, get, set

@@ -1,12 +1,9 @@
 .. _api.layer:
 
-Layer
+layer
 =====
 
 .. toctree::
    
    layer
    shapefile
-   postgis
-   memory
-   h2

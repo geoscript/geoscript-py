@@ -1,6 +1,5 @@
 """
-workspace module -- Provides data access and manipulation of collections of 
-layers.
+The :mod:`workspace.workspace` module provides layer access and manipulation.
 """
 
 from geoscript.layer import Layer
@@ -8,7 +7,7 @@ from geoscript import geom, feature
 
 class Workspace:
   """
-  A workspace is a collection of layers.
+  A workspace is a container of layers.
   """
 
   def __init__(self, ds=None):
@@ -51,42 +50,61 @@ class Workspace:
 
   def get(self, name):
     """
-    Returns a layer in the workspace.
+    Returns a :class:`Layer geoscript.layer.layer.Layer` in the workspace. This method raised ``KeyError`` if the layer does not exist.
+
+    *name* is the name of a layer to return.
 
     >>> ws = Workspace()
-    >>> l = ws.get('foo')
-    >>> str(l)
-    'None'
+    >>> try:
+    ...   ws.get('foo') 
+    ...   raise Exception('Should not get here')
+    ... except KeyError:
+    ...   pass
     >>> x = ws.create('foo')
     >>> l = ws.get('foo') 
     >>> str(l.name)
     'foo'
 
-    This method returns None if no such layer is defined.
     """
 
     if name in self.layers():
        fs = self.ds.getFeatureSource(name)
        return Layer(workspace=self, fs=fs)
   
-    return None
+    raise KeyError('No such layer "%s"' % name)
 
   def create(self, name=None, fields=[('geom', geom.Geometry)], schema=None):
      """
-     Creates a new layer in the workspace.
+     Creates a new :class:`Layer geoscript.layer.layer.Layer` in the workspace.
    
+     *name* is the optional name to assign to the new layer.
+
+     *fields* is an optional ``list`` of ``str``/``type`` tuples which define th e schema of the new layer.
+
+     *schema* is the optional :class:`Schema <geoscript.feature.Schema>` of the new layer.
+
+     **Note**: When the *schema* argument is specified neither of *name* or *fields* should be specified.
+
      >>> from geoscript import geom
      >>> ws = Workspace()
-     >>> l = ws.create('foo', [('geom', geom.Point)])
+     >>> l1 = ws.create('foo', [('geom', geom.Point)])
      >>> ws.layers()
      ['foo']
+
+     >>> from geoscript.feature import Schema
+     >>> l2 = ws.create(schema=Schema('bar', [('geom', geom.Point)]))
+     >>> ws.layers()
+     ['foo', 'bar']
      """
  
      if not name:
        name = schema.name if schema else Layer._newname()
 
-     if self.get(name):
+     try:
+       self.get(name)
        raise Exception('Layer %s already exists.' % (name))
+     except KeyError:
+       pass
 
      schema = schema or feature.Schema(name, fields)
      self.ds.createSchema(schema.ft) 
@@ -96,6 +114,10 @@ class Workspace:
      """
      Adds an existing layer to the workspace.
     
+     *layer* is the :class:`Layer <geoscript.layer.layer.Layer>` to add.
+
+     *name* is the optional name as a ``str`` to assign to the layer when copied into the workspace.
+
      >>> ws = Workspace()
      >>> ws.layers()
      []
@@ -107,20 +129,22 @@ class Workspace:
      """
 
      name = name if name else layer.name
-     l = self.get(name)
-     if not l:
+     try:
+       self.get(name)
+       raise Exception('Layer named "%s" already exists.' % name)
+     except KeyError:
        if layer.proj:
          flds = []
          for fld in layer.schema.fields:
            flds.append((fld.name, fld.typ, layer.proj) if issubclass(fld.typ, geom.Geometry) else (fld.name, fld.typ))
        else:
          flds = [(fld.name, fld.typ) for fld in layer.schema.fields]
-       l = self.create(name, flds)
-     
-     for f in layer.features():
-       l.add(f)
 
-     return l
+       l = self.create(name, flds)
+       for f in layer.features():
+         l.add(f)
+
+       return l
 
   def _format(self, layer):
     return self.format

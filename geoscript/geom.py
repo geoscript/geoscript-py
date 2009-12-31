@@ -29,7 +29,7 @@ class Point(_Point):
   """
   A Point geometry.
 
-  *coord* is specified as variable argument x,y,z values:
+  *coord* is a variable list of x, y, z arguments.
 
   >>> Point(1,2)
   POINT (1 2)
@@ -51,7 +51,7 @@ class LineString(_LineString):
   """
   A LineString geometry.
 
-  *coords* is specified as multiple ``list``/``tuple`` arguments:
+  *coords* is a variable list of ``list``/``tuple`` arguments.
 
   >>> LineString([1,2], [3,4])
   LINESTRING (1 2, 3 4)
@@ -73,7 +73,7 @@ class LineString(_LineString):
 
 class LinearRing(_LinearRing):
   """
-  A LineString geometry in which the first and last coordinates are identical forming a closed ring. The arguments for contstructing a ``LinearRing`` are identical to those for constructing a ``LineString``. 
+  A LineString geometry in which the first and last coordinates are identical forming a closed ring. The arguments for contstructing a ``LinearRing`` are identical to those for constructing a :class:`LineString`. 
 
   >>> LinearRing([1,2], [3,4], [4,5], [1,2])
   LINEARRING (1 2, 3 4, 4 5, 1 2)
@@ -90,7 +90,7 @@ class Polygon(_Polygon):
   """
   A Polygon geometry.
 
-  *rings* is a variable number of lists of ``list``/``tuple`` defining the rings of the polygon. The first argument is the outer ring and remaining arguments are holes. 
+  *rings* is a variable number of lists of ``list``/``tuple`` arguments defining the rings of the polygon. The first argument is the outer ring and remaining arguments are holes. 
 
   >>> Polygon( [[1,2], [3,4], [5,6], [1,2]])
   POLYGON ((1 2, 3 4, 5 6, 1 2))
@@ -98,7 +98,7 @@ class Polygon(_Polygon):
   >>> Polygon( [[-10,-10],[10,-10],[10,10],[-10,10],[-10,-10]], [[-5,-5],[-1,-5],[-3,-2],[-5,-5]], [[5,5],[9,5],[7,7],[5,5]] )
   POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))
 
-  *rings* may also be specified as a variable number of ``LinearRing`` objects:
+  *rings* may also be specified as a variable number of :class:`LinearRing` objects.
 
   >>> Polygon( LinearRing([-10,-10],[10,-10],[10,10],[-10,10],[-10,-10]), LinearRing([-5,-5],[-1,-5],[-3,-2],[-5,-5]), LinearRing([5,5],[9,5],[7,7],[5,5]) )
   POLYGON ((-10 -10, 10 -10, 10 10, -10 10, -10 -10), (-5 -5, -1 -5, -3 -2, -5 -5), (5 5, 9 5, 7 7, 5 5))
@@ -116,12 +116,12 @@ class MultiPoint(_MultiPoint):
   """
   A MultiPoint goemetry.
 
-  *points* is specified as a variable number of ``list``/``tuple`` arguments: 
+  *points* is a variable number of ``list``/``tuple`` arguments. 
 
   >>> MultiPoint([1,2], [3,4])
   MULTIPOINT (1 2, 3 4)
 
-  *points* may also be specified as a variable number of ``Point`` arguments: 
+  *points* may also be specified as a variable number of :class:`Point` arguments. 
 
   >>> MultiPoint(Point(1,2), Point(3,4))
   MULTIPOINT (1 2, 3 4)
@@ -142,12 +142,12 @@ class MultiLineString(_MultiLineString):
   """
   A MultiLineString geometry.
 
-  *linestrings* is specified as a variable number of lists of ``list``//``tuple`` arugments:
+  *linestrings* is a variable number of lists of ``list``/``tuple`` arugments.
 
   >>> MultiLineString([[1,2],[3,4]], [[5,6],[7,8]])
   MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
 
-  *linestrings* may also be specified as multiple ``LineString`` arguments:
+  *linestrings* may also be specified as multiple :class:`LineString` arguments.
 
   >>> MultiLineString(LineString([1,2],[3,4]), LineString([5,6],[7,8]))
   MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))
@@ -168,12 +168,12 @@ class MultiPolygon(_MultiPolygon):
   """
   A MultiPolygon geometry.
 
-  *polygons* is specified as a variable number of multidimensional lists of ``list``/``tuple``:
+  *polygons* is a variable number of multidimensional lists of ``list``/``tuple``.
 
   >>> MultiPolygon( [ [[1,2],[3,4],[5,6],[1,2]] ],  [ [[7,8], [9,10], [11,12], [7,8]] ] )
   MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
 
-  *polygons* may also be specified as a variable number of ``Polygon`` arguments:
+  *polygons* may also be specified as a variable number of :class:`Polygon` arguments.
 
   >>> MultiPolygon(Polygon([[1,2], [3,4], [5,6], [1,2]]), Polygon([[7,8], [9,10], [11,12], [7,8]]))
   MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)), ((7 8, 9 10, 11 12, 7 8)))
@@ -240,7 +240,7 @@ class Bounds(ReferencedEnvelope):
       return proj.Projection(crs)
   proj = property(getproj)
   """
-  The :ref:`Projection` of the bounds. ``None`` if the projection is unknown.
+  The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.
   """
 
   def __repr__(self):

@@ -9,3 +9,4 @@ API Reference
    proj
    feature
    layer/index
+   workspace/index

@@ -54,7 +54,9 @@ class Projection(object):
     """
     Transforms an object from this projection to a specified destination projection.
 
-    *obj* is a :class:`geoscript.geom.Geometry` object to transform. *dest* is the destination :class:`Projection` to transform to:
+    *obj* is a :class:`Geometry <geoscript.geom.Geometry>` object to transform.
+
+    *dest* is the destination :class:`Projection` to transform to.
 
      >>> proj = Projection('epsg:4326')
      >>> dest = Projection('epsg:3005')
@@ -64,7 +66,7 @@ class Projection(object):
      >>> p2
      POINT (1071693.1296328472 554289.941892416)
 
-    *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection:
+    *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection.
 
     >>> proj = Projection('epsg:4326')
     >>> p1 = (-125, 50)

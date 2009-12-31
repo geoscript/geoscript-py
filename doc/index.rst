@@ -9,5 +9,6 @@ Check out the :ref:`quick start <quickstart>` to get started with GeoScript. The
    :maxdepth: 1
 
    quickstart
+   gettingstarted/index
    api/index
 

@@ -1,5 +1,5 @@
 """
-The :mod:`layer.layer` module provides the base classes for data access and manipulation.
+The :mod:`layer.layer` module provides the classes for data access and manipulation.
 """
 import sys
 
@@ -29,7 +29,11 @@ class Layer(object):
     name = name or Layer._newname()
        
     if not fs:
-       layer = workspace.get(name)
+       layer = None
+       try:
+         layer = workspace.get(name)
+       except KeyError:
+         pass
         
        if not layer:
          if schema:
@@ -60,7 +64,7 @@ class Layer(object):
 
   name = property(getname)
   """
-  The name of the layer.
+  The name of the layer as a ``str``.
   """
 
   def getproj(self):
@@ -76,7 +80,7 @@ class Layer(object):
 
   proj = property(getproj, setproj)
   """
-  The :class:`geoscript.proj.Projection` of the layer. In cases where the projection of a layer is unkown this attribute has the value ``None``.
+  The :class:`Projection <geoscript.proj.Projection>` of the layer. In cases where the projection of a layer is unkown this attribute has the value ``None``.
 
   >>> import proj
   >>> l = Layer()
@@ -87,21 +91,17 @@ class Layer(object):
   EPSG:4326
   """
   
-
   def count(self, filter=None):
     """
-    The number of features in the layer.
+    The number of features in the layer as an ``int``.
+
+    *filter* is an optional :class:`Filter <geoscript.filter.Filter>` to constrains the counted set of features.
 
     >>> l = Layer()
     >>> l.count()
     0
     >>> from geoscript import geom
     >>> l.add([geom.Point(1,2)])
-    >>> l.count()
-    1
-    
-    This method takes an option filter paramter specified as CQL:
-
     >>> l.add([geom.Point(3,4)])
     >>> l.count() 
     2
@@ -121,7 +121,9 @@ class Layer(object):
 
   def bounds(self, filter=None):
     """
-    The :class:`geoscript.geom.Bounds` of the layer.
+    The :class:`Bounds <geoscript.geom.Bounds>` of the layer.
+
+    *filter* is an optional :class:`Filter <geoscript.filter.Filter>` to constrains the returned bounds.
 
     >>> l = Layer()
     >>> from geoscript import geom 
@@ -130,8 +132,6 @@ class Layer(object):
 
     >>> l.bounds()
     (1.0, 2.0, 3.0, 4.0)
-
-    This method takes an optional filter parameter specified as CQL:
 
     >>> l.bounds('INTERSECTS(geom,POINT(3 4))')
     (3.0, 4.0, 3.0, 4.0)
@@ -143,7 +143,11 @@ class Layer(object):
 
   def features(self, filter=None, transform=None):
     """
-    Iterates over the :class:`geoscript.feature.Feature` contained in the layer.
+    Generator over the :class:`Feature <geoscript.feature.Feature>` s of the layer.
+
+    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constained the features iterated over.
+
+    *transform* is an optional function to be excecuted to transform the features being iterated over. This function takes a single argument which is a :class:`Feature <geoscript.feature.Feature>` and returns a (possibly different) feature.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -152,14 +156,8 @@ class Layer(object):
     >>> [ str(f.geom) for f in l.features() ]
     ['POINT (1 2)', 'POINT (3 4)']
 
-    This method takes an optional *filter* argument specified as CQL:
-
     >>> [ str(f.geom) for f in l.features('INTERSECTS(geom,POINT(3 4))') ]
     ['POINT (3 4)']
-
-    This method takes an optional *transform* argument, which is a function that
-    takes a Feature instance. Each feature being iterated over is passed to the
-    transform function before it is returned.
 
     >>> def tx (f):
     ...    f.geom = geom.Point(2*f.geom.x, 2*f.geom.y)
@@ -185,7 +183,9 @@ class Layer(object):
 
   def delete(self, filter):
     """
-    Deletes features from the layer which match the specified *filter*.
+    Deletes features from the layer which match the specified constraint.
+
+    *filter* is a :class:`Filter <geoscript.filter.Filter>` that specifies which features are to be deleted.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -203,7 +203,9 @@ class Layer(object):
 
   def add(self, o):
     """
-    Adds a :class:`geoscript.feature.Feature` to the layer.
+    Adds a :class:`Feature <geoscript.feature.Feature>` to the layer.
+
+    *o* is the feature to add. It may be specified directly as a Feature object or alternatively as a ``dict`` or a ``list``.
 
     >>> from geoscript import geom
     >>> from geoscript import feature
@@ -214,10 +216,6 @@ class Layer(object):
     >>> l.add(f)
     >>> l.count()
     1
-    
-    *o* can also be specified as a ``dict`` or a ``list``:
-
-    >>> from geoscript import geom
     >>> l = Layer()
     >>> l.add({'geom': geom.Point(1,2)})
     >>> l.add([geom.Point(1,2)])
@@ -237,7 +235,13 @@ class Layer(object):
 
   def reproject(self, prj, name=None):
     """
-    Reprojects a layer to a :class:`geoscript.proj.Projection` specified by  *prj*. This method returns the reprojected layer, which is named *name*
+    Reprojects a layer.
+
+    *prj* is the destination :class:`Projection <geoscript.proj.Projection>` 
+
+    *name* is the optional name as a ``str`` to assign to the resulting reprojected layer.
+
+    This method returns a newly reprojected layer. The new layer is create within the containing workspace of the original layer.
 
     >>> from geoscript import geom
     >>> l = Layer()

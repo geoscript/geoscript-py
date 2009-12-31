@@ -9,9 +9,9 @@ from geoscript.layer import Layer
 
 class Shapefile(Layer):
   """
-  A subclass of :class:`geoscript.layer.layer.Layer` for the Shapefile format.
+  A subclass of :class:`Layer <geoscript.layer.layer.Layer>` for the Shapefile format.
 
-  A Shapefile layer is constructed by specifing the *file* path as a ``str``.
+  *file* is the path to the Shapefile as a ``str``.
   """
   def __init__(self, file):
     f = util.toFile(file) 
