@@ -3,6 +3,9 @@
 layer
 =====
 
+.. automodule:: geoscript.layer.layer
+   :members: foo
+   
 .. toctree::
    
    layer

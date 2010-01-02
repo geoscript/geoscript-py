@@ -182,7 +182,7 @@ class Schema(object):
 
 class Field(object):
   """
-  A schema field composed of a name and a type. A geometric attribute also contains a :class:`geoscript.proj.Projection`.
+  A schema field composed of a name and a type. A geometric attribute also contains a :class:`Projection <geoscript.proj.Projection>`.
   """
 
   def __init__(self, name, typ, proj=None):

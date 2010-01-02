@@ -5,9 +5,9 @@ API Reference
 
 .. toctree::
    
-   geom
+   geom/index
    proj
-   feature
+   feature/index
    filter
    layer/index
    workspace/index

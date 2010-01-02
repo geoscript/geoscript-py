@@ -1,7 +1,7 @@
 .. module:: filter
     :synopsis: Support for feature predicates.
    
-Filter
+filter
 ======
 
   .. automodule:: geoscript.filter
