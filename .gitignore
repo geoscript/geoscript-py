@@ -1,5 +1,6 @@
 *.class
-lib/target
 tests/work
 tags
+target
 doc/.build
+jars/*.jar
