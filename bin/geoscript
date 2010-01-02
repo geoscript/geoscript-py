@@ -1,0 +1,16 @@
+#!/bin/bash
+
+JYTHON=""
+if [ "$JYTHON_HOME" != "" ] && [ -e $JYTHON_HOME/jython ]; then
+  JYTHON=$JYTHON_HOME/bin/jython
+else
+  which jython > /dev/null
+  if [ "$?" == "1" ]; then
+    echo "JYTHON_HOME not defined and jython not on the current PATH"
+    exit -1
+  fi
+  JYTHON=`which jython`
+fi
+
+export CLASSPATH=`geoscript-classpath`
+$JYTHON

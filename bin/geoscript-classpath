@@ -1,0 +1,15 @@
+import sys
+import os
+from java.lang import System
+from java.io import File
+
+System.setProperty("geoscript.bootstrap", "true")
+try:
+  import geoscript
+  jardir = os.path.abspath(os.path.join(geoscript.__file__, '../../jars'))
+  jars = [os.path.join(jardir, jar) for jar in os.listdir(jardir)]
+  print File.pathSeparator.join(jars)
+except ImportError:
+  sys.exit(-1)
+finally:
+  System.clearProperty("geoscript.bootstrap")
