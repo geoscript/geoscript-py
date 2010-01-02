@@ -4,3 +4,5 @@ tags
 target
 doc/.build
 jars/*.jar
+geoscript.egg-info
+dist
