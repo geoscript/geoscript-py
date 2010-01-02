@@ -18,6 +18,7 @@ print "\tmkdir target"
 print 'fi'
 
 print "base=%s" % ogrepo
-for jar in os.listdir('target'):
-  os.path.walk(m2repo,lookup,jar)
+for jar in os.listdir('.'):
+  if os.path.splitext(jar)[1] == ".jar":
+     os.path.walk(m2repo,lookup,jar)
 
