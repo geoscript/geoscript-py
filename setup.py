@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 jars = ['jars/%s' % (f) for f in os.listdir('jars')]
 setup(name='geoscript',
-      version='0.1', 
+      version='0.2', 
       description='GeoScript Python',
       author='Justin Deoliveira',
       author_email='jdeolive@opengeo.org',
