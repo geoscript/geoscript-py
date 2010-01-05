@@ -9,4 +9,5 @@ layer
 .. toctree::
    
    layer
+   cursor
    shapefile

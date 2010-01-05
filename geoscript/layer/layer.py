@@ -79,7 +79,8 @@ class Layer(object):
 
   proj = property(getproj, setproj)
   """
-  The :class:`Projection <geoscript.proj.Projection>` of the layer. In cases where the projection of a layer is unkown this attribute has the value ``None``.
+  The :class:`Projection <geoscript.proj.Projection>` of the layer. In cases where the projection of a layer is 
+  unknown this attribute has the value ``None``.
 
   >>> import proj
   >>> l = Layer()
@@ -145,9 +146,11 @@ class Layer(object):
     """
     Generator over the :class:`Feature <geoscript.feature.Feature>` s of the layer.
 
-    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constained the features iterated over.
+    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constrain the features iterated over.
 
-    *transform* is an optional function to be excecuted to transform the features being iterated over. This function takes a single argument which is a :class:`Feature <geoscript.feature.Feature>` and returns a (possibly different) feature.
+    *transform* is an optional function to be executed to transform the features being iterated over. This 
+    function takes a single argument which is a :class:`Feature <geoscript.feature.Feature>` and returns a 
+    (possibly different) feature.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -179,7 +182,7 @@ class Layer(object):
     """
     Returns a :class:`Cursor <geoscript.layer.cursor.Cursor>` over the features of the layer.
 
-    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constained the features iterated over.
+    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constrain the features iterated over.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -242,7 +245,8 @@ class Layer(object):
     """
     Adds a :class:`Feature <geoscript.feature.Feature>` to the layer.
 
-    *o* is the feature to add. It may be specified directly as a Feature object or alternatively as a ``dict`` or a ``list``.
+    *o* is the feature to add. It may be specified directly as a Feature object or alternatively as a ``dict`` 
+    or a ``list``.
 
     >>> from geoscript import geom
     >>> from geoscript import feature

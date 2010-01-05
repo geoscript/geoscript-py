@@ -57,7 +57,7 @@ class Schema(object):
   def getname(self):
     return self.ft.name.localPart
 
-  name = property(getname, None, None, 'The name of the schema. A schema name is usually descriptive of the type of feature being descripted, for example "roads", "streams", "persons", etc...')
+  name = property(getname, None, None, 'The name of the schema. A schema name is usually descriptive of the type of feature being described, for example "roads", "streams", "persons", etc...')
 
   def getgeom(self):
     gd = self.ft.geometryDescriptor
