@@ -1,15 +1,18 @@
 import unittest
 from geoscript import geom
-from com.vividsolutions.jts.geom import Coordinate
+from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
 
 class GeomTest(unittest.TestCase):
+
+  def setUp(self):
+    self.gf = GeometryFactory()
 
   def testPoint(self):
     p = geom.Point(1,2)
     self.assertEqual('POINT (1 2)', str(p))
 
   def testPointFromJTS(self):
-    p = geom.Point(geom._gf.createPoint(Coordinate(1,2)))
+    p = geom.Point(self.gf.createPoint(Coordinate(1,2)))
     self.assertEqual('POINT (1 2)', str(p))
 
   def testLineString(self):
@@ -17,7 +20,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('LINESTRING (1 2, 3 4)', str(l)) 
 
   def testLineStringFromJTS(self):
-    ls = geom._gf.createLineString([Coordinate(1,2), Coordinate(3,4)])
+    ls = self.gf.createLineString([Coordinate(1,2), Coordinate(3,4)])
     l = geom.LineString(ls)
     self.assertEqual('LINESTRING (1 2, 3 4)', str(l)) 
   
@@ -26,7 +29,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('POLYGON ((1 2, 3 4, 5 6, 1 2))', str(p)) 
 
   def testPolygonFromJTS(self):
-    poly = geom._gf.createPolygon(geom._gf.createLinearRing([Coordinate(1,2),Coordinate(3,4), Coordinate(5,6), Coordinate(1,2)]), [])
+    poly = self.gf.createPolygon(self.gf.createLinearRing([Coordinate(1,2),Coordinate(3,4), Coordinate(5,6), Coordinate(1,2)]), [])
     p = geom.Polygon(poly)
     self.assertEqual('POLYGON ((1 2, 3 4, 5 6, 1 2))', str(p)) 
 
@@ -35,7 +38,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('MULTIPOINT (1 2, 3 4)', str(mp))
 
   def testMultiPointFromJTS(self):
-    mp = geom.MultiPoint(geom._gf.createMultiPoint([geom._gf.createPoint(Coordinate(1,2)), geom._gf.createPoint(Coordinate(3,4))]))
+    mp = geom.MultiPoint(self.gf.createMultiPoint([self.gf.createPoint(Coordinate(1,2)), self.gf.createPoint(Coordinate(3,4))]))
     self.assertEqual('MULTIPOINT (1 2, 3 4)', str(mp))
 
   def testMultiLineString(self):
@@ -43,7 +46,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))', str(ml))
 
   def testMultiLineStringFromJTS(self):
-    mls = geom._gf.createMultiLineString([geom._gf.createLineString([Coordinate(1,2),Coordinate(3,4)]), geom._gf.createLineString([Coordinate(5,6),Coordinate(7,8)])])
+    mls = self.gf.createMultiLineString([self.gf.createLineString([Coordinate(1,2),Coordinate(3,4)]), self.gf.createLineString([Coordinate(5,6),Coordinate(7,8)])])
     ml = geom.MultiLineString(mls)
     self.assertEqual('MULTILINESTRING ((1 2, 3 4), (5 6, 7 8))', str(ml))
 
@@ -59,7 +62,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('(1.0, 2.0, 3.0, 4.0, EPSG:4326)', str(b))
     
   def testMultiPolygonFromJTS(self):
-    mp = geom.MultiPolygon(geom._gf.createMultiPolygon([geom._gf.createPolygon(geom._gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
+    mp = geom.MultiPolygon(self.gf.createMultiPolygon([self.gf.createPolygon(self.gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
 
   def testFromWKT(self):
