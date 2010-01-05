@@ -40,3 +40,19 @@ class LayerTest:
         assert int(rgeoms[i].coordinate.x) == int(f.geom.coordinate.x)
         assert int(rgeoms[i].coordinate.y) == int(f.geom.coordinate.y)
         i += 1
+
+  def testCursor(self):
+     c = self.l.cursor()
+     f = c.next()
+     assert f
+     assert f.get('STATE_NAME')
+     
+     f = c.read(30)
+     assert f
+     assert len(f) == 30
+     assert f[0].get('STATE_NAME')
+  
+     f = c.read(30)
+     assert f
+     assert len(f) == 18
+     c.close()

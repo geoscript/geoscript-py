@@ -2,9 +2,9 @@
 The :mod:`layer.layer` module provides the classes for data access and manipulation.
 """
 import sys
-
 from java import io
 from java import net
+from cursor import Cursor
 from geoscript import geom, proj, feature
 from geoscript.filter import Filter
 from org.geotools.data import DefaultQuery, Query, Transaction
@@ -164,15 +164,8 @@ class Layer(object):
     >>> [str(f.geom) for f in l.features(transform=tx)]
     ['POINT (2 4)', 'POINT (6 8)']
     """
-
-    f = Filter(filter) if filter else Filter.PASS
-    q = DefaultQuery(self.name, f._filter)
-    if self.proj:
-      q.coordinateSystem = self.proj._crs
-
-    r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
-    while r.hasNext():
-      f = feature.Feature(schema=self.schema, f=r.next())
+    c = self.cursor(filter)
+    for f in c:
       if transform:
          result  = transform(f)
          if result and isinstance(result, Feature):
@@ -180,7 +173,50 @@ class Layer(object):
 
       yield f
 
-    r.close()
+    c.close()
+
+  def cursor(self, filter=None):
+    """
+    Returns a :class:`Cursor <geoscript.layer.cursor.Cursor>` over the features of the layer.
+
+    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constained the features iterated over.
+
+    >>> l = Layer()
+    >>> from geoscript import geom
+    >>> l.add([geom.Point(1,2)])
+    >>> l.add([geom.Point(3,4)])
+    >>> l.add([geom.Point(5,6)])
+    >>> l.add([geom.Point(7,8)])
+    >>> l.add([geom.Point(9,10)])
+    >>> c = l.cursor()
+    >>> f = c.next() 
+    >>> f.geom
+    POINT (1 2)
+    >>> f = c.next() 
+    >>> f.geom
+    POINT (3 4)
+    >>> features = c.read(2)
+    >>> len(features)
+    2
+    >>> features[0].geom
+    POINT (5 6)
+    >>> features[1].geom
+    POINT (7 8)
+    >>> features = c.read(2)
+    >>> len(features)
+    1
+    >>> features[0].geom
+    POINT (9 10)
+    >>> c.close()
+    """
+
+    f = Filter(filter) if filter else Filter.PASS
+    q = DefaultQuery(self.name, f._filter)
+    if self.proj:
+      q.coordinateSystem = self.proj._crs
+
+    r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
+    return Cursor(r, self)
 
   def delete(self, filter):
     """
