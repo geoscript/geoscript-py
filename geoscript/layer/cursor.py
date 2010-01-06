@@ -36,7 +36,7 @@ class Cursor(object):
 
   def close(self):
     """
-    Closes the cursor. This function should *always* be called by cliend code after the cursor is no longer needed or has been exhausted.
+    Closes the cursor. This function should *always* be called by client code after the cursor is no longer needed or has been exhausted.
     """
     self.reader.close()
 

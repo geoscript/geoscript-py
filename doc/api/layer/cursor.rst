@@ -1,7 +1,7 @@
 Cursor
 ======
 
-  .. automodule:: geoscript.layer.cursor
-      :members: Cursor
+  .. autoclass:: geoscript.layer.cursor.Cursor
+      :members: next, read, close
 
 

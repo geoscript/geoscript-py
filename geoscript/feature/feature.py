@@ -66,9 +66,9 @@ class Feature(object):
   def getid(self):
     return self.f.identifier.toString()
 
-  id = property(getid)
+  id = property(getid, None)
   """
-  Identifier of the feature as a ``str``.
+  Identifier of the feature as a ``str``
 
   >>> f = Feature({'name': 'anvil'}, 'widgets.1')
   >>> f.id
@@ -134,7 +134,7 @@ class Feature(object):
 
     return atts
 
-  attributes = property(getattributes)
+  attributes = property(getattributes, None)
   """
   A ``dict`` of name, value for the attributes of the feature.
 
