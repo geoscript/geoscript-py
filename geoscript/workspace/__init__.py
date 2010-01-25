@@ -1,7 +1,15 @@
 from workspace import Workspace
 from memory import Memory
-from postgis import PostGIS
-from h2 import H2
-from directory import Directory
-from spatialite import SpatiaLite
-from mysql import MySQL
+
+def _import(mod, clas):
+  try:
+    m = __import__(mod, globals(), locals(), [clas])
+    return getattr(m, clas)
+  except ImportError, (errmsg):
+    print 'Error import module %s: %s' % (mod, errmsg)
+
+PostGIS = _import('postgis', 'PostGIS')
+H2 = _import('h2', 'H2')
+Directory = _import('directory', 'Directory')
+Spatialite = _import('spatialite', 'SpatiaLite')
+MySQL = _import('mysql', 'MySQL')
