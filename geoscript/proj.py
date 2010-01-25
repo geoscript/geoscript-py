@@ -64,7 +64,7 @@ class Projection(object):
      >>> p1 = geom.Point(-125, 50)
      >>> p2 = proj.transform(p1, dest)
      >>> p2
-     POINT (1071693.1296328472 554289.941892416)
+     POINT (1071693.1296328472 554289.9418924153)
 
     *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection.
 
@@ -72,7 +72,7 @@ class Projection(object):
     >>> p1 = (-125, 50)
     >>> p2 = proj.transform(p1, 'epsg:3005')
     >>> p2
-    (1071693.1296328472, 554289.941892416)
+    (1071693.1296328472, 554289.9418924153)
     """
     fromcrs = self._crs
     tocrs = Projection(dest)._crs
@@ -109,7 +109,7 @@ def transform(obj, src, dst):
   >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
   >>> p2
-  POINT (1071693.1296328472 554289.941892416)
+  POINT (1071693.1296328472 554289.9418924153)
 
   .. seealso:: 
 
