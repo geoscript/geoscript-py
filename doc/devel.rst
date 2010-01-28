@@ -18,7 +18,7 @@ Install setuptools
 ------------------
 
 #. Downlaod `ez_setup.py <http://peak.telecommunity.com/dist/ez_setup.py>`_
-#. Execute :file:``ez_setup.py`` with the :command:`jython` command::
+#. Execute :file:`ez_setup.py` with the :command:`jython` command::
 
      $ <JYTHON_HOME>/bin/jython ez_setup.py
 
