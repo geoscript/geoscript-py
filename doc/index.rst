@@ -1,15 +1,29 @@
 GeoScript PY
 ============
 
-GeoScript PY is a Python implementation of GeoScript for Jython platform.
-
-Check out the :ref:`quick start <quickstart>` to get started with GeoScript. The :ref:`API reference <api>` contains documentation about all GeoScript modules.
-
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    quickstart
-   gettingstarted/index
+   using
    api/index
-   cookbook/index
+   
+GeoScript PY is a Python implementation of GeoScript for the Jython platform.
 
+   :ref:`Quickstart <quickstart>` 
+     Get up and running with GeoScript 
+
+   :ref:`Usage <using>`
+     How to use GeoScript in your application
+
+   :ref:`Learning <learning>`
+     A tour of the GeoScript library
+   
+   :ref:`Examples <examples>`
+     A library of examples and howto's
+
+   :ref:`API <api>`
+     The GeoScript API reference 
+
+   :ref:`Developing <devel>`
+     Developing with GeoScript 
