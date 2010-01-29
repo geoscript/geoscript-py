@@ -53,6 +53,45 @@ The GeoScript sources are stored in a git repository hosted at github.
 
      (geoscript)$ git clone git://github.com/jdeolive/geoscript-py.git
 
+Obtain GeoTools Libraries
+-------------------------
+
+GeoScript requires the GeoTools libraries to function. There are a number of ways to obtain them.
+
+Maven
+^^^^^
+
+If `Apache Maven <>`_ is installed on the system execute the following command from the root of the local git repository::
+
+   $ mvn install
+
+Upon success the required GeoTools libraries will be located in the :file:`jars` directory.
+
+Ant
+^^^
+
+If `Apache Ant <>`_ is installed on the system execute the :command:`ant` comand from the root of the local git repository::
+
+  $ ant
+
+Upon success the required GeoTools libraries will be located in the :file:`jars` directory.
+
+Download
+^^^^^^^^
+
+If neither of the above methods are appealing: 
+
+#. Download the latest GeoTools 2.6 release
+#. Unpack the zip archive
+#. Copy :file:`geotools-2.6.?/*.jar` into the :file:`jars` directory
+
+Setup the CLASSPATH
+-------------------
+
+Once the GeoTools libraries are located in the :file:`jars` directory source the :file:`classpath` file located in the root the local git repository::
+
+  $ source classpath
+
 Install nose
 ------------
 
