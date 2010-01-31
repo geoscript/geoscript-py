@@ -8,6 +8,7 @@ from multipolygon import MultiPolygon
 from bounds import Bounds
 from geom import Geometry
 from geom import fromWKT
+from geom import prepare
 
 from geoscript import core
 core.register(Point)
