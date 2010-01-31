@@ -4,8 +4,8 @@
 geom
 ====
 
-  .. automodule:: geoscript.geom
-     :members: foo
+  .. automodule:: geoscript.geom.geom
+     :members: fromWKT, prepare
      
   .. toctree::
   

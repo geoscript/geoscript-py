@@ -16,10 +16,10 @@ GeoScript PY is a Python implementation of GeoScript for the Jython platform.
    :ref:`Usage <using>`
      How to use GeoScript in your application
 
-   :ref:`Learning <learning>`
+   `Learning <../learning>`_
      A tour of the GeoScript library
    
-   :ref:`Examples <examples>`
+   `Examples <../examples>`_
      A library of examples and howto's
 
    :ref:`API <api>`
