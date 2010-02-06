@@ -1,7 +1,11 @@
 from java import awt
 from javax import swing
 from java.awt.geom import AffineTransform
+from com.vividsolutions.jts.geom import GeometryFactory
+from com.vividsolutions.jts.geom import Polygon, MultiPolygon
 from org.geotools.geometry.jts import LiteShape
+
+_fac = GeometryFactory()
 
 def draw(g, size=(500,500)):
   """
@@ -14,7 +18,7 @@ def draw(g, size=(500,500)):
   if not isinstance(g, list):
     g = [g]
 
-  e = _gf.createGeometryCollection(g).getEnvelopeInternal()
+  e = _fac.createGeometryCollection(g).getEnvelopeInternal()
   scale = size[0] / e.width if e.width > 0 else sys.maxint
   scale = min(scale, size[1] / e.height) if e.height > 0 else 1 
 
@@ -51,7 +55,7 @@ def draw(g, size=(500,500)):
       for g in self.geoms:
         shp = LiteShape(g, self.atx, False)
 
-        if isinstance(g, (_Polygon, _MultiPolygon)):
+        if isinstance(g, (Polygon, MultiPolygon)):
           i = i + 1
           gc.setColor(awt.Color.WHITE)
           gc.setComposite(awt.AlphaComposite.getInstance(awt.AlphaComposite.SRC_OVER, 0.5))
