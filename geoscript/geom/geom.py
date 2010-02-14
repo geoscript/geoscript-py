@@ -34,8 +34,8 @@ def prepare(g):
 
   *g* is the :class:`Geometry <geoscript.geom.Geometry>` to prepare.
 
-  >>> prep = prepare(fromWKT('POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))')
-  >>> prep.intersects(fromWKT('POLYGON ((4 4, 6 4, 6 6, 4 6, 4 4))')
+  >>> prep = prepare(fromWKT('POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))'))
+  >>> prep.intersects(fromWKT('POLYGON ((4 4, 6 4, 6 6, 4 6, 4 4))'))
   True
   """
   return _prepfactory.create(g)

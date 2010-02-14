@@ -20,7 +20,7 @@ class Filter(object):
 
   *obj* may also be specified as XML.
 
-  >>> f = Filter('<filter><PropertyIsEqualTo><PropertyName>name</PropertyName><Literal>foobar</Literal></PropertyIsEqualTo></filter>')
+  >>> f = Filter('<Filter><PropertyIsEqualTo><PropertyName>name</PropertyName><Literal>foobar</Literal></PropertyIsEqualTo></Filter>')
   >>> f
   [ name = foobar ]
   """
