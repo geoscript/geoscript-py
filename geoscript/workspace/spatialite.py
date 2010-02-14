@@ -24,7 +24,4 @@ class SpatiaLite(Workspace):
       db = os.path.join(dir, db)
 
     params = {'database': db, 'dbtype': 'spatialite'}
-    slf = SpatiaLiteDataStoreFactory()
-    sl = slf.createDataStore(params)
-
-    Workspace.__init__(self, sl)
+    Workspace.__init__(self, SpatiaLiteDataStoreFactory(), params)

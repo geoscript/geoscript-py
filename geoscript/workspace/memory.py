@@ -12,5 +12,12 @@ class Memory(Workspace):
 
   def __init__(self):
 
-    mem = MemoryDataStore()
-    Workspace.__init__(self, mem)
+    Workspace.__init__(self, MemoryDataStoreFactory())
+
+class MemoryDataStoreFactory(object):
+
+  def __init__(self):
+    pass
+
+  def createDataStore(self, params):
+    return MemoryDataStore()

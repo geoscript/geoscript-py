@@ -29,7 +29,5 @@ class PostGIS(Workspace):
 
     params = {'host': host, 'port': port, 'schema': schema, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'postgis'}
-    pgf = PostgisNGDataStoreFactory()
-    pg = pgf.createDataStore(params)
     
-    Workspace.__init__(self, pg)
+    Workspace.__init__(self, PostgisNGDataStoreFactory(), params)

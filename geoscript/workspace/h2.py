@@ -23,8 +23,5 @@ class H2(Workspace):
       db = os.path.join(dir, db)
 
     params = {'database': db, 'dbtype': 'h2'}
-    h2f = H2DataStoreFactory()
-    h2 = h2f.createDataStore(params)
-
-    Workspace.__init__(self, h2)
+    Workspace.__init__(self, H2DataStoreFactory(), params)
 

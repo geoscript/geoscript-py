@@ -26,8 +26,5 @@ class MySQL(Workspace):
 
     params = {'host': host, 'port': port, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'mysql'}
-    fac = MySQLDataStoreFactory()
-    ds = fac.createDataStore(params)
-    
-    Workspace.__init__(self, ds)
+    Workspace.__init__(self, MySQLDataStoreFactory(), params)
 
