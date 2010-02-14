@@ -32,6 +32,8 @@ def rm(file):
   if os.path.exists(file):
      os.remove(file)
 
+from org.h2.tools import DeleteDbFiles
+DeleteDbFiles.execute('work', 'states', False)
 unzip('data/states.db.zip', 'work')
 unzip('data/states.shp.zip', 'work')
 rmshp('reprojected', 'work')
