@@ -10,18 +10,21 @@ class Workspace:
   A workspace is a container of layers.
   """
 
-  def __init__(self, factory=None, params=None):
+  def __init__(self, factory=None, params=None, ds=None):
     if self.__class__ == Workspace and not factory:
       import memory
       mem = memory.Memory()
       self.ds = mem.ds
     else :
-      if not factory:
-        raise Exception('Workspace requires a data store factory.')
+      if ds:
+        self.ds = ds
+      elif factory:
+        self.ds = factory.createDataStore(params)
+      else: 
+        raise Exception('Workspace requires a data store or a factory')
 
       self.factory = factory
       self.params = params
-      self.ds = factory.createDataStore(params)
 
   def getformat(self):
     try:
