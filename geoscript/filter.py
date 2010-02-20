@@ -66,6 +66,20 @@ class Filter(object):
     """
     return _toXML(self._filter, pretty, version)
    
+  def evaluate(self, f):
+    """
+    Evaluates the filter against a Feature.
+
+    *f* is the :class:`geoscript.feature.Feature` to evaluate against.
+
+    >>> from geoscript.feature import Feature
+    >>> feature = Feature({'name': 'foobar'})
+    >>> f = Filter("name = 'foobar'")
+    >>> f.evaluate(feature)
+    True
+    """
+    return self._filter.evaluate(f._feature)
+ 
   def __repr__(self):
     return self._filter.toString()
 
