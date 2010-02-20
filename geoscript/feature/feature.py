@@ -53,18 +53,18 @@ class Feature(object):
       for att, val in atts.iteritems(): 
         b.set(att, val)
 
-      self.f = b.buildFeature(id)
+      self._feature = b.buildFeature(id)
 
     elif f:
       # feature specififed directly
-      self.f = f
+      self._feature = f
       self.schema = schema if schema else Schema(ft=f.type)
 
     else:
       raise Exception('No attributes specified for feature')
 
   def getid(self):
-    return self.f.identifier.toString()
+    return self._feature.identifier.toString()
 
   id = property(getid, None)
   """
@@ -76,10 +76,10 @@ class Feature(object):
   """
 
   def getgeom(self):
-    return self.f.defaultGeometry
+    return self._feature.defaultGeometry
 
   def setgeom(self, g):
-    self.f.defaultGeometry = g
+    self._feature.defaultGeometry = g
 
   geom = property(getgeom, setgeom)
   """
@@ -105,7 +105,7 @@ class Feature(object):
     'anvil'
     """
     self.schema.field(name)
-    return self.f.getAttribute(name)
+    return self._feature.getAttribute(name)
 
   def set(self, name, value):
     """
@@ -124,13 +124,13 @@ class Feature(object):
     """
 
     self.schema.field(name)
-    self.f.setAttribute(name, value)
+    self._feature.setAttribute(name, value)
 
   def getattributes(self):
 
     atts = {}
     for fld in self.schema.fields:
-      atts[fld.name] = core.map(self.f.getAttribute(fld.name))
+      atts[fld.name] = core.map(self._feature.getAttribute(fld.name))
 
     return atts
 

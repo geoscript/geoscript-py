@@ -271,7 +271,7 @@ class Layer(object):
       f = self.schema.feature(o)
       
     fc = FeatureCollections.newCollection() 
-    fc.add(f.f)
+    fc.add(f._feature)
     self.fs.addFeatures(fc)
 
   def reproject(self, prj, name=None):
