@@ -15,6 +15,7 @@ class Cursor(object):
     Returns the next feature. Raises `StopIteration` if no more features are available.
     """
     if not self.reader.hasNext():
+      self.reader.close()
       raise StopIteration
 
     return Feature(schema=self.layer.schema, f=self.reader.next())
