@@ -323,6 +323,49 @@ class Layer(object):
     fc.close(i)
     return rlayer
 
+  def filter(self, fil, name=None):
+    """
+    Filters the layer.
+
+    *fil* is the :class:`Filter <geoscript.filter.Filter>` to apply.
+
+    *name* is the optional name to assign to the new filtered layer.
+
+    This method returns a newly filtered layer. The new layer is create within the containing workspace of the original layer.
+
+    >>> from geoscript.feature import Schema
+    >>> l = Layer(schema=Schema('original', [('name', str)]))
+    >>> l.add(['foo'])
+    >>> l.add(['bar'])
+    >>> l.add(['baz'])
+    >>> 
+    >>> l2 = l.filter("name = 'foo'", "filtered")
+    >>> l2.count()
+    1
+    >>> l3 = l.filter("name LIKE 'b%'", "filtered2")
+    >>> l3.count()
+    2
+    """
+
+    f = Filter(fil)
+    name = name or Layer._newname()
+    fschema = feature.Schema(name, self.schema.fields)
+
+    # create the filtered layer
+    flayer = self.workspace.create(schema=fschema)
+
+    q = DefaultQuery(self.name, f._filter)
+    fc = self.fs.getFeatures(q)
+    i = fc.features()
+
+    # loop through features and add to new filtered layer
+    while i.hasNext():
+      f = feature.Feature(schema=fschema, f=i.next())
+      flayer.add(f)
+
+    fc.close(i)
+    return flayer
+
   def toGML(self,out=sys.stdout):
     try:
       from net.opengis.wfs import WfsFactory
