@@ -7,4 +7,4 @@ filter
   .. automodule:: geoscript.filter
 
      .. autoclass:: Filter
-        :members: cql, xml
+        :members: evaluate, cql, xml
