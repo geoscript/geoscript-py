@@ -38,7 +38,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'GeoScript'
-copyright = u'2009, Justin Deoliveira'
+copyright = u'2009, The Authors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -148,6 +148,7 @@ html_static_path = ['.static']
 
 # If true, links to the reST sources are added to the pages.
 #html_show_sourcelink = True
+html_show_sphinx = False
 
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
