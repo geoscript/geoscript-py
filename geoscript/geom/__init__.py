@@ -8,6 +8,8 @@ from multipolygon import MultiPolygon
 from bounds import Bounds
 from geom import Geometry
 from geom import fromWKT
+from geom import fromWKB
+from geom import toWKB
 from geom import prepare
 
 from geoscript import core
