@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 jars = ['jars/%s' % (f) for f in os.listdir('jars')]
 setup(name='geoscript',
-      version='0.5', 
+      version='0.6', 
       description='GeoScript Python',
       author='Justin Deoliveira',
       author_email='jdeolive@opengeo.org',
@@ -16,5 +16,5 @@ setup(name='geoscript',
       scripts=['bin/geoscript-classpath', 'bin/geoscript']
      )
 
-shutil.move(make_tarball('geoscript-0.5-src', 'geoscript'), 'dist')
+shutil.move(make_tarball('geoscript-0.6-src', 'geoscript'), 'dist')
 
