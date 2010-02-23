@@ -40,11 +40,11 @@ class Layer(object):
          else:
            layer = workspace.create(name)
 
-       fs = layer.fs
+       fs = layer._source
 
     self.workspace = workspace
     self.schema = schema or feature.Schema(ft=fs.schema) 
-    self.fs = fs
+    self._source = fs
 
     # keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
@@ -59,7 +59,7 @@ class Layer(object):
   """
 
   def getname(self):
-    return self.fs.name.localPart
+    return self._source.name.localPart
 
   name = property(getname)
   """
@@ -70,7 +70,7 @@ class Layer(object):
     if self._proj:
       return self._proj
     else:
-      crs = self.fs.schema.coordinateReferenceSystem
+      crs = self._source.schema.coordinateReferenceSystem
       if crs:
         return proj.Projection(crs)
 
@@ -110,7 +110,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    count = self.fs.getCount(DefaultQuery(self.name, f._filter))
+    count = self._source.getCount(DefaultQuery(self.name, f._filter))
     if count == -1:
       count = 0
       # calculate manually 
@@ -138,7 +138,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    e = self.fs.getBounds(DefaultQuery(self.name, f._filter))
+    e = self._source.getBounds(DefaultQuery(self.name, f._filter))
     if e:
       return geom.Bounds(env=e)
 
@@ -218,7 +218,7 @@ class Layer(object):
     if self.proj:
       q.coordinateSystem = self.proj._crs
 
-    r = self.fs.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
+    r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     return Cursor(r, self)
 
   def delete(self, filter):
@@ -239,7 +239,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.FAIL
-    self.fs.removeFeatures(f._filter)
+    self._source.removeFeatures(f._filter)
 
   def add(self, o):
     """
@@ -272,7 +272,7 @@ class Layer(object):
       
     fc = FeatureCollections.newCollection() 
     fc.add(f._feature)
-    self.fs.addFeatures(fc)
+    self._source.addFeatures(fc)
 
   def reproject(self, prj, name=None):
     """
@@ -312,7 +312,7 @@ class Layer(object):
       q.coordinateSystem = self.proj._crs
     q.coordinateSystemReproject = prj._crs 
 
-    fc = self.fs.getFeatures(q)
+    fc = self._source.getFeatures(q)
     i = fc.features()
 
     # loop through features and add to new reprojeced layer
@@ -355,7 +355,7 @@ class Layer(object):
     flayer = self.workspace.create(schema=fschema)
 
     q = DefaultQuery(self.name, f._filter)
-    fc = self.fs.getFeatures(q)
+    fc = self._source.getFeatures(q)
     i = fc.features()
 
     # loop through features and add to new filtered layer
@@ -374,12 +374,12 @@ class Layer(object):
     except ImportError:
       raise Exception('toGML() not available, GML libraries not on classpath.') 
 
-    features = self.fs.features
+    features = self._source.features
     fc = WfsFactory.eINSTANCE.createFeatureCollectionType()
     fc.feature.add(features)
 
     e = Encoder(WFSConfiguration())        
-    uri = self.fs.name.namespaceURI
+    uri = self._source.name.namespaceURI
     prefix = 'gt'
     e.namespaces.declarePrefix(prefix,uri)
     e.indenting = True
@@ -391,7 +391,7 @@ class Layer(object):
     except ImportError:
       raise Exception('toJSON() not available, GeoJSON libraries not on classpath.')
     else:
-      features = self.fs.features
+      features = self._source.features
       w = GeoJSONWriter() 
       w.write(features,out)
 

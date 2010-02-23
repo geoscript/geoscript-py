@@ -14,12 +14,12 @@ class Workspace:
     if self.__class__ == Workspace and not factory:
       import memory
       mem = memory.Memory()
-      self.ds = mem.ds
+      self._store = mem._store
     else :
       if ds:
-        self.ds = ds
+        self._store = ds
       elif factory:
-        self.ds = factory.createDataStore(params)
+        self._store = factory.createDataStore(params)
       else: 
         raise Exception('Workspace requires a data store or a factory')
 
@@ -30,7 +30,7 @@ class Workspace:
     try:
       return self.factory.displayName
     except AttributeError:
-      return type(self.ds).__name__[:-9]
+      return type(self._store).__name__[:-9]
 
   format = property(getformat)
   """
@@ -48,7 +48,7 @@ class Workspace:
     ['foo', 'bar']
     """
 
-    return [str(tn) for tn in self.ds.typeNames]
+    return [str(tn) for tn in self._store.typeNames]
 
   def get(self, name):
     """
@@ -70,7 +70,7 @@ class Workspace:
     """
 
     if name in self.layers():
-       fs = self.ds.getFeatureSource(name)
+       fs = self._store.getFeatureSource(name)
        return Layer(workspace=self, fs=fs)
   
     raise KeyError('No such layer "%s"' % name)
@@ -109,7 +109,7 @@ class Workspace:
        pass
 
      schema = schema or feature.Schema(name, fields)
-     self.ds.createSchema(schema.ft) 
+     self._store.createSchema(schema._type) 
      return self.get(name)
 
   def add(self, layer, name=None):
@@ -153,7 +153,7 @@ class Workspace:
     Closes the workspace disposing of any resources being consumed. Generally
     this method should always be closed when the workspace is no longer needed.
     """
-    self.ds.dispose()
+    self._store.dispose()
 
   def _format(self, layer):
     return self.format

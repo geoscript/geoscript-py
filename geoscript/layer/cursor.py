@@ -7,18 +7,18 @@ class Cursor(object):
   """
 
   def __init__(self, reader, layer):
-    self.reader = reader
+    self._reader = reader
     self.layer = layer
 
   def next(self):
     """
     Returns the next feature. Raises `StopIteration` if no more features are available.
     """
-    if not self.reader.hasNext():
-      self.reader.close()
+    if not self._reader.hasNext():
+      self._reader.close()
       raise StopIteration
 
-    return Feature(schema=self.layer.schema, f=self.reader.next())
+    return Feature(schema=self.layer.schema, f=self._reader.next())
   
   def read(self, n):
     """
@@ -39,7 +39,7 @@ class Cursor(object):
     """
     Closes the cursor. This function should *always* be called by client code after the cursor is no longer needed or has been exhausted.
     """
-    self.reader.close()
+    self._reader.close()
 
   def __iter__(self):
     return self

@@ -33,16 +33,20 @@ def rm(file):
      os.remove(file)
 
 from org.h2.tools import DeleteDbFiles
-DeleteDbFiles.execute('work', 'states', False)
+DeleteDbFiles.execute('work', 'states', True)
 unzip('data/states.db.zip', 'work')
 unzip('data/states.shp.zip', 'work')
 rmshp('reprojected', 'work')
 
 # init h2 database
 db = dbexts('h2', 'dbexts.ini')
-db.isql('DROP TABLE IF EXISTS "widgets"')
-db.isql('DROP TABLE IF EXISTS "states2"')
-db.isql('DROP TABLE IF EXISTS "reprojected"')
+def h2_drop(db, tbl):
+  db.isql('DROP TABLE IF EXISTS "%s"' % tbl)
+  db.isql('DROP TABLE IF EXISTS "%s_HATBOX"' % tbl)
+
+h2_drop(db, 'widgets')
+h2_drop(db, 'states2')
+h2_drop(db, 'reprojected')
 db.close()
 
 # init postgresql database

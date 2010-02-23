@@ -21,9 +21,9 @@ class Directory(Workspace):
     Workspace.__init__(self, DirectoryDataStoreFactory(), params)
 
   def _format(self, layer):
-    f = type(self.ds.getDataStore(layer.name)).__name__[:-9]
+    f = type(self._store.getDataStore(layer.name)).__name__[:-9]
     f = 'Shapefile' if f == 'IndexedShapefile' else f
     return f
 
   def __repr__(self):
-    return 'Directory[%s]' % str(self.ds.info.source.path)
+    return 'Directory[%s]' % str(self._store.info.source.path)

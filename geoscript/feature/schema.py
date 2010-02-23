@@ -22,7 +22,7 @@ class Schema(object):
   """
 
   def __init__(self, name=None, fields=[], ft=None):
-    self.ft = ft
+    self._type = ft
 
     if name and fields:
       # name and fields specified directly, generate gt feature type 
@@ -46,21 +46,21 @@ class Schema(object):
         # (eg: PyInteger) type, but rather a native java type (Integer)
         tb.add(name, core.map(typ))
 
-      self.ft = tb.buildFeatureType()
+      self._type = tb.buildFeatureType()
         
     elif ft:
       # gt feature type specified directly
-      self.ft = ft
+      self._type = ft
     else:
       raise Exception('No fields specified for feature type.')
 
   def getname(self):
-    return self.ft.name.localPart
+    return self._type.name.localPart
 
   name = property(getname, None, None, 'The name of the schema. A schema name is usually descriptive of the type of feature being described, for example "roads", "streams", "persons", etc...')
 
   def getgeom(self):
-    gd = self.ft.geometryDescriptor
+    gd = self._type.geometryDescriptor
     if gd:
       return self.field(gd.localName)
 
@@ -77,7 +77,7 @@ class Schema(object):
     price: float
     """
 
-    ad = self.ft.getDescriptor(name)
+    ad = self._type.getDescriptor(name)
     if ad:
       att = Field(ad.localName, core.map(ad.type.binding))
       if isinstance(ad, GeometryDescriptor) and ad.coordinateReferenceSystem:
@@ -88,7 +88,7 @@ class Schema(object):
     raise KeyError('No such field "%s"' % name)
 
   def getfields(self):
-    return [self.field(ad.localName) for ad in self.ft.attributeDescriptors]
+    return [self.field(ad.localName) for ad in self._type.attributeDescriptors]
 
   fields = property(getfields)
   """

@@ -49,7 +49,7 @@ class Feature(object):
         self.schema = Schema('feature', [(att, type(val)) for att,val in atts.iteritems()])
       
       # generate feature
-      b = SimpleFeatureBuilder(self.schema.ft)
+      b = SimpleFeatureBuilder(self.schema._type)
       for att, val in atts.iteritems(): 
         b.set(att, val)
 
