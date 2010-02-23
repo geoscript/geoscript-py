@@ -9,5 +9,6 @@ API Reference
    proj
    feature/index
    filter
+   render
    layer/index
    workspace/index
