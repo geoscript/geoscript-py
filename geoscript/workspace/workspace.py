@@ -148,5 +148,12 @@ class Workspace:
 
        return l
 
+  def close(self):
+    """
+    Closes the workspace disposing of any resources being consumed. Generally
+    this method should always be closed when the workspace is no longer needed.
+    """
+    self.ds.dispose()
+
   def _format(self, layer):
     return self.format
