@@ -27,7 +27,7 @@ def parseSLD(file):
    """
    Constructs a style from a StyledLayerDescriptor (SLD) file.
  
-   >>> s = parseSLD('tests/data/states.sld')
+   >>> s = parseSLD('work/states.sld')
    >>> len(s.rules())
    4
    """
@@ -88,7 +88,7 @@ class Rule(object):
  
    >>> from java.awt import Color
    >>> from geoscript import filter
-   >>> rule = Rule([PointSymbolizer(Color(75,100,125), 2)], filter.fromCQL("NAME= 'foo'"))
+   >>> rule = Rule([PointSymbolizer(Color(75,100,125), 2)], Filter("NAME= 'foo'"))
    >>> str(rule)
    'Rule(symbolizers=[Point(color=rgb(75,100,125), size=2)], filter=[ NAME = foo ])'
    """   
@@ -98,7 +98,7 @@ class Rule(object):
        
       fil = Filter(fil)
       if fil:
-        self.rule.filter = fil
+        self.rule.filter = fil._filter
     
       if len(syms) > 0:
         self.rule.setSymbolizers([s.sym for s in syms])
@@ -257,7 +257,7 @@ class PolygonSymbolizer(Symbolizer):
       if width: 
         sym.stroke.width = _sb.literalExpression(width)
       if fill:
-        sym.fill = _sb.createFill(fill)
+        sym.setFill(_sb.createFill(fill))
  
       Symbolizer.__init__(self,sym)
      
