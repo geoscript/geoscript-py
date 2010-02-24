@@ -11,5 +11,5 @@ def _import(mod, clas):
 PostGIS = _import('postgis', 'PostGIS')
 H2 = _import('h2', 'H2')
 Directory = _import('directory', 'Directory')
-Spatialite = _import('spatialite', 'SpatiaLite')
+#Spatialite = _import('spatialite', 'SpatiaLite')
 MySQL = _import('mysql', 'MySQL')

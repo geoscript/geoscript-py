@@ -10,5 +10,4 @@ workspace
    postgis
    mysql
    h2
-   spatialite   
    memory
