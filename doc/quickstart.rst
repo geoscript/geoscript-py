@@ -29,11 +29,11 @@ Jython version greater than *2.5.1* is required for GeoScript. The current versi
 Install GeoScript
 -----------------
 
-#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-0.2.tar.gz>`_
+#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-0.6.tar.gz>`_
 
 #. Unpack the GeoScript tarball::
 
-     tar xzvf geoscript-0.2.tgz 
+     tar xzvf geoscript-0.6.tgz 
 
 #. Change directory into the root of the unpacked tarball and execute :file:`setup.py`::
 
