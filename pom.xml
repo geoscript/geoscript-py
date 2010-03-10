@@ -83,14 +83,27 @@
       <artifactId>gt-xsd-kml</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-geojson</artifactId>
+      <artifactId>gt-geotiff</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
+      <artifactId>gt-image</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <!--dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-cql</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+<<<<<<< HEAD
       <artifactId>gt-charts</artifactId>
+=======
+      <artifactId>gt-geojson</artifactId>
+>>>>>>> first cut at adding raster support to geoscript
       <version>${gt.version}</version>
     </dependency>
     <dependency>
