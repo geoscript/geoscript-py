@@ -9,4 +9,5 @@ def _import(mod, clas):
   except ImportError, (errmsg):
     print 'Error importing %s module: %s' % (mod, errmsg)
 
+Mosaic = _import('mosaic', 'Mosaic')
 MrSID = _import('mrsid', 'MrSID')
