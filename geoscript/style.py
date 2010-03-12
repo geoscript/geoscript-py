@@ -23,6 +23,10 @@ def polygon():
   sym = _sb.createPolygonSymbolizer()
   return Style(_sb.createStyle(sym))
  
+def raster():
+  sym = _sb.createRasterSymbolizer() 
+  return Style(_sb.createStyle(sym))
+
 def parseSLD(file):
    """
    Constructs a style from a StyledLayerDescriptor (SLD) file.
@@ -288,3 +292,7 @@ class PolygonSymbolizer(Symbolizer):
    def __str__(self):
       return 'Polygon(stroke=%s, width=%d, fill=%s)' % (cstr(self.stroke), self.width, cstr(self.fill))
  
+class RasterSymbolizer(Symbolizer):
+
+   def __init__(self, sym=_sb.createRasterSymbolizer()):
+      Symbolizer.__init__(self,sym)
