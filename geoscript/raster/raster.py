@@ -23,7 +23,7 @@ class Raster(object):
 
   proj = property(getproj, None)
 
-  def getbounds(self):
+  def getextent(self):
     env = self._coverage.getEnvelope()
     crs = env.getCoordinateReferenceSystem()
     if not crs:
@@ -31,7 +31,7 @@ class Raster(object):
 
     return Bounds(env=env, prj=crs)
  
-  bounds = property(getbounds, None)
+  extent = property(getextent, None)
 
   def getsize(self):
     grid = self._coverage.getGridGeometry().getGridRange2D()
@@ -54,7 +54,7 @@ class Raster(object):
   blocksize = property(getblocksize, None)
 
   def getpixelsize(self):
-    b = self.bounds
+    b = self.extent
     s = self.size
     return (b.width/s[0], b.height/s[1])
 
