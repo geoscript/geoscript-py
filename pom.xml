@@ -109,11 +109,8 @@
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-<<<<<<< HEAD
       <artifactId>gt-charts</artifactId>
-=======
       <artifactId>gt-geojson</artifactId>
->>>>>>> first cut at adding raster support to geoscript
       <version>${gt.version}</version>
     </dependency>
     <dependency>
@@ -126,11 +123,6 @@
       <artifactId>gt-svg</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-geotiff</artifactId>
-      <version>${gt.version}</version>
-    </dependency-->
   </dependencies>
   
   <build>
