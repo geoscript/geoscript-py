@@ -88,21 +88,11 @@
       <artifactId>gt-imageio-ext-gdal</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-cql</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-geojson</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-swing</artifactId>
       <version>${gt.version}</version>
-    </dependency-->
+    </dependency>
   </dependencies>
   
   <build>
