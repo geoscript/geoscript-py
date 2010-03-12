@@ -144,6 +144,26 @@ class Bounds(ReferencedEnvelope):
        x += dx
      y += dy
 
+  def scale(self, factor):
+    """
+    Scales the bounds by a particualr factor.
+
+    *factor* is the scale factor. The scale factor must be greather than 0. A 
+    value greater than 1 will grow the bounds whereas a value of less than 1 
+    will shrink the bounds.
+   
+    This method returns a new :class:`Bounds <geoscript.geom.bounds.Bounds>` 
+    object.
+
+    >>> b = Bounds(0, 0, 1, 1)
+    >>> b1 = b.scale(1.5)
+    (-0.25, -0.25, 1.25, 1.25)
+    """
+    w = self.width * (factor - 1) / 2
+    h = self.height * (factor - 1) / 2
+
+    return Bounds(self.l - w, self.b - h, self.r + w, self.t + h)
+      
   def __add__(self, other):
     b = Bounds(env=self)
     if self.proj and other.proj and other.proj != self.proj:
