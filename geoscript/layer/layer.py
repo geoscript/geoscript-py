@@ -91,6 +91,23 @@ class Layer(object):
   EPSG:4326
   """
   
+  def getextent(self): 
+    """
+    The extent of the entire layer as a :class:`Bounds <geoscript.geom.Bounds>`.
+
+    >>> l = Layer()
+    >>> from geoscript import geom 
+    >>> l.add([geom.Point(1.0, 2.0)])
+    >>> l.add([geom.Point(3.0, 4.0)])
+
+    >>> l.extent
+    (1.0, 2.0, 3.0, 4.0)
+    
+    """
+    return self.bounds()
+ 
+  extent = property(getextent, None)
+
   def count(self, filter=None):
     """
     The number of features in the layer as an ``int``.
