@@ -1,12 +1,10 @@
-import sys
-from geoscript import util
 from geoscript.raster.raster import Raster
-from org.geotools.gce.geotiff import GeoTiffReader
+from org.geotools.gce.geotiff import GeoTiffFormat
 
 class GeoTIFF(Raster):
 
-  def __init__(self, file):
-    Raster.__init__(self, GeoTiffReader(util.toFile(file)))
+  def __init__(self, file, proj=None):
+    Raster.__init__(self, GeoTiffFormat(), file, proj)
 
   def getpixelsize(self):
     md = self._reader.getMetadata()

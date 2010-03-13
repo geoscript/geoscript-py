@@ -3,16 +3,25 @@ from geoscript import util
 from geoscript.proj import Projection
 from geoscript.geom import Bounds
 from geoscript.raster.band import Band
+from org.geotools.factory import Hints
 
 class Raster(object):
 
-  def __init__(self, reader):
+  def __init__(self, format, file, proj):
     self.file = file
-    self._reader = reader
-    self._coverage = reader.read(None)
+    self._format = format
+
+    hints = Hints()
+    if proj:
+      proj = Projection(proj)
+      
+      hints.put(Hints.DEFAULT_COORDINATE_REFERENCE_SYSTEM, proj._crs) 
+
+    self._reader = format.getReader(util.toFile(file), hints)
+    self._coverage = self._reader.read(None)
 
   def getformat(self):
-    return str(self._reader.getFormat().getName())
+    return str(self._format.getName())
 
   format = property(getformat, None)
 
