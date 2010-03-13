@@ -61,7 +61,7 @@ def _prepareContext(data, style=None, bbox=None):
    if isinstance(data, Layer):
      mc.addLayer(DefaultMapLayer(data._source, style.style))
    elif isinstance(data, Raster):
-     mc.addLayer(DefaultMapLayer(data._coverage, style.style))
+     mc.addLayer(DefaultMapLayer(data._reader, style.style))
    else:
      raise Exception('Unable to render %s' % str(data))
 
