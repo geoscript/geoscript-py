@@ -6,6 +6,7 @@ GeoScript PY
 
    quickstart
    using
+   download
    api/index
    
 GeoScript PY is a Python implementation of GeoScript for the Jython platform.
