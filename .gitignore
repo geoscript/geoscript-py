@@ -6,3 +6,5 @@ doc/.build
 jars/*.jar
 geoscript.egg-info
 dist
+.classpath
+.project
