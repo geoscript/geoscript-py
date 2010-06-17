@@ -9,12 +9,12 @@ class MultiPoint(_MultiPoint):
   *points* is a variable number of ``list``/``tuple`` arguments. 
 
   >>> MultiPoint([1,2], [3,4])
-  MULTIPOINT (1 2, 3 4)
+  MULTIPOINT ((1 2), (3 4))
 
   *points* may also be specified as a variable number of :class:`Point` arguments. 
 
   >>> MultiPoint(Point(1,2), Point(3,4))
-  MULTIPOINT (1 2, 3 4)
+  MULTIPOINT ((1 2), (3 4))
    
   """
 
