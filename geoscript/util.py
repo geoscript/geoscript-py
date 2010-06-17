@@ -2,6 +2,7 @@
 util module -- Various utility functions
 """
 
+import warnings
 from java import io, net
 
 def toURL(o):
@@ -30,3 +31,14 @@ def toFile(o):
     return toFile(o.getFile())
   elif isinstance(o, (str, unicode)):
     return io.File(o)
+
+def deprecated(f):
+  def wrapper(*args, **kwargs):
+    warnings.warn("Function %s is deprecated. %s"% (f.__name__, f.__doc__),
+        DeprecationWarning, 2)
+    return f(*args, **kwargs)
+    
+  wrapper.__name__ = f.__name__ 
+  wrapper.__doc__ = f.__doc__
+  wrapper.__dict__.update(f.__dict__)
+  return wrapper
