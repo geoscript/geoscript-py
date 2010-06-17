@@ -3,6 +3,7 @@ The :mod:`workspace.workspace` module provides layer access and manipulation.
 """
 
 from geoscript.layer import Layer
+from geoscript.filter import Filter
 from geoscript import geom, feature
 
 class Workspace:
@@ -157,3 +158,31 @@ class Workspace:
 
   def _format(self, layer):
     return self.format
+
+  def __getitem__(self, key):
+     return self.get(key)
+
+  def __setitem__(self, key, val):
+     try:
+       self.get(key) 
+
+       #todo: drop the existing schema and create a new one
+       raise Exception('%s already exists' % key) 
+     except KeyError:
+       if isinstance(val, list):
+         self.create(key, fields=val)
+       elif isinstance(val, feature.Schema):
+         self.create(key, schema=val)
+       else: 
+         self.add(val)
+
+  def __iter__(self):
+    return self.layers().__iter__()
+
+  def iterkeys(self):
+    return self.__iter__()
+
+  def iteritems(self):
+    for l in self.layers():
+       yield (l, self.get(l)) 
+

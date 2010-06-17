@@ -104,7 +104,7 @@ class Feature(object):
     >>> str(f.get('name'))
     'anvil'
     """
-    self.schema.field(name)
+    self.schema.get(name)
     return self._feature.getAttribute(name)
 
   def set(self, name, value):
@@ -123,7 +123,7 @@ class Feature(object):
     'mallet'
     """
 
-    self.schema.field(name)
+    self.schema.get(name)
     self._feature.setAttribute(name, value)
 
   def getattributes(self):
@@ -146,8 +146,23 @@ class Feature(object):
   100.0
   """
 
+  def __getitem__(self, key):
+    return self.get(key)
+
+  def __iter__(self):
+    return self.schema.__iter__()
+
+  def iterkeys(self):
+    return self.__iter__()
+
+  def iteritems(self):
+    return self.attributes.iteritems()
+
   def __repr__(self):
     atts = ['%s: %s' % (fld.name, self.get(fld.name)) for fld in self.schema.fields]
 
     id = self.id if self.id.startswith(self.schema.name) else '%s.%s' % (self.schema.name, self.id)
     return '%s {%s}' % (id, string.join(atts,', '))
+
+  def __eq__(self, other):
+    return other and self._feature == other._feature

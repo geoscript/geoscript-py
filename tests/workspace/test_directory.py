@@ -5,7 +5,7 @@ from geoscript.workspace import Directory
 class DirectoryWorkspace_Test(WorkspaceTest):
 
   def setUp(self):
-    self.ws = Directory('data')
+    self.ws = Directory('work')
 
   def testCreate(self):
     pass

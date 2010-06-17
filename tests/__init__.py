@@ -37,6 +37,7 @@ DeleteDbFiles.execute('work', 'states', True)
 unzip('data/states.db.zip', 'work')
 unzip('data/states.shp.zip', 'work')
 rmshp('reprojected', 'work')
+rmshp('widgets2', 'work')
 
 # init h2 database
 db = dbexts('h2', 'dbexts.ini')
@@ -45,12 +46,12 @@ def h2_drop(db, tbl):
   db.isql('DROP TABLE IF EXISTS "%s_HATBOX"' % tbl)
 
 h2_drop(db, 'widgets')
+h2_drop(db, 'widgets2')
 h2_drop(db, 'states2')
 h2_drop(db, 'reprojected')
 db.close()
 
 # init postgresql database
-db = dbexts('postgresql', 'dbexts.ini')
 def pg_drop(db, tbl):
   try:
     db.isql("DROP TABLE %s" % (tbl))
@@ -59,20 +60,31 @@ def pg_drop(db, tbl):
   else:
     db.isql("DELETE FROM geometry_columns WHERE f_table_name='%s'" % (tbl))
 
-pg_drop(db,'widgets')
-pg_drop(db,'states2')
-pg_drop(db,'reprojected')
-db.close()
+try:
+  db = dbexts('postgresql', 'dbexts.ini')
+except Exception, e:
+  print "Skipping postgis initialization", e
+else:
+  pg_drop(db,'widgets')
+  pg_drop(db,'widgets2')
+  pg_drop(db,'states2')
+  pg_drop(db,'reprojected')
+  db.close()
 
 # init mysql database
-db = dbexts('mysql', 'dbexts.ini')
 def mysql_drop(db, tbl):
   try:
     db.isql("DROP TABLE %s" % (tbl))
   except:
     pass
 
-mysql_drop(db, 'widgets')
-mysql_drop(db, 'states2')
-mysql_drop(db, 'reprojected')
-db.close()
+try:
+  db = dbexts('mysql', 'dbexts.ini')
+except Exception, e:
+  print "Skipping mysql initialization", e
+else:
+  mysql_drop(db, 'widgets')
+  mysql_drop(db, 'widgets2')
+  mysql_drop(db, 'states2')
+  mysql_drop(db, 'reprojected')
+  db.close()

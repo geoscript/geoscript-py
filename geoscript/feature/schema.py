@@ -3,6 +3,7 @@ from org.opengis.feature.type import GeometryDescriptor
 from org.geotools.feature import NameImpl
 from org.geotools.feature.simple import SimpleFeatureTypeBuilder
 from geoscript import core, geom, proj
+from geoscript.util import deprecated
 from field import Field
 from feature import Feature
 
@@ -62,11 +63,18 @@ class Schema(object):
   def getgeom(self):
     gd = self._type.geometryDescriptor
     if gd:
-      return self.field(gd.localName)
+      return self.get(gd.localName)
 
   geom = property(getgeom, None, None, 'The geometry :class:`Field` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes')
 
+  @deprecated
   def field(self, name):
+    """
+    Use :func:`get`.
+    """
+    return self.get(name)
+
+  def get(self, name):
     """
     Returns the :class:`Field` of a specific name or ``None`` if no such attribute exists in the schema.
  
@@ -88,7 +96,7 @@ class Schema(object):
     raise KeyError('No such field "%s"' % name)
 
   def getfields(self):
-    return [self.field(ad.localName) for ad in self._type.attributeDescriptors]
+    return [self.get(ad.localName) for ad in self._type.attributeDescriptors]
 
   fields = property(getfields)
   """
@@ -138,6 +146,23 @@ class Schema(object):
 
     return Schema(name, flds)
 
+  def __getitem__(self, key):
+    return self.get(key)
+
+  def __iter__(self):
+    for f in self.fields:
+      yield f.name
+
+  def iterkeys(self):
+    return self.__iter__()
+
+  def iteritems(self):
+    for f in self.fields:
+      yield f.name, f
+
   def __repr__(self):
     flds = ['%s' % str(fld) for fld in self.fields]
     return '%s [%s]' % (self.name, string.join(flds,', '))
+
+  def __eq__(self, other):
+    return other and self._type == other._type

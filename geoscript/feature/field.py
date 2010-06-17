@@ -12,3 +12,6 @@ class Field(object):
   def __repr__(self):
     return '%s: %s' % (self.name, self.typ.__name__)
 
+  def __eq__(self, other):
+    return other and self.name == other.name \
+      and self.typ == other.typ and self.proj == other.proj
