@@ -263,6 +263,11 @@ class Layer(object):
     >>> l.count()
     2
     """
+    if isinstance(o, Layer):
+      for f in o.features():
+        self.add(f)
+      return
+
     if isinstance(o, feature.Feature):
       f = o
       if not f.schema:
