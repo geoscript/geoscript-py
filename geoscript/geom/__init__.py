@@ -7,10 +7,9 @@ from multilinestring import MultiLineString
 from multipolygon import MultiPolygon
 from bounds import Bounds
 from geom import Geometry
-from geom import fromWKT
-from geom import fromWKB
-from geom import toWKB
 from geom import prepare
+from io.wkt import fromWKT, readWKT, writeWKT, fromWKB, readWKB, toWKB, writeWKT
+from io.json import writeJSON
 
 from geoscript import core
 core.register(Point)

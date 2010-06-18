@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>geoscript</groupId>
-  <artifactId>lib</artifactId>
+  <artifactId>geoscript</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
 
@@ -68,14 +68,14 @@
       <artifactId>gt-xsd-wfs</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <!--dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-cql</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-geojson</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <!--dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-cql</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
