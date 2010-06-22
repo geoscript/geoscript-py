@@ -4,6 +4,8 @@ from java.awt.geom import AffineTransform
 from com.vividsolutions.jts.geom import GeometryFactory
 from com.vividsolutions.jts.geom import Polygon, MultiPolygon
 from org.geotools.geometry.jts import LiteShape
+from org.geotools.renderer.chart import GeometryDataset
+from org.jfree.chart import JFreeChart, ChartPanel
 
 _fac = GeometryFactory()
 
@@ -73,3 +75,23 @@ def draw(g, size=(500,500)):
   frame.pack()
   frame.visible = True
 
+def plot(geoms, size=(500,500)):
+  """
+  Plots a set of geometry objects into a xy grid.
+
+  *geom* is a `list` of geometry objects to plot. *size* is the resulting
+  size of the rendered plot.
+  """
+
+  if not isinstance(geoms, list):
+    geoms = [geoms]
+
+  gd = GeometryDataset(geoms)
+  plot = gd.createPlot()
+  chart = JFreeChart(plot)
+  panel = ChartPanel(chart)
+  
+  frame = swing.JFrame()
+  frame.setContentPane(panel)
+  frame.size = size
+  frame.visible = True

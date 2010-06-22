@@ -73,12 +73,12 @@
       <artifactId>gt-geojson</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <!--dependency>
+    <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-cql</artifactId>
+      <artifactId>gt-charts</artifactId>
       <version>${gt.version}</version>
     </dependency>
-    <dependency>
+    <!--dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-geotiff</artifactId>
       <version>${gt.version}</version>
