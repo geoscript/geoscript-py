@@ -7,7 +7,7 @@ from multilinestring import MultiLineString
 from multipolygon import MultiPolygon
 from bounds import Bounds
 from geom import Geometry
-from geom import prepare
+from geom import prepare, simplify
 from io.wkt import fromWKT, readWKT, writeWKT, fromWKB, readWKB, toWKB, writeWKT
 from io.json import writeJSON
 

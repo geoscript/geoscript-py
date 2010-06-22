@@ -5,6 +5,7 @@ The :mod:`geom` module provides geometry classes and utilities for the construct
 from com.vividsolutions.jts.geom import GeometryFactory
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
+from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
 
 _factory = GeometryFactory()
 _prepfactory = PreparedGeometryFactory()
@@ -27,3 +28,15 @@ def prepare(g):
   """
   return _prepfactory.create(g)
   
+
+def simplify(g, tol):
+  """
+  Simplifies a geometry object using the Douglas-Peucker simplfication method.
+  
+  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to simplify. 
+
+  *tol* is the distance tolernance such that all veriticies in the resulting
+  simplified geometry will be within this distance from the original geometry.
+  """
+  return DP.simplify(g, tol)
+   
