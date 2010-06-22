@@ -1,4 +1,6 @@
+import java
 import unittest
+import simplejson as json 
 from geoscript import geom, proj, feature
 
 class Feature_Test:
@@ -92,3 +94,25 @@ class Feature_Test:
     f2 = feature.Feature(a,'fid')
     assert f1 == f2
 
+  def testWriteJSON(self):
+    g = geom.Point(-125, 50)
+    a = {'x': 1, 'y': 1.1, 'z': 'one', 'geom': g}
+    f1 = feature.Feature(a,'fid')
+    st = feature.writeJSON(f1)    
+    assert st
+
+    obj = json.loads(st) 
+    assert obj['type'] == 'Feature'
+    assert obj['properties']['x'] == 1
+    assert obj['properties']['y'] == 1.1
+    assert obj['geometry']['type'] == 'Point'
+    assert obj['geometry']['coordinates'] == [-125, 50] 
+
+  def testReadJSON(self):
+    st = '{"type": "Feature", "properties": {"x": 1, "y": 1.1 }, "id": "fid"}'
+    f = feature.readJSON(st) 
+    assert f
+
+    assert 1 == f['x']
+    assert 1.1 == f['y']
+    assert 'fid' == f.id

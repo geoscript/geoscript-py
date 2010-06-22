@@ -29,9 +29,9 @@ class Feature(object):
   """
   def __init__(self, atts=None, id=None, schema=None, f=None):
 
+    from schema import Schema
     if atts:
       # attributes specified directly
-      from schema import Schema
 
       # if list specified assume values in order of schema
       if isinstance(atts, list):
