@@ -22,6 +22,7 @@ def prepare(g):
 
   *g* is the :class:`Geometry <geoscript.geom.Geometry>` to prepare.
 
+  >>> from geoscript.geom import readWKT
   >>> prep = prepare(readWKT('POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))'))
   >>> prep.intersects(readWKT('POLYGON ((4 4, 6 4, 6 6, 4 6, 4 4))'))
   True
