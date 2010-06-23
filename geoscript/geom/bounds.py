@@ -16,8 +16,13 @@ class Bounds(ReferencedEnvelope):
       else:
         ReferencedEnvelope.__init__(self, env)
     else:
-      ReferencedEnvelope.__init__(self, west, east, south, north, 
-         prj._crs if prj else None)
+      if west:
+        ReferencedEnvelope.__init__(self, west, east, south, north, 
+           prj._crs if prj else None)
+      elif prj:
+        ReferencedEnvelope.__init__(self, prj._crs) 
+      else:
+        ReferencedEnvelope.__init__(self)
 
   def getwest(self):
     return self.minX()
