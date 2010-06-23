@@ -56,6 +56,9 @@ class Feature_Test:
     except KeyError:
       pass
 
+    assert s.values() == s.fields 
+    assert s.keys() == [f.name for f in s.fields]
+
   def testSchemaEquals(self):
     s1 = feature.Schema('test',[('att1',str),('att2',int),('geom', geom.Point,'epsg:3005')])
     s2 = feature.Schema('test',[('att1',str),('att2',int),('geom', geom.Point,'epsg:3005')])
@@ -86,6 +89,9 @@ class Feature_Test:
     expected = [(x,y) for x,y in f.attributes.iteritems()]
     assert [(x,y) for x,y in f.iteritems()] == expected
    
+    assert f.attributes.keys() == f.keys()
+    assert f.attributes.values() == f.values()
+
   def testEquals(self):
     id = 'fid'
     g = geom.Point(-125, 50)

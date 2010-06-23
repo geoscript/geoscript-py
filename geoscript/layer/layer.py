@@ -371,6 +371,9 @@ class Layer(object):
     fc.close(i)
     return flayer
 
+  def __eq__(self, other):
+    return other and self.schema == other.schema
+
   def toGML(self,out=sys.stdout):
     try:
       from net.opengis.wfs import WfsFactory

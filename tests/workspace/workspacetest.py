@@ -43,3 +43,7 @@ class WorkspaceTest:
  
     assert l
     assert shp.count() == l.count()
+
+  def testContainer(self):
+    assert self.ws.keys() == self.ws.layers() 
+    assert self.ws.values() == [self.ws.get(l) for l in self.ws.layers()]

@@ -127,7 +127,6 @@ class Feature(object):
     self._feature.setAttribute(name, value)
 
   def getattributes(self):
-
     atts = {}
     for fld in self.schema.fields:
       atts[fld.name] = core.map(self._feature.getAttribute(fld.name))
@@ -157,6 +156,12 @@ class Feature(object):
 
   def iteritems(self):
     return self.attributes.iteritems()
+
+  def keys(self):
+    return [f.name for f in self.schema.fields]
+
+  def values(self):
+    return [core.map(val) for val in self._feature.getAttributes()]
 
   def __repr__(self):
     atts = ['%s: %s' % (fld.name, self.get(fld.name)) for fld in self.schema.fields]

@@ -160,6 +160,12 @@ class Schema(object):
     for f in self.fields:
       yield f.name, f
 
+  def keys(self):
+    return [f.name for f in self.fields] 
+
+  def values(self):
+    return self.fields
+
   def __repr__(self):
     flds = ['%s' % str(fld) for fld in self.fields]
     return '%s [%s]' % (self.name, string.join(flds,', '))

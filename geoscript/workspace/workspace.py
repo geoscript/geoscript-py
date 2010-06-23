@@ -186,3 +186,8 @@ class Workspace:
     for l in self.layers():
        yield (l, self.get(l)) 
 
+  def keys(self):
+    return self.layers()
+
+  def values(self):
+    return [v for k,v in self.iteritems()]
