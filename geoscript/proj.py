@@ -1,11 +1,13 @@
 """
 The :mod:`proj` module provides support for coordinate reference system transformation and geometry reprojection.
 """
-from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
-from org.geotools.referencing import CRS as crs
-from org.opengis.referencing.crs import CoordinateReferenceSystem
+from com.vividsolutions.jts.geom import CoordinateFilter
+from org.osgeo.proj4j import CoordinateReferenceSystem as CRS
+from org.osgeo.proj4j import ProjCoordinate
+from org.osgeo.proj4j import CRSFactory, CoordinateTransformFactory 
 
-CRS = CoordinateReferenceSystem
+_crsFactory = CRSFactory()
+_txFactory = CoordinateTransformFactory()
 
 class Projection(object):
   """
@@ -32,23 +34,17 @@ class Projection(object):
       self._crs = proj._crs
     elif isinstance(proj, (str,unicode)):
       try:
-         self._crs = crs.decode(proj)
+         self._crs = _crsFactory.createFromName(proj)
       except:
          try:
-           self._crs = crs.parseWKT(proj)
+           self._crs = _crsFactory.createFromParams(None, proj)
          except:
            raise Exception('Unable to determine projection from %s' % proj)
 
   def getid(self):
-    return str(crs.lookupIdentifier(self._crs, True))
+    return self._crs.getName()
 
   id = property(getid, None, None, 'The string identifying the projection')
-
-  def getwkt(self):
-    return str(self._crs.toString())
-
-  wkt = property(getwkt, None, None, 
-     'The well known text string representing the projection')
 
   def transform(self, obj, dest):
     """
@@ -76,30 +72,30 @@ class Projection(object):
     """
     fromcrs = self._crs
     tocrs = Projection(dest)._crs
-    tx = crs.findMathTransform(fromcrs,tocrs)
+    tx = _txFactory.createTransform(fromcrs, tocrs)
 
     if isinstance(obj, (list,tuple)):
       # tuple or list
-      import jarray
-      transformed = jarray.zeros(len(obj), 'd')
-      tx.transform(obj, 0, transformed, 0, 1)
-      l = [transformed[x] for x in range(len(obj))]
+      p1 = ProjCoordinate(*obj)      
+      p2 = ProjCoordinate()      
+
+      tx.transform(p1, p2)
+
+      l = [p2.x, p2.y]
+      if len(obj) > 2:
+         l.append(p2.z)
+
       return l if isinstance(obj, list) else tuple(l)
     else:
       # geometry
-      gt = GeometryTX()
-      gt.mathTransform = tx
-
-      return gt.transform(obj)
+      obj.apply(TransformFilter(tx))
+      return obj
 
   def __str__(self):
     return self.id
   
-  def __repr__(self):
-    return self.wkt
-
   def __eq__(self, other):
-    return crs.equalsIgnoreMetadata(self._crs, other._crs)
+    return other and self.name == other.name
 
 def transform(obj, src, dst):
   """
@@ -134,3 +130,18 @@ def projections():
      except:
        # todo: log this
        pass
+
+class TransformFilter(CoordinateFilter):
+
+  def __init__(self, tx):
+    self.tx = tx;
+
+  def filter(self, coord):
+    p1 = ProjCoordinate(coord.x, coord.y, coord.z)
+    p2 = ProjCoordinate()
+    self.tx.transform(p1, p2)
+    coord.x = p2.x
+    coord.y = p2.y
+    coord.z = p2.z
+    
+

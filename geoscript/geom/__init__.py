@@ -9,7 +9,6 @@ from bounds import Bounds
 from geom import Geometry
 from geom import prepare, simplify
 from io.wkt import fromWKT, readWKT, writeWKT, fromWKB, readWKB, toWKB, writeWKT
-from io.json import writeJSON
 
 from geoscript import core
 core.register(Point)

@@ -59,15 +59,15 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('(1.0, 2.0, 3.0, 4.0)', str(b))
  
     b = geom.Bounds(1.0, 2.0, 3.0, 4.0, 'epsg:4326')
-    self.assertEqual('(1.0, 2.0, 3.0, 4.0, EPSG:4326)', str(b))
+    self.assertEqual('(1.0, 2.0, 3.0, 4.0, epsg:4326)', str(b))
     
   def testBoundsReproject(self):
     b = geom.Bounds(-111, 44.7, -110, 44.9, 'epsg:4326')
     b1 = b.reproject('epsg:26912')
-    self.assertEqual(499999, int(b1.west))
-    self.assertEqual(4949624, int(b1.south))
-    self.assertEqual(579224, int(b1.east))
-    self.assertEqual(4972327, int(b1.north))
+    self.assertEqual(500000, int(b1.west))
+    self.assertEqual(4949625, int(b1.south))
+    self.assertEqual(578952, int(b1.east))
+    self.assertEqual(4972328, int(b1.north))
     
 
   def testMultiPolygonFromJTS(self):

@@ -1,8 +1,8 @@
-from org.geotools.geometry.jts import ReferencedEnvelope
+from com.vividsolutions.jts.geom import Envelope
 from geoscript.util import deprecated
 from geoscript import proj
 
-class Bounds(ReferencedEnvelope):
+class Bounds(Envelope):
   """
   A two dimensional bounding box.
   """
@@ -11,21 +11,17 @@ class Bounds(ReferencedEnvelope):
       prj = proj.Projection(prj)
 
     if env:
-      if prj:
-        ReferencedEnvelope.__init__(self, env, prj._crs)
-      else:
-        ReferencedEnvelope.__init__(self, env)
+        Envelope.__init__(self, env)
     else:
       if west:
-        ReferencedEnvelope.__init__(self, west, east, south, north, 
-           prj._crs if prj else None)
-      elif prj:
-        ReferencedEnvelope.__init__(self, prj._crs) 
+        Envelope.__init__(self, west, east, south, north)
       else:
-        ReferencedEnvelope.__init__(self)
+        Envelope.__init__(self)
+
+    self.proj = prj
 
   def getwest(self):
-    return self.minX()
+    return self.minX
   west = property(getwest)
   """
   The leftmost/westmost oordinate of the bounds.
@@ -37,7 +33,7 @@ class Bounds(ReferencedEnvelope):
   l = property(get_l, None, None, "Use west.")
 
   def getsouth(self):
-    return self.minY()
+    return self.minY
   south = property(getsouth)
   """
   The bottomtmost/southmost oordinate of the bounds.
@@ -49,7 +45,7 @@ class Bounds(ReferencedEnvelope):
   b = property(get_b, None, None, "Use south.")
 
   def geteast(self):
-    return self.maxX()
+    return self.maxX
   east = property(geteast)
   """
   The rightmost/eastmost oordinate of the bounds.
@@ -61,7 +57,7 @@ class Bounds(ReferencedEnvelope):
   r = property(get_r, None, None, 'Use east.')
 
   def getnorth(self):
-    return self.maxY()
+    return self.maxY
   north = property(getnorth)
   """
   The topmost/northmost oordinate of the bounds.
@@ -71,15 +67,6 @@ class Bounds(ReferencedEnvelope):
   def get_t(self):
     return self.north
   t = property(get_t, None, None, 'Use north.')
-
-  def getproj(self):
-    crs = self.coordinateReferenceSystem
-    if crs:
-      return proj.Projection(crs)
-  proj = property(getproj)
-  """
-  The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.
-  """
 
   def reproject(self, prj):
     """
@@ -92,7 +79,10 @@ class Bounds(ReferencedEnvelope):
       raise Exception('No projection set on bounds, unable to reproject')
 
     prj = proj.Projection(prj)
-    return Bounds(env=self.transform(prj._crs, True))
+    w,s = proj.transform((self.west, self.south), self.proj, prj)
+    e,n = proj.transform((self.east, self.north), self.proj, prj)
+
+    return Bounds(w, s, e, n, prj)
    
   def __repr__(self):
     s = '(%s, %s, %s, %s' % (self.west, self.south, self.east, self.north)
