@@ -69,6 +69,20 @@ class GeomTest(unittest.TestCase):
     self.assertEqual(579224, int(b1.east))
     self.assertEqual(4972327, int(b1.north))
     
+  def testBoundsScale(self):
+    b = geom.Bounds(5,5,10,10)
+
+    b1 = b.scale(2)
+    assert 2.5 == b1.west
+    assert 2.5 == b1.south
+    assert 12.5 == b1.east
+    assert 12.5 == b1.north
+  
+    b1 = b.scale(0.5)
+    assert 6.25 == b1.west
+    assert 6.25 == b1.south
+    assert 8.75 == b1.east
+    assert 8.75 == b1.north
 
   def testMultiPolygonFromJTS(self):
     mp = geom.MultiPolygon(self.gf.createMultiPolygon([self.gf.createPolygon(self.gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
