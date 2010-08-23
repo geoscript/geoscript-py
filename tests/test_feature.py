@@ -100,6 +100,19 @@ class Feature_Test:
     f2 = feature.Feature(a,'fid')
     assert f1 == f2
 
+  def testBounds(self):
+    g = geom.LineString((1,1), (10,10))
+    f = feature.Feature({'geom': g}, 'fid')
+   
+    assert 1 == f.bounds.west 
+    assert 1 == f.bounds.south 
+    assert 10 == f.bounds.east
+    assert 10 == f.bounds.north
+
+  def testBoundsNoGeom(self):
+    f = feature.Feature({'x': 1}, 'fid')
+    assert None == f.bounds
+
   def testWriteJSON(self):
     g = geom.Point(-125, 50)
     a = {'x': 1, 'y': 1.1, 'z': 'one', 'geom': g}

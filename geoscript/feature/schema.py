@@ -67,6 +67,13 @@ class Schema(object):
 
   geom = property(getgeom, None, None, 'The geometry :class:`Field` of the schema. Returns ``None`` in the event the schema does not contain any geometric attributes')
 
+  def getproj(self):
+    crs = self._type.coordinateReferenceSystem
+    if crs:
+       return proj.Projection(crs)
+
+  proj = property(getproj, None, None, 'The :class:`Projection <geoscript.proj.Projection>` of the schema. Returns ``None`` if the schema does not contain any geometric attributes or if the information is not available.')
+
   @deprecated
   def field(self, name):
     """

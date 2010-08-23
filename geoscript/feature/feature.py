@@ -1,6 +1,6 @@
 import string
 from org.geotools.feature.simple import SimpleFeatureBuilder
-from geoscript import core
+from geoscript import core, geom
 
 class Feature(object):
   """
@@ -92,6 +92,16 @@ class Feature(object):
   >>> f.geom = geom.Point(2,2)
   >>> f.geom
   POINT (2 2)
+  """
+
+  def getbounds(self):
+    if self.geom:
+       return geom.Bounds(prj=self.schema.proj, env=self.geom.getEnvelopeInternal())
+
+  bounds = property(getbounds)
+  """
+  The :class:`Bounds <geoscript.geom.bounds.Bounds>` of the feature geometry. 
+  Will return ``None`` if the feature does not contain any geometric attributes.
   """
 
   def get(self, name):

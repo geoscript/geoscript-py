@@ -15,9 +15,9 @@ class Bounds(ReferencedEnvelope):
       if prj:
         ReferencedEnvelope.__init__(self, env, prj._crs)
       else:
-        ReferencedEnvelope.__init__(self, env)
+        ReferencedEnvelope.__init__(self, env, None)
     else:
-      if west:
+      if west != None:
         ReferencedEnvelope.__init__(self, west, east, south, north, 
            prj._crs if prj else None)
       elif prj:
@@ -114,6 +114,12 @@ class Bounds(ReferencedEnvelope):
     h = self.height * (factor - 1) / 2
 
     return Bounds(self.west - w, self.south - h, self.east + w, self.north + h)
+
+  def expand(self, other):
+    """
+    Expands this bounds to include another.
+    """
+    self.expandToInclude(other)
    
   def toPolygon(self):
    """
