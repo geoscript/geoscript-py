@@ -7,6 +7,9 @@ from java import io, lang
 from org.opengis.filter import Filter as _Filter
 from org.geotools.filter.text.cql2 import CQL
 from org.geotools.xml import Parser, Encoder
+from org.geotools.factory import CommonFactoryFinder
+
+_factory = CommonFactoryFinder.getFilterFactory(None)
 
 class Filter(object):
   """
@@ -80,8 +83,20 @@ class Filter(object):
     """
     return self._filter.evaluate(f._feature)
  
+  def __eq__(self, other):
+    return self._filter.equals(other._filter)
+
+  def __hash__(self):
+    return self._filter.hashCode()
+
   def __repr__(self):
     return self._filter.toString()
+
+  def __add__(self, other):
+    if self._filter == _Filter.INCLUDE:
+       return Filter(other)
+
+    return Filter(_factory.and(self._filter, Filter(other)._filter))
 
 Filter.PASS = Filter(_Filter.INCLUDE)
 Filter.FAIL = Filter(_Filter.EXCLUDE)
