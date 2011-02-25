@@ -36,6 +36,9 @@ from org.h2.tools import DeleteDbFiles
 DeleteDbFiles.execute('work', 'states', True)
 unzip('data/states.db.zip', 'work')
 unzip('data/states.shp.zip', 'work')
+unzip('data/sld_cookbook/point.shp.zip', 'work')
+unzip('data/sld_cookbook/line.shp.zip', 'work')
+unzip('data/sld_cookbook/polygon.shp.zip', 'work')
 rmshp('reprojected', 'work')
 rmshp('widgets2', 'work')
 
