@@ -16,7 +16,10 @@ def toURL(o):
   elif isinstance(o,(net.URI,io.File)):
     return o.toURL()
   elif isinstance(o, (str, unicode)):
-    return io.File(o).toURL()
+    try:
+      return net.URL(o)
+    except net.MalformedURLException:
+      return io.File(o).toURL()
 
 def toFile(o):
   """

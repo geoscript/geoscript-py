@@ -3,6 +3,22 @@ from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import LineSymbolizer, PolygonSymbolizer
 
 class Hatch(Symbolizer):
+  """
+  Symbolizer that repeats a pattern. A hatch can be applied to linear and area 
+  geometries. 
+
+  A hatch is composed of a well known ``name`` that describes the pattern, and a 
+  :class:`Stroke <geoscript.style.stroke.Stroke>` that specifies how the pattern is
+  stroked.
+  
+  >>> Hatch('slash', Stroke('#333333'))
+  Hatch(name=slash,stroke=Stroke(color=#333333,width=1),size=8)
+
+  A hatch also accepts a ``size`` argument. When applied to a linear geometry the size
+  specifies both the length of the hatch and the distance between repeated instances of
+  it. When applied to a polygon the size specifies the dimensions of the square tile in
+  which the pattern is repeated.
+  """
 
   def __init__(self, name, stroke=None, size=None):
     Symbolizer.__init__(self)
@@ -32,3 +48,6 @@ class Hatch(Symbolizer):
     graphic.setSize(self.size)
 
     return graphic
+
+  def __repr__(self):
+    return self._repr('name', 'stroke', 'size')

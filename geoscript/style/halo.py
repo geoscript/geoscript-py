@@ -4,7 +4,15 @@ from geoscript.style.fill import Fill
 from org.geotools.styling import TextSymbolizer
 
 class Halo(Symbolizer):
+  """
+  Symbolizer for label background.
 
+  A halo is composed of a :class:`Fill <geoscript.style.fill.Fill>` and a ``radius`` 
+  that specifies the extend the of background.
+
+  >>> Halo(Fill('white'), 4)
+  Halo(fill=Fill(color=white,opacity=1.0),radius=4)
+  """
   def __init__(self, fill=None, radius=1):
     Symbolizer.__init__(self)
     self.fill = fill if fill else Fill('#ffffff')
@@ -19,3 +27,5 @@ class Halo(Symbolizer):
     h = self.factory.createHalo(self.fill._fill(), self._literal(self.radius))
     sym.setHalo(h)
 
+  def __repr__(self):
+    return self._repr('fill','radius')

@@ -1,11 +1,18 @@
 from geoscript.util import toURL
 from geoscript.style import util
 from geoscript.style.symbolizer import Symbolizer
-from geoscript.filter import Filter
 from org.geotools.styling import PointSymbolizer, PolygonSymbolizer
 
 class Icon(Symbolizer):
+  """
+  Symbolizer for an external image or glyph. 
 
+  An icon is composed is of a ``url`` that specifies the location of the source image
+  and a ``format`` that specifies the format or the mime type of the image.
+
+  >>> icon = Icon('tests/work/colorblocks.png', 'image/png')
+  >>> icon = Icon('http://v2.suite.opengeo.org/geoserver/styles/smileyface.png', 'image/png')
+  """
   def __init__(self, url, format):
     Symbolizer.__init__(self)
     self.url = toURL(url)
@@ -23,5 +30,4 @@ class Icon(Symbolizer):
       g.graphicalSymbols().add(eg)
 
   def __repr__(self):
-    return 'Icon(url=%s,format=%s)%s' % (self.url, self.format,
-       self.filter if self.filter != Filter.PASS else '')
+    return self._repr('url', 'format')

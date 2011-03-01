@@ -1,3 +1,4 @@
+import sys
 from java import awt
 from geoscript.style.factory import StyleFactory
 from geoscript.style import io
@@ -5,6 +6,9 @@ from geoscript.filter import Filter
 from geoscript.util import seqdict
 
 class Symbolizer(object):
+  """
+  Base class for all symbolizers.
+  """
 
   def __init__(self):
     self.filter = Filter.PASS
@@ -13,19 +17,34 @@ class Symbolizer(object):
     self.factory = StyleFactory()
 
   def where(self, filter):
+    """
+    Appies a filter to the symbolizer. The ``filter`` argument can be a CQL string or
+    an instance of :class:`Filter <geoscript.filter.Filter>`.
+    """
     self.filter = self.filter + filter
     return self
 
   def range(self, min=-1, max=-1):
+    """
+    Applies a min/max scale denominator to the symbolizer.
+    """
     self.scale = (min, max) 
     return self
 
   def zindex(self, z):
+    """
+    Applies a z-index to the symbolizer. Symbolizers with a higher z-index are drawn on
+    top of those with a smaller z-index.
+    """
     self.z = z
     return self
 
-  def asSLD(self):
-    io.writeSLD(self._style())
+  def asSLD(self, out=sys.stdout):
+    """
+    Serializes the symbolizer to SLD. The ``out`` argument is the file/output stream to
+    write to.
+    """
+    io.writeSLD(self._style(), out)
      
   def _literal(self, value):
     return self.factory.filter.literal(value)
@@ -85,7 +104,7 @@ class Symbolizer(object):
              
     return style
 
-  def __repr__(self, **props):
+  def _repr(self, *props):
     return '%s(' % (self.__class__.__name__) + ','.join(
-      ['%s=%s' % (k,v) for k,v in props.iteritems()]) + ')%s' % (   
+      ['%s=%s' % (p, getattr(self, p)) for p in props]) + ')%s' % (   
       self.filter if self.filter != Filter.PASS else '')

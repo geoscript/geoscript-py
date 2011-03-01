@@ -11,3 +11,4 @@ API Reference
    filter
    layer/index
    workspace/index
+   style/index
