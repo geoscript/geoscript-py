@@ -128,6 +128,24 @@ class Bounds(ReferencedEnvelope):
    return Polygon([(self.west,self.south), (self.west,self.north), 
       (self.east,self.north), (self.east,self.south), (self.west,self.south)])
 
+  def tile(self, res):
+   """
+   Partitions the bounding box into a set of smaller bounding boxes.
+
+   The ``res`` argument is the resolution to tile at and should be in the range
+   (0,1].
+   """
+   dx = self.width * res
+   dy = self.height * res
+
+   y = self.south
+   while y < self.north:
+     x = self.west
+     while x < self.east:
+       yield Bounds(x,y,min(x+dx,self.east),min(y+dy,self.north),self.proj)
+       x += dx
+     y += dy
+    
   def __repr__(self):
     s = '(%s, %s, %s, %s' % (self.west, self.south, self.east, self.north)
     if self.proj:
