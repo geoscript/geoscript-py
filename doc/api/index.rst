@@ -9,6 +9,7 @@ API Reference
    proj
    feature/index
    filter
+   function
    layer/index
    workspace/index
    style/index
