@@ -151,7 +151,7 @@
   </build>
 
   <properties>
-    <gt.version>2.7-SNAPSHOT</gt.version>
+    <gt.version>2.8-SNAPSHOT</gt.version>
   </properties>
 
 </project>
