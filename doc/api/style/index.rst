@@ -14,3 +14,4 @@ style
      font
      hatch
      halo
+     transform
