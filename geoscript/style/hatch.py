@@ -11,6 +11,7 @@ class Hatch(Symbolizer):
   :class:`Stroke <geoscript.style.stroke.Stroke>` that specifies how the pattern is
   stroked.
   
+  >>> from geoscript.style import Stroke
   >>> Hatch('slash', Stroke('#333333'))
   Hatch(name=slash,stroke=Stroke(color=#333333,width=1),size=8)
 

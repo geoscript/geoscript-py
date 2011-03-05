@@ -42,6 +42,7 @@ class Label(Symbolizer):
     The ``fill`` and ``radius`` arguments specify the :class:`Fill` and radius to 
     use for the halo.
    
+    >>> from geoscript.style import Fill
     >>> label = Label('foo').halo(Fill('#ffffff'), 2)
     """
     self._halo = Halo(fill, radius)

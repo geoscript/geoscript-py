@@ -9,7 +9,7 @@ class Stroke(Symbolizer):
   Symbolizer for linear geometries that consists of a ``color`` and a ``width``.
 
   >>> Stroke('#00ff00', 4)
-  Stroke(width=4,color=#00ff00)
+  Stroke(color=#00ff00,width=4)
 
   The ``color`` argument may also be specified as a well known name or as an rgb tuple.
 

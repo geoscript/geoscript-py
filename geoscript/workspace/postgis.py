@@ -22,12 +22,16 @@ class PostGIS(Workspace):
 
   *passwd* is the optional password to connect with.
 
+  *estimated_extent* is an optional flag that controls whether to use the PostGIS 
+  ``estimated_extent`` function when calculating bounds.
+
   """
 
   def __init__(self, db, host='localhost', port=5432, schema='public', 
-               user=os.environ['USER'], passwd=None):
+               user=os.environ['USER'], passwd=None, estimated_extent=False):
 
     params = {'host': host, 'port': port, 'schema': schema, 'database': db,
-              'user':user, 'passwd': passwd, 'dbtype': 'postgis'}
+              'user':user, 'passwd': passwd, 'dbtype': 'postgis', 
+              'Estimated extends': estimated_extent}
     
     Workspace.__init__(self, PostgisNGDataStoreFactory(), params)

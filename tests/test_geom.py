@@ -97,7 +97,7 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
 
   def testFromWKT(self):
-    g = geom.fromWKT('POINT(1 2)') 
+    g = geom.readWKT('POINT(1 2)') 
     self.assertEqual('Point',g.geometryType)
     self.assertEqual(1,g.x)
     self.assertEqual(2,g.y)

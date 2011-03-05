@@ -25,5 +25,10 @@ class Map:
      # instantiate it 
      renderer = renderer()
      renderer.render(layer, style, bounds, size, **options)
+
+     self.renderer = renderer
      return renderer
-     
+
+   def dispose(self):
+     if self.renderer and self.renderer.dispose:
+       self.renderer.dispose()

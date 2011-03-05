@@ -14,10 +14,10 @@ class MapWindow:
       pass   
 
    def render(self, layer, style, bounds, size, **options):
-      map = DefaultMapContext(layer.proj._crs)
-      map.setAreaOfInterest(bounds)
+      self.map = DefaultMapContext(layer.proj._crs)
+      self.map.setAreaOfInterest(bounds)
 
-      map.addLayer(DefaultMapLayer(layer._source, style._style()))
+      self.map.addLayer(DefaultMapLayer(layer._source, style._style()))
 
       w,h = (size[0], size[1]) 
 
@@ -27,13 +27,17 @@ class MapWindow:
       renderer = StreamingRenderer()
       renderer.java2DHints = awt.RenderingHints(hints)
 
-      mappane = JMapPane(renderer,map)
+      mappane = JMapPane(renderer, self.map)
       mappane.size = (w,h) 
       mappane.visible = True
 
       f = Frame(mappane)
       f.setSize(w,h)
       f.setVisible(True)
+
+   def dispose(self):
+      if self.map:
+         self.map.dispose()
 
 class Frame(swing.JFrame):
 

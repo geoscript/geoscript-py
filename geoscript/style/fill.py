@@ -50,7 +50,7 @@ class Fill(Symbolizer):
     The ``stroke`` and ``size`` argument specify the :class:`Stroke` and size to 
     use for the hatch pattern respectively.
 
-    >>> fill  Fill().hatch('slash')
+    >>> fill = Fill().hatch('slash')
     """
     self._hatch = Hatch(name, stroke, size)
     return self

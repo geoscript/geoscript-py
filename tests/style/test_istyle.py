@@ -39,16 +39,18 @@ class InteractiveStyle_Test:
   def testPolyLabel(self):
     self.render(Fill() + Label('name'), self.polygons(), "polygon with label")
 
+  """
   def testPolyLabelWithHalo(self):
     self.render(Fill() + Label('name').font('16px "Times New Roman"').halo(), self.polygons(),  "polygon label with halo") 
 
+  """
   def testPolyHatch(self):
     self.render(Fill().hatch('backslash'), self.polygons(), "polygon with hatch")
 
   def render(self, style, layer, title):
     w = Worker(layer=layer, style=style, title=title)
     w.start()
-    time.sleep(10)
+    time.sleep(5)
     w.dispose()
     
   def points(self):
@@ -67,7 +69,9 @@ class Worker(threading.Thread):
      self.args = kwargs
 
    def run(self):
-     self.renderer = Map().render(**self.args)
+     self.map = Map()
+     self.renderer = self.map.render(**self.args)
 
    def dispose(self):
      self.renderer.window.dispose()
+     self.map.dispose()

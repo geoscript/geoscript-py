@@ -9,10 +9,10 @@ from org.geotools.renderer.lite import StreamingRenderer
 class Window:
 
    def render(self, layer, style, bounds, size, **options):
-      map = DefaultMapContext(layer.proj._crs)
-      map.setAreaOfInterest(bounds)
+      self.map = DefaultMapContext(layer.proj._crs)
+      self.map.setAreaOfInterest(bounds)
 
-      map.addLayer(DefaultMapLayer(layer._source, style._style()))
+      self.map.addLayer(DefaultMapLayer(layer._source, style._style()))
 
       w,h = (size[0], size[1]) 
 
@@ -21,7 +21,7 @@ class Window:
       
       renderer = StreamingRenderer()
       renderer.setJava2DHints(awt.RenderingHints(hints))
-      renderer.setContext(map)
+      renderer.setContext(self.map)
 
       img = image.BufferedImage(w, h, image.BufferedImage.TYPE_INT_ARGB)
       g = img.getGraphics()
@@ -37,6 +37,10 @@ class Window:
       self.window.add(p)
       self.window.pack()
       self.window.setVisible(True)
+
+   def dispose(self):
+      if self.map:
+        self.map.dispose()
 
 class Panel(awt.Panel):
 

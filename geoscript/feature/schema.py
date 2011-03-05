@@ -88,7 +88,7 @@ class Schema(object):
     *name* is the name of the field as a ``str``.
 
     >>> s = Schema('widgets', [('name', str), ('price', float)])
-    >>> s.field('price')
+    >>> s.get('price')
     price: float
     """
 
