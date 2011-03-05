@@ -8,3 +8,4 @@ geoscript.egg-info
 dist
 .classpath
 .project
+*.swp
