@@ -15,7 +15,7 @@ class Map:
      if not bounds:
        bounds = layer.bounds()
      if not size:
-       size = (500,500)
+       size = (500, int(500 * bounds.height / bounds.width))
 
      # look up the render based on format
      renderer = _renderers[format]
