@@ -89,8 +89,8 @@ class Feature_Test:
     expected = [(x,y) for x,y in f.attributes.iteritems()]
     assert [(x,y) for x,y in f.iteritems()] == expected
    
-    assert f.attributes.keys() == f.keys()
-    assert f.attributes.values() == f.values()
+    assert sorted(f.attributes.keys()) == sorted(f.keys())
+    assert sorted(f.attributes.values()) == sorted(f.values())
 
   def testEquals(self):
     id = 'fid'
