@@ -44,8 +44,11 @@ class InteractiveStyle_Test:
     self.render(Fill() + Label('name').font('16px "Times New Roman"').halo(), self.polygons(),  "polygon label with halo") 
 
   """
+
   def testPolyHatch(self):
     self.render(Fill().hatch('backslash'), self.polygons(), "polygon with hatch")
+  def testIcon(self):
+    self.render(Icon('data/hospital16.png'), self.points(), 'simple icon')
 
   def render(self, style, layer, title):
     w = Worker(layer=layer, style=style, title=title)
