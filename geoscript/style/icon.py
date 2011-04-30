@@ -1,3 +1,4 @@
+import mimetypes
 from geoscript.util import toURL
 from geoscript.style import util
 from geoscript.style.symbolizer import Symbolizer
@@ -13,9 +14,13 @@ class Icon(Symbolizer):
   >>> icon = Icon('tests/work/colorblocks.png', 'image/png')
   >>> icon = Icon('http://v2.suite.opengeo.org/geoserver/styles/smileyface.png', 'image/png')
   """
-  def __init__(self, url, format):
+  def __init__(self, url, format=None):
     Symbolizer.__init__(self)
     self.url = toURL(url)
+
+    if not format:
+      format = mimetypes.guess_type(url)[0]
+    
     self.format = format
 
   def _prepare(self, rule):
@@ -26,6 +31,7 @@ class Icon(Symbolizer):
   def _apply(self, sym):
     eg = self.factory.createExternalGraphic(self.url, self.format)
     g = util.graphic(sym)
+    g.setMarks([])
     if g:
       g.graphicalSymbols().add(eg)
 
