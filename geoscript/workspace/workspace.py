@@ -103,6 +103,9 @@ class Workspace:
      if not name:
        name = schema.name if schema else Layer._newname()
 
+     if schema:
+       schema = feature.Schema(name, schema.fields)
+
      try:
        self.get(name)
        raise Exception('Layer %s already exists.' % (name))
