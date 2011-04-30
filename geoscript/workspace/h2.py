@@ -5,6 +5,7 @@ The :mod:`workspace.h2` module a workspace implementation based on the contents 
 import os
 from geoscript.workspace import Workspace
 from org.geotools.data.h2 import H2DataStoreFactory
+from org.h2.tools import Server
 
 class H2(Workspace):
   """
@@ -25,3 +26,7 @@ class H2(Workspace):
     params = {'database': db, 'dbtype': 'h2'}
     Workspace.__init__(self, H2DataStoreFactory(), params)
 
+  def server(self):
+    s = Server()
+    s.run([])
+    return s
