@@ -1,4 +1,5 @@
 import unittest
+from .util import assertClose
 from geoscript import geom
 from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
 
@@ -64,10 +65,10 @@ class GeomTest(unittest.TestCase):
   def testBoundsReproject(self):
     b = geom.Bounds(-111, 44.7, -110, 44.9, 'epsg:4326')
     b1 = b.reproject('epsg:26912')
-    self.assertEqual(499999, int(b1.west))
-    self.assertEqual(4949624, int(b1.south))
-    self.assertEqual(579224, int(b1.east))
-    self.assertEqual(4972327, int(b1.north))
+    assertClose(self, 499999, int(b1.west))
+    assertClose(self, 4949624, int(b1.south))
+    assertClose(self, 579224, int(b1.east))
+    assertClose(self, 4972327, int(b1.north))
     
   def testBoundsScale(self):
     b = geom.Bounds(5,5,10,10)
@@ -92,6 +93,10 @@ class GeomTest(unittest.TestCase):
     assert 0 == b1.west and 0 == b1.south
     assert 10 == b1.east and 10 == b1.north
   
+  def testBoundsAspect(self):
+    assert 1.0 == float(geom.Bounds(0,0,5,5).aspect)
+    assert 0.5 == float(geom.Bounds(0,0,5,10).aspect)
+   
   def testMultiPolygonFromJTS(self):
     mp = geom.MultiPolygon(self.gf.createMultiPolygon([self.gf.createPolygon(self.gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
