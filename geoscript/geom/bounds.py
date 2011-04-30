@@ -82,6 +82,13 @@ class Bounds(ReferencedEnvelope):
   The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.
   """
 
+  def get_aspect(self):
+    return self.width / self.height 
+  aspect = property(get_aspect)
+  """
+  Ratio of width to height for this bounds.
+  """
+
   def reproject(self, prj):
     """
     Reprojects the bounding box.
