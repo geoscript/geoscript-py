@@ -33,7 +33,7 @@ class Filter(object):
       self._filter = obj._filter
     elif isinstance(obj, _Filter):
       self._filter = obj
-    elif isinstance(obj, str):
+    elif isinstance(obj, (str, unicode)):
       # first try parsing as CQL
       try:
         self._filter = _fromCQL(obj)
