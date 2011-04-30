@@ -26,7 +26,7 @@ def toFile(o):
   Transforms an object to a File if possible. This method can take a file, 
   string, uri, or url object.
   """
-  if isinstance(o, io.File):
+  if isinstance(o, (io.File, file)):
     return o
   elif isinstance(o, net.URI):
     return toFile(o.toURL())
@@ -34,6 +34,16 @@ def toFile(o):
     return toFile(o.getFile())
   elif isinstance(o, (str, unicode)):
     return io.File(o)
+
+def toOutputStream(o):
+  """
+  """
+  if isinstance(o, (io.InputStream, io.Reader, file)):
+    return o
+  else:
+    o = toFile(o)
+    if isinstance(o,io.File):
+      return io.FileOutputStream(o)
 
 def deprecated(f):
   def wrapper(*args, **kwargs):
