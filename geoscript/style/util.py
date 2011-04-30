@@ -12,7 +12,13 @@ _colors['blue'] = awt.Color(0, 0, 255)
 _syms = {}
 _syms[PointSymbolizer] = lambda x: _builder.createPointSymbolizer()
 _syms[LineSymbolizer] = lambda x: _builder.createLineSymbolizer()
-_syms[PolygonSymbolizer] = lambda x: _builder.createPolygonSymbolizer()
+
+def _createPolySymbolizer(x): 
+  ps = _builder.createPolygonSymbolizer()
+  ps.setStroke(None)
+  return ps
+_syms[PolygonSymbolizer] = _createPolySymbolizer
+
 _syms[TextSymbolizer] = lambda x: _builder.createTextSymbolizer()
 
 def color(val):
