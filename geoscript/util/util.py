@@ -45,6 +45,14 @@ def toOutputStream(o):
     if isinstance(o,io.File):
       return io.FileOutputStream(o)
 
+def doOutput(fn, out):
+  os = toOutputStream(out)
+  try:  
+    fn(os)
+  finally:
+    if os != out:
+      out.close()
+
 def deprecated(f):
   def wrapper(*args, **kwargs):
     warnings.warn("Function %s is deprecated. %s"% (f.__name__, f.__doc__),
