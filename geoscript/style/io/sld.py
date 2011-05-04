@@ -7,10 +7,7 @@ def writeSLD(style, out=sys.stdout, format=True):
   if format: 
     tx.setIndentation(2)
 
-  out = util.toOutputStream(out)
-  try:
-    tx.transform(style, out)
-  finally:
-    if out and out.close:
-       out.close()
-  
+  def write(os):
+    tx.transform(style._style(), os) 
+
+  util.doOutput(write, out)

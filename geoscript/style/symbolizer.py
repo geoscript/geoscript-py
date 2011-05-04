@@ -44,7 +44,7 @@ class Symbolizer(object):
     Serializes the symbolizer to SLD. The ``out`` argument is the file/output stream to
     write to.
     """
-    io.writeSLD(self._style(), out)
+    io.writeSLD(self, out)
      
   def _literal(self, value):
     return self.factory.filter.literal(value)
