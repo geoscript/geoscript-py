@@ -24,6 +24,7 @@ class Halo(Symbolizer):
       self._apply(sym)
 
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     h = self.factory.createHalo(self.fill._fill(), self._literal(self.radius))
     sym.setHalo(h)
 

@@ -30,6 +30,7 @@ class Shape(Symbolizer):
       self._apply(sym)
 
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     g = util.graphic(sym)
     g.setSize(self._literal(self.size))
     g.graphicalSymbols().clear()

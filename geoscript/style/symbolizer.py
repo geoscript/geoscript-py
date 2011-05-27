@@ -14,6 +14,7 @@ class Symbolizer(object):
     self.filter = Filter.PASS
     self.scale = (-1,-1)
     self.z = 0
+    self.options = {}
     self.factory = StyleFactory()
 
   def where(self, filter):
@@ -48,6 +49,10 @@ class Symbolizer(object):
      
   def _literal(self, value):
     return self.factory.filter.literal(value)
+
+  def _apply(self, sym):
+    for k,v in self.options.iteritems(): 
+	  sym.getOptions()[k] = str(v)
 
   def __add__(self, other):
     from geoscript.style.composite import Composite

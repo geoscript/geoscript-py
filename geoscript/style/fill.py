@@ -61,6 +61,7 @@ class Fill(Symbolizer):
       self._apply(sym)
 
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     sym.setFill(self._fill())
     
     if self._icon:

@@ -21,7 +21,6 @@ class Label(Symbolizer):
     self._font = None
     self._halo = None
     self._placement = None
-    self.options = {}
 
   def font(self, font):
     """
@@ -72,7 +71,7 @@ class Label(Symbolizer):
     return self
 
   def linear(self, offset=0, gap=None, igap=None, align=False, follow=False, 
-             displace=None, repeat=None):
+             group=False, displace=None, repeat=None):
     """
     Sets the label placement relative to a line. 
 
@@ -95,7 +94,7 @@ class Label(Symbolizer):
       lp.setInitialGap(self._literal(gap))
     self._placement = lp
 
-    self.options = {"followLine": follow}
+    self.options = {'followLine': follow, 'group': group}
     if displace:
       self.options['maxDisplacement'] = displace
     if repeat:
@@ -108,6 +107,7 @@ class Label(Symbolizer):
       self._apply(sym)
 
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     sym.setLabel(self.factory.filter.property(self.property))
 
     if self._font:
@@ -118,8 +118,6 @@ class Label(Symbolizer):
     if self._placement:
       sym.setLabelPlacement(self._placement)
 
-    for k,v in self.options.iteritems(): 
-	  sym.getOptions()[k] = str(v)
 
   def __repr__(self):
     return self._repr('property')

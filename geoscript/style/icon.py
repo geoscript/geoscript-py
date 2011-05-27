@@ -29,6 +29,7 @@ class Icon(Symbolizer):
       self._apply(sym)
     
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     eg = self.factory.createExternalGraphic(self.url, self.format)
     g = util.graphic(sym)
     g.setMarks([])
