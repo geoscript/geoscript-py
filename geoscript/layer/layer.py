@@ -140,7 +140,10 @@ class Layer(object):
     f = Filter(filter) if filter else Filter.PASS
     e = self._source.getBounds(DefaultQuery(self.name, f._filter))
     if e:
-      return geom.Bounds(env=e)
+      if e.crs():
+        return geom.Bounds(env=e)
+      else:
+        return geom.Bounds(env=e, prj=self.proj)
 
   def features(self, filter=None, transform=None):
     """
