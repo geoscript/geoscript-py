@@ -14,6 +14,8 @@ class Bounds(ReferencedEnvelope):
     if env:
       if prj:
         ReferencedEnvelope.__init__(self, env, prj._crs)
+      elif hasattr(env, 'crs') and env.crs():
+        ReferencedEnvelope.__init__(self, env, env.crs())
       else:
         ReferencedEnvelope.__init__(self, env, None)
     else:
@@ -100,7 +102,7 @@ class Bounds(ReferencedEnvelope):
       raise Exception('No projection set on bounds, unable to reproject')
 
     prj = proj.Projection(prj)
-    return Bounds(env=self.transform(prj._crs, True))
+    return Bounds(env=self.transform(prj._crs, True), prj=prj)
 
   def scale(self, factor):
     """
@@ -152,6 +154,13 @@ class Bounds(ReferencedEnvelope):
        yield Bounds(x,y,min(x+dx,self.east),min(y+dy,self.north),self.proj)
        x += dx
      y += dy
+
+  def __add__(self, other):
+    b = Bounds(env=self)
+    if self.proj and other.proj and other.proj != self.proj:
+      other = other.reproject(self.proj)
+    b.expandToInclude(other)
+    return b
     
   def __repr__(self):
     s = '(%s, %s, %s, %s' % (self.west, self.south, self.east, self.north)
