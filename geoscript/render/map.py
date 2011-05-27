@@ -1,4 +1,5 @@
-from geoscript import geom, proj, style 
+from geoscript import geom, proj
+from geoscript.style import Stroke, Shape
 from geoscript.render.window import Window
 from geoscript.render.mapwindow import MapWindow
 
@@ -8,12 +9,23 @@ _renderers = {
 
 class Map:
 
-   def __init__(self):
-     pass
+   def __init__(self, layers, styles=[]):
+     self.layers = layers if isinstance(layers, (list)) else [layers]
+     self.styles = []
+     for i in range(len(layers)):
+       if i < len(styles):
+         self.styles.append(styles[i])
+       else:
+         if layers[i].schema.geom.typ.__name__ in ['Point', 'MultiPoint']:
+           style = Shape()
+         else:
+           style = Stroke()
+         self.styles.append(style)
 
-   def render(self, layer, style=None, format='window', bounds=None, size=None, **options):
+   def render(self, format='window', bounds=None, size=None, **options):
      if not bounds:
-       bounds = layer.bounds()
+       # calulate bounds for layers, merge all bounds together
+       bounds = reduce(lambda x,y:x+y, map(lambda x:x.bounds(), self.layers))
      if not size:
        size = (500, int(500 * bounds.height / bounds.width))
 
@@ -24,7 +36,7 @@ class Map:
 
      # instantiate it 
      renderer = renderer()
-     renderer.render(layer, style, bounds, size, **options)
+     renderer.render(self.layers, self.styles, bounds, size, **options)
 
      self.renderer = renderer
      return renderer

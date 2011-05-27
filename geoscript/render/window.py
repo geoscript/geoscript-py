@@ -8,11 +8,12 @@ from org.geotools.renderer.lite import StreamingRenderer
 
 class Window:
 
-   def render(self, layer, style, bounds, size, **options):
-      self.map = DefaultMapContext(layer.proj._crs)
+   def render(self, layers, styles, bounds, size, **options):
+      self.map = DefaultMapContext(bounds.proj._crs)
       self.map.setAreaOfInterest(bounds)
 
-      self.map.addLayer(DefaultMapLayer(layer._source, style._style()))
+      for i in range(len(layers)): 
+        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
 
       w,h = (size[0], size[1]) 
 

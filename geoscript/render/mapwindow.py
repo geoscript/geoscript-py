@@ -13,11 +13,12 @@ class MapWindow:
    def __init__(self):
       pass   
 
-   def render(self, layer, style, bounds, size, **options):
+   def render(self, layers, styles, bounds, size, **options):
       self.map = DefaultMapContext(layer.proj._crs)
       self.map.setAreaOfInterest(bounds)
 
-      self.map.addLayer(DefaultMapLayer(layer._source, style._style()))
+      for i in range(len(layers)):
+        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
 
       w,h = (size[0], size[1]) 
 
