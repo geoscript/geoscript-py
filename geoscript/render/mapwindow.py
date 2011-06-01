@@ -14,7 +14,7 @@ class MapWindow:
       pass   
 
    def render(self, layers, styles, bounds, size, **options):
-      self.map = DefaultMapContext(layer.proj._crs)
+      self.map = DefaultMapContext(bounds.proj._crs)
       self.map.setAreaOfInterest(bounds)
 
       for i in range(len(layers)):
