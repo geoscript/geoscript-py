@@ -64,6 +64,7 @@ class Stroke(Symbolizer):
       self._apply(sym)
     
   def _apply(self, sym):
+    Symbolizer._apply(self, sym)
     sym.setStroke(self._stroke())
 
   def _stroke(self):
