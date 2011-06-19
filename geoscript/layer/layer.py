@@ -302,7 +302,7 @@ class Layer(object):
     'EPSG:26912'
 
     >>> [f.geom for f in l2.features()]
-    [POINT (499999.42501775385 5060716.092032814)]
+    [POINT (500000 5060716.31816507)]
     """
 
     prj = proj.Projection(prj)
