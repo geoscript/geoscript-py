@@ -26,6 +26,15 @@ Install Jython
 
 Jython version greater than *2.5.1* is required for GeoScript. The current version can be downloaded from http://www.jython.org/.
 
+Install Setuptools
+------------------
+
+#. Download http://peak.telecommunity.com/dist/ez_setup.py
+
+#. Run `ez_setup.py` with Jython:: 
+
+     jython ez_setup.py
+
 Install GeoScript
 -----------------
 
