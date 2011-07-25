@@ -76,7 +76,7 @@ class Workspace:
   
     raise KeyError('No such layer "%s"' % name)
 
-  def create(self, name=None, fields=[('geom', geom.Geometry)], schema=None):
+  def create(self, name=None, fields=[('geom', geom.Geometry,'epsg:4326')], schema=None):
      """
      Creates a new :class:`Layer geoscript.layer.layer.Layer` in the workspace.
    
