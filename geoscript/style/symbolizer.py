@@ -47,9 +47,6 @@ class Symbolizer(object):
     """
     io.writeSLD(self, out)
      
-  def _literal(self, value):
-    return self.factory.filter.literal(value)
-
   def _apply(self, sym):
     for k,v in self.options.iteritems(): 
 	  sym.getOptions()[k] = str(v)

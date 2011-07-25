@@ -1,4 +1,6 @@
 from io import writeSLD
+from property import Property
+from color import Color
 from stroke import Stroke
 from fill import Fill
 from shape import Shape

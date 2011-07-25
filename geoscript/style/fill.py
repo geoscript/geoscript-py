@@ -1,9 +1,11 @@
-from geoscript.style import util
-from geoscript.style.symbolizer import Symbolizer
-from geoscript.style.stroke import Stroke
-from geoscript.style.icon import Icon
-from geoscript.style.hatch import Hatch
 from geoscript.filter import Filter
+from geoscript.style import util
+from geoscript.style.color import Color
+from geoscript.style.expression import Expression
+from geoscript.style.hatch import Hatch
+from geoscript.style.icon import Icon
+from geoscript.style.stroke import Stroke
+from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import PolygonSymbolizer
 
 class Fill(Symbolizer):
@@ -12,7 +14,7 @@ class Fill(Symbolizer):
   ``opacity``.
 
   >>> Fill('#ff0000', 0.5)
-  Fill(color=#ff0000,opacity=0.5)
+  Fill(color=(255,0,0),opacity=0.5)
 
   The ``color`` argument may also be specified as either a well known name or as an
   rgb tuple. 
@@ -23,8 +25,8 @@ class Fill(Symbolizer):
 
   def __init__(self, color=None, opacity=1.0):
     Symbolizer.__init__(self)
-    self.color = color
-    self.opacity = opacity
+    self.color = Color(color) if color else None
+    self.opacity = Expression(opacity)
     self._icon = None
     self._hatch = None
 
@@ -72,12 +74,12 @@ class Fill(Symbolizer):
     fill = f.createFill()
 
     if self.color:
-      fill.setColor(f.filter.literal(util.color(self.color)))
+      fill.setColor(self.color.expr)
 
     if self._hatch:
       fill.setGraphicFill(self._hatch._hatch())  
 
-    fill.setOpacity(f.filter.literal(self.opacity))
+    fill.setOpacity(self.opacity.expr)
 
     return fill
 

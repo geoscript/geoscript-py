@@ -1,7 +1,9 @@
 from geoscript.style import util
-from geoscript.style.symbolizer import Symbolizer
+from geoscript.style.expression import Expression
 from geoscript.style.font import Font
 from geoscript.style.halo import Halo
+from geoscript.style.property import Property
+from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import TextSymbolizer
 
 class Label(Symbolizer):
@@ -17,7 +19,7 @@ class Label(Symbolizer):
 
   def __init__(self, property):
     Symbolizer.__init__(self)
-    self.property = property
+    self.property = Property(property)
     self._font = None
     self._halo = None
     self._placement = None
@@ -65,9 +67,10 @@ class Label(Symbolizer):
     >>> label = Label('foo').point((0.5,0), (0,5))
     """
     f = self.factory
-    ap = f.createAnchorPoint(self._literal(anchor[0]), self._literal(anchor[1]))
-    dp = f.createDisplacement(self._literal(displace[0]), self._literal(displace[1]))
-    self._placement = f.createPointPlacement(ap, dp, self._literal(rotate))
+    ap = f.createAnchorPoint(Expression(anchor[0]).expr,Expression(anchor[1]).expr)
+    dp = f.createDisplacement(Expression(displace[0]).expr, 
+      Expression(displace[1]).expr)
+    self._placement = f.createPointPlacement(ap, dp, Expression(rotate).expr)
     return self
 
   def linear(self, offset=0, gap=None, igap=None, align=False, follow=False, 
@@ -85,13 +88,13 @@ class Label(Symbolizer):
     >>> label = Label('foo').linear(align=True, follow=True)
     """
     f = self.factory
-    lp = f.createLinePlacement(self._literal(offset))
+    lp = f.createLinePlacement(Expression(offset).expr)
     lp.setAligned(align)
     #lp.setRepeated(repeat)
     if gap:   
-      lp.setGap(self._literal(gap))
+      lp.setGap(Expression(gap).expr)
     if igap:
-      lp.setInitialGap(self._literal(gap))
+      lp.setInitialGap(Expression(igap).expr)
     self._placement = lp
 
     self.options = {'followLine': follow, 'group': group}
@@ -108,7 +111,7 @@ class Label(Symbolizer):
 
   def _apply(self, sym):
     Symbolizer._apply(self, sym)
-    sym.setLabel(self.factory.filter.property(self.property))
+    sym.setLabel(self.property.expr)
 
     if self._font:
       self._font._apply(sym)

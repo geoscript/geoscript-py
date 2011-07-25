@@ -51,9 +51,9 @@ class InteractiveStyle_Test:
     self.render(Icon('data/hospital16.png'), self.points(), 'simple icon')
 
   def render(self, style, layer, title):
-    w = Worker(layer=layer, style=style, title=title)
+    w = Worker(layers=layer, styles=style, title=title)
     w.start()
-    time.sleep(5)
+    time.sleep(2)
     w.dispose()
     
   def points(self):
@@ -72,8 +72,8 @@ class Worker(threading.Thread):
      self.args = kwargs
 
    def run(self):
-     self.map = Map()
-     self.renderer = self.map.render(**self.args)
+     self.map = Map(**self.args)
+     self.renderer = self.map.render()
 
    def dispose(self):
      self.renderer.window.dispose()

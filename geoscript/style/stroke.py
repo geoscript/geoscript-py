@@ -1,7 +1,9 @@
-from geoscript.style.symbolizer import Symbolizer
-from geoscript.style.hatch import Hatch
 from geoscript.filter import Filter
 from geoscript.style import util
+from geoscript.style.color import Color
+from geoscript.style.expression import Expression
+from geoscript.style.hatch import Hatch
+from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import LineSymbolizer
 
 class Stroke(Symbolizer):
@@ -9,7 +11,7 @@ class Stroke(Symbolizer):
   Symbolizer for linear geometries that consists of a ``color`` and a ``width``.
 
   >>> Stroke('#00ff00', 4)
-  Stroke(color=#00ff00,width=4)
+  Stroke(color=(0,255,0),width=4)
 
   The ``color`` argument may also be specified as a well known name or as an rgb tuple.
 
@@ -35,11 +37,11 @@ class Stroke(Symbolizer):
 
   def __init__(self, color='#000000', width=1, dash=None, cap=None, join=None):
     Symbolizer.__init__(self)
-    self.color = color
-    self.width = width
+    self.color = Color(color)
+    self.width = Expression(width)
     self.dash = dash
-    self.cap = cap
-    self.join = join
+    self.cap = Expression(cap) if cap else None
+    self.join = Expression(join) if join else None
     self._hatch = None
 
   def hatch(self, name, stroke=None, size=None):
@@ -69,8 +71,9 @@ class Stroke(Symbolizer):
 
   def _stroke(self):
     f = self.factory
-    stroke = f.createStroke(f.filter.literal(util.color(self.color)), 
-      f.filter.literal(self.width))
+    stroke = f.createStroke(self.color.expr, self.width.expr)
+    #stroke = f.createStroke(f.filter.literal(util.color(self.color)), 
+    #  f.filter.literal(self.width))
 
     if self.dash:
       if isinstance(self.dash, tuple): 
@@ -80,9 +83,11 @@ class Stroke(Symbolizer):
         stroke.setDashArray(self.dash)
 
     if self.cap:
-      stroke.setLineCap(f.filter.literal(self.cap))
+      #stroke.setLineCap(f.filter.literal(self.cap))
+      stroke.setLineCap(self.cap.expr)
     if self.join:
-      stroke.setLineJoin(f.filter.literal(self.join))
+      stroke.setLineJoin(self.join.expr)
+      #stroke.setLineJoin(f.filter.literal(self.join))
    
     if self._hatch:
       stroke.setGraphicStroke(self._hatch._hatch())
