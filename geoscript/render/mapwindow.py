@@ -9,6 +9,11 @@ from org.geotools.map import DefaultMapContext, DefaultMapLayer
 from org.geotools.renderer.lite import StreamingRenderer
 
 class MapWindow:
+   """
+   Renderer that produces a map window based on JMapPane. 
+
+   The map window provides basic map viewing controls such as pan, zoom, etc..
+   """
 
    def __init__(self):
       pass   

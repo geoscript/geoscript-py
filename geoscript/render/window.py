@@ -1,36 +1,12 @@
 from java import awt
-from java.awt import image
-from javax import swing
-from geoscript import geom, proj, style 
-from org.geotools.geometry.jts import ReferencedEnvelope
-from org.geotools.map import DefaultMapContext, DefaultMapLayer
-from org.geotools.renderer.lite import StreamingRenderer
+from geoscript.render.base import RendererBase
 
-class Window:
+class Window(RendererBase):
+   """
+   Renderer that produces a window containing the rendered image.
+   """
 
-   def render(self, layers, styles, bounds, size, **options):
-      self.map = DefaultMapContext(bounds.proj._crs)
-      self.map.setAreaOfInterest(bounds)
-
-      for i in range(len(layers)): 
-        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
-
-      w,h = (size[0], size[1]) 
-
-      hints = {}
-      hints [awt.RenderingHints.KEY_ANTIALIASING] = awt.RenderingHints.VALUE_ANTIALIAS_ON
-      
-      renderer = StreamingRenderer()
-      renderer.setJava2DHints(awt.RenderingHints(hints))
-      renderer.setContext(self.map)
-
-      img = image.BufferedImage(w, h, image.BufferedImage.TYPE_INT_ARGB)
-      g = img.getGraphics()
-      g.setColor(awt.Color.white)
-      g.fillRect(0, 0, w, h)
-      
-      renderer.paint(g, awt.Rectangle(w,h), bounds)
-      
+   def _encode(self, img, g, size, **options):
       p = Panel(img, size)
       self.window = awt.Frame(windowClosing=lambda e: e.getWindow().dispose())
       if options.has_key('title'):
@@ -38,10 +14,6 @@ class Window:
       self.window.add(p)
       self.window.pack()
       self.window.setVisible(True)
-
-   def dispose(self):
-      if self.map:
-        self.map.dispose()
 
 class Panel(awt.Panel):
 
