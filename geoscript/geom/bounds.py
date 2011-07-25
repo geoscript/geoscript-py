@@ -122,7 +122,8 @@ class Bounds(ReferencedEnvelope):
     w = self.width * (factor - 1) / 2
     h = self.height * (factor - 1) / 2
 
-    return Bounds(self.west - w, self.south - h, self.east + w, self.north + h)
+    return Bounds(self.west - w, self.south - h, self.east + w, self.north + h,
+       self.proj)
 
   def expand(self, other):
     """
