@@ -10,4 +10,5 @@ workspace
    postgis
    mysql
    h2
+   property
    memory

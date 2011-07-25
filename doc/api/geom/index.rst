@@ -5,7 +5,7 @@ geom
 ====
 
   .. automodule:: geoscript.geom.geom
-     :members: fromWKT, prepare
+     :members: prepare, simplify, transform
      
   .. toctree::
   
@@ -15,4 +15,3 @@ geom
      multipoint
      multilinestring
      multipolygon
-     

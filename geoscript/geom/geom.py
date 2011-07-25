@@ -48,13 +48,15 @@ def transform(g, dx=0, dy=0, sx=1, sy=1, shx=0, shy=0, r=0):
   """
   Tranforms a geometry with an affine transformation.
 
+  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to simplify. 
+
   *dx*, *dy* specify the x,y translation.
 
   *sx*, *sy* specify the x,y scale factors.
 
   *shx, shy* specify the x,y shear factors.
 
-  *r* specifies the rotation angle in radians
+  *r* specifies the rotation angle in radians.
   """
   tx = AffineTransform(sx, shy, shx, sy, dx, dy)
   tx.rotate(r)
