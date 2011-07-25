@@ -2,10 +2,13 @@
 The :mod:`geom` module provides geometry classes and utilities for the construction and manipulation of geometry objects.
 """
 
+from java.awt.geom import AffineTransform
 from com.vividsolutions.jts.geom import GeometryFactory
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
+from org.geotools.geometry.jts import JTS
+from org.geotools.referencing.operation.transform import AffineTransform2D
 
 _factory = GeometryFactory()
 _prepfactory = PreparedGeometryFactory()
@@ -41,3 +44,18 @@ def simplify(g, tol):
   """
   return DP.simplify(g, tol)
    
+def transform(g, dx=0, dy=0, sx=1, sy=1, shx=0, shy=0, r=0): 
+  """
+  Tranforms a geometry with an affine transformation.
+
+  *dx*, *dy* specify the x,y translation.
+
+  *sx*, *sy* specify the x,y scale factors.
+
+  *shx, shy* specify the x,y shear factors.
+
+  *r* specifies the rotation angle in radians
+  """
+  tx = AffineTransform(sx, shy, shx, sy, dx, dy)
+  tx.rotate(r)
+  return JTS.transform(g, AffineTransform2D(tx))
