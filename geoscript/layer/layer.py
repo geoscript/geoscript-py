@@ -131,10 +131,10 @@ class Layer(object):
     >>> l.add([geom.Point(3.0, 4.0)])
 
     >>> l.bounds()
-    (1.0, 2.0, 3.0, 4.0)
+    (1.0, 2.0, 3.0, 4.0, EPSG:4326)
 
     >>> l.bounds('INTERSECTS(geom,POINT(3 4))')
-    (3.0, 4.0, 3.0, 4.0)
+    (3.0, 4.0, 3.0, 4.0, EPSG:4326)
     """
 
     f = Filter(filter) if filter else Filter.PASS
