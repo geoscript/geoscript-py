@@ -51,7 +51,7 @@ def doOutput(fn, out):
     fn(os)
   finally:
     if os != out:
-      out.close()
+      os.close()
 
 def deprecated(f):
   def wrapper(*args, **kwargs):
