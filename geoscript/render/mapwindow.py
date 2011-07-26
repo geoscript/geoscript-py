@@ -3,10 +3,11 @@ from java.awt import image
 from javax import swing
 from geoscript import geom, proj, style 
 from org.geotools.geometry.jts import ReferencedEnvelope
-from org.geotools.swing import JMapPane,StatusBar
-from org.geotools.swing.action import PanAction, ZoomInAction, ZoomOutAction, ResetAction
 from org.geotools.map import DefaultMapContext, DefaultMapLayer
 from org.geotools.renderer.lite import StreamingRenderer
+from org.geotools.swing import JMapPane
+from org.geotools.swing.action import *
+from org.geotools.swing.control import *
 
 class MapWindow:
    """
@@ -52,7 +53,11 @@ class Frame(swing.JFrame):
 
    def init(self,mappane):
       self.add(mappane,awt.BorderLayout.CENTER)
-      self.add(StatusBar(mappane), awt.BorderLayout.SOUTH)
+
+      statusBar = JMapStatusBar.createDefaultStatusBar(mappane)
+      #statusBar.addItem(CRSStatusBarItem(mappane))
+      #statusBar.addItem(ExtentStatusBarItem(mappane))
+      self.add(statusBar, awt.BorderLayout.SOUTH)
             
       toolBar = swing.JToolBar()
       toolBar.setOrientation(swing.JToolBar.HORIZONTAL)
