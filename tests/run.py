@@ -7,7 +7,9 @@ except ImportError:
   sys.exit(1)
 
 # run all regular tests
-nose.run()
+passed = nose.run()
+if passed:
+  # run doc tests
+  passed = nose.run(argv=['nosetests', '--with-doctest', '../geoscript'])
 
-# run doc tests
-nose.run(argv=['nosetests', '--with-doctest', '../geoscript'])
+sys.exit(0 if passed else 1)
