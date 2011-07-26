@@ -5,6 +5,7 @@ from geoscript.workspace import PostGIS
 class PostgisLayer_Test(LayerTest):
 
   def setUp(self):
+    self.skipIfNoDB('postgis')
     self.l = PostGIS('geoscript').get('states')
 
   def testFormat(self):

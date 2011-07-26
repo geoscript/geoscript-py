@@ -1,8 +1,12 @@
 import unittest
+from ..util import skipIfNoDB
 from geoscript import geom, proj, feature
 
 class LayerTest:
 
+  def skipIfNoDB(self, id):
+    skipIfNoDB(id)
+    
   def testCount(self):
     assert 49 == self.l.count()
 

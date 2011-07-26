@@ -5,6 +5,7 @@ from geoscript.workspace import MySQL
 class MySQLLayer_Test(LayerTest):
 
   def setUp(self):
+    self.skipIfNoDB('mysql')
     self.l = MySQL('geoscript').get('states')
 
   def testFormat(self):

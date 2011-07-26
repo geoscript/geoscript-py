@@ -1,8 +1,13 @@
 import unittest
+from dbexts import dbexts
+from ..util import skipIfNoDB
 from geoscript import geom, feature
 from geoscript.layer import Layer, Shapefile
 
 class WorkspaceTest:
+
+  def skipIfNoDB(self, id):
+    skipIfNoDB(id)
 
   def testCreate(self):
     l = self.ws.create('widgets',[ ('geom', geom.Point), ('name', str) ])
