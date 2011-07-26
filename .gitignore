@@ -12,3 +12,5 @@ dist
 *.swp
 env
 tests/dbexts.ini
+scripts
+site
