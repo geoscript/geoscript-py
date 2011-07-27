@@ -6,9 +6,7 @@ from java.io import File
 System.setProperty("geoscript.bootstrap", "true")
 try:
   import geoscript
-  jardir = os.path.abspath(os.path.join(geoscript.__file__, '../../jars'))
-  jars = [os.path.join(jardir, jar) for jar in os.listdir(jardir)]
-  print File.pathSeparator.join(jars)
+  print os.path.abspath(os.path.join(geoscript.__file__, '../../jars', '*')),
 except ImportError:
   sys.exit(-1)
 finally:
