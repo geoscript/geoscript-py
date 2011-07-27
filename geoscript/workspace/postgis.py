@@ -1,8 +1,7 @@
 """
 The :mod:`workspace.postgis` module a workspace implementation based on the contents of a PostGIS database.
 """
-
-import os
+from java.lang.System import getProperty as sysprop
 from geoscript.workspace import Workspace
 from org.geotools.data.postgis import PostgisNGDataStoreFactory
 
@@ -28,7 +27,7 @@ class PostGIS(Workspace):
   """
 
   def __init__(self, db, host='localhost', port=5432, schema='public', 
-               user=os.environ['USER'], passwd=None, estimated_extent=False):
+               user=sysprop('user.name'), passwd=None, estimated_extent=False):
 
     params = {'host': host, 'port': port, 'schema': schema, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'postgis', 

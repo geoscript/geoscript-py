@@ -2,7 +2,7 @@
 The :mod:`workspace.mysql` module a workspace implementation based on the contents of a MySQL database.
 """
 
-import os
+from java.lang.System import getProperty as sysprop
 from geoscript.workspace import Workspace
 from org.geotools.data.mysql import MySQLDataStoreFactory
 
@@ -21,7 +21,7 @@ class MySQL(Workspace):
   *passwd* is the optional password to connect with.
 
   """
-  def __init__(self, db, host='localhost', port=3306, user=os.environ['USER'], 
+  def __init__(self, db, host='localhost', port=3306, user=sysprop('user.name'),
                passwd=None):
 
     params = {'host': host, 'port': port, 'database': db,
