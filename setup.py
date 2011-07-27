@@ -47,6 +47,6 @@ setup(cmdclass={'src': SrcCmd, 'doc': DocCmd},
       url='http://geoscript.org',
       packages=find_packages(),
       data_files=[('jars', jars)],
-      scripts=['bin/geoscript-classpath', 'bin/geoscript']
+      scripts=['bin/geoscript-classpath', 'bin/geoscript', 'bin/geoscript.bat']
      )
 
