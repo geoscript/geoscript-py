@@ -24,7 +24,7 @@ def draw(obj, style=None, size=None, format=None):
     # wrap up the geometries features
     mem = Memory()
     layer = mem.create("feature")
-    for geom in g:
+    for geom in obj:
       layer.add([geom])
 
   # create a map and render
