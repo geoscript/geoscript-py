@@ -6,14 +6,14 @@ Quick Start
 Install Java
 ------------
 
-A Java Runtime Environment (JRE), version greater than *1.5*, is required to run Jython and GeoScript. Chances are your system already has a JRE installed on it. A quick way to test is to execute the following from the command line::
+A Java Runtime Environment (JRE), version greater than *1.6*, is required to run Jython and GeoScript. Chances are your system already has a JRE installed on it. A quick way to test is to execute the following from the command line::
 
    % java -version
-   java version "1.5.0_20"
-   Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0_20-b02-315)
-   Java HotSpot(TM) Client VM (build 1.5.0_20-141, mixed mode, sharing)
+   java version "1.6.0_26"
+   Java(TM) SE Runtime Environment (build 1.6.0_26-b03-384-10M3425)
+   Java HotSpot(TM) 64-Bit Server VM (build 20.1-b02-384, mixed mode)
 
-If the command is not found or the Java version is less than 1.5 you must install a new JRE. Otherwise you can continue to the :ref:`next step <install_jython>`.
+If the command is not found or the Java version is less than 1.6 you must install a new JRE. Otherwise you can continue to the :ref:`next step <install_jython>`.
 
 A JRE can be downloaded from `Sun Microsystems <http://java.sun.com/javase/downloads/index.jsp>`_. 
 
@@ -38,15 +38,15 @@ Install Setuptools
 Install GeoScript
 -----------------
 
-#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-1.0.1.tar.gz>`_
+#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.zip>`_
 
-#. Unpack the GeoScript tarball::
+#. Unpack the GeoScript archive::
 
-     tar xzvf geoscript-1.0.1.tgz 
+     unzip geoscript-1.1.zip 
 
 #. Change directory into the root of the unpacked tarball and execute :file:`setup.py`::
 
-     cd geoscript-1.0.1
+     cd geoscript-1.1
      jython setup.py install
      
    .. note:: 
