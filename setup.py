@@ -37,6 +37,7 @@ class DocCmd(Command):
 
 
 ver='1.1-20110504'
+jars = ['jars/%s' % (f) for f in os.listdir('jars')]
 setup(cmdclass={'src': SrcCmd, 'doc': DocCmd}, 
       name='geoscript',
       version=ver,
@@ -45,6 +46,7 @@ setup(cmdclass={'src': SrcCmd, 'doc': DocCmd},
       author_email='jdeolive@opengeo.org',
       url='http://geoscript.org',
       packages=find_packages(),
+      data_files=[('jars', jars)],
       scripts=['bin/geoscript-classpath', 'bin/geoscript']
      )
 
