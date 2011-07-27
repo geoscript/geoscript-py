@@ -27,12 +27,13 @@ class Map:
 
      self.title = title if title else layers[0].schema.name
 
-   def render(self, format='window', bounds=None, size=None, **options):
+   def render(self, format=None, bounds=None, size=None, **options):
      if not bounds:
        # calulate bounds for layers, merge all bounds together
        bounds = reduce(lambda x,y:x+y, map(lambda x:x.bounds(), self.layers))
      if not size:
        size = (500, int(500 * bounds.height / bounds.width))
+     format = format if format else 'window'
 
      # look up the render based on format
      renderer = _renderers[format]
