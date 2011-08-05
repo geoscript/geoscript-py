@@ -1,6 +1,8 @@
 import unittest
+from java import io
 from ..util import skipIfNoDB
 from geoscript import geom, proj, feature
+from geoscript.layer import writeGML, readGML, readJSON, writeJSON
 
 class LayerTest:
 
@@ -60,3 +62,45 @@ class LayerTest:
      assert f
      assert len(f) == 18
      c.close()
+
+  def testReadWriteGML(self):
+    ostream = io.ByteArrayOutputStream() 
+    writeGML(self.l, output=ostream)
+
+    istream = io.ByteArrayInputStream(ostream.toByteArray())
+    l = readGML(istream)
+
+    assert self.l.count() == l.count()
+
+    c = self.l.cursor("STATE_ABBR = 'TX'")
+    ostream = io.ByteArrayOutputStream()
+    writeGML(c, output=ostream)
+    c.close()
+
+    istream = io.ByteArrayInputStream(ostream.toByteArray())
+    l = readGML(istream) 
+    assert 1 == l.count()
+    f = [x for x in l.features()][0]
+
+    assert 'Texas' == f['STATE_NAME']
+
+  def testReadWriteJSON(self):
+    ostream = io.ByteArrayOutputStream() 
+    writeJSON(self.l, output=ostream)
+
+    istream = io.ByteArrayInputStream(ostream.toByteArray())
+    l = readJSON(istream)
+
+    assert self.l.count() == l.count()
+
+    c = self.l.cursor("STATE_ABBR = 'TX'")
+    ostream = io.ByteArrayOutputStream()
+    writeJSON(c, output=ostream)
+    c.close()
+
+    istream = io.ByteArrayInputStream(ostream.toByteArray())
+    l = readJSON(istream) 
+    assert 1 == l.count()
+    f = [x for x in l.features()][0]
+
+    assert 'Texas' == f['STATE_NAME']

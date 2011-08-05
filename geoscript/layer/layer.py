@@ -221,8 +221,9 @@ class Layer(object):
     if self.proj:
       q.coordinateSystem = self.proj._crs
 
-    r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
-    return Cursor(r, self)
+    fcol = self._source.getFeatures(q)
+    #r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
+    return Cursor(fcol, self)
 
   def delete(self, filter):
     """

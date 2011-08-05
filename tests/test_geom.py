@@ -1,6 +1,7 @@
 import unittest
 from .util import assertClose
 from geoscript import geom
+from geoscript.util import bytes
 from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
 
 class GeomTest(unittest.TestCase):
@@ -101,8 +102,49 @@ class GeomTest(unittest.TestCase):
     mp = geom.MultiPolygon(self.gf.createMultiPolygon([self.gf.createPolygon(self.gf.createLinearRing([Coordinate(1,2),Coordinate(3,4),Coordinate(5,6),Coordinate(1,2)]),[])]))
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
 
-  def testFromWKT(self):
+  def testReadWKT(self):
     g = geom.readWKT('POINT(1 2)') 
     self.assertEqual('Point',g.geometryType)
     self.assertEqual(1,g.x)
     self.assertEqual(2,g.y)
+
+  def testReadWKB(self):
+    p = geom.Point(1,2)
+    wkb = geom.writeWKB(p)
+
+    assert str(p) == str(geom.readWKB(wkb))
+    assert str(p) == str(geom.readWKB(bytes.encode(wkb, 2),2))
+    assert str(p) == str(geom.readWKB(bytes.encode(wkb, 8),8))
+    assert str(p) == str(geom.readWKB(bytes.encode(wkb, 16),16))
+
+  def testReadGML(self):
+    """
+    <gml:Point xmlns:gml="http://www.opengis.net/gml">
+      <gml:coord>
+        <gml:X>1.0</gml:X>
+        <gml:Y>2.0</gml:Y>
+      </gml:coord>
+    </gml:Point>
+    """
+    gml = '<gml:Point xmlns:gml="http://www.opengis.net/gml"><gml:coord><gml:X>1.0</gml:X><gml:Y>2.0</gml:Y></gml:coord></gml:Point>'
+    g = geom.readGML(gml)
+    assert 1.0 == g.x and 2.0 == g.y
+
+    gml = '<gml:LineString xmlns:gml="http://www.opengis.net/gml"><gml:posList>1.0 2.0 3.0 4.0</gml:posList></gml:LineString>'
+    g = geom.readGML(gml, ver=3)
+    assert 'LINESTRING (1 2, 3 4)' == str(g)
+
+    gml = '<gml:Polygon xmlns:gml="http://www.opengis.net/gml/3.2"><gml:exterior><gml:LinearRing><gml:posList>1.0 2.0 3.0 4.0 5.0 6.0 1.0 2.0</gml:posList></gml:LinearRing></gml:exterior></gml:Polygon>'
+    g = geom.readGML(gml, ver=3.2)
+    assert 'POLYGON ((1 2, 3 4, 5 6, 1 2))' == str(g)
+
+  def testWriteGML(self):
+    gml = geom.writeGML(geom.Point(1,2))
+    p = geom.readGML(gml)
+    assert 1.0 == p.x and 2.0 == p.y
+
+    line = geom.LineString([1,2],[3,4])
+    assert str(line) == str(geom.readGML(geom.writeGML(line, ver=3), ver=3)) 
+   
+    poly = geom.Polygon([[1,2],[3,4],[5,6],[1,2]])
+    assert str(poly) == str(geom.readGML(geom.writeGML(poly,ver=3.2),ver=3.2)) 

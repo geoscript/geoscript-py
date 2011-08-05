@@ -2,4 +2,4 @@ Schema
 ======
 
   .. autoclass:: geoscript.feature.Schema
-     :members: name, geom, fields, field, feature
+     :members: name, uri, geom, fields, field, feature

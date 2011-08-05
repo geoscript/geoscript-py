@@ -6,8 +6,9 @@ class Cursor(object):
   A cursor or iterator over :class:`Feature <geoscript.feature.feature.Feature>` objects.
   """
 
-  def __init__(self, reader, layer):
-    self._reader = reader
+  def __init__(self, fcol, layer):
+    self._fcol = fcol
+    self._reader = fcol.features()
     self.layer = layer
 
   def next(self):

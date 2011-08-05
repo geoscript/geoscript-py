@@ -22,7 +22,8 @@ class Schema(object):
 
   """
 
-  def __init__(self, name=None, fields=[], ft=None):
+  def __init__(self, name=None, fields=[], ft=None, 
+               uri='http://geoscript.org/feature'):
     self._type = ft
 
     if name and fields:
@@ -30,6 +31,7 @@ class Schema(object):
       # from list
       tb = SimpleFeatureTypeBuilder()
       tb.setName(NameImpl(name))
+      tb.setNamespaceURI(uri)
       for fld in fields:
         if isinstance(fld, Field):
           name, typ, prj = fld.name, fld.typ, fld.proj
@@ -40,6 +42,7 @@ class Schema(object):
             # look for srs/crs info
             if len(fld) > 2:
               prj = proj.Projection(fld[2])
+        prj = prj if prj else proj.Projection('EPSG:4326')
         if prj:
           tb.crs(prj._crs)
           
@@ -59,6 +62,10 @@ class Schema(object):
     return self._type.name.localPart
 
   name = property(getname, None, None, 'The name of the schema. A schema name is usually descriptive of the type of feature being described, for example "roads", "streams", "persons", etc...')
+
+  def geturi(self):
+    return self._type.name.namespaceURI
+  uri = property(geturi, None, None, 'The namespace uri of the schema. A schema namespace uri qualifies the schema name, usually used for purposes of encoding GML.') 
 
   def getgeom(self):
     gd = self._type.geometryDescriptor

@@ -11,3 +11,4 @@ layer
    layer
    cursor
    shapefile
+   io/index

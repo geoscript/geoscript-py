@@ -17,10 +17,10 @@ class Label(Symbolizer):
   Label(property=foo)
   """
 
-  def __init__(self, property):
+  def __init__(self, property, font=None):
     Symbolizer.__init__(self)
     self.property = Property(property)
-    self._font = None
+    self._font = Font(font) if font else None
     self._halo = None
     self._placement = None
 

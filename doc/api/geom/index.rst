@@ -15,3 +15,4 @@ geom
      multipoint
      multilinestring
      multipolygon
+     io/index

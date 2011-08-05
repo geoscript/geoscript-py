@@ -1,2 +1,3 @@
-from util import toURL, toFile, toOutputStream, doOutput, deprecated
+from util import toURL, toFile, deprecated
+from util import toOutputStream, doOutput, toInputStream, doInput 
 from seqdict import seqdict

@@ -8,8 +8,10 @@ from multipolygon import MultiPolygon
 from bounds import Bounds
 from geom import Geometry
 from geom import prepare, simplify, transform
-from io.wkt import fromWKT, readWKT, writeWKT, fromWKB, readWKB, toWKB, writeWKT
-from io.json import writeJSON
+from io.wkt import readWKT, writeWKT, fromWKT
+from io.wkb import readWKB, writeWKB, fromWKB, toWKB
+from io.json import writeJSON, readJSON
+from io.gml import writeGML, readGML
 
 from geoscript import core
 core.register(Point)

@@ -2,8 +2,9 @@
 util module -- Various utility functions
 """
 
-import warnings
-from java import io, net
+import math, warnings
+from java import io, lang, net
+from java.lang.String import format
 
 def toURL(o):
   """
@@ -36,22 +37,38 @@ def toFile(o):
     return io.File(o)
 
 def toOutputStream(o):
-  """
-  """
-  if isinstance(o, (io.InputStream, io.Reader, file)):
+  if isinstance(o, (io.OutputStream, io.Writer, file)):
     return o
   else:
     o = toFile(o)
     if isinstance(o,io.File):
       return io.FileOutputStream(o)
 
+def toInputStream(o):
+  if isinstance(o, (io.InputStream, io.Reader, file)):
+    return o
+  elif isinstance(o, (str,unicode)):
+    return io.ByteArrayInputStream(lang.String(o).getBytes())
+  else:
+    o = toFile(o)
+    if isinstance(o,io.File):
+      return io.FileInputStream(o)
+
 def doOutput(fn, out):
   os = toOutputStream(out)
   try:  
-    fn(os)
+    return fn(os)
   finally:
     if os != out:
       os.close()
+
+def doInput(fn, input):
+  instream = toInputStream(input)
+  try:
+    return fn(instream)
+  finally:
+    if instream != input:
+      instream.close()
 
 def deprecated(f):
   def wrapper(*args, **kwargs):
@@ -63,3 +80,4 @@ def deprecated(f):
   wrapper.__doc__ = f.__doc__
   wrapper.__dict__.update(f.__dict__)
   return wrapper
+

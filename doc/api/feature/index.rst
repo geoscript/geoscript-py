@@ -4,11 +4,9 @@
 feature 
 =======
 
-  .. automodule:: geoscript.feature
-     :members: foo
-
   .. toctree::
   
      schema
      field
      feature
+     io/index
