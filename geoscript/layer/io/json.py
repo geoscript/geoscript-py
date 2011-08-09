@@ -1,7 +1,6 @@
 import sys
 from org.geotools.geojson.feature import FeatureJSON
 from geoscript.util import doOutput, doInput
-from geoscript.workspace import Memory
 from geoscript.layer.cursor import Cursor
 
 _fjson = FeatureJSON()
@@ -44,7 +43,9 @@ def readJSON(json):
   1
   """
   fcol = doInput(lambda input: _fjson.readFeatureCollection(input), json)
-  mem = Memory()
-  mem._store.addFeatures(fcol)
 
-  return [mem[name] for name in mem.layers()][0]
+  from geoscript.workspace import Workspace
+  ws = Workspace()
+  ws._store.addFeatures(fcol)
+
+  return [ws[name] for name in ws.layers()][0]

@@ -2,7 +2,6 @@ import sys
 from net.opengis.wfs import WfsFactory
 from geoscript.layer.cursor import Cursor
 from geoscript.util import xml
-from geoscript.workspace import Memory
 
 def writeGML(obj, ver=2, format=True, bounds=False, xmldecl=False, 
              nsprefix='gsf', output=sys.stdout):
@@ -63,9 +62,11 @@ def readGML(input, ver=2):
   1
   """
   fc = xml.wfs.parse(input, ver)
-  mem = Memory()
-  for f in fc.feature: 
-    mem._store.addFeatures(f)
 
-  layers = [mem[name] for name in mem.layers()]
+  from geoscript.workspace import Workspace
+  ws = Workspace()
+  for f in fc.feature: 
+    ws._store.addFeatures(f)
+
+  layers = [ws[name] for name in ws.layers()]
   return layers if len(layers) > 1 else layers[0]
