@@ -24,3 +24,4 @@ class Point(_Point):
 
     _Point.__init__(self, p.coordinateSequence, geom._factory)
 
+geom._enhance(Point)

@@ -18,3 +18,4 @@ class LinearRing(_LinearRing):
       l = LineString(*coords)
       _LinearRing.__init__(self, l.coordinateSequence, geom._factory)
 
+geom._enhance(LinearRing)

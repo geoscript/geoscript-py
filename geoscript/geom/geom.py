@@ -9,6 +9,7 @@ from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
 from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
+from geoscript.geom.bounds import Bounds
 
 _factory = GeometryFactory()
 _prepfactory = PreparedGeometryFactory()
@@ -48,7 +49,7 @@ def transform(g, dx=0, dy=0, sx=1, sy=1, shx=0, shy=0, r=0):
   """
   Tranforms a geometry with an affine transformation.
 
-  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to simplify. 
+  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to transform. 
 
   *dx*, *dy* specify the x,y translation.
 
@@ -61,3 +62,9 @@ def transform(g, dx=0, dy=0, sx=1, sy=1, shx=0, shy=0, r=0):
   tx = AffineTransform(sx, shy, shx, sy, dx, dy)
   tx.rotate(r)
   return JTS.transform(g, AffineTransform2D(tx))
+
+def _bounds(g):
+  return Bounds(env=g.getEnvelopeInternal())
+
+def _enhance(cls):
+  cls.bounds = _bounds

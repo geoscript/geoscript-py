@@ -27,3 +27,5 @@ class MultiPoint(_MultiPoint):
       points = [Point(*p) for p in points]
           
     _MultiPoint.__init__(self, points, geom._factory)
+
+geom._enhance(MultiPoint)

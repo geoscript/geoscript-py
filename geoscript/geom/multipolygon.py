@@ -28,3 +28,4 @@ class MultiPolygon(_MultiPolygon):
 
     _MultiPolygon.__init__(self, polygons, geom._factory)
 
+geom._enhance(MultiPolygon)

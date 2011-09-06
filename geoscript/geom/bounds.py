@@ -1,6 +1,5 @@
 from org.geotools.geometry.jts import ReferencedEnvelope
 from geoscript.util import deprecated
-from geoscript.geom import Polygon
 from geoscript import proj
 
 class Bounds(ReferencedEnvelope):
@@ -135,6 +134,7 @@ class Bounds(ReferencedEnvelope):
    """
    Converts the bounding box to a :class:`Polygon <geoscript.geom.polygon.Polygon>`.
    """
+   from geoscript.geom import Polygon
    return Polygon([(self.west,self.south), (self.west,self.north), 
       (self.east,self.north), (self.east,self.south), (self.west,self.south)])
 

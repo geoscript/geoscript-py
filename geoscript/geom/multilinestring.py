@@ -27,3 +27,5 @@ class MultiLineString(_MultiLineString):
       linestrings = [LineString(*l) for l in linestrings]
 
     _MultiLineString.__init__(self, linestrings, geom._factory)
+
+geom._enhance(MultiLineString)

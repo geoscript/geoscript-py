@@ -25,3 +25,5 @@ class LineString(_LineString):
       ls = geom._factory.createLineString(l)
   
     _LineString.__init__(self, ls.coordinateSequence, geom._factory)
+
+geom._enhance(LineString)

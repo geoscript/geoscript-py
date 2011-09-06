@@ -28,3 +28,4 @@ class Polygon(_Polygon):
       lr = [r if isinstance(r,LinearRing) else LinearRing(*r) for r in rings ]
       _Polygon.__init__(self, lr[0], lr[1:], geom._factory)
 
+geom._enhance(Polygon)
