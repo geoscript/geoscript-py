@@ -3,6 +3,8 @@ from java import io
 from ..util import skipIfNoDB
 from geoscript import geom, proj, feature
 from geoscript.layer import writeGML, readGML, readJSON, writeJSON
+from org.geotools.factory import CommonFactoryFinder
+from org.opengis.filter.sort import SortOrder
 
 class LayerTest:
 
@@ -104,3 +106,24 @@ class LayerTest:
     f = [x for x in l.features()][0]
 
     assert 'Texas' == f['STATE_NAME']
+
+  def testSort(self):
+    # check that the layer supports sorting
+    ff = CommonFactoryFinder.getFilterFactory(None)
+    sortBy = ff.sort('STATE_NAME', SortOrder.ASCENDING)
+    if not self.l._source.getQueryCapabilities().supportsSorting([sortBy]):
+      print '%s DOES NOT SUPPORT SORTING' % self.l.format
+      return
+
+    print 'TESTING SORTING!!'
+    c = self.l.cursor(sort=('STATE_NAME'))
+    assert 'Alabama' == c.next()['STATE_NAME']
+    assert 'Arizona' == c.next()['STATE_NAME']
+    assert 'Arkansas' == c.next()['STATE_NAME']
+    c.close()
+
+    c = self.l.cursor(sort=('STATE_NAME', 'DESC'))
+    assert 'Wyoming' == c.next()['STATE_NAME']
+    assert 'Wisconsin' == c.next()['STATE_NAME']
+    assert 'West Virginia' == c.next()['STATE_NAME']
+    c.close()

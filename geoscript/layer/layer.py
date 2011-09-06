@@ -8,7 +8,11 @@ from cursor import Cursor
 from geoscript import geom, proj, feature
 from geoscript.filter import Filter
 from org.geotools.data import DefaultQuery, Query, Transaction
+from org.geotools.factory import CommonFactoryFinder
 from org.geotools.feature import FeatureCollections
+from org.opengis.filter.sort import SortOrder
+
+_filterFactory = CommonFactoryFinder.getFilterFactory(None)
 
 class Layer(object):
   """
@@ -138,14 +142,33 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    e = self._source.getBounds(DefaultQuery(self.name, f._filter))
+    q = DefaultQuery(self.name, f._filter)
+    e = self._source.getBounds(q)
+
+    if not e:
+      # try through feature collection
+      fc = self._source.getFeatures(q)
+      e = fc.getBounds()
     if e:
       if e.crs():
         return geom.Bounds(env=e)
       else:
         return geom.Bounds(env=e, prj=self.proj)
+    else:
+      # calculate manually
+      it = self._source.getFeatures(q).features()
+      try:
+        bounds = geom.Bounds(prj=self.proj)
+        if it.hasNext(): 
+          bounds.init(it.next().getBounds())
+          while it.hasNext():
+            bounds.expland(it.next().getBounds())
+        return bounds
+      finally:
+        it.close()
 
-  def features(self, filter=None, transform=None):
+
+  def features(self, filter=None, transform=None, sort=None):
     """
     Generator over the :class:`Feature <geoscript.feature.Feature>` s of the layer.
 
@@ -154,6 +177,11 @@ class Layer(object):
     *transform* is an optional function to be executed to transform the features being iterated over. This 
     function takes a single argument which is a :class:`Feature <geoscript.feature.Feature>` and returns a 
     (possibly different) feature.
+ 
+    *sort* is an optional tuple or ``list`` of tuples that defined the order in
+    which features are iterated over. The first value of each tuple is the name
+    of a field to sort on. The second value is one of the strings 'ASC' or 
+    'DESC', representing ascending and decending sort order respectively. 
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -170,7 +198,7 @@ class Layer(object):
     >>> [str(f.geom) for f in l.features(transform=tx)]
     ['POINT (2 4)', 'POINT (6 8)']
     """
-    c = self.cursor(filter)
+    c = self.cursor(filter, sort)
     for f in c:
       if transform:
          result  = transform(f)
@@ -181,11 +209,16 @@ class Layer(object):
 
     c.close()
 
-  def cursor(self, filter=None):
+  def cursor(self, filter=None, sort=None):
     """
     Returns a :class:`Cursor <geoscript.layer.cursor.Cursor>` over the features of the layer.
 
     *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to constrain the features iterated over.
+
+    *sort* is an optional tuple or ``list`` of tuples that defined the order in
+    which features are iterated over. The first value of each tuple is the name
+    of a field to sort on. The second value is one of the strings 'ASC' or 
+    'DESC', representing ascending and decending sort order respectively. 
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -218,6 +251,14 @@ class Layer(object):
 
     f = Filter(filter) if filter else Filter.PASS
     q = DefaultQuery(self.name, f._filter)
+    if sort:
+      sort = sort if isinstance(sort, list) else [sort]
+      sortBy = [] 
+      ff = _filterFactory
+      for s in sort: 
+        s = s if isinstance(s, tuple) else [s, 'ASC']
+        sortBy.append(ff.sort(s[0], SortOrder.valueOf(s[1])))
+        q.setSortBy(sortBy)
     if self.proj:
       q.coordinateSystem = self.proj._crs
 
