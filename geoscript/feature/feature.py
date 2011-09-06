@@ -53,7 +53,7 @@ class Feature(object):
       for att, val in atts.iteritems(): 
         b.set(att, val)
 
-      self._feature = b.buildFeature(id)
+      self._feature = b.buildFeature(str(id) if id else None)
 
     elif f:
       # feature specififed directly
