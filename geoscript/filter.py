@@ -6,6 +6,7 @@ import sys
 from java import io, lang
 from org.opengis.filter import Filter as _Filter
 from org.geotools.filter.text.cql2 import CQL
+from org.geotools.filter.text.ecql import ECQL
 from org.geotools.xml import Parser, Encoder
 from org.geotools.factory import CommonFactoryFinder
 
@@ -38,14 +39,18 @@ class Filter(object):
       try:
         self._filter = _fromCQL(obj)
       except:
-        # next try as XML
+        # next try as ECQL
         try:
-          self._filter = _fromXML(obj)
+          self._filter = _fromECQL(obj)
         except:
+          # next try as XML
           try:
-            self._filter = _fromXML(obj, version=1.1)
+            self._filter = _fromXML(obj)
           except:
-            raise Exception('Could not parse "%s" as filter' % (obj))
+            try:
+              self._filter = _fromXML(obj, version=1.1)
+            except:
+              raise Exception('Could not parse "%s" as filter' % (obj))
 
   def getcql(self):
      return _toCQL(self._filter)    
@@ -106,6 +111,10 @@ def _fromCQL(cql):
 
   return CQL.toFilter(cql)
 
+def _fromECQL(cql):
+  """Parses a ECQL string into a filter object."""
+
+  return ECQL.toFilter(cql)
 
 def _toCQL(filter):
   """Encodes a filter object as a CQL string."""
