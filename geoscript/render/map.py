@@ -31,8 +31,35 @@ class Map:
      if not bounds:
        # calulate bounds for layers, merge all bounds together
        bounds = reduce(lambda x,y:x+y, map(lambda x:x.bounds(), self.layers))
+     else:
+       # bounds may be a "raw" envelope
+       if not isinstance(bounds, geom.Bounds):
+         bounds = geom.Bounds(env=bounds)
+
+     # handle the case of a 0 width/height bounds, might happen if rendering
+     # a single point, or a single verticle/horizontal line
+     if bounds.width == 0 or bounds.height == 0:
+       if bounds.height > 0:
+         h = bounds.height/2.0
+         bounds = geom.Bounds(bounds.west-h, bounds.south, bounds.east+h, 
+           bounds.north, bounds.proj)
+       elif bounds.width > 0:
+         w = bounds.width/2.0
+         bounds = geom.Bounds(bounds.west, bounds.south-w, bounds.east, 
+           bounds.south+w, bounds.proj)
+       else: 
+         e = geom.Point(bounds.west, bounds.south).buffer(0.1).getEnvelopeInternal()
+         bounds = geom.Bounds(env=e, prj=bounds.proj)
+
+     # try to ensure the bounds has a projection
+     if not bounds.proj and self.layers[0].proj:
+       # use the layer projection
+       bounds = geom.Bounds(env=bounds, prj=self.layers[0].proj) 
+
+
      if not size:
-       size = (500, int(500 * bounds.height / bounds.width))
+         size = (500, int(500 * bounds.height / bounds.width))
+
      format = format if format else 'window'
 
      # look up the render based on format
