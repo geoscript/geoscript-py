@@ -1,4 +1,5 @@
 from geoscript.style import util
+from geoscript.style.color import Color
 from geoscript.style.expression import Expression
 from geoscript.style.fill import Fill
 from geoscript.style.symbolizer import Symbolizer
@@ -16,7 +17,12 @@ class Halo(Symbolizer):
   """
   def __init__(self, fill=None, radius=1):
     Symbolizer.__init__(self)
-    self.fill = fill if fill else Fill('#ffffff')
+    if fill:
+      if not isinstance(fill, Fill):
+        fill = Fill(Color(fill))
+    else:
+      fill = Fill('#ffffff')
+    self.fill = fill
     self.radius = Expression(radius)
 
   def _prepare(self, syms):
