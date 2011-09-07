@@ -1,7 +1,7 @@
 from geoscript.style import util
 from geoscript.style.color import Color
 from geoscript.style.expression import Expression
-from geoscript.style.fill import Fill
+from geoscript.style.fill import Fill, Stroke
 from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import PointSymbolizer
 
@@ -42,6 +42,7 @@ class Shape(Symbolizer):
     f = self.factory
     mark = f.createMark()
 
+    mark.setStroke(Stroke(self.color)._stroke())
     mark.setFill(Fill(self.color)._fill())
     mark.setWellKnownName(self.type)
 
