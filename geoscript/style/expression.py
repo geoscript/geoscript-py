@@ -8,7 +8,7 @@ class Expression(object):
   def __init__(self, e): 
     self.factory = StyleFactory()
     if isinstance(e, Expression):
-      self.expr = e
+      self.expr = e.expr
     else:
       self.expr = self._expr(e)
    

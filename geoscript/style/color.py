@@ -34,11 +34,14 @@ class Color(Expression):
   def _expr(self, val):
     if isinstance(val, Expression):
       # direct expression specified
-      self.expr = val
+      return val.expr
     else:
       # transform val to color
-      if _colors.has_key(val):
-         # first try well known
+      if isinstance(val, awt.Color):
+         # try direct awt color 
+         col = val
+      elif _colors.has_key(val):
+         # try well known
          col = _colors[val]
       elif isinstance(val,(list,tuple)):
          # try as tuple
