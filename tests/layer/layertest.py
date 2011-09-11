@@ -112,10 +112,8 @@ class LayerTest:
     ff = CommonFactoryFinder.getFilterFactory(None)
     sortBy = ff.sort('STATE_NAME', SortOrder.ASCENDING)
     if not self.l._source.getQueryCapabilities().supportsSorting([sortBy]):
-      print '%s DOES NOT SUPPORT SORTING' % self.l.format
       return
 
-    print 'TESTING SORTING!!'
     c = self.l.cursor(sort=('STATE_NAME'))
     assert 'Alabama' == c.next()['STATE_NAME']
     assert 'Arizona' == c.next()['STATE_NAME']
