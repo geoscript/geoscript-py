@@ -10,7 +10,7 @@ def draw(obj, style=None, bounds=None, size=None, format=None, **options):
 
   *obj* can be a geometry, list of geometries, or a :class:`Layer <geoscript.layer.layer.Layer>`.
 
-  *style* is a :class:`geoscript.style.symbolizer.Symbolizer` that specifies how to render the object.
+  *style* is a :class:`Symbolizer <geoscript.style.symbolizer.Symbolizer>` that specifies how to render the object.
 
   *size* is a tuple that specifies the dimensions of the canvas the object will drawn upon. 
 
