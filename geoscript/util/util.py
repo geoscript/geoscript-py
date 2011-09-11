@@ -47,12 +47,13 @@ def toOutputStream(o):
 def toInputStream(o):
   if isinstance(o, (io.InputStream, io.Reader, file)):
     return o
-  elif isinstance(o, (str,unicode)):
+
+  f = toFile(o)
+  if isinstance(f,io.File) and f.exists():
+    return io.FileInputStream(f)
+
+  if isinstance(o, (str,unicode)):
     return io.ByteArrayInputStream(lang.String(o).getBytes())
-  else:
-    o = toFile(o)
-    if isinstance(o,io.File):
-      return io.FileInputStream(o)
 
 def doOutput(fn, out):
   os = toOutputStream(out)
