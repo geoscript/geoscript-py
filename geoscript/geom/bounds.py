@@ -28,10 +28,8 @@ class Bounds(ReferencedEnvelope):
 
   def getwest(self):
     return self.minX()
-  west = property(getwest)
-  """
-  The leftmost/westmost oordinate of the bounds.
-  """
+  west = property(getwest,None,None,'The leftmost/westmost oordinate of the bounds.')
+  
 
   @deprecated
   def get_l(self):
@@ -40,10 +38,7 @@ class Bounds(ReferencedEnvelope):
 
   def getsouth(self):
     return self.minY()
-  south = property(getsouth)
-  """
-  The bottomtmost/southmost oordinate of the bounds.
-  """
+  south = property(getsouth,None,None,'The bottomtmost/southmost oordinate of the bounds.')
 
   @deprecated
   def get_b(self):
@@ -52,10 +47,7 @@ class Bounds(ReferencedEnvelope):
 
   def geteast(self):
     return self.maxX()
-  east = property(geteast)
-  """
-  The rightmost/eastmost oordinate of the bounds.
-  """
+  east = property(geteast,None,None,'The rightmost/eastmost oordinate of the bounds.')
 
   @deprecated
   def get_r(self):
@@ -64,10 +56,7 @@ class Bounds(ReferencedEnvelope):
 
   def getnorth(self):
     return self.maxY()
-  north = property(getnorth)
-  """
-  The topmost/northmost oordinate of the bounds.
-  """
+  north = property(getnorth,None,None,'The topmost/northmost oordinate of the bounds.')
 
   @deprecated
   def get_t(self):
@@ -78,17 +67,11 @@ class Bounds(ReferencedEnvelope):
     crs = self.coordinateReferenceSystem
     if crs:
       return proj.Projection(crs)
-  proj = property(getproj)
-  """
-  The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.
-  """
+  proj = property(getproj,None,None,'The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.')
 
   def get_aspect(self):
     return self.width / self.height 
-  aspect = property(get_aspect)
-  """
-  Ratio of width to height for this bounds.
-  """
+  aspect = property(get_aspect,None,None,'Ratio of width to height for this bounds.')
 
   def reproject(self, prj):
     """
@@ -129,6 +112,7 @@ class Bounds(ReferencedEnvelope):
     Expands this bounds to include another.
     """
     self.expandToInclude(other)
+    return self
    
   def toPolygon(self):
    """
