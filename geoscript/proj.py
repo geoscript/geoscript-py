@@ -50,6 +50,15 @@ class Projection(object):
   wkt = property(getwkt, None, None, 
      'The well known text string representing the projection')
 
+  def getbounds(self):
+    from geoscript.geom.bounds import Bounds
+    extent = crs.getGeographicBoundingBox(self._crs)  
+    if extent:
+      return Bounds(extent.westBoundLongitude, extent.southBoundLatitude, 
+        extent.eastBoundLongitude, extent.northBoundLatitude, 'epsg:4326')
+  bounds = property(getbounds, None, None, 
+     'The valid geographic area for the specified coordinate reference system as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
+
   def transform(self, obj, dest):
     """
     Transforms an object from this projection to a specified destination projection.

@@ -7,7 +7,7 @@ proj
   .. automodule:: geoscript.proj
 
      .. autoclass:: Projection
-        :members: id, wkt, transform
+        :members: id, wkt, bounds, transform
 
      .. autofunction:: transform
 
