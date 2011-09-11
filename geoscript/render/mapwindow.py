@@ -34,7 +34,8 @@ class MapWindow:
       renderer = StreamingRenderer()
       renderer.java2DHints = awt.RenderingHints(hints)
 
-      mappane = JMapPane(renderer, self.map)
+      mappane = JMapPane(self.map)
+      mappane.renderer = renderer
       mappane.size = (w,h) 
       mappane.visible = True
 
@@ -82,5 +83,10 @@ class Frame(swing.JFrame):
 
       resetBtn = swing.JButton(ResetAction(mappane))
       toolBar.add(resetBtn)
+
+      toolBar.addSeparator()
+
+      infoBtn = swing.JButton(InfoAction(mappane))
+      toolBar.add(infoBtn)
 
       self.add( toolBar, awt.BorderLayout.NORTH )
