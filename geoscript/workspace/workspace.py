@@ -4,6 +4,7 @@ The :mod:`workspace.workspace` module provides layer access and manipulation.
 
 from geoscript.layer import Layer
 from geoscript.filter import Filter
+from geoscript.util.data import readFeatures
 from geoscript import geom, feature
 
 class Workspace:
@@ -12,7 +13,7 @@ class Workspace:
   """
 
   def __init__(self, factory=None, params=None, ds=None):
-    if self.__class__ == Workspace and not factory:
+    if self.__class__ == Workspace and not factory and not ds:
       import memory
       mem = memory.Memory()
       self._store = mem._store
@@ -116,7 +117,7 @@ class Workspace:
      self._store.createSchema(schema._type) 
      return self.get(name)
 
-  def add(self, layer, name=None):
+  def add(self, layer, name=None, chunk=1000):
      """
      Adds an existing layer to the workspace.
     
@@ -147,10 +148,20 @@ class Workspace:
          flds = [(fld.name, fld.typ) for fld in layer.schema.fields]
 
        l = self.create(name, flds)
-       for f in layer.features():
-         l.add(f)
 
-       return l
+       # add all the features
+       it = layer._source.getFeatures().features()
+       try:
+         while True:
+           features = readFeatures(it, layer._source.getSchema(), chunk)
+           if features.isEmpty():
+             break
+
+           l._source.addFeatures(features)
+
+         return l
+       finally:
+         it.close()
 
   def close(self):
     """

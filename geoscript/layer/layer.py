@@ -7,6 +7,7 @@ from java import net
 from cursor import Cursor
 from geoscript import geom, proj, feature
 from geoscript.filter import Filter
+from geoscript.util.data import readFeatures
 from org.geotools.data import DefaultQuery, Query, Transaction
 from org.geotools.factory import CommonFactoryFinder
 from org.geotools.feature import FeatureCollections
@@ -29,7 +30,7 @@ class Layer(object):
        from geoscript.workspace import Memory
        workspace = Memory()
  
-    name = name or Layer._newname()
+    name = name if name else schema.name if schema else Layer._newname()
        
     if not fs:
        layer = None
@@ -324,7 +325,7 @@ class Layer(object):
     fc.add(f._feature)
     self._source.addFeatures(fc)
 
-  def reproject(self, prj, name=None):
+  def reproject(self, prj, name=None, chunk=1000):
     """
     Reprojects a layer.
 
@@ -356,21 +357,22 @@ class Layer(object):
     # create the reprojected layer
     rlayer = self.workspace.create(schema=rschema)
 
-    # create a query specifying that feautres should be reproje`cted
+    # create a query specifying that feautres should be reprojected
     q = DefaultQuery(self.name, Filter.PASS._filter)
     if self.proj:
       q.coordinateSystem = self.proj._crs
     q.coordinateSystemReproject = prj._crs 
 
-    fc = self._source.getFeatures(q)
-    i = fc.features()
-
     # loop through features and add to new reprojeced layer
-    while i.hasNext():
-      f = feature.Feature(schema=rschema, f=i.next())
-      rlayer.add(f)
-    
-    fc.close(i)
+    i = self._source.getFeatures(q).features()
+    while True:
+      features = readFeatures(i, self._source.getSchema(), chunk)
+      if features.isEmpty(): 
+        break
+
+      rlayer._source.addFeatures(features)
+
+    i.close()
     return rlayer
 
   def filter(self, fil, name=None):
