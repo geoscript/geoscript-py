@@ -8,12 +8,13 @@ from org.geotools.gml3.v3_2 import GMLConfiguration as GML32
 from org.geotools.wfs.v1_0 import WFSConfiguration as WFS10
 from org.geotools.wfs.v1_1 import WFSConfiguration as WFS11
 from org.geotools.wfs.v2_0 import WFSConfiguration as WFS20
+from org.geotools.kml import KMLConfiguration as KML
 
 def doParse(cls, xml, ver):
   return doInput(lambda input: Parser(cls.config(ver)).parse(input), xml)
 
-def doEncode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings={}, 
-             out=None):
+def doEncode(cls, obj, el, ver, format, bounds, xmldecl, namespaces=True, 
+             nsmappings={}, out=None):
 
   cfg = cls.config(ver)
   if not bounds:
@@ -24,9 +25,12 @@ def doEncode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings={},
     e.setOmitXMLDeclaration(True)
   if format:
     e.setIndenting(True)
-  for pre,uri in nsmappings.iteritems():
-    if uri:
-      e.getNamespaces().declarePrefix(pre, uri)
+  if namespaces:
+    for pre,uri in nsmappings.iteritems():
+      if uri:
+        e.getNamespaces().declarePrefix(pre, uri)
+  else:
+    e.setNamespaceAware(False)
 
   if not isinstance(el, tuple):
     el = (cls.uri(ver), el) 
@@ -52,8 +56,8 @@ class gml(object):
   @classmethod
   def encode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings={}, 
              out=None):
-    return doEncode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings,
-      out)
+    return doEncode(cls, obj, el, ver, format, bounds, xmldecl, True, 
+      nsmappings, out)
      
   @classmethod
   def config(cls, ver):
@@ -76,8 +80,8 @@ class wfs(object):
   @classmethod
   def encode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings={}, 
              out=None):
-    return doEncode(cls, obj, el, ver, format, bounds, xmldecl, nsmappings,
-      out)
+    return doEncode(cls, obj, el, ver, format, bounds, xmldecl, True, 
+      nsmappings, out)
 
   @classmethod
   def config(cls, ver):
@@ -86,3 +90,22 @@ class wfs(object):
       3: lambda x: WFS11(),
       3.2: lambda x: WFS20()
     }[ver](0)
+
+class kml(object):
+
+  @classmethod
+  def uri(cls, ver):
+    return KML().getNamespaceURI()
+
+  @classmethod
+  def parse(cls, xml):
+    return doParse(cls, xml, None)
+
+  @classmethod
+  def encode(cls, obj, el, format, xmldecl, namespaces, out=None):
+    return doEncode(cls, obj, el, None, format, True, xmldecl, namespaces, {}, 
+      out)
+
+  @classmethod
+  def config(cls, ver):
+    return KML()

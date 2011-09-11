@@ -12,6 +12,7 @@ from io.wkt import readWKT, writeWKT, fromWKT
 from io.wkb import readWKB, writeWKB, fromWKB, toWKB
 from io.json import writeJSON, readJSON
 from io.gml import writeGML, readGML
+from io.kml import writeKML, readKML
 
 from geoscript import core
 core.register(Point)
