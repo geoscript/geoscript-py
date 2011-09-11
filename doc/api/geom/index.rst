@@ -5,7 +5,7 @@ geom
 ====
 
   .. automodule:: geoscript.geom.geom
-     :members: prepare, simplify, transform
+     :members: prepare, simplify, transform, buffer, delaunay, voronoi
      
   .. toctree::
   
@@ -15,4 +15,5 @@ geom
      multipoint
      multilinestring
      multipolygon
+     bounds
      io/index

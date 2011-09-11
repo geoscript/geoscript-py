@@ -13,3 +13,4 @@ API Reference
    layer/index
    workspace/index
    style/index
+   render/index
