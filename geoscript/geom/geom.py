@@ -6,10 +6,10 @@ from java.awt.geom import AffineTransform
 from com.vividsolutions.jts.geom import GeometryFactory
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
-from com.vividsolutions.jts.operation.buffer import *
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
 from com.vividsolutions.jts.triangulate import DelaunayTriangulationBuilder
 from com.vividsolutions.jts.triangulate import VoronoiDiagramBuilder
+from com.vividsolutions.jts.operation.buffer import BufferOp, BufferParameters
 from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
 from geoscript.geom.bounds import Bounds
@@ -130,7 +130,6 @@ def buffer(g, distance, singleSided=False):
   
   *singleSided* specifies whether to compute a single sided buffer.
   """
-
   bp = BufferParameters()
   bp.setSingleSided(singleSided)
   
