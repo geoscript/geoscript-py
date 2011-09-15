@@ -1,7 +1,7 @@
 """
 The :mod:`layer.layer` module provides the classes for data access and manipulation.
 """
-import sys
+import sys, math
 from java import io
 from java import net
 from cursor import Cursor
@@ -157,16 +157,16 @@ class Layer(object):
         return geom.Bounds(env=e, prj=self.proj)
     else:
       # calculate manually
-      it = self._source.getFeatures(q).features()
+      fit = self._source.getFeatures(q).features()
       try:
         bounds = geom.Bounds(prj=self.proj)
-        if it.hasNext(): 
-          bounds.init(it.next().getBounds())
-          while it.hasNext():
-            bounds.expland(it.next().getBounds())
+        if fit.hasNext(): 
+          bounds.init(fit.next().getBounds())
+          while fit.hasNext():
+            bounds.expland(fit.next().getBounds())
         return bounds
       finally:
-        it.close()
+        fit.close()
 
 
   def features(self, filter=None, transform=None, sort=None):
@@ -364,15 +364,16 @@ class Layer(object):
     q.coordinateSystemReproject = prj._crs 
 
     # loop through features and add to new reprojeced layer
-    i = self._source.getFeatures(q).features()
-    while True:
-      features = readFeatures(i, self._source.getSchema(), chunk)
-      if features.isEmpty(): 
-        break
-
-      rlayer._source.addFeatures(features)
-
-    i.close()
+    fit = self._source.getFeatures(q).features()
+    try:
+      while True:
+        features = readFeatures(fit, self._source.getSchema(), chunk)
+        if features.isEmpty(): 
+          break
+  
+        rlayer._source.addFeatures(features)
+    finally:
+      fit.close()
     return rlayer
 
   def filter(self, fil, name=None):
@@ -396,7 +397,7 @@ class Layer(object):
     1
     >>> l3 = l.filter("name LIKE 'b%'", "filtered2")
     >>> l3.count()
-    2
+   2
     """
 
     f = Filter(fil)
@@ -407,16 +408,105 @@ class Layer(object):
     flayer = self.workspace.create(schema=fschema)
 
     q = DefaultQuery(self.name, f._filter)
-    fc = self._source.getFeatures(q)
-    i = fc.features()
 
     # loop through features and add to new filtered layer
-    while i.hasNext():
-      f = feature.Feature(schema=fschema, f=i.next())
-      flayer.add(f)
+    fit = self._source.getFeatures(q).features()
+    try:
+      while fit.hasNext():
+        f = feature.Feature(schema=fschema, f=fit.next())
+        flayer.add(f)
+    finally:
+      fit.close(i)
 
-    fc.close(i)
     return flayer
+
+  def interpolate(self, att, classes=10, method='linear'):
+    """
+    Generates a set of interpolated values for an attribute of the layer.
+
+    *att* specifies the attribute. *classes* specifies the number of values
+    to generate.
+
+    The *method* parameter specifies the interpolation method. By default
+    a linear method is used. The values 'exp' (exponential) and 'log' 
+    (logarithmic) methods are also supported.
+   
+    """
+    min, max = self.minmax(att)
+  
+    delta = max-min
+    if method == 'linear':
+      fx = lambda x: delta * x
+    elif method == 'exp':
+      fx = lambda x: math.exp(x * math.log(1+delta)) - 1
+    elif method == 'log':
+      fx = lambda x: delta * math.log((x+1))/math.log(2)
+    else:
+      raise Exception('Interpolation method %s not supported' % method)
+      
+    fy = lambda x : min + fx(x)
+    return map(fy, [x/float(classes) for x in range(0,classes+1)])
+
+  def histogram(self, att, classes=10):
+    """
+    Generates the histogram of values for an attribute of the layer.
+
+    *att* specifies the value to generate the histogram for and  *classes* 
+    specifies the number of buckets to use. 
+
+    This method returns a `list` of `tuple`, one tuple for each bucket. The
+    first value of each tuple is another `tuple` representing the bucket 
+    range, the second value is the number of values within that range.
+    
+    """
+    low, high = self.minmax(att)
+
+    rnge = high - low
+    dx = rnge/float(classes)
+    values = [0]*classes
+
+    fil = Filter('%s BETWEEN %s AND %s' % (att, low, high))
+    fit = self._source.getFeatures(fil._filter).features()
+    try:
+      while fit.hasNext():
+        f = fit.next()
+        val = f.getAttribute(att)
+        #import pdb; pdb.set_trace()
+        values[min(classes-1, int( (val-low)/float(rnge)*classes ))] += 1
+    finally:
+      fit.close()
+
+    keys = [round(low + x * dx, 2) for x in range(0,classes+1)]
+    return zip([(keys[i-1],keys[i]) for i in range(1,len(keys))], values)
+
+  def minmax(self, att, low=None, high=None):
+    """
+    Calculates the minimum and maximum values for an attribute of the layer.
+
+    *att* specifies the attribute. *low* and *high* are used to constrain
+    the value space. 
+    """
+    # build a filter based on specified min/max values
+    fil = ['%s >= %s' % (att, low)] if low != None else []
+    fil += ['%s <= %s' % (att, high)] if high != None else []
+    fil = ' AND '.join(fil)
+     
+    q = DefaultQuery(self.name)
+    if len(fil) > 0:
+      q.setFilter(Filter(fil)._filter)
+
+    min, max = None, None
+    fit = self._source.getFeatures(q).features()
+    try:
+      while fit.hasNext():
+        f = fit.next() 
+        val = f.getAttribute(att)
+        min = val if min == None or val < min else min
+        max = val if max == None or val > max else max
+    finally:
+      fit.close()
+
+    return (min,max)
 
   def __eq__(self, other):
     return other and self.schema == other.schema
