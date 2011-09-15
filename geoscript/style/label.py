@@ -1,7 +1,9 @@
 from geoscript.style import util
 from geoscript.style.expression import Expression
 from geoscript.style.font import Font
+from geoscript.style.fill import Fill
 from geoscript.style.halo import Halo
+from geoscript.style.color import Color
 from geoscript.style.property import Property
 from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import TextSymbolizer
@@ -10,16 +12,19 @@ class Label(Symbolizer):
   """
   Symbolizer for labelling a geometry. 
 
-  The ``property`` argument specifies the field or attribute with which to generate
-  labels from.
+  The ``property`` argument specifies the field or attribute with which to generate labels from.
+ 
+  The ``font`` and ``color`` arguments specify the label font and color
+  respectively. 
 
   >>> Label('foo')
   Label(property=foo)
   """
 
-  def __init__(self, property, font=None):
+  def __init__(self, property, font=None, color=None):
     Symbolizer.__init__(self)
     self.property = Property(property)
+    self.color = Color(color) if color else None
     self._font = Font(font) if font else None
     self._halo = None
     self._placement = None
@@ -117,6 +122,9 @@ class Label(Symbolizer):
       self._font._apply(sym)
     if self._halo:
       self._halo._apply(sym)
+
+    if self.color:
+      sym.setFill(Fill(self.color)._fill())
 
     if self._placement:
       sym.setLabelPlacement(self._placement)
