@@ -397,7 +397,7 @@ class Layer(object):
     1
     >>> l3 = l.filter("name LIKE 'b%'", "filtered2")
     >>> l3.count()
-   2
+    2
     """
 
     f = Filter(fil)
