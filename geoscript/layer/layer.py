@@ -416,7 +416,7 @@ class Layer(object):
         f = feature.Feature(schema=fschema, f=fit.next())
         flayer.add(f)
     finally:
-      fit.close(i)
+      fit.close()
 
     return flayer
 
