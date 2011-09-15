@@ -19,10 +19,14 @@ class Map:
        if i < len(self.styles):
          self.styles.append(self.styles[i])
        else:
-         if self.layers[i].schema.geom.typ.__name__ in ['Point', 'MultiPoint']:
-           style = Shape()
+         l = self.layers[i]
+         if hasattr(l, 'style'):
+           style = l.style
          else:
-           style = Stroke()
+           if l.schema.geom.typ.__name__ in ['Point', 'MultiPoint']:
+             style = Shape()
+           else:
+             style = Stroke()
          self.styles.append(style)
 
      self.title = title if title else layers[0].schema.name
@@ -74,10 +78,10 @@ class Map:
      if self.title and not options.has_key('title'):
        options['title'] = self.title
 
-     renderer.render(self.layers, self.styles, bounds, size, **options)
+     obj = renderer.render(self.layers, self.styles, bounds, size, **options)
 
      self.renderer = renderer
-     return renderer
+     return obj if obj else renderer
 
    def dispose(self):
      if self.renderer and self.renderer.dispose:

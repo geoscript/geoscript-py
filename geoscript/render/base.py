@@ -32,7 +32,7 @@ class RendererBase:
       g.fillRect(0, 0, w, h)
       
       renderer.paint(g, awt.Rectangle(w,h), bounds)
-      self._encode(img, g, size, **options)   
+      return self._encode(img, g, size, **options)   
 
    def _encode(self, img, g, size, **options):
       pass
