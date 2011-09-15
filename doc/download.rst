@@ -6,7 +6,7 @@ Downloads
 Stable
 ------
 
-The latest stable release of GeoScript PY is 1.1. Select a file to download from below.
+The current stable release of GeoScript PY is 1.1. Select a file to download from below.
 
 Full
 ^^^^
@@ -15,8 +15,8 @@ Full
 
   .. cssclass:: external  
 
-     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.tar.gz>`_ 
-     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.zip>`_
+    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.tar.gz>`_ 
+    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.zip>`_
          
 Source 
 ^^^^^^
@@ -25,8 +25,8 @@ Source
 
   .. cssclass:: external  
 
-     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.0.1-src.tar.gz>`_ 
-     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.0.1-src.zip>`_ 
+     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-src.tar.gz>`_ 
+     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-src.zip>`_ 
 
 Doc
 ^^^
@@ -35,12 +35,17 @@ Doc
 
   .. cssclass:: external  
         
-     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.0.1-doc.tar.gz>`_ 
-     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.0.1-doc.zip>`_ 
+     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-doc.tar.gz>`_ 
+     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-doc.zip>`_ 
 
 
 Experimental
 ------------
+
+The latest experimental release is 1.2-20110914.
+
+    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20110914.tar.gz>`_ 
+    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20110914.zip>`_
 
 .. warning::
 
