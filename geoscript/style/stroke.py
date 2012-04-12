@@ -1,5 +1,6 @@
 from geoscript.filter import Filter
 from geoscript.style import util
+from geoscript.util import stats
 from geoscript.style.color import Color
 from geoscript.style.expression import Expression
 from geoscript.style.hatch import Hatch
@@ -59,6 +60,28 @@ class Stroke(Symbolizer):
     """
     self._hatch = Hatch(name, stroke, size)
     return self
+
+  def interpolate(self, stroke, n=10, method='linear'):
+    """
+    Creates a set of stroke objects by interpolating between the color/width of
+    this stroke and the specified stroke.
+
+    The *n* parameter specifies how many values to interpolate. The 
+    interpolation is inclusive of this and the specified stroke. 
+
+    The *method* parameter specifies the interpolation method. By default
+    a linear method is used. The values 'exp' (exponential) and 'log' 
+    (logarithmic) methods are also supported.
+    """
+    def _stroke(col, width):
+      s = Stroke(col, width, self.dash, self.cap, self.join)
+      s._hatch = self._hatch
+      return s 
+
+    cols = self.color.interpolate(stroke.color, n, method)
+    widths = stats.interpolate(self.width.value(), stroke.width.value(), n,
+      method)
+    return map(lambda col, width: _stroke(col, width), cols, widths)
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, LineSymbolizer)

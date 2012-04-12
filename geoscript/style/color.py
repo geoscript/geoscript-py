@@ -1,6 +1,7 @@
 import string
 from java import awt
 from geoscript.style.expression import Expression
+from geoscript.util import stats
 
 _colors = {}
 _colors['red'] = awt.Color(255, 0, 0)
@@ -92,19 +93,25 @@ class Color(Expression):
     return [x for x in [h, s, l]];        
   hsl = property(gethsl,None,None,"The HSL/HLS value of the color")
 
-  def interpolate(self, color, n=10):
+  def interpolate(self, color, n=10, method='linear'):
     """  
     Interpolates a set of color values beteen this color and the specified
     *color*. 
 
     The *n* parameter specifies how many values to interpolate. The 
     interpolation is inclusive of this and the specified color. 
+
+    The *method* parameter specifies the interpolation method. By default
+    a linear method is used. The values 'exp' (exponential) and 'log' 
+    (logarithmic) methods are also supported.
     """  
     hsl1,hsl2 = self.hsl, color.hsl 
+
+    # calculate the diff between hsl values
     dhsl = map(lambda x: x[1]-x[0], zip(hsl1,hsl2)) 
 
     return [Color.fromHSL(map(lambda x,y: x + (r/float(n))*y,hsl1,dhsl)) 
-      for r in range(0,n)]
+      for r in stats.interpolate(0, n, n, method)]
 
   @classmethod
   def fromHSL(cls, hsl):

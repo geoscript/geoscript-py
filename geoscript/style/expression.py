@@ -12,6 +12,9 @@ class Expression(object):
     else:
       self.expr = self._expr(e)
    
+  def value(self, obj=None):
+    return self.expr.evaluate(obj)
+
   def _expr(self, e):
     return self.factory.filter.literal(e)
 

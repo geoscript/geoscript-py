@@ -6,6 +6,7 @@ from geoscript.style.hatch import Hatch
 from geoscript.style.icon import Icon
 from geoscript.style.stroke import Stroke
 from geoscript.style.symbolizer import Symbolizer
+from geoscript.util import stats
 from org.geotools.styling import PolygonSymbolizer
 
 class Fill(Symbolizer):
@@ -57,8 +58,28 @@ class Fill(Symbolizer):
     self._hatch = Hatch(name, stroke, size)
     return self
 
-  def interpolate(self, fill, n=10):
-    return [Fill(col) for col in self.color.interpolate(fill.color, n)]
+  def interpolate(self, fill, n=10, method='linear'):
+    """
+    Creates a set of fill objects by interpolating between the color and
+    opacity difference between this fill and the specified fill.
+
+    The *n* parameter specifies how many values to interpolate. The 
+    interpolation is inclusive of this and the specified fill. 
+
+    The *method* parameter specifies the interpolation method. By default
+    a linear method is used. The values 'exp' (exponential) and 'log' 
+    (logarithmic) methods are also supported.
+    """
+
+    def _fill(col, opa):
+      f = Fill(col, opa)
+      f._icon = self._icon 
+      f._hatch = self._hatch
+      return f
+
+    cols = self.color.interpolate(fill.color, n, method)
+    opas = stats.interpolate(self.opacity.value(), fill.opacity.value(), n, method)
+    return map(lambda col,opa: _fill(col, opa), cols, opas)
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, PolygonSymbolizer)
