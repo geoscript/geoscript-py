@@ -78,7 +78,7 @@ class Map:
      if self.title and not options.has_key('title'):
        options['title'] = self.title
 
-     obj = renderer.render(self.layers, self.styles, bounds, size, **options)
+     obj = renderer.render(self, bounds, size, **options)
 
      self.renderer = renderer
      return obj if obj else renderer
