@@ -162,7 +162,7 @@ class Bounds(ReferencedEnvelope):
     w = self.width * (factor - 1) / 2
     h = self.height * (factor - 1) / 2
 
-    return Bounds(self.l - w, self.b - h, self.r + w, self.t + h)
+    return Bounds(self.west-w, self.south-h, self.east+w, self.north+h)
       
   def __add__(self, other):
     b = Bounds(env=self)
