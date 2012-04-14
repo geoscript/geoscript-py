@@ -1,5 +1,6 @@
 from geoscript.feature import Feature
 from geoscript.layer import Layer
+from geoscript.raster import Raster
 from geoscript.render import Map
 from geoscript.style import Stroke
 from geoscript.workspace import Memory
@@ -17,7 +18,7 @@ def draw(obj, style=None, bounds=None, size=None, format=None, **options):
   *format* is the format or renderer to use for rendering.
   """
 
-  if isinstance(obj, (Layer)):
+  if isinstance(obj, (Layer, Raster)):
     layer = obj
   else:
     obj = obj if isinstance(obj, list) else [obj]
@@ -35,7 +36,7 @@ def draw(obj, style=None, bounds=None, size=None, format=None, **options):
 
   # create a map and render
   if not bounds:
-    bounds = layer.bounds().scale(1.1)
+    bounds = layer.extent.scale(1.1)
 
   map = Map([layer], [style] if style else [])
   map.render(format=format, bounds=bounds, size=size, **options) 

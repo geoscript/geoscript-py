@@ -9,5 +9,7 @@ from icon import Icon
 from font import Font
 from hatch import Hatch
 from halo import Halo
+from opacity import Opacity
+from colormap import ColorMap
 from transform import Transform
 

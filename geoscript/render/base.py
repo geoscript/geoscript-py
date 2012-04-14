@@ -1,6 +1,7 @@
 from java import awt
 from java.awt import image
 from geoscript import geom, proj, style 
+from geoscript.raster import Raster
 from org.geotools.geometry.jts import ReferencedEnvelope
 from org.geotools.map import DefaultMapContext, DefaultMapLayer
 from org.geotools.renderer.lite import StreamingRenderer
@@ -18,7 +19,9 @@ class RendererBase:
       styles = map.styles
 
       for i in range(len(layers)): 
-        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
+        l = layers[i]
+        data = l._reader if isinstance(l,Raster) else l._source
+        self.map.addLayer(DefaultMapLayer(data, styles[i]._style()))
 
       w,h = (size[0], size[1]) 
 

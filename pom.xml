@@ -83,34 +83,14 @@
       <artifactId>gt-xsd-kml</artifactId>
       <version>${gt.version}</version>
     </dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-geotiff</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-image</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-imagemosaic</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-imageio-ext-gdal</artifactId>
-      <version>${gt.version}</version>
-    </dependency>
-    <!--dependency>
-      <groupId>org.geotools</groupId>
-      <artifactId>gt-cql</artifactId>
+      <artifactId>gt-geojson</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-charts</artifactId>
-      <artifactId>gt-geojson</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
@@ -121,6 +101,21 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-svg</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-geotiff</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-imagemosaic</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-imageio-ext-gdal</artifactId>
       <version>${gt.version}</version>
     </dependency>
   </dependencies>

@@ -1,6 +1,7 @@
 from java import awt
 from org.geotools.styling import StyleBuilder, PointSymbolizer, LineSymbolizer
 from org.geotools.styling import PolygonSymbolizer, TextSymbolizer
+from org.geotools.styling import RasterSymbolizer
 
 _builder = StyleBuilder()
 
@@ -20,7 +21,7 @@ def _createPolySymbolizer(x):
 _syms[PolygonSymbolizer] = _createPolySymbolizer
 
 _syms[TextSymbolizer] = lambda x: _builder.createTextSymbolizer()
-
+_syms[RasterSymbolizer] = lambda x: _builder.createRasterSymbolizer()
 def color(val):
   # first try well known
   if _colors.has_key(val):

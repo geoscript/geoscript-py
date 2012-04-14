@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from geoscript import util
 from geoscript.proj import Projection
 from geoscript.geom import Bounds
@@ -19,6 +19,11 @@ class Raster(object):
 
     self._reader = format.getReader(util.toFile(file), hints)
     self._coverage = self._reader.read(None)
+
+  def getname(self):
+     return os.path.basename(self.file)
+
+  name = property(getname, None)
 
   def getformat(self):
     return str(self._format.getName())
