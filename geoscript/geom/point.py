@@ -24,4 +24,13 @@ class Point(_Point):
 
     _Point.__init__(self, p.coordinateSequence, geom._factory)
 
+  def round(self, ndigits):
+    c = self.coordinate
+    coords = [c.x, c.y]
+
+    if c.z == c.z: # ie, isnan
+      coords.append(c.z)
+
+    return Point(*map(lambda x: round(x, ndigits), coords))
+
 geom._enhance(Point)

@@ -22,6 +22,19 @@ Geometry = _Geometry
 Base class for all geometry classes.
 """
   
+def wrap(g):
+  """
+  Wraps a raw JTS geometry in its corresponding geoscript geometry.
+  """
+  if not g:
+    return g
+
+  type = g.getGeometryType()
+
+  # do some import tricks to avoid circular import mess
+  mod = __import__('geoscript.geom', globals(), locals(), ['type'])
+  return mod.__dict__[type](g)  
+
 def prepare(g):
   """
   Constructs a prepared geometry. Prepared geometries make repeated spatial 
