@@ -1,6 +1,5 @@
 from geoscript.feature import Feature
-from geoscript.layer import Layer
-from geoscript.raster import Raster
+from geoscript.layer import Layer, Raster
 from geoscript.render import Map
 from geoscript.style import Stroke
 from geoscript.workspace import Memory

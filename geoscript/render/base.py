@@ -1,7 +1,7 @@
 from java import awt
 from java.awt import image
 from geoscript import geom, proj, style 
-from geoscript.raster import Raster
+from geoscript.layer import Raster
 from org.geotools.geometry.jts import ReferencedEnvelope
 from org.geotools.map import DefaultMapContext, DefaultMapLayer
 from org.geotools.renderer.lite import StreamingRenderer

@@ -1,4 +1,4 @@
-from geoscript.raster.raster import Raster
+from geoscript.layer.raster import Raster
 from org.geotools.gce.geotiff import GeoTiffFormat
 
 class GeoTIFF(Raster):

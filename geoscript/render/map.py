@@ -1,5 +1,5 @@
 from geoscript import geom, proj
-from geoscript.raster import Raster
+from geoscript.layer import Raster
 from geoscript.style import Stroke, Shape, Opacity
 from geoscript.render.window import Window
 from geoscript.render.mapwindow import MapWindow

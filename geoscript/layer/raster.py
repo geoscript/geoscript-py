@@ -2,7 +2,7 @@ import os, sys
 from geoscript import util
 from geoscript.proj import Projection
 from geoscript.geom import Bounds
-from geoscript.raster.band import Band
+from geoscript.layer.band import Band
 from org.geotools.factory import Hints
 
 class Raster(object):
@@ -77,4 +77,3 @@ class Raster(object):
   def render(self):
     self._coverage.show()
 
-   
