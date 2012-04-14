@@ -16,7 +16,7 @@ class ColorMap(Symbolizer):
   associated color:
 
   >>> ColorMap([('red', 0), ('blue', 100)])
-  ColorMap(values=[('red', 0), ('blue', 100)],type=ramp)
+  ColorMap(values=[('red', 0), ('blue', 100)],interpolate=ramp)
 
   The *interpolate* argument specifies how to apply the entries of the color 
   map to raster data values. The default value, 'ramp' indicates that data 
@@ -33,7 +33,7 @@ class ColorMap(Symbolizer):
   def __init__(self, values, interpolate='ramp'):
     Symbolizer.__init__(self)
     self.values = values
-    self.type = type
+    self.interpolate = interpolate
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, RasterSymbolizer)
@@ -47,7 +47,7 @@ class ColorMap(Symbolizer):
   def _colormap(self):
     f = self.factory
     map = f.createColorMap()
-    map.setType(_type[self.type])
+    map.setType(_type[self.interpolate])
 
     for v in self.values:
       entry = f.createColorMapEntry()
@@ -58,5 +58,5 @@ class ColorMap(Symbolizer):
     return map
 
   def __repr__(self):
-    return self._repr('values', 'type')
+    return self._repr('values', 'interpolate')
 
