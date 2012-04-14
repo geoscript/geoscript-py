@@ -72,16 +72,16 @@ class Projection(object):
      >>> import geom
      >>> p1 = geom.Point(-125, 50)
      >>> p2 = proj.transform(p1, dest)
-     >>> p2
-     POINT (1071693.3691932235 554290.3694231863)
+     >>> p2.round(0)
+     POINT (1071693 554290)
 
     *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection.
 
     >>> proj = Projection('epsg:4326')
     >>> p1 = (-125, 50)
     >>> p2 = proj.transform(p1, 'epsg:3005')
-    >>> p2
-    (1071693.3691932235, 554290.3694231863)
+    >>> map(lambda x: round(x,0), p2)
+    [1071693.0, 554290.0]
     """
     fromcrs = self._crs
     tocrs = Projection(dest)._crs
@@ -99,7 +99,8 @@ class Projection(object):
       gt = GeometryTX()
       gt.mathTransform = tx
 
-      return gt.transform(obj)
+      from geoscript.geom import wrap
+      return wrap(gt.transform(obj))
 
   def __str__(self):
     return self.id
@@ -117,8 +118,8 @@ def transform(obj, src, dst):
   >>> import geom 
   >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
-  >>> p2
-  POINT (1071693.3691932235 554290.3694231863)
+  >>> p2.round(0)
+  POINT (1071693 554290)
 
   .. seealso:: 
 

@@ -76,7 +76,7 @@ class Feature(object):
   """
 
   def getgeom(self):
-    return self._feature.defaultGeometry
+    return geom.wrap(self._feature.defaultGeometry)
 
   def setgeom(self, g):
     self._feature.defaultGeometry = g
