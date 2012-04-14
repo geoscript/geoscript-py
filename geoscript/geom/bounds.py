@@ -156,7 +156,7 @@ class Bounds(ReferencedEnvelope):
     object.
 
     >>> b = Bounds(0, 0, 1, 1)
-    >>> b1 = b.scale(1.5)
+    >>> b.scale(1.5)
     (-0.25, -0.25, 1.25, 1.25)
     """
     w = self.width * (factor - 1) / 2
