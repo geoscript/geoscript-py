@@ -106,7 +106,7 @@ class Layer(object):
     >>> l.add([geom.Point(3.0, 4.0)])
 
     >>> l.extent
-    (1.0, 2.0, 3.0, 4.0)
+    (1.0, 2.0, 3.0, 4.0, EPSG:4326)
     
     """
     return self.bounds()
@@ -361,8 +361,8 @@ class Layer(object):
     >>> l2.proj.id
     'EPSG:26912'
 
-    >>> [f.geom for f in l2.features()]
-    [POINT (500000 5060716.31816507)]
+    >>> [f.geom.round(0) for f in l2.features()]
+    [POINT (500000 5060716)]
     """
 
     prj = proj.Projection(prj)
