@@ -73,9 +73,14 @@ class Bounds(ReferencedEnvelope):
       return proj.Projection(crs)
   proj = property(getproj,None,None,'The :class:`Projection <geoscript.proj.Projection>` of the bounds. ``None`` if the projection is unknown.')
 
-  def get_aspect(self):
+  def getaspect(self):
     return self.width / self.height 
-  aspect = property(get_aspect,None,None,'Ratio of width to height for this bounds.')
+  aspect = property(getaspect,None,None,'Ratio of width to height for this bounds.')
+
+  def getcenter(self):
+    from geoscript.geom import Point
+    return Point(self.west+self.width/float(2), self.south+self.height/float(2))
+  center = property(getcenter,None,None,'Central point of this bounds')
 
   def reproject(self, prj):
     """
@@ -144,26 +149,6 @@ class Bounds(ReferencedEnvelope):
        x += dx
      y += dy
 
-  def scale(self, factor):
-    """
-    Scales the bounds by a particualr factor.
-
-    *factor* is the scale factor. The scale factor must be greather than 0. A 
-    value greater than 1 will grow the bounds whereas a value of less than 1 
-    will shrink the bounds.
-   
-    This method returns a new :class:`Bounds <geoscript.geom.bounds.Bounds>` 
-    object.
-
-    >>> b = Bounds(0, 0, 1, 1)
-    >>> b.scale(1.5)
-    (-0.25, -0.25, 1.25, 1.25)
-    """
-    w = self.width * (factor - 1) / 2
-    h = self.height * (factor - 1) / 2
-
-    return Bounds(self.west-w, self.south-h, self.east+w, self.north+h)
-      
   def __add__(self, other):
     b = Bounds(env=self)
     if self.proj and other.proj and other.proj != self.proj:
