@@ -20,7 +20,7 @@ class RendererBase:
 
       for i in range(len(layers)): 
         l = layers[i]
-        data = l._reader if isinstance(l,Raster) else l._source
+        data = l._coverage if isinstance(l,Raster) else l._source
         self.map.addLayer(DefaultMapLayer(data, styles[i]._style()))
 
       w,h = (size[0], size[1]) 
