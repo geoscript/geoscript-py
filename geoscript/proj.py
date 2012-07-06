@@ -52,12 +52,22 @@ class Projection(object):
 
   def getbounds(self):
     from geoscript.geom.bounds import Bounds
-    extent = crs.getGeographicBoundingBox(self._crs)  
-    if extent:
-      return Bounds(extent.westBoundLongitude, extent.southBoundLatitude, 
-        extent.eastBoundLongitude, extent.northBoundLatitude, 'epsg:4326')
+    #extent = crs.getGeographicBoundingBox(self._crs)  
+    env = crs.getEnvelope(self._crs)
+    if env:
+      return Bounds(env.getMinimum(0), env.getMinimum(1), 
+        env.getMaximum(0), env.getMaximum(1), self)
   bounds = property(getbounds, None, None, 
-     'The valid geographic area for the specified coordinate reference system as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
+     'The extent for this projection as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
+
+  def getgeobounds(self):
+    from geoscript.geom.bounds import Bounds
+    box = crs.getGeographicBoundingBox(self._crs)  
+    if box:
+      return Bounds(box.westBoundLongitude, box.southBoundLatitude, 
+        box.eastBoundLongitude, box.northBoundLatitude, 'epsg:4326')
+  geobounds = property(getgeobounds, None, None, 
+     'The geographic extent for this projection as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
 
   def transform(self, obj, dest):
     """
