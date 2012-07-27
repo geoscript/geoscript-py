@@ -85,12 +85,17 @@
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-geojson</artifactId>
+      <artifactId>gt-charts</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
       <groupId>org.geotools</groupId>
-      <artifactId>gt-charts</artifactId>
+      <artifactId>gt-imagemosaic</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-imageio-ext-gdal</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
@@ -106,6 +111,11 @@
     <dependency>
       <groupId>org.geotools</groupId>
       <artifactId>gt-geotiff</artifactId>
+      <version>${gt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.geotools</groupId>
+      <artifactId>gt-image</artifactId>
       <version>${gt.version}</version>
     </dependency>
     <dependency>
