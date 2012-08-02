@@ -3,7 +3,7 @@ The :mod:`geom` module provides geometry classes and utilities for the construct
 """
 
 from java.awt.geom import AffineTransform
-from com.vividsolutions.jts.geom import GeometryFactory
+from com.vividsolutions.jts.geom import GeometryFactory, CoordinateFilter
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
@@ -138,5 +138,20 @@ def buffer(g, distance, singleSided=False):
 def _bounds(g):
   return Bounds(env=g.getEnvelopeInternal())
 
+class RoundFilter(CoordinateFilter):
+   def __init__(self, n):
+     self.n = n
+
+   def filter(self, c):
+     c.x = round(c.x, self.n)
+     c.y = round(c.y, self.n)
+     c.z = round(c.z, self.n)
+
+def _round(g, n=0):
+  g.apply(RoundFilter(n))
+  return g
+
 def _enhance(cls):
   cls.bounds = _bounds
+  cls.round = _round
+
