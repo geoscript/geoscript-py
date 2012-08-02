@@ -9,6 +9,7 @@ from org.geotools.filter.text.cql2 import CQL
 from org.geotools.filter.text.ecql import ECQL
 from org.geotools.xml import Parser, Encoder
 from org.geotools.factory import CommonFactoryFinder
+from geoscript import core
 
 _factory = CommonFactoryFinder.getFilterFactory(None)
 
@@ -151,3 +152,6 @@ def _ogc(version):
     raise Exception('fromXML() not available, filter libs not on classpath')
 
   return (OGC11.getInstance(),OGCConfiguration11()) if version == 1.1 else (OGC10.getInstance(), OGCConfiguration10())
+
+core.registerTypeMapping(_Filter, Filter)
+core.registerTypeMapping(Filter, _Filter, lambda x: x._filter)

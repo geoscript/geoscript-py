@@ -4,6 +4,7 @@ The :mod:`proj` module provides support for coordinate reference system transfor
 from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
 from org.geotools.referencing import CRS as crs
 from org.opengis.referencing.crs import CoordinateReferenceSystem
+from geoscript import core
 
 CRS = CoordinateReferenceSystem
 
@@ -82,16 +83,17 @@ class Projection(object):
      >>> import geom
      >>> p1 = geom.Point(-125, 50)
      >>> p2 = proj.transform(p1, dest)
-     >>> p2
-     POINT (1071693.3691932235 554290.3694231863)
+     >>> p2.round()
+     POINT (1071693 554290)
+
 
     *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection.
 
     >>> proj = Projection('epsg:4326')
     >>> p1 = (-125, 50)
     >>> p2 = proj.transform(p1, 'epsg:3005')
-    >>> p2
-    (1071693.3691932235, 554290.3694231863)
+    >>> [round(x) for x in p2]
+    [1071693.0, 554290.0]
     """
     fromcrs = self._crs
     tocrs = Projection(dest)._crs
@@ -109,7 +111,7 @@ class Projection(object):
       gt = GeometryTX()
       gt.mathTransform = tx
 
-      return gt.transform(obj)
+      return core.map(gt.transform(obj))
 
   def __str__(self):
     return self.id
@@ -127,8 +129,8 @@ def transform(obj, src, dst):
   >>> import geom 
   >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
-  >>> p2
-  POINT (1071693.3691932235 554290.3694231863)
+  >>> p2.round()
+  POINT (1071693 554290)
 
   .. seealso:: 
 
@@ -153,3 +155,7 @@ def projections():
      except:
        # todo: log this
        pass
+
+core.registerTypeMapping(CRS, Projection)
+core.registerTypeUnmapping(Projection, CRS, lambda x: x._crs)
+

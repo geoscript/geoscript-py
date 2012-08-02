@@ -1,5 +1,6 @@
 import string
 from org.geotools.feature.simple import SimpleFeatureBuilder
+from org.opengis.feature import Feature as _Feature
 from geoscript import core, geom
 
 class Feature(object):
@@ -76,7 +77,7 @@ class Feature(object):
   """
 
   def getgeom(self):
-    return self._feature.defaultGeometry
+    return core.map(self._feature.defaultGeometry)
 
   def setgeom(self, g):
     self._feature.defaultGeometry = g
@@ -181,3 +182,6 @@ class Feature(object):
 
   def __eq__(self, other):
     return other and self._feature == other._feature
+
+core.registerTypeMapping(_Feature, Feature, lambda x: Feature(f=x))
+core.registerTypeUnmapping(Feature, _Feature, lambda x: x._feature)

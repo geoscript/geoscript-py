@@ -1,6 +1,6 @@
 from org.geotools.geometry.jts import ReferencedEnvelope
 from geoscript.util import deprecated
-from geoscript import proj
+from geoscript import core, proj
 
 class Bounds(ReferencedEnvelope):
   """
@@ -153,4 +153,6 @@ class Bounds(ReferencedEnvelope):
       s = '%s, %s' % (s, self.proj.id)
 
     return '%s)' % s
+
+core.registerTypeMapping(ReferencedEnvelope, Bounds, lambda x: Bounds(env=x))
 

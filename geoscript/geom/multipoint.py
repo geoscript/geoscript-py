@@ -1,4 +1,5 @@
 from com.vividsolutions.jts.geom import MultiPoint as _MultiPoint
+from geoscript import core
 from point import Point
 import geom
 
@@ -29,3 +30,4 @@ class MultiPoint(_MultiPoint):
     _MultiPoint.__init__(self, points, geom._factory)
 
 geom._enhance(MultiPoint)
+core.registerTypeMapping(_MultiPoint, MultiPoint)

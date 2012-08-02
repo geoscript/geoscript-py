@@ -1,6 +1,7 @@
 from com.vividsolutions.jts.geom import Coordinate
 from com.vividsolutions.jts.geom import LinearRing as _LinearRing
 from linestring import LineString
+from geoscript import core
 import geom
 
 class LinearRing(_LinearRing):
@@ -19,3 +20,4 @@ class LinearRing(_LinearRing):
       _LinearRing.__init__(self, l.coordinateSequence, geom._factory)
 
 geom._enhance(LinearRing)
+core.registerTypeMapping(_LinearRing, LinearRing)

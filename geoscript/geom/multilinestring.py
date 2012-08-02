@@ -1,5 +1,6 @@
 from com.vividsolutions.jts.geom import MultiLineString as _MultiLineString
 from linestring import LineString
+from geoscript import core
 import geom
 
 class MultiLineString(_MultiLineString):
@@ -29,3 +30,4 @@ class MultiLineString(_MultiLineString):
     _MultiLineString.__init__(self, linestrings, geom._factory)
 
 geom._enhance(MultiLineString)
+core.registerTypeMapping(_MultiLineString, MultiLineString)
