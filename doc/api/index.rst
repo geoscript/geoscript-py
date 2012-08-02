@@ -10,6 +10,7 @@ API Reference
    feature/index
    filter
    function
+   process
    layer/index
    workspace/index
    style/index
