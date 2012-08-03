@@ -3,12 +3,18 @@ from jarray import array
 from geoscript import util
 from geoscript.proj import Projection
 from geoscript.geom import Bounds
+from geoscript.feature import Feature
 from geoscript.layer.band import Band
+from org.opengis.parameter import GeneralParameterValue
 from org.geotools.factory import Hints
+from org.geotools.parameter import Parameter
 from org.geotools.coverage import CoverageFactoryFinder
+from org.geotools.coverage.grid import GridGeometry2D, GridEnvelope2D
+from org.geotools.coverage.grid.io import AbstractGridFormat
 from org.geotools.coverage.processing import CoverageProcessor
 from org.geotools.process.raster.gs import ScaleCoverage, CropCoverage
 from org.geotools.process.raster.gs import AddCoveragesProcess
+from org.geotools.process.raster.gs import RasterAsPointCollectionProcess
 
 class Raster(object):
 
@@ -88,6 +94,50 @@ class Raster(object):
 
   pixelsize = property(getpixelsize, None)
 
+  def getdata(self):
+     return self._coverage.getRenderedImage().getData() 
+
+  data = property(getdata, None)
+
+  def resample(self, bbox=None, rect=None, size=None):
+     """
+     Resamples this raster returning a new raster. The *bbox* argument specifies
+     the subset in model/world space to resample. Alternatively the *rect*
+     argument can be used to specify the subset in pixel space.
+
+     The *size* argument defines the size of the resulting raster. If not 
+     specified the resulting size will be calculated proportionally to the 
+     the *bbox* or *rect* arguments.
+     """
+     if not bbox:
+       if rect:
+         # compute bounds from rectangle in pixel space
+         dx, dy = self.pixelsize
+         #dx = rect[2] / float(self.size[0])
+         #dy = rect[3] / float(self.size[1])
+
+         e = self.extent
+         bbox = Bounds(e.west + rect[0]*dx, e.south + rect[1]*dy, 
+          e.west + (rect[0]+rect[2])*dx, e.south + (rect[1]+rect[3])*dy, e.proj)
+       else:
+         # no bbox or rectangle, use full extent
+         bbox = self.extent
+
+     if not size:
+       if not rect:
+         # auto compute size based on bounding box ratio
+         e = self.extent
+         w = int(self.size[0] * bbox.width / e.width)
+         size = (w, int(w * e.aspect))
+       else:
+         size = rect[2], rect[3]
+
+     gg = GridGeometry2D(GridEnvelope2D(0,0,*size), bbox)
+     result =  self._op('Resample', Source=self._coverage, 
+       CoordinateReferenceSystem=self.proj._crs, GridGeometry=gg)
+
+     return Raster(self._format, coverage=result, reader=self._reader)
+
   def render(self):
     self._coverage.show()
 
@@ -102,6 +152,27 @@ class Raster(object):
     result = cc.execute(self._coverage, geom, None)
     return Raster(self._format, coverage=result, reader=self._reader)
 
+  def features(self):
+    """
+    Returns the contents of the raster as a 
+    :class:`Feature <geoscript.feature.Feature>` generator by converting each
+    cell/pixel into a feature object.
+ 
+    Each returned feature has a :class:`Point <geoscript.geom.Point>` geometry 
+    corresponding to the location of the center of the pixel. The feature also
+    contains attributes corresponding to the bands of the raster, which values
+    corresponding to the band value for the pixel.
+    """
+    pcp = RasterAsPointCollectionProcess()
+    result = pcp.execute(self._coverage)
+    
+    it = result.features()
+    while it.hasNext(): 
+      f = it.next()
+      yield Feature(f=f)
+
+    it.close()
+ 
   def __add__(self, other):
     if isinstance(other, Raster):
       result = self._op('Add', Source0=self._coverage, Source1=other._coverage)
