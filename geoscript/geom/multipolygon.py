@@ -1,4 +1,5 @@
 from com.vividsolutions.jts.geom import MultiPolygon as _MultiPolygon
+from geoscript import core
 from polygon import Polygon
 import geom
 
@@ -29,3 +30,4 @@ class MultiPolygon(_MultiPolygon):
     _MultiPolygon.__init__(self, polygons, geom._factory)
 
 geom._enhance(MultiPolygon)
+core.registerTypeMapping(_MultiPolygon, MultiPolygon)

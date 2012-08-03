@@ -2,10 +2,11 @@
 The :mod:`workspace.workspace` module provides layer access and manipulation.
 """
 
+from org.geotools.data import DataStore
 from geoscript.layer import Layer
 from geoscript.filter import Filter
 from geoscript.util.data import readFeatures
-from geoscript import geom, feature
+from geoscript import core, geom, feature
 
 class Workspace:
   """
@@ -205,3 +206,6 @@ class Workspace:
 
   def values(self):
     return [v for k,v in self.iteritems()]
+
+core.registerTypeMapping(DataStore, Workspace, lambda x: Workspace(ds=x))
+core.registerTypeUnmapping(Workspace, DataStore, lambda x: x._store)

@@ -4,6 +4,7 @@ The :mod:`proj` module provides support for coordinate reference system transfor
 from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
 from org.geotools.referencing import CRS as crs
 from org.opengis.referencing.crs import CoordinateReferenceSystem
+from geoscript import core
 
 CRS = CoordinateReferenceSystem
 
@@ -52,12 +53,22 @@ class Projection(object):
 
   def getbounds(self):
     from geoscript.geom.bounds import Bounds
-    extent = crs.getGeographicBoundingBox(self._crs)  
-    if extent:
-      return Bounds(extent.westBoundLongitude, extent.southBoundLatitude, 
-        extent.eastBoundLongitude, extent.northBoundLatitude, 'epsg:4326')
+    #extent = crs.getGeographicBoundingBox(self._crs)  
+    env = crs.getEnvelope(self._crs)
+    if env:
+      return Bounds(env.getMinimum(0), env.getMinimum(1), 
+        env.getMaximum(0), env.getMaximum(1), self)
   bounds = property(getbounds, None, None, 
-     'The valid geographic area for the specified coordinate reference system as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
+     'The extent for this projection as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
+
+  def getgeobounds(self):
+    from geoscript.geom.bounds import Bounds
+    box = crs.getGeographicBoundingBox(self._crs)  
+    if box:
+      return Bounds(box.westBoundLongitude, box.southBoundLatitude, 
+        box.eastBoundLongitude, box.northBoundLatitude, 'epsg:4326')
+  geobounds = property(getgeobounds, None, None, 
+     'The geographic extent for this projection as a :class:`Bounds <geoscript.geom.Bounds>` object. If unknown this method returns ``None``.')
 
   def transform(self, obj, dest):
     """
@@ -72,15 +83,17 @@ class Projection(object):
      >>> import geom
      >>> p1 = geom.Point(-125, 50)
      >>> p2 = proj.transform(p1, dest)
-     >>> p2.round(0)
+     >>> p2.round()
      POINT (1071693 554290)
+
+>>>>>>> master
 
     *obj* may also be specified as a single coordinate ``list`` or ``tuple``. *dest* may also be specified as a string identifying the destination projection.
 
     >>> proj = Projection('epsg:4326')
     >>> p1 = (-125, 50)
     >>> p2 = proj.transform(p1, 'epsg:3005')
-    >>> map(lambda x: round(x,0), p2)
+    >>> [round(x) for x in p2]
     [1071693.0, 554290.0]
     """
     fromcrs = self._crs
@@ -99,8 +112,7 @@ class Projection(object):
       gt = GeometryTX()
       gt.mathTransform = tx
 
-      from geoscript.geom import wrap
-      return wrap(gt.transform(obj))
+      return core.map(gt.transform(obj))
 
   def __str__(self):
     return self.id
@@ -118,7 +130,7 @@ def transform(obj, src, dst):
   >>> import geom 
   >>> p1 = geom.Point(-125, 50)
   >>> p2 = transform(p1, 'epsg:4326', 'epsg:3005')
-  >>> p2.round(0)
+  >>> p2.round()
   POINT (1071693 554290)
 
   .. seealso:: 
@@ -144,3 +156,7 @@ def projections():
      except:
        # todo: log this
        pass
+
+core.registerTypeMapping(CRS, Projection)
+core.registerTypeUnmapping(Projection, CRS, lambda x: x._crs)
+

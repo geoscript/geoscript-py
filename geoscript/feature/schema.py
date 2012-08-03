@@ -1,5 +1,5 @@
 import string
-from org.opengis.feature.type import GeometryDescriptor
+from org.opengis.feature.type import FeatureType, GeometryDescriptor
 from org.geotools.feature import NameImpl
 from org.geotools.feature.simple import SimpleFeatureTypeBuilder
 from geoscript import core, geom, proj
@@ -46,9 +46,9 @@ class Schema(object):
         if prj:
           tb.crs(prj._crs)
           
-        # we call map() here to avoid setting the type binding to a Python
+        # we call unmap() here to avoid setting the type binding to a Python
         # (eg: PyInteger) type, but rather a native java type (Integer)
-        tb.add(name, core.map(typ))
+        tb.add(name, core.unmap(typ))
 
       self._type = tb.buildFeatureType()
         
@@ -186,3 +186,6 @@ class Schema(object):
 
   def __eq__(self, other):
     return other and self._type == other._type
+
+core.registerTypeMapping(FeatureType, Schema, lambda x: Schema(ft=x))
+core.registerTypeUnmapping(Schema, FeatureType, lambda x: x._type)

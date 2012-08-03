@@ -1,5 +1,6 @@
 from com.vividsolutions.jts.geom import Coordinate
 from com.vividsolutions.jts.geom import LineString as _LineString
+from geoscript import core
 import geom
 
 class LineString(_LineString):
@@ -27,3 +28,4 @@ class LineString(_LineString):
     _LineString.__init__(self, ls.coordinateSequence, geom._factory)
 
 geom._enhance(LineString)
+core.registerTypeMapping(_LineString, LineString)

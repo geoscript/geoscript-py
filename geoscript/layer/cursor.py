@@ -1,3 +1,5 @@
+from org.geotools.feature import FeatureCollection
+from geoscript import core
 from geoscript.feature import Feature
 from geoscript.filter import Filter
 
@@ -6,12 +8,15 @@ class Cursor(object):
   A cursor or iterator over :class:`Feature <geoscript.feature.feature.Feature>` objects.
   """
 
-  def __init__(self, fcol, layer):
+  def __init__(self, fcol, layer=None):
     self._fcol = fcol
-    self._reader = fcol.features()
+    self._reader = None
     self.layer = layer
 
   def next(self):
+    if not self._reader:
+      self._reader = self._fcol.features()
+
     """
     Returns the next feature. Raises `StopIteration` if no more features are available.
     """
@@ -19,7 +24,7 @@ class Cursor(object):
       self._reader.close()
       raise StopIteration
 
-    return Feature(schema=self.layer.schema, f=self._reader.next())
+    return Feature(schema=self.layer.schema if self.layer else None, f=self._reader.next())
   
   def read(self, n):
     """
@@ -40,7 +45,11 @@ class Cursor(object):
     """
     Closes the cursor. This function should *always* be called by client code after the cursor is no longer needed or has been exhausted.
     """
-    self._reader.close()
+    if self._reader:
+      self._reader.close()
 
   def __iter__(self):
     return self
+
+core.registerTypeMapping(FeatureCollection, Cursor)
+core.registerTypeUnmapping(Cursor, FeatureCollection, lambda x: x._fcol)

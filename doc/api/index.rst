@@ -11,6 +11,7 @@ API Reference
    filter
    function
    render
+   process
    layer/index
    workspace/index
    style/index

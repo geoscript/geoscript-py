@@ -13,38 +13,90 @@ class ProxyRenamer(ClassAdapter):
 def register(t):
    ProxyRenamer(t).rename()
 
-_tmap = {}
-_tmap[int] = java.lang.Integer
-_tmap[java.lang.Integer] = int
-_tmap[java.lang.Short] = int
-_tmap[java.lang.Float] = int
+class TypeMapper(object):
+  """
+  Maps a jython/geoscript type to java/geotools type, and back.
+  """
 
-_tmap[long] = java.lang.Long
-_tmap[java.lang.Long] = long
+  def __init__(self, fromType, toType, conv=None):
+    self.fromType = fromType
+    self.toType = toType
+    self.conv = conv
 
-_tmap[str] = java.lang.String
-_tmap[unicode] = java.lang.String
-_tmap[java.lang.String] = str
+  def map(self, obj):
+    if isinstance(obj,type):
+      return self.toType
 
-_tmap[float] = java.lang.Double
-_tmap[java.lang.Double] = float
-_tmap[java.lang.Float] = float
+    if self.conv:
+      return self.conv(obj)
+    
+    # default is to try and just invoke the constructor
+    return self.toType(obj)
+  
+# forward type map
+_fmap = {}
 
-"""
-Maps a jython type to its associated java type.
-"""
+# reverse type map
+_rmap = {}
+
+def registerTypeMapping(fromType, toType, conv=None):
+  """
+  Registers a forward mapping (called by :func:`map`) from a java/geotools
+  type to a jython/geoscript type.
+  """
+  _fmap[fromType] = TypeMapper(fromType, toType, conv)
+
+def registerTypeUnmapping(fromType, toType, conv=None):
+  """
+  Registers a reverse mapping (called by :func:`unmap`) from a jython/geoscript
+  type to a java/geotools type.
+  """
+  _rmap[fromType] = TypeMapper(fromType, toType, conv)
+
+# register some core type mappers
+registerTypeMapping(java.lang.Integer, int)
+registerTypeMapping(java.lang.Short, int)
+registerTypeMapping(java.lang.Byte, int)
+registerTypeUnmapping(int, java.lang.Integer)
+
+registerTypeMapping(java.lang.Long, long)
+registerTypeUnmapping(long, java.lang.Long)
+
+registerTypeMapping(java.lang.String, str)
+registerTypeUnmapping(str, java.lang.String)
+registerTypeUnmapping(unicode, java.lang.String)
+
+registerTypeMapping(java.lang.Double, float)
+registerTypeMapping(java.lang.Float, float)
+registerTypeUnmapping(float, java.lang.Double)
+
 def map(o):
+  """
+  Maps a java/geotools type to its associated jython/geoscript type.
+  """
+  return _doMap(o, _fmap)
+
+def unmap(o):
+  """
+  Reverse maps a jython/geoscript type to its associated java/geotools type.
+  """
+  return _doMap(o, _rmap)
+
+def _doMap(o, maps):
   if isinstance(o,type):
     t = o 
   else:
     t = type(o)
 
-  if _tmap.has_key(t):
-    mapped = _tmap[t]
-    if isinstance(o,type):
-      return mapped
-    else:
-      return mapped(o)
+  if maps.has_key(t):
+    return maps[t].map(o)
+
+  # could not find direct match, look for subclasses
+  matches = [x for x in maps.keys() if issubclass(t,x)]
+  if len(matches) == 1:
+    # single match, go with it
+    return maps[matches[0]].map(o)
 
   return o
+
 

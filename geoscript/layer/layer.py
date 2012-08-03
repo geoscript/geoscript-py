@@ -5,12 +5,12 @@ import sys, math
 from java import io
 from java import net
 from cursor import Cursor
-from geoscript import geom, proj, feature
+from geoscript import core, geom, proj, feature
 from geoscript.filter import Filter
 from geoscript.util.data import readFeatures
-from org.geotools.data import DefaultQuery, Query, Transaction
+from org.geotools.data import FeatureSource, DefaultQuery, Query, Transaction
 from org.geotools.factory import CommonFactoryFinder
-from org.geotools.feature import FeatureCollections
+from org.geotools.feature import FeatureCollection, FeatureCollections
 from org.opengis.filter.sort import SortOrder
 
 _filterFactory = CommonFactoryFinder.getFilterFactory(None)
@@ -361,7 +361,7 @@ class Layer(object):
     >>> l2.proj.id
     'EPSG:26912'
 
-    >>> [f.geom.round(0) for f in l2.features()]
+    >>> [f.geom.round() for f in l2.features()]
     [POINT (500000 5060716)]
     """
 
@@ -561,3 +561,6 @@ class Layer(object):
   def _newname():
     Layer._id  += 1
     return 'layer_%d' % Layer._id
+
+core.registerTypeMapping(FeatureSource, Layer, lambda x: Layer(fs=x))
+core.registerTypeUnmapping(Layer, FeatureSource, lambda x: x._source)

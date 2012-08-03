@@ -1,5 +1,6 @@
 from com.vividsolutions.jts.geom import Coordinate
 from com.vividsolutions.jts.geom import Point as _Point
+from geoscript import core
 import geom
 
 class Point(_Point):
@@ -34,3 +35,4 @@ class Point(_Point):
     return Point(*map(lambda x: round(x, ndigits), coords))
 
 geom._enhance(Point)
+core.registerTypeMapping(_Point, Point)

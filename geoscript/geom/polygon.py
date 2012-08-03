@@ -1,4 +1,5 @@
 from com.vividsolutions.jts.geom import Polygon as _Polygon
+from geoscript import core
 from linearring import LinearRing
 import geom
 
@@ -29,3 +30,4 @@ class Polygon(_Polygon):
       _Polygon.__init__(self, lr[0], lr[1:], geom._factory)
 
 geom._enhance(Polygon)
+core.registerTypeMapping(_Polygon, Polygon)
