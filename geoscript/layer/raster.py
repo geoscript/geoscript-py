@@ -1,6 +1,6 @@
 import os, sys
 from jarray import array
-from geoscript import util
+from geoscript import core, util
 from geoscript.proj import Projection
 from geoscript.geom import Bounds
 from geoscript.feature import Feature
@@ -9,7 +9,8 @@ from org.opengis.parameter import GeneralParameterValue
 from org.geotools.factory import Hints
 from org.geotools.parameter import Parameter
 from org.geotools.coverage import CoverageFactoryFinder
-from org.geotools.coverage.grid import GridGeometry2D, GridEnvelope2D
+from org.geotools.coverage.grid import GridCoverage2D, GridGeometry2D
+from org.geotools.coverage.grid import GridEnvelope2D
 from org.geotools.coverage.grid.io import AbstractGridFormat
 from org.geotools.coverage.processing import CoverageProcessor
 from org.geotools.process.raster.gs import ScaleCoverage, CropCoverage
@@ -224,3 +225,6 @@ class Raster(object):
       p.parameter(k).setValue(v)
 
     return op.doOperation(p, None)
+
+core.registerTypeMapping(GridCoverage2D, Raster, lambda x: Raster(coverage=x))
+core.registerTypeUnmapping(Raster, GridCoverage2D, lambda x: x._coverage)
