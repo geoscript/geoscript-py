@@ -1,7 +1,19 @@
+from org.geotools.util import NumberRange
+from org.geotools.coverage import Category, GridSampleDimension
+
 class Band(object):
 
-  def __init__(self, dim):
-    self._dim = dim
+  def __init__(self, name=None, min=0, max=255, dim=None):
+    if dim:
+      self._dim = dim
+    else:
+      cat = Category(name, None, NumberRange.create(min, max))
+      self._dim = GridSampleDimension(name, [cat], None)
+
+  def getname(self):
+    return self._dim.getDescription().toString()
+  
+  name = property(getname, None)
 
   def getmin(self):
     return self._dim.getMinimumValue()
