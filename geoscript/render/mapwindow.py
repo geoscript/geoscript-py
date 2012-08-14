@@ -2,6 +2,7 @@ from java import awt
 from java.awt import image
 from javax import swing
 from geoscript import geom, proj, style 
+from geoscript.layer import Layer
 from org.geotools.geometry.jts import ReferencedEnvelope
 from org.geotools.map import DefaultMapContext, DefaultMapLayer
 from org.geotools.renderer.lite import StreamingRenderer
@@ -27,7 +28,9 @@ class MapWindow:
       styles = map.styles
 
       for i in range(len(layers)):
-        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
+        l = layers[i] 
+        obj = l._source if isinstance(l, Layer) else l._reader 
+        self.map.addLayer(DefaultMapLayer(obj, styles[i]._style()))
 
       w,h = (size[0], size[1]) 
 
