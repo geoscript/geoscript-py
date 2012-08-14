@@ -18,6 +18,9 @@ class Point(_Point):
     if len(coord) == 1 and isinstance(coord[0], _Point):
       p = coord[0]
     else:
+      if len(coord) == 1:
+        coord = coord[0]
+
       c = Coordinate(coord[0], coord[1])
       if len(coord) > 2:
         c.z = coord[2]
