@@ -148,6 +148,25 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <finalName>${artifactId}-java-${version}</finalName>
+              <outputDirectory>jars</outputDirectory>
+              <excludes>
+                <exclude>geoscript/**/*</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <configuration>
           <outputDirectory>${basedir}/jars</outputDirectory>
