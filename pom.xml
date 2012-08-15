@@ -5,6 +5,7 @@
   <artifactId>geoscript-py</artifactId>
   <packaging>jar</packaging>
   <version>1.2-SNAPSHOT</version>
+  <name>GeoScript Python</name>
 
   <repositories>
    <repository>
@@ -16,6 +17,21 @@
     </snapshots>
    </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>opengeo</id>
+      <name>OpenGeo Maven Repository</name>
+      <url>dav:http://repo.opengeo.org</url>
+      <uniqueVersion>false</uniqueVersion>
+    </repository>
+    <snapshotRepository>
+      <id>opengeo</id>
+      <name>OpenGeo Maven Repository</name>
+      <url>dav:http://repo.opengeo.org</url>
+      <uniqueVersion>false</uniqueVersion>
+    </snapshotRepository>
+   </distributionManagement>
 
   <dependencies>
     <dependency>
@@ -57,6 +73,12 @@
       <groupId>org.geotools.jdbc</groupId>
       <artifactId>gt-jdbc-spatialite</artifactId>
       <version>${gt.version}</version>
+      <!--exclusions>
+        <exclusion>
+          <groupId>org.xerial</groupId>
+          <artifactId>sqlite-jdbc-spatialite</artifactId>
+        </exclusion>
+      </exclusions-->
     </dependency>
     <dependency>
       <groupId>org.geotools.jdbc</groupId>
@@ -147,7 +169,7 @@
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
-      <plugin>
+      <!--plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
@@ -165,7 +187,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin-->
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <configuration>
@@ -208,6 +230,19 @@
             </goals>
           </execution>
           <execution>
+            <id>package</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <jar destfile="jars/${artifactId}-java-${version}.jar"
+                     basedir="target/classes" excludes="geoscript/**/*"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          <execution>
             <id>clean</id>
             <phase>clean</phase>
             <configuration>
@@ -222,6 +257,14 @@
         </executions>
      </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav</artifactId>
+        <version>1.0-beta-2</version>
+      </extension>
+    </extensions>
+
   </build>
 
   <properties>
