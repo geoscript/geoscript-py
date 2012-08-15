@@ -53,13 +53,15 @@ class Process(object):
       p.description = pf.getDescription(n)
 
       params = pf.getParameterInfo(n)
+      p._params = params
       p.inputs = _params(params)
       p.outputs = _params(pf.getResultInfo(n, params))
 
       return p
 
-  def __init__(self, process=None):
+  def __init__(self, process=None, factory=None):
     self._process = process
+    self._factory = factory
 
   def run(self, **args):
     """
@@ -73,27 +75,18 @@ class Process(object):
     >>> l = Layer()
     >>> l.add([geom.Point(-125, 50)])
     >>> r = p.run(features=l, targetCRS=proj.Projection('epsg:3005'))
-    >>> [f.geom.round() for f in r['result']]
+    >>> [f.geom.round() for f in r['result'].features()]
     [POINT (1071693 554290)]
     """
     # map the inputs to java
-    m = {}
-    for k,v in args.iteritems(): 
-      # special case for layer
-      if isinstance(v, Layer):
-        v = v.cursor()
-
-      m[k] = core.unmap(v)
+    m = dict((k, core.unmap(v, self._params[k].type)) 
+      for (k,v) in args.iteritems())
     
     # run the process
     result = self._process.execute(m, None)
 
     # reverse map the outputs back 
-    r = {}
-    for k, v in dict(result).iteritems():
-      r[k] = core.map(v)
-
-    return r
+    return dict((k, core.map(v)) for (k,v) in dict(result).iteritems())
 
 def _params(m):
   d = {}

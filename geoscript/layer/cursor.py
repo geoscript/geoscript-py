@@ -50,6 +50,3 @@ class Cursor(object):
 
   def __iter__(self):
     return self
-
-core.registerTypeMapping(FeatureCollection, Cursor)
-core.registerTypeUnmapping(Cursor, FeatureCollection, lambda x: x._fcol)

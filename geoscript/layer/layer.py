@@ -8,7 +8,9 @@ from cursor import Cursor
 from geoscript import core, geom, proj, feature
 from geoscript.filter import Filter
 from geoscript.util.data import readFeatures
-from org.geotools.data import FeatureSource, DefaultQuery, Query, Transaction
+from org.geoscript.util import CollectionDelegatingFeatureSource
+from org.geotools.data import FeatureSource, FeatureStore
+from org.geotools.data import DefaultQuery, Query, Transaction
 from org.geotools.factory import CommonFactoryFinder
 from org.geotools.feature import FeatureCollection, FeatureCollections
 from org.opengis.filter.sort import SortOrder
@@ -25,14 +27,14 @@ class Layer(object):
   Internal counter for generating layer names
   """
 
-  def __init__(self, name=None, workspace=None, fs=None, schema=None):
+  def __init__(self, name=None, workspace=None, source=None, schema=None):
     if not workspace:
        from geoscript.workspace import Memory
        workspace = Memory()
  
     name = name if name else schema.name if schema else Layer._newname()
        
-    if not fs:
+    if not source:
        layer = None
        try:
          layer = workspace.get(name)
@@ -45,11 +47,13 @@ class Layer(object):
          else:
            layer = workspace.create(name)
 
-       fs = layer._source
+       source = layer._source
+    elif isinstance(source, FeatureCollection):
+      source = CollectionDelegatingFeatureSource(source)
 
     self.workspace = workspace
-    self.schema = schema or feature.Schema(ft=fs.schema) 
-    self._source = fs
+    self.schema = schema or feature.Schema(ft=source.schema) 
+    self._source = source 
 
     # keep a crs local to allow the native crs to be overriden, or to 
     # provide a crs for layers that don't have one specified
@@ -96,6 +100,11 @@ class Layer(object):
   EPSG:4326
   """
   
+  def getreadonly(self):
+    return not isinstance(self._source, FeatureStore)
+
+  readonly = property(getreadonly, None)
+
   def count(self, filter=None):
     """
     The number of features in the layer as an ``int``.
@@ -283,6 +292,8 @@ class Layer(object):
     >>> l.count()
     1
     """
+    if self.readonly:
+      raise Exception('Layer is read-only')
 
     f = Filter(filter) if filter else Filter.FAIL
     self._source.removeFeatures(f._filter)
@@ -309,6 +320,9 @@ class Layer(object):
     >>> l.count()
     2
     """
+    if self.readonly:
+      raise Exception('Layer is read-only')
+
     if isinstance(o, Layer):
       for f in o.features():
         self.add(f)
@@ -545,5 +559,7 @@ class Layer(object):
     Layer._id  += 1
     return 'layer_%d' % Layer._id
 
-core.registerTypeMapping(FeatureSource, Layer, lambda x: Layer(fs=x))
+core.registerTypeMapping(FeatureSource, Layer, lambda x: Layer(source=x))
+core.registerTypeMapping(FeatureCollection, Layer, lambda x: Layer(source=x))
 core.registerTypeUnmapping(Layer, FeatureSource, lambda x: x._source)
+core.registerTypeUnmapping(Layer, FeatureCollection, lambda x: x._source.getFeatures())

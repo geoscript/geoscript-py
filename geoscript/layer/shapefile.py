@@ -21,7 +21,7 @@ class Shapefile(Layer):
     Layer.__init__(self, name, Directory(f.canonicalFile.parent))
 
   def getfile(self):
-    return self.fs.dataStore.info.source.toURL().file
+    return self._source.dataStore.info.source.toURL().file
 
   file = property(getfile, None, None, 'Returns the file path to the Shapefile')
 

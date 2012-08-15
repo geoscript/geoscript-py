@@ -74,7 +74,7 @@ class Workspace:
 
     if name in self.layers():
        fs = self._store.getFeatureSource(name)
-       return Layer(workspace=self, fs=fs)
+       return Layer(workspace=self, source=fs)
   
     raise KeyError('No such layer "%s"' % name)
 
