@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>geoscript</groupId>
-  <artifactId>geoscript</artifactId>
+  <groupId>org.geoscript</groupId>
+  <artifactId>geoscript-py</artifactId>
   <packaging>jar</packaging>
   <version>1.2-SNAPSHOT</version>
 
@@ -111,8 +111,27 @@
   </dependencies>
   
   <build>
+    <sourceDirectory>java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}</directory>
+        <includes>
+          <include>geoscript/**/*.py</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
-     <plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <debug>true</debug>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <configuration>
           <outputDirectory>${basedir}/jars</outputDirectory>
