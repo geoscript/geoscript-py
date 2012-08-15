@@ -28,7 +28,7 @@ class RendererBase:
 
       img = image.BufferedImage(w, h, image.BufferedImage.TYPE_INT_ARGB)
       g = img.getGraphics()
-      g.setColor(awt.Color.white)
+      g.setColor(style.Color(options["bgcolor"]).expr.value if options.has_key("bgcolor") else awt.Color.white)
       g.fillRect(0, 0, w, h)
       
       renderer.paint(g, awt.Rectangle(w,h), bounds)
