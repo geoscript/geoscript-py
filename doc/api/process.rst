@@ -9,4 +9,4 @@ process
       .. autofunction:: Process.lookup
 
       .. autoclass:: Process
-         :members: processes, lookup, inputs, outputs, run
+         :members: list, lookup, inputs, outputs, run

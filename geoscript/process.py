@@ -19,7 +19,7 @@ class Process(object):
   """
 
   @staticmethod
-  def processes():
+  def list():
     """
     Static method that returns a generator over the list of known process names.
     Each element is returned as a tuple of (prefix, localName).
