@@ -9,10 +9,16 @@ class Process():
         s+=str(self.outputs) + "\n"
         return s;
     
-    def run(self, **args):
-        """
-        Executes the process with set of named inputs. The input argument names are
-        specified by the :attr:`inputs` property. The output arguments names are 
-        specified by the :attr:`outputs` property.
-        """
-        pass 
+    def run(self, **args):            
+        for inp in self.inputs:
+            if inp.name in args.keys():
+                if not inp.setValue(args[input.name]):
+                    print "Error in parameter " + inp.name
+                    return 
+            else:
+                if not inp.setValue(None):
+                    print "Error in parameter " + inp.name
+                    return 
+        self._run()    
+            
+    

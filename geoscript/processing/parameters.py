@@ -1,3 +1,5 @@
+#TODO: implement more types of accepted value formats, as stated in the documentation
+
 class Parameter:
     '''
     Base class for all input parameters that a process might take. Subclasses of this class are
@@ -12,7 +14,7 @@ class Parameter:
         self.isAdvanced = False
 
         #a hidden parameter can be used to set a hard-coded value.
-        #It can be used as any other parameter, but it will not be shown to the user
+        #It can be used as any other parameter, but it should not be shown to the user
         self.hidden = False
 
 
@@ -48,7 +50,7 @@ class ParameterBoolean(Parameter):
 
     def deserialize(self, s):
         tokens = s.split("|")
-        return ParameterBoolean (tokens[0], tokens[1], tokens[2] == str(True))
+        return ParameterBoolean (tokens[0], tokens[1], tokens[2] == str(True))    
 
 class ParameterCrs(Parameter):
 
@@ -243,6 +245,24 @@ class ParameterNumber(Parameter):
         except:
             val = float(tokens[4])
         return ParameterNumber(tokens[0], tokens[1], tokens[2], tokens[3], val)
+
+class ParameterObject(Parameter):
+    '''
+    This is a wildcard class to be used for unusual parameter that do not fit
+    into any of the other classes.
+    ''' 
+    def __init__(self, name="", description=""):
+        Parameter.__init__(self, name, description)        
+        self.value = None        
+
+    def setValue(self, obj):        
+        self.value = obj
+        return True
+    
+    def deserialize(self, s):
+        tokens = s.split("|")
+        return ParameterString(tokens[0], tokens[1])
+
 
 class ParameterRaster(Parameter):
 

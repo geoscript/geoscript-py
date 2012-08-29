@@ -153,6 +153,9 @@ class Raster(object):
   blocksize = property(getblocksize, None)
 
   def getpixelsize(self):
+    '''
+    returns a (x_pixelsize, y_pixelsize) tuple
+    '''
     b = self.extent
     s = self.size
     return (b.width / s[0], b.height / s[1])
@@ -175,7 +178,7 @@ class Raster(object):
     '''
       
     try:
-      #this should be done in geotools, but it throws exception instead (might not very efficient)
+      #this should be done in geotools, but it throws an exception instead (might not very efficient)
       if self.isinwindow(x, y): 
         tile = self._image.getTile(self._image.XToTileX(x), self._image.YToTileY(y));
         return tile.getSampleDouble(x, y, band)

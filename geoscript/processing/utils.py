@@ -1,5 +1,5 @@
 ''' the :mod:`utils` module contains methods to easily convert between several ways 
-of representing a given type of output. These methods should be used by processes to provide
+of representing a given type of input. These methods should be used by processes to provide
 a transparent access to them , so users can call their run() method transparently without
 having to worry about the format of the input object to use.
 
@@ -13,6 +13,15 @@ def asvectorlayer(obj):
     pass
 
 def asrasterlayer(obj):
+    pass
+
+def asnumber(obj):
+    pass
+
+def asboolean(obj):
+    pass
+
+def asstring(obj):
     pass
 
 def asfile(obj):
