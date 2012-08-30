@@ -15,6 +15,7 @@ from org.geotools.coverage.grid import GridEnvelope2D, GridCoordinates2D
 from org.geotools.coverage.processing import CoverageProcessor
 from org.geotools.process.raster.gs import ScaleCoverage, CropCoverage
 from org.geotools.process.raster.gs import RasterAsPointCollectionProcess
+from org.geotools.coverage.grid.io import GridFormatFinder
 
 class Raster(object):
     
@@ -67,9 +68,9 @@ class Raster(object):
     else:
       coverage = factory.create('raster', data, bounds)
     
-    return Raster(None, coverage=coverage)
+    return Raster(coverage=coverage)
   
-  def __init__(self, format, file=None, proj=None, coverage=None, reader=None):
+  def __init__(self, format=None, file=None, proj=None, coverage=None, reader=None):
     self.file = file
     self._format = format
     self._coverage = coverage
@@ -81,7 +82,8 @@ class Raster(object):
         if proj:
           proj = Projection(proj)
           hints.put(Hints.DEFAULT_COORDINATE_REFERENCE_SYSTEM, proj._crs) 
-
+        if format is None:
+            self._format = format = GridFormatFinder.findFormat(util.toFile(file))
         self._reader = format.getReader(util.toFile(file), hints)
       self._coverage = self._reader.read(None)
 

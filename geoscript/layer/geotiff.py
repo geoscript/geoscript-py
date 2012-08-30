@@ -1,5 +1,7 @@
 from geoscript.layer.raster import Raster
-from org.geotools.gce.geotiff import GeoTiffFormat
+from org.geotools.gce.geotiff import GeoTiffFormat, GeoTiffWriter
+from geoscript.processing import utils
+from geoscript import util
 
 class GeoTIFF(Raster):
 
@@ -22,3 +24,10 @@ class GeoTIFF(Raster):
     dump = IIOMetadataDumper(md.rootNode).getMetadata().split('\n')
     for s in dump:
       print s
+      
+  @staticmethod
+  def save(raster, filename):
+    writer = GeoTiffWriter(util.toFile(file));         
+    writer.write(raster._coverage.geophysics(True), None)
+    writer.dispose()
+

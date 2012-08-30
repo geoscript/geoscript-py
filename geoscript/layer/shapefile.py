@@ -25,3 +25,6 @@ class Shapefile(Layer):
 
   file = property(getfile, None, None, 'Returns the file path to the Shapefile')
 
+  @staticmethod
+  def save(Layer, filename):
+      pass
