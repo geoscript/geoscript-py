@@ -33,5 +33,5 @@ if __name__ == '__main__':
     # print t2-t1
     #===========================================================================
     
-    processes()
-    processhelp('gs:Bounds')
+    
+   processes()    

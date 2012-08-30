@@ -1,4 +1,8 @@
 #TODO: implement more types of accepted value formats, as stated in the documentation
+from geoscript.geom.bounds import Bounds
+from geoscript.layer.raster import Raster
+from geoscript.processing import utils
+from geoscript.layer.geotiff import GeoTIFF
 
 class Parameter:
     '''
@@ -25,6 +29,9 @@ class Parameter:
         return True
 
     def __str__(self):
+        return self.name + " <" + self.__class__.__name__ +">"
+    
+    def description(self):
         return self.name + " <" + self.__class__.__name__ +">"
 
     def serialize(self):
@@ -77,28 +84,43 @@ class ParameterCrs(Parameter):
 
 class ParameterExtent(Parameter):
 
-    def __init__(self, name="", description="", default="0,1,0,1"):
+    def __init__(self, name="", description="", default=Bounds(0,0,1,1)):
         Parameter.__init__(self, name, description)
         self.default = default
-        self.value = None #The value is a string in the form "xmin, xmax, ymin, ymax"
+        self.value = None #The value is a Bounds object
 
-    def setValue(self, text):
-        ##TODO: adapt it so it accepts other forms of input, like a list or a Bounds object
-        if text is None:
+    def setValue(self, obj):        
+        if obj is None:
             self.value = self.default
             return True
-        tokens = text.split(",")
-        if len(tokens)!= 4:
+        if isinstance(obj, Bounds):
+            self.value = obj
+        elif isinstance(obj, list):
+            if len(obj != 4):
+                return False
+            try:
+                self.value = Bounds(float(obj[0]), float(obj[2]),
+                                    float(obj[1]), float(obj[3]))                
+                return True
+            except:
+                return False
+        
+        elif isinstance(obj, str):
+            tokens = obj.split(",")
+            if len(tokens)!= 4:
+                return False
+            try:
+                self.value = Bounds(float(tokens[0]), float(tokens[2]),
+                                    float(tokens[1]), float(tokens[3]))                
+                return True
+            except:
+                return False
+        else:
             return False
-        try:
-            float(tokens[0])
-            float(tokens[1])
-            float(tokens[2])
-            float(tokens[3])
-            self.value=text
-            return True
-        except:
-            return False
+        
+    def aslist(self):
+        return [self.value.getwest(), self.value.getsouth(), self.value.geteast(), self.value.getnorth()]
+        
 
     def serialize(self):
         return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
@@ -251,9 +273,10 @@ class ParameterObject(Parameter):
     This is a wildcard class to be used for unusual parameter that do not fit
     into any of the other classes.
     ''' 
-    def __init__(self, name="", description=""):
+    def __init__(self, name="", description="", objecttype = None):
         Parameter.__init__(self, name, description)        
         self.value = None        
+        self.objecttype = objecttype
 
     def setValue(self, obj):        
         self.value = obj
@@ -262,6 +285,9 @@ class ParameterObject(Parameter):
     def deserialize(self, s):
         tokens = s.split("|")
         return ParameterString(tokens[0], tokens[1])
+    
+    def __str__(self):
+        return self.name + " <" + self.__class__.__name__ +":" + str(self.objecttype) + ">"
 
 
 class ParameterRaster(Parameter):
@@ -269,9 +295,10 @@ class ParameterRaster(Parameter):
     def __init__(self, name="", description="", optional=False):
         Parameter.__init__(self, name, description)
         self.optional = optional
-        self.value = None
+        # the object value can be expressed as several type. Using the asXXX method is the recommended way
+        #of getting it as a given data type
+        self.value = None         
         self.exported = None
-
 
     def setValue(self, obj):
         #TODO: check that obj is a valid object    
@@ -280,7 +307,7 @@ class ParameterRaster(Parameter):
                 self.value = None
                 return True
             else:
-                return False
+                return False                        
         self.value = obj
         return True
     
@@ -291,24 +318,50 @@ class ParameterRaster(Parameter):
     def deserialize(self, s):
         tokens = s.split("|")
         return ParameterRaster(tokens[0], tokens[1], str(True) == tokens[2])
+    
+    def asrasterlayer(self):
+        if isinstance(self.value, Raster):
+            return self.value
+        elif isinstance(self.value, str):            
+            return Raster(file=self.value)
+    
+    
+    def asfile(self):
+        if isinstance(self.value, str):
+            return self.value
+        elif isinstance(self.value, Raster):
+            if self.value.file is not None:
+                return self.value.file
+            else:
+                if self.exported:
+                    return self.exported
+                else:
+                    self.exported = utils.gettempfilename('tif')
+                    GeoTIFF.save(self.value, self.exported)
+
 
 class ParameterSelection(Parameter):
 
     def __init__(self, name="", description="", options=[], default = 0):
         Parameter.__init__(self, name, description)
         self.options = options
-        self.value = None ## values is the zero-based index of the selected option
+        self.value = None ## value is the zero-based index of the selected option
         self.default = default
 
-    def setValue(self, n):
-        if n is None:
+    def setValue(self, obj):
+        if obj is None:
             self.value = self.default
             return True
-        try:
-            n = int(n)
-            self.value = n
+        if isinstance(obj, str):
+            if str in self.options:
+                self.value = self.options.index(obj)
+                return True
+            else:
+                return False
+        elif isinstance(obj, int): 
+            self.value = obj
             return True
-        except:
+        else:
             return False
 
     def deserialize(self, s):
@@ -321,6 +374,15 @@ class ParameterSelection(Parameter):
     def serialize(self):
         return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
                         "|" + ";".join(self.options)
+                                                
+    def __str__(self):
+        s = self.name + " <" + self.__class__.__name__ +">\n"
+        s += len(self.name) * " " + "Options:\n"
+        i = 0
+        for opt in self.options:
+            s += " " * (len(self.name) + len("Options:")) + str(i) + ": " + str(opt) + "\n"
+            i += 1 
+        return s
                                                 
 class ParameterString(Parameter):
 
@@ -402,7 +464,7 @@ class ParameterTableField(Parameter):
             return ParameterTableField(tokens[0], tokens[1], tokens[2])
 
     def __str__(self):
-        return self.name + " <" + self.__class__.__name__ +" from " + self.parent     + ">"
+        return self.name + " <" + self.__class__.__name__ +" from " + self.parent  + ">"
 
 
 class ParameterVector(Parameter):
@@ -438,6 +500,12 @@ class ParameterVector(Parameter):
         tokens = s.split("|")
         return ParameterVector(tokens[0], tokens[1], int(tokens[2]), str(True) == tokens[3])
 
+    def asrasterlayer(self):
+        pass
+    
+    def asfile(self):
+        pass
+    
 def getparameterfromstring(s):
         classes = [ParameterBoolean, ParameterMultipleInput,ParameterNumber,
                    ParameterRaster, ParameterString, ParameterVector, ParameterTableField,

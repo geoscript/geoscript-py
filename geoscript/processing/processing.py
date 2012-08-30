@@ -30,8 +30,7 @@ def processes(text=None):
                         if len (s) > 80:
                             print s
                             s = " " * 40
-                    print s                                     
-
+                    print s                                                                  
 
 def processhelp(name):
     '''
