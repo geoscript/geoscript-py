@@ -45,8 +45,9 @@ setup(cmdclass={'src': SrcCmd, 'doc': DocCmd},
       author='Justin Deoliveira',
       author_email='jdeolive@opengeo.org',
       url='http://geoscript.org',
-      packages=find_packages(),
-      data_files=[('jars', jars)],
+      packages=find_packages(),      
+      data_files=[('jars', jars) ,('data',['data/saga_descriptions.txt'])],
       scripts=['bin/geoscript-classpath', 'bin/geoscript', 'bin/geoscript.bat']
      )
 
+	
