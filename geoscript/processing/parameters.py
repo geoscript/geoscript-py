@@ -3,6 +3,8 @@ from geoscript.geom.bounds import Bounds
 from geoscript.layer.raster import Raster
 from geoscript.processing import utils
 from geoscript.layer.geotiff import GeoTIFF
+from geoscript.layer.layer import Layer
+from geoscript.layer.shapefile import Shapefile
 
 class Parameter:
     '''
@@ -11,7 +13,7 @@ class Parameter:
     '''
 
     def __init__(self, name="", description=""):
-        self.name = name
+        self.name = name.lower()
         self.description = description
         self.value = None
 
@@ -26,6 +28,9 @@ class Parameter:
         '''sets the value of the parameter.
         Returns true if the value passed is correct for the type of parameter'''
         self.value = str(obj)
+        return True
+    
+    def isDefaultValueOK(self):
         return True
 
     def __str__(self):
@@ -185,6 +190,8 @@ class ParameterMultipleInput(Parameter):
         self.value = None        
 
     def setValue(self, obj):
+        if not isinstance(obj, list):
+            return False
         self.exported = None
         if obj == None:
             if self.optional:
@@ -204,6 +211,28 @@ class ParameterMultipleInput(Parameter):
         else:            
             return False
 
+    def isDefaultValueOK(self):
+        return not self.optional
+
+    def aslayers(self):
+        pass
+    
+    def asfiles(self):
+        ### TODO: fix this. We are assumming multiple rasters!!!!!!!!!!
+        if self.exported is not None:
+            return self.exported
+        self.exported = []
+        for layer in self.value:
+            if isinstance(layer, str):
+                self.exported.append(layer)
+            else:
+                if (hasattr(layer.file)) and layer.file is not None:
+                    self.exported.append(layer.file)
+                else:
+                    filename = utils.gettempfilename('tif')
+                    GeoTIFF.save(self.value, filename)
+                    self.exported.append(filename)
+        return self.exported
 
     def serialize(self):
         return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
@@ -311,6 +340,10 @@ class ParameterRaster(Parameter):
         self.value = obj
         return True
     
+    
+    def isDefaultValueOK(self):
+        return not self.optional
+    
     def serialize(self):
         return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
                         "|" + str(self.optional)
@@ -319,7 +352,7 @@ class ParameterRaster(Parameter):
         tokens = s.split("|")
         return ParameterRaster(tokens[0], tokens[1], str(True) == tokens[2])
     
-    def asrasterlayer(self):
+    def aslayer(self):
         if isinstance(self.value, Raster):
             return self.value
         elif isinstance(self.value, str):            
@@ -333,12 +366,18 @@ class ParameterRaster(Parameter):
             if self.value.file is not None:
                 return self.value.file
             else:
-                if self.exported:
+                if self.exported is not None:
                     return self.exported
                 else:
                     self.exported = utils.gettempfilename('tif')
                     GeoTIFF.save(self.value, self.exported)
+                    return self.exported
 
+    def __str__(self):
+        if self.optional:
+            return self.name + " (optional) <" + self.__class__.__name__ +">"
+        else:
+            return self.name + " <" + self.__class__.__name__ +">"
 
 class ParameterSelection(Parameter):
 
@@ -413,6 +452,7 @@ class ParameterTable(Parameter):
         Parameter.__init__(self, name, description)
         self.optional = optional
         self.value = None
+        self.exported = None
 
     def setValue(self, obj):
         #TODO: check that obj is a valid object    
@@ -425,6 +465,9 @@ class ParameterTable(Parameter):
         self.value = obj
         return True
 
+    def isDefaultValueOK(self):
+        return not self.optional
+    
     def serialize(self):
         return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
                         "|" + str(self.optional)
@@ -432,6 +475,27 @@ class ParameterTable(Parameter):
     def deserialize(self, s):
         tokens = s.split("|")
         return ParameterTable(tokens[0], tokens[1], str(True) == tokens[2])
+    
+    def aslayer(self):
+        if isinstance(self.value, Layer):
+            return self.value
+        elif isinstance(self.value, str):            
+            return Shapefile(self.value)
+    
+    
+    def asfile(self):
+        if isinstance(self.value, str):
+            return self.value
+        elif isinstance(self.value, Layer):
+            if self.value.file is not None:
+                return self.value.file
+            else:
+                if self.exported is not None:
+                    return self.exported
+                else:
+                    self.exported = utils.gettempfilename('shp')
+                    Shapefile.save(self.value, self.exported)
+                    return self.exported
 
 class ParameterTableField(Parameter):
 
@@ -445,6 +509,9 @@ class ParameterTableField(Parameter):
         self.value = None
         self.datatype = datatype
 
+    def isDefaultValueOK(self):
+        return False
+    
     def setValue(self, obj):
         if obj is None:            
             return False
@@ -481,6 +548,9 @@ class ParameterVector(Parameter):
         self.value = None
         self.exported = None
 
+    def isDefaultValueOK(self):
+        return not self.optional
+    
     def setValue(self, obj):
         #TODO: check that obj is a valid object    
         if obj == None:
@@ -500,12 +570,19 @@ class ParameterVector(Parameter):
         tokens = s.split("|")
         return ParameterVector(tokens[0], tokens[1], int(tokens[2]), str(True) == tokens[3])
 
-    def asrasterlayer(self):
+    def aslayer(self):
+        #TODO:write this
         pass
     
     def asfile(self):
         pass
     
+    def __str__(self):
+        if self.optional:
+            return self.name + " (optional) <" + self.__class__.__name__ +">"
+        else:
+            return self.name + " <" + self.__class__.__name__ +">"
+
 def getparameterfromstring(s):
         classes = [ParameterBoolean, ParameterMultipleInput,ParameterNumber,
                    ParameterRaster, ParameterString, ParameterVector, ParameterTableField,
@@ -514,3 +591,4 @@ def getparameterfromstring(s):
         for clazz in classes:
             if s.startswith(clazz().__class__.__name__):
                 return clazz().deserialize(s[len(clazz().__class__.__name__)+1:])
+        

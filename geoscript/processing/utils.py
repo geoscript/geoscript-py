@@ -1,12 +1,10 @@
 import os
-import time
-import sys
+import java
+import tempfile
 
 def isWindows():
-    return os.name =="nt"
-
-def isMac():
-    return sys.platform == "darwin"
+    name = java.lang.System.getProperty( "os.name" )
+    return "windows" in name.lower()
 
 def userFolder():
     userfolder = os.path.expanduser("~") + os.sep + "geoscript"
@@ -35,6 +33,6 @@ NUM_LAYERS_SAVED = 1
 
 def gettempfilename(ext):
     path = tempfolder()
-    filename = path + os.sep + str(time.time()) + str(NUM_LAYERS_SAVED) + "." + ext
-    NUM_LAYERS_SAVED += 1
+    suffix = "." + ext
+    filename = tempfile.NamedTemporaryFile(suffix=suffix, dir=path).name
     return filename

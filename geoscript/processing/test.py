@@ -4,8 +4,8 @@ Created on 25/08/2012
 @author: volaya
 '''
 import time
-from  geoscript.processing import processes 
-from geoscript.processing import processhelp
+from  geoscript.processing import processes, getprocess
+
 
 
 if __name__ == '__main__':
@@ -34,4 +34,5 @@ if __name__ == '__main__':
     #===========================================================================
     
     
-   processes()    
+   p = getprocess('saga:slopeaspectcurvature')
+   p.run (elevation = 'd:\gisdata\dempart1.tif')    

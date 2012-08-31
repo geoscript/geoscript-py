@@ -25,8 +25,8 @@ def sagaBatchJobFilename():
 
     return batchfile
 
-def sagaDescriptionPath():
-    return os.path.join(os.path.dirname(__file__),"saga_descriptions")
+def sagaDescriptionsFile():
+    return os.path.join(os.path.dirname(__file__), "..", "..", "data", "saga_descriptions.txt")
 
 def createSagaBatchJobFileFromSagaCommands(commands):
 
@@ -39,7 +39,7 @@ def createSagaBatchJobFileFromSagaCommands(commands):
     fout.close()
 
 
-def executeSaga(progress):
+def executeSaga():
     if isWindows():
         command = ["cmd.exe", "/C ", sagaBatchJobFilename()]
     else:
@@ -49,16 +49,6 @@ def executeSaga(progress):
     loglines.append("SAGA execution console output")
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,stderr=subprocess.STDOUT, universal_newlines=True).stdout
     for line in iter(proc.readline, ""):
-        #=======================================================================
-        # if "%" in line:
-        #    s = "".join([x for x in line if x.isdigit()])
-        #    progress.setPercentage(int(s))
-        # else:
-        #    line = line.strip()
-        #    if line!="/" and line!="-" and line !="\\" and line!="|":
-        #        loglines.append(line)
-        #        progress.setConsoleInfo(line)
-        #=======================================================================
         pass
     
 
@@ -68,19 +58,18 @@ class SagaProvider(ProcessProvider):
         ProcessProvider.__init__(self)        
         
     def loadprocesses(self):
-        self._processes = []
-        folder = sagaDescriptionPath()
-        print folder
-        for descriptionFile in os.listdir(folder):
-            if descriptionFile.endswith("txt"):
-                try:
-                    alg = SagaProcess(os.path.join(folder, descriptionFile))
-                    if alg.name.strip() != "":
-                        self._processes.append(alg)                    
-                except Exception,e:
-                    print e#do nothing by now if an algorithm cannot be loaded
-                    pass
-
+        file = sagaDescriptionsFile()
+        lines = open(file)   
+        s = ""     
+        for line in lines:            
+            if not line.startswith("----"):
+                s += line
+            else:                
+                alg = SagaProcess(s)
+                if alg.name.strip() != "":
+                    self._processes.append(alg)                    
+                s = ""
+    
     def name(self):
         return "SAGA"
 
@@ -91,35 +80,25 @@ class SagaProcess(Process):
 
     OUTPUT_EXTENT = "outputextent"
 
-    def __init__(self, descriptionfile):        
-        Process.__init__(self)
-        self.descriptionFile = descriptionfile
-        self.defineCharacteristicsFromFile()        
-
-    def getCopy(self):
-        newone = SagaProcess(self.descriptionFile)
-        newone.provider = self.provider
-        return newone
+    def __init__(self, text):        
+        Process.__init__(self)        
+        self.defineCharacteristicsFromText(text)        
     
-    def defineCharacteristicsFromFile(self):
+    
+    def defineCharacteristicsFromText(self, text):
         self.inputs = {}
-        self.outputs = {}
-        lines = open(self.descriptionFile)
-        line = lines.readline().strip("\n").strip()
-        self.fullname = line
-        print line
-        self.name = "saga:" + ''.join(c for c in line if c not in ':;,. -_()' )
-        print self.name        
-        self.description = line
-        line = lines.readline().strip("\n").strip()
-        self.undecoratedGroup = line
-        line = lines.readline().strip("\n").strip()        
-        while line != "":
-            line = line.strip("\n").strip()
+        self.outputs = {}    
+        lines = text.split("\n")    
+        line = lines[0].strip("\n").strip()
+        self.fullname = lines[0].strip("\n").strip()      
+        self.name = "saga:" + ''.join(c for c in self.fullname if c not in ':;,. -_()[]' ).lower()        
+        self.description = self.fullname
+        line = lines[1].strip("\n").strip()
+        self.undecoratedGroup = line        
+        for i in range(2,len(lines)):                
+            line = lines[i].strip("\n").strip()
             if line.startswith("Parameter"):
                 param = getparameterfromstring(line)
-                print line
-                print param
                 self.inputs[param.name] = param
             elif line.startswith("DontResample"):
                 pass
@@ -127,22 +106,19 @@ class SagaProcess(Process):
             elif line.startswith("Extent"): #An extent parameter that wraps 4 SAGA numerical parameters
                 self.extentParamNames = line[6:].strip().split(" ")
                 self.addParameter(ParameterExtent(self.OUTPUT_EXTENT, "Output extent", "0,1,0,1"))
+            elif line == "":
+                break
             else:
                 output = getoutputfromstring(line)
-                print line
-                print output
-                self.outputs[output.name] = output                
-            line = lines.readline().strip("\n").strip()
-        lines.close()
+                self.outputs[output.name] = output                                   
 
-
-    def run(self, progress):        
+    def _run(self):        
         commands = list()
         self.exportedLayers = {}
  
         #1: Export rasters to sgrd and vectors to shp
         #   Tables must be in dbf format. We check that.    
-        for param in self.parameters:
+        for param in self.inputs.values():
             if isinstance(param, ParameterRaster):
                 if param.value == None:
                     continue
@@ -162,19 +138,18 @@ class SagaProcess(Process):
             if isinstance(param, ParameterMultipleInput):
                 if param.value == None:
                     continue
-                layers = param.value.split(";")
+                value = param.asfiles() 
+                layers = value.split(";")
                 if layers == None or len(layers) == 0:
                     continue
-                if param.datatype == ParameterMultipleInput.TYPE_RASTER:
-                    for layer in layers:
-                        value = param.asfile()                
+                if param.datatype == ParameterMultipleInput.TYPE_RASTER:                    
+                    for layer in layers:               
                         commands.append(self.exportRasterLayer(value))                        
                 elif param.datatype == ParameterMultipleInput.TYPE_VECTOR_ANY:
-                    for layer in layers:
-                        value = param.asfile()                                    
+                    for layer in layers:                                  
                         if not layer.endswith("shp"):
                             filename = utils.gettempfilename('shp') 
-                            Shapefile.save(param.aslayer(), filename)
+                            Shapefile.save(layer, filename)
                             self.exportedLayers[value]=filename
  
         #2: set parameters and outputs
@@ -183,23 +158,24 @@ class SagaProcess(Process):
         else:
             command = "lib" + self.undecoratedGroup  + " \"" + self.fullname + "\""
  
-        for param in self.parameters:
+        for param in self.inputs.values():
+            paramname = param.name.upper()
             if param.value is None:
                 continue
             if isinstance(param, (ParameterRaster, ParameterVector)):
-                value = param.aslayer()
+                value = param.asfile()
                 if value in self.exportedLayers.keys():
-                    command+=(" -" + param.name + " \"" + self.exportedLayers[value] + "\"")
+                    command+=(" -" + paramname + " \"" + self.exportedLayers[value] + "\"")
                 else:
-                    command+=(" -" + param.name + " " + value)
+                    command+=(" -" + paramname + " " + value)
             elif isinstance(param, ParameterMultipleInput):
                 s = param.value
                 for layer in self.exportedLayers.keys():
                     s = s.replace(layer, self.exportedLayers[layer])
-                command+=(" -" + param.name + " \"" + s + "\"");
+                command+=(" -" + paramname + " \"" + s + "\"");
             elif isinstance(param, ParameterBoolean):
                 if param.value:
-                    command+=(" -" + param.name);
+                    command+=(" -" + paramname);
             elif isinstance(param, ParameterFixedTable):
                 tempTableFile  = gettempfilename("txt")
                 f = open(tempTableFile, "w")
@@ -209,30 +185,31 @@ class SagaProcess(Process):
                     s = values[i] + "\t" + values[i+1] + "\t" + values[i+2] + "\n"
                     f.write(s)
                 f.close()
-                command+=( " -" + param.name + " " + tempTableFile)
+                command+=( " -" + paramname + " " + tempTableFile)
             elif isinstance(param, ParameterExtent):
                 values = param.aslist()
                 for i in range(4):
                     command+=(" -" + self.extentParamNames[i] + " " + str(values[i]));
             elif isinstance(param, (ParameterNumber, ParameterSelection)):
-                command+=(" -" + param.name + " " + str(param.value));
+                command+=(" -" + paramname + " " + str(param.value));
             else:
-                command+=(" -" + param.name + " \"" + str(param.value) + "\"");
+                command+=(" -" + paramname + " \"" + str(param.value) + "\"");
  
-        for out in self.outputs:
-            if isinstance(out, OutputRaster):
+        for out in self.outputs.values():
+            if isinstance(out, OutputRaster): 
+                outname = out.name.upper()               
                 filename = out.value
                 if not filename.endswith(".tif"):
                     filename += ".tif"
                     out.value = filename
                 filename = tempfolder() + os.sep + os.path.basename(filename) + ".sgrd"
-                command+=(" -" + out.name + " \"" + filename + "\"");
+                command+=(" -" + outname + " \"" + filename + "\"");
             if isinstance(out, OutputVector):
                 filename = out.value
                 if not filename.endswith(".shp"):
                     filename += ".shp"
                     out.value = filename
-                command+=(" -" + out.name + " \"" + filename + "\"");
+                command+=(" -" + outname + " \"" + filename + "\"");
             #===================================================================
             # if isinstance(out, OutputTable):
             #    filename = out.value
@@ -245,7 +222,7 @@ class SagaProcess(Process):
         commands.append(command)
  
         #3:Export resulting raster layers
-        for out in self.outputs:
+        for out in self.outputs.values():
             if isinstance(out, OutputRaster):
                 filename = out.value
                 filename2 = tempfolder() + os.sep + os.path.basename(filename) + ".sgrd"
@@ -257,7 +234,7 @@ class SagaProcess(Process):
         #4 Run SAGA
         createSagaBatchJobFileFromSagaCommands(commands)
         
-        executeSaga(progress);
+        executeSaga();
 
     
     def exportRasterLayer(self, layer):
