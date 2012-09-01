@@ -1,7 +1,7 @@
-.. _learning.raster:
+.. _raster:
 
 Working with raster data
-=====================
+=========================
 
 
 Raster data are represented in GeoScript by the :class:`Raster` class. It contains method to access several properties of the layer and perform some common operations on it. It also contains method to access the values in the cells(pixels) of the layer.
@@ -14,7 +14,7 @@ A raster layer can be created from a given raster file (mostly to be used for re
 
 Classes derived from :class:`Raster` can be used to open a particular type of raster layer file. Two of the most common ones are :class:`GeoTIFF` and :class:`WorldImage`.
 
-.::
+::
 
     >>> from geoscript.layer import GeoTIFF, WorldImage
     >>> gtiff = GeoTIFF('dem.tif')
@@ -29,7 +29,7 @@ Classes derived from :class:`Raster` can be used to open a particular type of ra
 To create a raster layer from an array of data values, the static method *create* from :class:`Raster` is used.
 The next example shows how to create a small raster layer with random values.
 
-.::
+::
 
     >>> from geoscript.layer import Raster
     >>> import random
@@ -51,7 +51,7 @@ Notice that we have to pass the number of layers explicitly. Also, the method ne
 Once we have created a layer, there are several methods to get more information about it and work with it. For instance, we can get the extent covered by a raster layer, as a Bounds object, and it size in pixels. The following example shows how this can be used to create another random layer, but this time covering the same extent as a previous one and with the same pixel size. (For the following examples, we assume that `gtiff` is the GeoTIFF layer created in the first example)
 
 
-.::
+::
 
     >>> width, height = gtiff.getsize()
     >>> data = [][]
@@ -61,12 +61,12 @@ Once we have created a layer, there are several methods to get more information 
     >>> Raster.create(data, gtiff.getextent(), nbands = 1)
 
 
-Operations on raster layer data
+Operations on a raster layer 
 --------------------------------
 
-We can query a raster layer in several ways to know the value at any location within it extent. The simplest way of doing it is using the :meth:`getvalueatcoord`method, passing a real world coordinate.
+We can query a raster layer in several ways to know the value at any location within it extent. The simplest way of doing it is using the :meth:`getvalueatcoord` method, passing a real world coordinate.
 
-.::
+::
 
     >>> gtiff.getvalueatcoord(8.5, 4.46)
     1222.7
@@ -74,7 +74,7 @@ We can query a raster layer in several ways to know the value at any location wi
     
 However, if you want to run some analysis on the layer that needs to access a large part of its extent sistematically, it is a better idea to query the layer in a per-cell basis. The :meth:`getvalueatcell` method should be used for that. Its  `x` and `y` parameters represent in this case the column and row of the pixel whose value is to be returned.
 
-.::
+::
 
     >>> gtiff.getvalueatcoord(3, 3)
     655.9    
@@ -82,13 +82,13 @@ However, if you want to run some analysis on the layer that needs to access a la
     
 Querying the layer using a real coordinate is usually slower than using a cell coordinate, since it involves interpolation calculations.
 
-Both method accept a third parameter called *band* indicating the band to be used to query the layer. If it is not used, as in the cases above, the first band (band = 0) is used.
+Both methods accept a third parameter called *band* indicating the band to be used to query the layer. If it is not used, as in the cases above, the first band (band = 0) is used.
 
-Also, both method will return a special value called the *no-data value* if the coordinate falls outside the extent of the layer. Although the passed coordinate is not suitable to be applied to this layer, GeoScript will not throw an exception, but return this value instead. The no-data value is used whenever the query cannot be answered because there is no data on that given cell or point. 
+Also, both methods will return a special value called the *no-data value* if the coordinate falls outside the extent of the layer. Although the passed coordinate is not suitable to be applied to this layer, GeoScript will not throw an exception, but return this value instead. The no-data value is used whenever the query cannot be answered because there is no data on that given cell or point. 
 
 Each layer has its own no-data value (it has to be a value that cannot be used for a "normal" value of the variable represented in the raster layer), and the :meth:`getnodatavalue` method returns that value.
 
-.::
+::
 
     >>> gtiff.getnodatavalue()
     -32768
@@ -111,11 +111,11 @@ With the above methods we can perform a small analysis on our `gtiff` layer with
     XXXXX
 
     
- This code can be improved to be more robust and to handle special values. Although :meth:`getvalueatcell` and :meth:`getvalueatcoord` return the no-value data when queried outside of the layer's bounding box, they might also return it for an interior point, since the no-data value might be used in the layer to indicate that there is no data for a given cell. (some processes migth use it as well to leave out certain cells, or to indicate that the result of the process could not be computed. For instance, a process calculating aspect from a Digital Elevation Model will not be able to calculate the aspect of a flat area, and will assign the no-data value to that location in the output aspect layer). Since no-data values should not be considered for our minimum and maximum calculation, we should handle them separately.
+This code can be improved to be more robust and to handle special values. Although :meth:`getvalueatcell` and :meth:`getvalueatcoord` return the no-value data when queried outside of the layer's bounding box, they might also return it for an interior point, since the no-data value might be used in the layer to indicate that there is no data for a given cell. (some processes migth use it as well to leave out certain cells, or to indicate that the result of the process could not be computed. For instance, a process calculating aspect from a Digital Elevation Model will not be able to calculate the aspect of a flat area, and will assign the no-data value to that location in the output aspect layer). Since no-data values should not be considered for our minimum and maximum calculation, we should handle them separately.
  
- The :meth:`isnodatavalue`º method comes very handy for checking is a value is valid or not. Here is the improved version of the previous algorithm.
+The :meth:`isnodatavalue` method comes very handy for checking whether a value is valid or not. Here is the improved version of the previous algorithm.
 
-.::
+::
 
     >>> width, height = gtiff.getsize()
     >>> min = max = gtiff.getnodatavalue();
@@ -134,4 +134,4 @@ With the above methods we can perform a small analysis on our `gtiff` layer with
     XXXXX
 
  
- Although you can create you own algorithms, if they are going to be applied to large datasets or contain some complex analysis, it is always better to rely on an external algorithm. Since GeoScript can access a large collection of algorithms (meaningn that, whatever you want to do, you will most likely find a process that already does it, or a combination of them that produces the result you are looking for), it is better to use it to create a workflow and let those algorithms do the actual computation. See the `Processing geospatial data with GeoScript`_ section to know more about this powerful feature of GeoScript.
+Although you can create you own algorithms, if they are going to be applied to large datasets or contain some complex analysis, it is always better to rely on an external algorithm. Since GeoScript can access a large collection of algorithms (meaning that, whatever you want to do, you will most likely find a process that already does it, or a combination of them that produces the result you are looking for), it is better to use it to create a workflow and let those algorithms do the actual computation. See the :ref:`Processing geospatial data with GeoScript <processing>` section to know more about this powerful feature of GeoScript.
