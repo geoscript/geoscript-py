@@ -171,6 +171,40 @@ class ParameterFixedTable(Parameter):
                         "|" + str(self.numRows) + "|" + ";".join(self.cols) + "|" +  str(self.fixedNumOfRows)
 
 
+class ParameterGeometry(Parameter):
+
+    def __init__(self, name="", description="", optional = False):
+        Parameter.__init__(self, name, description)
+        self.value = None
+        self.optional = optional
+
+    def setValue(self, value):
+        #TODO: check that obj is a valid object    
+        if value == None:
+            if self.optional:
+                self.value = None
+                return True
+            else:
+                return False                        
+        self.value = value
+        return True
+
+    def serialize(self):
+        return self.__class__.__name__ + "|" + self.name + "|" + self.description +\
+                        "|" + str(self.optional)
+
+    def deserialize(self, s):
+        tokens = s.split("|")
+        return ParameterRaster(tokens[0], tokens[1], str(True) == tokens[2])
+    
+    def isDefaultValueOK(self):
+        return not self.optional
+    
+    def asgeom(self):
+        #TODO: fill this
+        pass
+
+
 class ParameterMultipleInput(Parameter):
     '''A parameter representing several data objects.
     Its value is a list of data sources.'''
@@ -217,21 +251,31 @@ class ParameterMultipleInput(Parameter):
     def aslayers(self):
         pass
     
-    def asfiles(self):
-        ### TODO: fix this. We are assumming multiple rasters!!!!!!!!!!
+    def asfiles(self):        
         if self.exported is not None:
             return self.exported
         self.exported = []
         for layer in self.value:
-            if isinstance(layer, str):
-                self.exported.append(layer)
-            else:
-                if (hasattr(layer.file)) and layer.file is not None:
-                    self.exported.append(layer.file)
+            if self.datatype == self.TYPE_RASTER:
+                if isinstance(layer, str):
+                    self.exported.append(layer)
                 else:
-                    filename = utils.gettempfilename('tif')
-                    GeoTIFF.save(self.value, filename)
-                    self.exported.append(filename)
+                    if (hasattr(layer.file)) and layer.file is not None:
+                        self.exported.append(layer.file)
+                    else:
+                        filename = utils.gettempfilename('tif')
+                        GeoTIFF.save(self.value, filename)
+                        self.exported.append(filename)
+            else:
+                if isinstance(layer, str):
+                    self.exported.append(self.value)
+                elif isinstance(layer, Layer):
+                    if hasattr(layer, 'shapefile'):
+                        self.exported.append(layer.shapefile)
+                    else:                        
+                        filename = utils.gettempfilename('shp')
+                        Shapefile.save(layer, filename)
+                        self.exported.append(filename)
         return self.exported
 
     def serialize(self):
@@ -571,11 +615,25 @@ class ParameterVector(Parameter):
         return ParameterVector(tokens[0], tokens[1], int(tokens[2]), str(True) == tokens[3])
 
     def aslayer(self):
-        #TODO:write this
-        pass
-    
+        if isinstance(self.value, Layer):
+            return self.value
+        elif isinstance(self.value, str):
+            #TODO: do not assume that the file is a shapefile            
+            return Shapefile(file=self.value)
+        
     def asfile(self):
-        pass
+        if isinstance(self.value, str):
+            return self.value
+        elif isinstance(self.value, Layer):
+            if hasattr(self.value, 'shapefile'):
+                return self.value.shapefile
+            else:
+                if self.exported is not None:
+                    return self.exported
+                else:
+                    self.exported = utils.gettempfilename('shp')
+                    Shapefile.save(self.value, self.exported)
+                    return self.exported
     
     def __str__(self):
         if self.optional:

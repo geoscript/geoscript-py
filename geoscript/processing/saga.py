@@ -88,8 +88,7 @@ class SagaProcess(Process):
     def defineCharacteristicsFromText(self, text):
         self.inputs = {}
         self.outputs = {}    
-        lines = text.split("\n")    
-        line = lines[0].strip("\n").strip()
+        lines = text.split("\n")            
         self.fullname = lines[0].strip("\n").strip()      
         self.name = "saga:" + ''.join(c for c in self.fullname if c not in ':;,. -_()[]' ).lower()        
         self.description = self.fullname
