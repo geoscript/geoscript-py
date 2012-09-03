@@ -1,19 +1,19 @@
-.. _Processing geospatial data with GeoScript:
+.. _processing:
 
 Processing geospatial data 
 ===========================
 
-We have already seen how to directly edit and modify both vector and raster data. There are many things that can be done with the methods from the :class:`RasterLayer` and :class:`VectorLayer` classes, ranging from simple calculation to more complex analytical tasks. Although it is easy to create those task due to the simple  nature of GeoScript, in some cases it might not be a good idea to do so, specially in terms of performance. Simplicity comes at a cost, and, like most high level languages, GeoScript sacrifices performances to have a simpler syntax and reduce the number of lines of code you have to write to accomplish a given task.
+We have already seen how to directly edit and modify both vector and raster data. There are many things that can be done with the methods from the :class:`RasterLayer` and :class:`VectorLayer` classes, ranging from simple calculation to more complex analytical tasks. Although it is easy to create those task due to the simple  nature of GeoScript, in some cases it might not be a good idea to do so, specially in terms of performance. Simplicity comes at a cost, and, like most scripting languages, GeoScript sacrifices performances to have a simpler syntax and reduce the number of lines of code you have to write to accomplish a given task.
 
 That means that if your algorithm is complex and time-consuming, it is generally not a good idea (unless you are working with small datasets) to write your geoprocessing ideas in Geoscript, but it does not necessarily means that GeoScript is not meant for geoprocessing. In fact, geoprocessing is one of the strongest parts of GeoScript, but it has a different approach. Instead of being a language only designed to create your own algorithmic ideas from scratch, it is also meant as the 'glue' to connect preexisting algorithms into a custom workflow. Based on an comprehensive and atomized collection of geoprocesses, GeoScript should be used to create more complex calculations that link several of this basic processes into a well-defined workflow.
 
 To understand how this works before we start typing code and having a look at some examples, here are some basic ideas that might help you get an idea about how the processing part of GeoScript has been conceived.
 
-- GeoScript wraps GeoTools. That means that you cannot only use element from GeoTools such as geometries and projections (as it was explained here), but also all the geoprocesses that can be found as part of GeoTools, and which rely on the powerful GeoTools' Processing API
+- GeoScript wraps GeoTools. That means that you cannot only use element from GeoTools such as geometries and projections (as it was explained in other sections), but also all the geoprocesses that can be found as part of GeoTools, and which rely on the powerful GeoTools Processing API
 
 - Just like GeoScript makes it easier to access other elements in GeoTools, it also simplifies its Processing API, so calling geoprocesses gets as easy as it can get.
 
-- GeoScript contains its own processing API, that not just leverages acess to GeoTools algorithms, but also to other ones coming from different applications and libraries. This is completely transparent for the user, who doesn't have to worry about where his data is being processed or even the format that data is in, since GeoScript handles all that transparently.
+- GeoScript contains its own processing API that not just leverages access to GeoTools algorithms, but also to other ones coming from different applications and libraries. This is completely transparent for the user, who doesn't have to worry about where his data is being processed or even the format that data is in, since GeoScript handles all that transparently.
 
 - In short, GeoScript links your data with the processes that you need in the most practical way, so you can concentrate on creating meaningful analyses and taking the most out of the results you get.
 
@@ -26,9 +26,9 @@ A common processing task in GeoScript involves the following steps:
 
 Let's have a look at those tasks separately.
 
-::note
+.. ::note
 
-	The collection of algorithm currently available to be run from GeoScript can also be easily extended using the GeoTools Processing API. Development of new processes for GeoTools and how to incorporate them so they are available to GeoScript is covered in the ``Developing processes in Java``_ section 
+	The collection of algorithm currently available to be run from GeoScript can also be easily extended using the GeoTools Processing API. Development of new processes for GeoTools and how to incorporate them so they are available to GeoScript is covered in the :ref:`Developing processes in Java<developingjava>` section 
 
 
 Finding a process
@@ -36,31 +36,26 @@ Finding a process
 
 The number of processes available from GeoScript is rather large, specially when external applications are configured and used. You can get a simple list with all the available processes, by calling the :meth:`processes` method in the :mod:`processing` module.
 
-::.
+::
 
-    >>> import from geoscript.processing import processes, processhelp
+    >>> from geoscript.processing import *
     >>> processes()
 	gs:Aggregate--------------------------->Computes one or more aggregation functions 
 	                                        on a feature attribute. Functions include 
 	                                        Count, Average, Max, Median, Min, StdDev, 
 	                                        and Sum. 
-	gs:Bounds------------------------------>Computes the bounding box of the input features. 
-	                                        
+	gs:Bounds------------------------------>Computes the bounding box of the input features. 	                                        
 	gs:BufferFeatureCollection------------->Buffers features by a distance value supplied 
 	                                        either as a parameter or by a feature attribute. 
-	                                        Calculates buffers based on Cartesian distances. 
-	                                        
-	gs:Centroid---------------------------->Computes the geometric centroids of features 
-	                                        
-	gs:Clip-------------------------------->Clips (crops) features to a given geometry 
-	                                        
+	                                        Calculates buffers based on Cartesian distances. 	                                       
+	gs:Centroid---------------------------->Computes the geometric centroids of features 	                                        
+	gs:Clip-------------------------------->Clips (crops) features to a given geometry 	                                        
 	gs:CollectGeometries------------------->Collects the deafult geometries of the input 
 	                                        features and combines them into a single 
 	                                        geometry collection 
 	gs:Count------------------------------->Computes the number of features in a feature 
 	                                        collection. 
-	gs:Feature----------------------------->Converts a geometry into a feature collection. 
-	                                        
+	gs:Feature----------------------------->Converts a geometry into a feature collection. 	                                        
 	gs:Grid-------------------------------->Generates a georeferenced regular grid of 
 	                                        cells.  Output contains the attributes: cell 
 	                                        - the cell polygon; id - a unique identifier; 
@@ -73,33 +68,43 @@ The number of processes available from GeoScript is rather large, specially when
 Notice that we have imported from the :mod:`processing` module. All the methods that we are going to use are part of that module, as it is the entry point for geoprocessing in GeoScript.
  
 The left part of each line contains the name of the algorithm, while the right one contains a description of what it does. The left part is used to later called algorithms and identify them, so it is what we will be using for further examples.
- 
- 
-The list is probably larger than what fits in a single screen (we have not included the full list in the above example), and that does not seem to be a very practical way of finding an algorithm. You can, however, easily restrict it to just a small group of processes by passing a string to the :meth:`processes` method. In this case, it will just show you those algorithms that contain that string in their name or description. For instance, let's suppose that you want to calculate a slope layer from a DEM. The process to perform that calculation is likely to have the string 'slope' in its name, you we can use it.
- 
-::.
 
-	>>> processes('slope')
-	XXXXXXX
+It is easy to identify where processes come from, since their names are always in the form ``namespace:processname``. The namespace usually indicates the provider of the algorithm. For instance, all those algorithms starting with ``gs:`` come from the GeoTools provider, which wraps the same GeoTools library that is used for handling spatial data in GeoScript. You will find other namespaces, like ``saga:`` or ``grass:``which correspond to processes provided by SAGA and GRASS, two powerful GIS with advanced geoprocessing capabilities.
  
-Now we have a smaller list of processes and we can select the one that we want to run, in this cased called "*****". 
+The list containing all the available processes is probably larger than what fits in a single screen (we have not included the full list in the above example), and that does not seem to be a very practical way of finding an algorithm. You can, however, easily restrict it to just a small group of processes by passing a string to the :meth:`processes` method.In this case, it will just show you those algorithms that contain that string in their name or description. For instance, let's suppose that you want to calculate a slope layer from a DEM. The process to perform that calculation is likely to have the string 'slope' in its name, you we can use it.
+ 
+::
+
+	>>> processing.processes('slope')
+	saga:downslopedistancegradient--------->Downslope Distance Gradient
+	saga:dtmfilterslopebased--------------->DTM Filter (slope-based)
+	saga:relativeheightsandslopepositions--->Relative Heights and Slope Positions
+	saga:slopeaspectcurvature-------------->Slope, Aspect, Curvature
+	saga:slopelength----------------------->Slope Length
+	saga:upslopearea----------------------->Upslope Area
+	saga:vegetationindexslopebased--------->Vegetation Index[slope based]	
+	 
+Now we have a smaller list of processes and we can select the one that we want to run, in this cased called *saga:slopeaspectcurvature*, which along with the slope calculates some other morphometrical parameters. 
 
 Using the :meth:`getprocess` method you can get an instance of a given process.
 
-::.
+::
 
-	>>> proc = getprocess('XXXXXslope')
+	>>> proc = getprocess('saga:slopeaspectcurvature')
 
   
 Having the instance of the process, you can also run it query it about its requirements, calling the corresponding methods that we will see soon.
 
+.. note::
+
+	Although GeoScript will always list all processes that are available (those that it knows about), external applications must be installed to use those processes that rely on them. See :ref:`Ìnstalling external application <external>` to know more about this.
 
 Preparing data for a process
 -----------------------------
  
 Processes need data to run. The slope process that we want to run also needs data, and we have to know which kind of data we need. The :meth:`processhelp` method prints information about all the inputs that an algorithm needs, and also about the output it produces, so you know which data you have to use and which data you should expect from the algorithm. To describe a particular process, just pass its name to the :meth:`processhelp` method.
 
-::.
+::
 
 	>>> processhelp('saga:slopeaspectcurvature')
 	saga:slopeaspectcurvature
@@ -113,8 +118,7 @@ Processes need data to run. The slope process that we want to run also needs dat
                          3: [3] Fit 2.Degree Polynom (Bauer, Rohdenburg, Bork 1985)                
                          4: [4] Fit 2.Degree Polynom (Heerdegen & Beran 1982)                      
                          5: [5] Fit 2.Degree Polynom (Zevenbergen & Thorne 1987)                   
-                         6: [6] Fit 3.Degree Polynom (Haralick 1983)                               
-                                                                                                   
+                         6: [6] Fit 3.Degree Polynom (Haralick 1983)                                                                                               
            elevation <ParameterRaster>                                                             
            curv <OutputRaster>                                                                     
            aspect <OutputRaster>                                                                   
@@ -124,7 +128,7 @@ Processes need data to run. The slope process that we want to run also needs dat
  
 If you have an instance of the process, just call its :meth:`help` method to get the same result.
 
-::.
+::
 
 	>>> proc.help()
 	saga:slopeaspectcurvature
@@ -138,8 +142,7 @@ If you have an instance of the process, just call its :meth:`help` method to get
                          3: [3] Fit 2.Degree Polynom (Bauer, Rohdenburg, Bork 1985)                
                          4: [4] Fit 2.Degree Polynom (Heerdegen & Beran 1982)                      
                          5: [5] Fit 2.Degree Polynom (Zevenbergen & Thorne 1987)                   
-                         6: [6] Fit 3.Degree Polynom (Haralick 1983)                               
-                                                                                                   
+                         6: [6] Fit 3.Degree Polynom (Haralick 1983)                                                                                              
            elevation <ParameterRaster>                                                             
            curv <OutputRaster>                                                                     
            aspect <OutputRaster>                                                                   
@@ -152,40 +155,53 @@ The information printed by GeoScript tells us the kind of data the algorithm nee
 
 When a certain parameter is presented along with the name of class extending :class:`Parameter`, that doesn't mean that you have to create an object of that class and use it when running algorithm. Classes extending :class:`Parameter` are just containers for the actual parameter values, and they do not have to be instantiated. You should understand them as a way of telling you which data the algorithm is expecting, but the value to be passed is not an instance of :class:`Parameter`.
 
-Let's see an example with the *Elevation* parameter in the *XXXXSlope* process above. The information printed by :meth:`getprocesshelp` tells us that this parameter is of class :class:`ParameterRaster`. Basically, that tells you that when you want to run the process you have to pass it *something that represents a raster layer*. What kind of object can you use for that? Depending on the type of parameter, different objects can be used, but usually there are several options for each one. In the case of a raster layer, the most obvious one is a :class:`Raster` object, so you could call the :meth:`run` method of our algorithm with something like this (don't worry if this doesn't make sense to you, specially considering the nuber of parameters needed. We will see more about the *run* method in a while):
+Let's see an example with the *Elevation* parameter in the *saga:slopeaspectcurvature* process above. The information printed by :meth:`getprocesshelp` tells us that this parameter is of class :class:`ParameterRaster`. Basically, that tells you that when you want to run the process you have to pass it *something that represents a raster layer*. What kind of object can you use for that? Depending on the type of parameter, different objects can be used, but usually there are several options for each one. In the case of a raster layer, the most obvious one is a :class:`Raster` object, so you could call the :meth:`run` method of our algorithm with something like this (don't worry if this doesn't make sense to you, specially considering the nuber of parameters needed. We will see more about the *run* method in a while):
 
-::.
+::
 
 	>>> raster = GeoTIFF('dem.tif')
 	>>> result = proc.run(dem=raster)
 
-Another possible option is to pass directly a string with the path to a suitable file. So there is no need to create the :class:`GeoTIFF` object, since we can use the path string and GeoScript will internally take care of loading it if necessary.
+Another possible option is to pass directly a string with the path to a suitable file. 
+
+::
+	
+	>>> result = proc.run(dem='XXXXXdem.tif')
+
+
+There is no need now to create the :class:`GeoTIFF` object, since we can use the path string and GeoScript will internally take care of loading it if necessary.
 
 By handling parameters this way, GeoScript allows you to call all of its available processes in a similar manner, without worring about their origin. As it was said, GeoScript also includes processes from 3rd party application, which most likely will have different requirements in terms of data formats. However, you can use the same object for all processes that need a given type of parameter, and GeoScript will take care of adapting or converting them if needed, depending of what the process doing the actual computation accepts.
 
-In particular, the slope process that we have just run comes from an application called SAGA, which does not support GeoTools object at all, and which doesn't even support TIF files, but just raster files in its own format. However, you can use both a string with the path to a TIF file or a :class:`Raster` object when running that slope process, since GeoScript will do all the hard work for you.
+In particular, the slope process that we have just run comes from an application called SAGA, which does not support GeoTools objects at all, and which doesn't even support TIFF files (they have to be imported by an additional process), but just raster files in its own format. However, you can use both a string with the path to a TIFF file or a :class:`Raster` object when running that slope process, since GeoScript will do all the hard work for you.
 
 Below you have a list of all possible types of parameters and the type of values that you can use for each of them.
 
 - *ParameterRaster*: 
-	- A string representing the filepath to a raster layer.
+	- A string representing the absolute filepath to a raster layer.
 	- A :class:`Raster` object.	
 - *ParameterVector*: 
-	- A string representing the filepath to a vector layer.
+	- A string representing the absolute filepath to a vector layer.
 	- A :class:`Layer` object.
+- *ParameterGeometry*:
+	- A ``Geometry`` object.
+	- A WKT string from which a ``Geometry`` object can be constructed.
 - *ParameterTable*:
-	- A string representing the filepath to a table object layer, for instance a DBF file.
+	- A string representing the absolute filepath to a table object layer, for instance a DBF file.
 	- A bidimensional list.
 - *ParameterString*:
 	- A string object
 - *ParameterNumber*: This parameter represents a numerical value. It might have lower and/or upper bounds, shown along with the description of the parameter type
 	- A number object
 	- A string containing a numerical value
+- *ParameterRange*:
+	-A list with two numerical values in the form ``[min, max]``
+	-A string in the form "min, max"
 - *ParameterCrs*:
 	- A number object representing a valid EPSG code
 	- A string containing a numerical value representing a valid EPSG code
 	- A :class:`Projection` object
-- *ParameterMultipleInput*: This parameter represents a set of input layer (raster or vector) or tables. A list shoud be passed containing any combination of valid objects for the type of input. For instance, for a multiple input of type raster you should pass a list of object, all of which should be valid objects to be used in the case of a parameter of type *ParameterRaster*.
+- *ParameterMultipleInput*: This parameter represents a set of input layers (raster or vector) or tables. A list shoud be passed containing any combination of valid objects for the type of input. For instance, for a multiple input of type raster you should pass a list of objects, all of which should be valid objects to be used in the case of a parameter of type *ParameterRaster*.
 - *ParameterExtent*:
 	- A :class:`Bounds` object
 	- A list with 4 numerical values, representing xmin, xmax, ymin, ymax values to define a extent
@@ -195,7 +211,6 @@ Below you have a list of all possible types of parameters and the type of values
 	- A boolean value
 	- A string with the string "true" (not case-sensitive) to represent the true vale, or any other string to represent the false value.
 - *ParameterFixedTable*: This parameter represents a small table such as those used for a lookup table or a kernel filter. It should be passed as a bidimensional list
-
 - *ParameterTableField*: This parameter reprsents a field in a table (whether an independent one, or from a vector layer). The description will show also the parent parameter it depends on .
 
 You might find some processes with inputs of type :class:`ParameterObject` and, along with that, a given class name. This is used when the object needed by the algorithm does not exactly match any of the other types, and it acts as a generic container for a parameter value. In this case, you should prepare the corresponding object to use, since GeoScript will not do any checking or conversion. The class names shown in the description 
@@ -206,41 +221,54 @@ Once you understand how to handle input values, the next step is to actually pas
 Executing a process and handling outputs
 -----------------------------------------
 
-As you might have already figured out from the last example, the :meth:``run`` method is the one to call to actually run the process and get the work done. The number of parameters of the :meth:`run` method depends on the process to be executed, and these parameters have the names indicated in the process description, including both input parameters and output. So in the case of our slope process, the corresponding run method should have 7 parameters: *elevation, method, slope, aspect curv, hcurv* and *vcurv*. A complete call to the run algorithm might look like the one below:
+As you might have already figured out from the last example, the :meth:``run`` method is the one to call to actually run the process and get the work done. The number of parameters of the :meth:`run` method depends on the process to be executed, and these parameters have the names indicated in the process description, including both input parameters and output. So in the case of our slope process, the corresponding run method should have 7 parameters: *elevation, method, slope, aspect curv, hcurv* and *vcurv*. A complete call to the run algorithm might look like the one below.
 
-.::
+::
 
-	>>>result = proc.run(dem=layer, method=3, slope='/user/myuser/slope.tif', aspect='/user/myuser/aspect.tif',
-						 curv='/user/myuser/curv.tif', hcurv='/user/myuser/hcurv.tif', vcurv='/user/myuser/vcurv.tif' )
+	>>> result = proc.run(dem=layer, method=3, slope='/user/myuser/slope.tif', aspect='/user/myuser/aspect.tif',
+						 curv='/user/myuser/curv.tif', hcurv='/user/myuser/hcurv.tif', 
+						 vcurv='/user/myuser/vcurv.tif' )
 
-Let's see what is happening here at how it compares to the previous call that we saw in the example above.
+Let's see what is happening here and how it compares to the previous call that we saw in the example above.
 
 The first thing you might notice is that, while this call contains all the parameters declared by the process definition that was printed by the :meth:`help` method, the previous one did not. It just used the *dem* parameter to pass our Tiff file, whatever the format used for that was. This is because some types of parameters have default values, and you can omit them, just like you do on a normal Python method. Basically, all parameter types except :class:`ParameterRaster, ParameterTable, ParameterVector, ParameterMultipleInput, ParameterFixedTable` and :class:`ParameterTableField` can be ommited. The first 4 parameter types (those representing layers or tables) can be ommited when the parameter is optional, but not when it is mandatory. If the parameter is optional (for instance, a process taking 2 raster layers, one of them not mandatory), the :meth:`help` method will tell you about it when printing the description of parameters. The other 2 parameter can never be ommited.
 
-The second thing that you might notice is that the parameters of the :meth:`run` method corresponding to outputs have also been ommited int he first . We haven't talked about outputs yet, and this is a good time to do it. The only thing you have to know is that the value to pass to a parameter representing an output is a string with a file path that will be used to store that output. If you omit it, GeoScript will decide where to put it, which might be a temporary file, or even not using a file at all, depending on the process. Most of the times, you will omit output values, specially when the process to execute is an intermediate one within a larger processing workflow. 
+The second thing that you might notice is that the parameters of the :meth:`run` method corresponding to outputs have also been ommited in the first . We haven't talked about outputs yet, and this is a good time to do it. The only thing you have to know is that the value to pass to a parameter representing an output is a string with a file path that will be used to store that output. If you omit it, GeoScript will decide where to put it, which might be a temporary file, or even not using a file at all, depending on the process. Most of the times, you will omit output values, specially when the process to execute is an intermediate one within a larger processing workflow. 
 
 The object returned by the run method is a dictionary object with the names of the outputs (the same ones displayed by the :meth:`help` method) as keys and objects of class :class:`Output` as values. As it happens with object from class :class:`Parameter`, object of class :class:`Output` are just containers for the real output values. To get those output values you should use the corresponding methods in the output object. In the case of a raster layer, a :class:`RasterLayer` object can be obtained using the :meth:`aslayer` method. 
 
-.::
+::
 
-	>>>slope = result['slope']
-	>>>slopelayer = slope.aslayer()
-	>>>type(slopelayer)
+	>>> slope = result['slope']
+	>>> slopelayer = slope.aslayer()
+	>>> type(slopelayer)
 	'RasterLayer'
 
-Just like input parameters can be entered in several different formats, output results can be obtained from the :class:`Output` object in different ones as well. To get a filename refering to the output raster layer, use the :meth:`asfile` method.
+Just like input parameters can be entered in several different formats, output results can be obtained from the :class:`Output` object in different ones as well. To get a filename refering to the output raster layer, use the :meth:`asfile` method. 
 
-Notice that you can always get both the filename and the :class:`RasterLayer` object, no matter how the result was calculated. If (as it happens in this case, since we are calling an external application) the result was generated and saved to a file, calling the :meth:`asrasterlayer` method will cause the :class:`RasterLayer` object to be created from that file. If the process did not use a filename to save results, calling the :meth:`asfile` method will cause it to be saved and a file to be created, and the filepath to that file to be returned.
+Notice that you can always get both the filename and the :class:`RasterLayer` object, no matter how the result was calculated. If (as it happens in this case, since we are calling an external application) the result was generated and saved to a file, calling the :meth:`asrasterlayer` method will cause the :class:`RasterLayer` object to be created from that file. If the process did not use a filename to save results, calling the :meth:`asfile` method will cause it to be saved and a file to be created, and the filepath to that file to be returned. Subsequent calls to the method will return the same filepath string and will not cause the output file to be created again.
 
 Once again, GeoScript hides most of the complexity out of data handling.
 
 Below you can see a complete and slightly more complex example. Starting with a Digital Elevation Model stored in a TIFF file, a slope layer is computed, and then its average value is calculated directly in GeoScript, without calling an additional process.
 
-.::
-
-	>>>gtiff = GeoTIFF('dem.tif')
-
-	************************
+::
+	
+	>>> proc = getprocess('saga:slopeaspectcurvature')
+	>>> out = proc.run('dem.tif')
+	>>> slope =  out['slope'].aslayer()
+	>>> width, height = slope.getsize()
+	>>> mean = 0
+	>>> nvalid = 0
+	>>> for y in range(height):
+	>>>    for x in range(width):  
+	>>>	      value = slope.getvalueatcell(x,y)
+	>>>       if not slope.isnodatavalue(value):
+	>>>          mean += value
+	>>>			 nvalid += 1
+	>>> mean /= nvalid
+	>>> mean
+	XXXXXX
 
 
 Using several layers for a single process
@@ -248,36 +276,60 @@ Using several layers for a single process
 
 Some processes require more than one layer to be executed. That might mean using several layers of the same kind (raster or vector), or both raster and vector together. Combining several layers requires some extra care to make sure that results are sound, and this section discusses some important ideas that should be taken into account when using more than one layer in a single process.
 
-
-
 One of the main concerns when most users have when combining several layers is how to combine raster layers with different extents and cellsizes. Most raster processes assume that input layers have the same extent and cellsize, so the grid of cells that they define exactly matches that of other layers being used. That is, pixel(0,0) in layer A matches pixel (0,0) in layer B, and the same for the rest of pixels and layers.
 
 Among the processes available from GeoScript you can found processes to crop and resample a raster layer (and the :class:`RasterLayer` object has a :meth:`crop` method), which you can use to prepare layers before passing them to the process, making sure that they all have the same dimensions.
 
 Here's a small example of running a process that takes two raster layers, which includes some previous resampling to make one layer match the characteristics of the other before passing both of them to the :meth:`run` method of the process.
 
-.::
+::
 
-	>>> layerA = GeoTIFF ('layerA.tif')
-	>>> layerB = GeoTIFF ('layerB.tif')
-	>>> layerB = layerB.resample(bbox = layerA.getextent(), size = layerA.getpixelsize())
+	>>> area = GeoTIFF ('accarea.tif')
+	>>> slope = GeoTIFF ('slope.tif')
+	>>> slope_resampled = slope.resample(bbox = area.getextent(), size = area.getpixelsize()[0])
+	>>> proc = getprocess('saga:topographicwetnessindextwi')
+	>>> result = proc.run(slope = slope_resampled, area = area)
 
 
-And here is that same example but using a process to perform the interpolation instead of the built-in :meth:`resample` method
+.. note::
+
+	The process used for this example calculates the Topographic Wetness Index. If you want to know more about this hydrological parameter and its meaning, you can check the full description of the algorithm at the process descriptions section.
+
+Notice that in this case we could not have passed the filenames directly to the :meth:`runmethod` method, since we needed to perform the resampling, which requires the layers to be loaded. There are external processes that perform resampling, so the same result could be obtained following a different scheme. Below you can find the same example but using an external process to perform the interpolation instead of the built-in :meth:`resample` method.
+
+::
+	>>> area = GeoTIFF ('accarea.tif')
+	>>> resampling = getprocess('saga:resampling')
+	>>> result_resampling = resampling.run(input='XXX', user_size = area.getpixelsize()[0], 
+					scale_down_method = 3, scale_up_method = 3, output_extent = area.getextent())
+	>>> slope_resampled = result_resampling['user_grid']
+	>>> twi = getprocess('saga:topographicwetnessindextwi')
+	>>> result_twi = twi.run(slope = slope_resampled, area = area)
+
+
+As you can see, this process allows us to select the interpolation method, something that was not possible with the :meth:`resample` method. 
 
 Another important concern is related to CRSs. Both when using raster and vector layer, processes assume that there is no need to reproject layers, and most of them do not even check for consistency in input layers' CRSs. If the process being run makes no actual measurements (which might need to differentiate between projected and geographical coordinates), most of the time the CRS of the layer is completely ignored.
 
-For this reason, you have to perform reprojections manually if needed. The following example shows how a polygon layer is reprojected to the same projection as a raster layer, so statistics of that raster layer within the polygons can be calculated. If the reprojection was not performed, the Process would run, but the results would be wrong. The process would assume that both layers have the same CRS and, under that assumption, the poygon will not fall in the area covered by the raster layer.
+For this reason, you have to perform reprojections manually if needed. The following example shows how a polygon layer is reprojected to the same projection as a raster layer, so statistics of that raster layer within the polygons can be calculated. The resulting layer is in the same projection as the two input ones. If the reprojection was not performed, the process would run anyway, but the results would be wrong. The process would assume that both layers have the same CRS and, under that assumption, the poygon will not fall in the area covered by the raster layer.
 
-.::
+::
 
-	>>>
+	>>> raster = GeoTIFF('dem.tif')
+	>>> raster.getproj()
 
-As it happens with resampling, there are several alternatives for performing a reprojection. Below you can see the above example, using an external process for reprojecting instead of the built-in method.
+	>>> vector = Shapefile('polyg.shp')
+	>>> vector.getproj()
 
-.::
+	>>> reprojected = vector.reproject(raster.getproj()) 
+	>>> reprojected.getproj()
 
-	>>>
+	>>> proc = getprocess(saga:)
+	>>> out = proc.run(
+	>>> result = out[''].aslayer()
+	>>> result.getproj()
+
+
 
 
  
