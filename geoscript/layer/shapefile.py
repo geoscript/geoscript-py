@@ -16,7 +16,7 @@ class Shapefile(Layer):
   def __init__(self, file):
     f = util.toFile(file) 
     name = path.splitext(path.basename(file))[0]
-
+    self.shapefile = file
     from geoscript.workspace import Directory
     Layer.__init__(self, name, Directory(f.canonicalFile.parent))
 

@@ -4,9 +4,10 @@ from geoscript.processing.saga import SagaProvider
 '''This module is the entry point to geoprocessing capabilities in GeoScript.
 Ideally, a user should be able to perform geodata analysis just calling methods
 from this module from a geoscript console'''
+from geoscript.processing.grass import GrassProvider
     
 #The list of providers whose processes are available to be run or queried
-providers = [GeotoolsProvider(), SagaProvider()];
+providers = [GeotoolsProvider(), SagaProvider(), GrassProvider()];
     
 def processes(text=None):
     '''

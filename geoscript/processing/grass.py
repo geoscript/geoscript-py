@@ -1,7 +1,6 @@
 import os
 from geoscript.processing.process import Process
 from geoscript.processing.provider import ProcessProvider
-
 import subprocess
 import stat
 import shutil
@@ -11,6 +10,7 @@ from geoscript.processing.outputs import getoutputfromstring, OutputFile,\
 from geoscript.processing.parameters import getparameterfromstring,\
     ParameterExtent, ParameterNumber, ParameterRaster, ParameterVector,\
     ParameterTable, ParameterMultipleInput, ParameterBoolean, ParameterSelection
+import time
 
 def grassBatchJobFilename():
     '''This is used in linux. This is the batch job that we assign to
@@ -18,7 +18,6 @@ def grassBatchJobFilename():
     filename = "grass_batch_job.sh";
     batchfile = userFolder() + os.sep + filename
     return batchfile
-
 
 def grassScriptFilename():
     '''this is used in windows. We create a script that initializes
@@ -28,11 +27,21 @@ def grassScriptFilename():
     return filename
 
 def grassDescriptionsFile():
-    return os.path.join(os.path.dirname(__file__), "..", "..", "data", "saga_descriptions.txt")
-    
+    return os.path.join(os.path.dirname(__file__), "..", "..", "data", "grass_descriptions.txt")
+   
+def grassPath():
+    return os.environ['GRASS_BIN_PATH']
+
+def grassWinShellPath():
+    return os.environ['GRASS_SHELL_PATH']
+
+def isLatLon():
+    ##TODO: change this!!!
+    return False
+
 def createGrassScript(commands):
     folder = grassPath()
-    shell = grassWinShell()
+    shell = grassWinShellPath()
 
     script = grassScriptFilename()
     gisrc =  userFolder() + os.sep + "sextante.gisrc"
@@ -88,13 +97,10 @@ def createGrassBatchJobFileFromGrassCommands(commands):
     fout.write("exit")
     fout.close()
 
-
 def grassMapsetFolder():
     tempfolder = os.path.join(os.path.expanduser("~"), "sextante", "tempdata", "grassdata", "temp_location")
     mkdir(tempfolder)
     return tempfolder
-
-
 
 def createTempMapset(latlon):
     '''Creates a temporary location and mapset(s) for GRASS data processing. A minimal set of folders and files is created in the
@@ -209,7 +215,7 @@ def getGrassVersion():
     return "6.4.0"
 
 
-class GrassProcessProvider(ProcessProvider):
+class GrassProvider(ProcessProvider):
 
     def __init__(self):
         ProcessProvider.__init__(self)
@@ -233,28 +239,28 @@ class GrassProcessProvider(ProcessProvider):
 
 
 
+
+
 class GrassProcess(Process):
+    
+    ExportedLayers = 0;
 
     GRASS_REGION_EXTENT_PARAMETER = "region"
     GRASS_REGION_CELLSIZE_PARAMETER = "regioncellsize"
 
-    def __init__(self, descriptionfile):
-        Process.__init__(self)
-        self.descriptionFile = descriptionfile
-        self.defineCharacteristicsFromFile()
-        self.numExportedLayers = 0
+    def __init__(self, text):
+        Process.__init__(self)        
+        self.defineCharacteristicsFromText(text)        
 
     def defineCharacteristicsFromText(self, text):
         self.inputs = {}
         self.outputs = {}    
-        lines = text.split("\n")    
-        line = lines[0].strip("\n").strip()
-        self.fullname = lines[0].strip("\n").strip()      
-        self.name = "saga:" + ''.join(c for c in self.fullname if c not in ':;,. -_()[]' ).lower()        
-        self.description = self.fullname
-        line = lines[1].strip("\n").strip()
-        self.undecoratedGroup = line        
-        for i in range(2,len(lines)):                
+        lines = text.split("\n")            
+        self.name = "grass:" +  lines[0].strip("\n").strip()
+        desc =  lines[1].strip("\n").strip()
+        self.grassname = desc[:desc.find(" ")]         
+        self.description = desc[desc.find(" ") + 2:]      
+        for i in range(3,len(lines)):                
             line = lines[i].strip("\n").strip()
             if line.startswith("Parameter"):
                 param = getparameterfromstring(line)
@@ -282,7 +288,7 @@ class GrassProcess(Process):
         
         region = str(self.getParameterValue(self.GRASS_REGION_EXTENT_PARAMETER))
         regionCoords = region.split(",")
-        createTempMapset();
+        createTempMapset(isLatLon());
 
         command = "g.region"
         command += " n=" + str(regionCoords[3])
@@ -293,7 +299,7 @@ class GrassProcess(Process):
         commands.append(command)
 
         #1: Export layer to grass mapset
-        for param in self.parameters:
+        for param in self.inputs.values():
             if isinstance(param, ParameterRaster):
                 if param.value == None:
                     continue
@@ -320,8 +326,8 @@ class GrassProcess(Process):
                         commands.append(self.exportVectorLayer(layer))
 
         #2: set parameters and outputs
-        command = self.grassName
-        for param in self.parameters:
+        command = self.grassname
+        for param in self.inputs.values():
             if param.value == None:
                 continue
             if param.name == self.GRASS_REGION_CELLSIZE_PARAMETER or param.name == self.GRASS_REGION_EXTENT_PARAMETER:
@@ -347,7 +353,7 @@ class GrassProcess(Process):
             else:
                 command+=(" " + param.name + "=" + str(param.value));
 
-        for out in self.outputs:
+        for out in self.outputs.values():
             if isinstance(out, OutputFile):
                 command+=(" " + out.name + "=\"" + out.value + "\"");
             else:
@@ -357,7 +363,7 @@ class GrassProcess(Process):
         commands.append(command)
 
         #3:Export resulting layers to a format that qgis can read
-        for out in self.outputs:
+        for out in self.outputs.values():
             if isinstance(out, OutputRaster):
                 filename = out.value
                 #Raster layer output: adjust region to layer before exporting
@@ -403,6 +409,7 @@ class GrassProcess(Process):
 
 
     def getTempFilename(self):
-        filename =  "tmp" + str(time.time()).replace(".","") + str(SextanteUtils.getNumExportedLayers())
+        filename =  "tmp" + str(time.time()).replace(".","") + str(self.ExportedLayers)
+        self.ExportedLayers += 1
         return filename
 

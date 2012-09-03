@@ -35,8 +35,12 @@ def tempfolder():
 
 NUM_LAYERS_SAVED = 1
 
-def gettempfilename(ext):
-    path = tempfolder()
-    suffix = "." + ext
+def gettempfilename(ext=None, path=None):
+    if path is None:
+        path = tempfolder()    
+    if ext is None:
+        suffix = None
+    else:
+        suffix = "." + ext
     filename = tempfile.NamedTemporaryFile(suffix=suffix, dir=path).name
     return filename
