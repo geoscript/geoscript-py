@@ -15,26 +15,20 @@ The :mod:`saga` module contains provider and process classes to call algorithms
 from SAGA (System for Automated Geospatial Analysis)
 '''
 def sagaBatchJobFilename():
-
     if isWindows():
         filename = "saga_batch_job.bat";
     else:
         filename = "saga_batch_job.sh";
-
     batchfile = userFolder() + os.sep + filename
-
     return batchfile
 
 def sagaDescriptionsFile():
     return os.path.join(os.path.dirname(__file__), "..", "..", "data", "saga_descriptions.txt")
 
 def createSagaBatchJobFileFromSagaCommands(commands):
-
     fout = open(sagaBatchJobFilename(), "w")
-
     for command in commands:
         fout.write("saga_cmd " + command + "\n")
-
     fout.write("exit")
     fout.close()
 
@@ -49,6 +43,7 @@ def executeSaga():
     loglines.append("SAGA execution console output")
     proc = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stdin=subprocess.PIPE,stderr=subprocess.STDOUT, universal_newlines=True).stdout
     for line in iter(proc.readline, ""):
+        #TODO: comunicate progress
         pass
     
 
@@ -89,7 +84,6 @@ class SagaProcess(Process):
         self.inputs = {}
         self.outputs = {}    
         lines = text.split("\n")    
-        line = lines[0].strip("\n").strip()
         self.fullname = lines[0].strip("\n").strip()      
         self.name = "saga:" + ''.join(c for c in self.fullname if c not in ':;,. -_()[]' ).lower()        
         self.description = self.fullname
@@ -105,7 +99,8 @@ class SagaProcess(Process):
                 #self.resample = False
             elif line.startswith("Extent"): #An extent parameter that wraps 4 SAGA numerical parameters
                 self.extentParamNames = line[6:].strip().split(" ")
-                self.addParameter(ParameterExtent(self.OUTPUT_EXTENT, "Output extent", "0,1,0,1"))
+                param = ParameterExtent(self.OUTPUT_EXTENT, "Output extent", "0,1,0,1")
+                self.inputs[param.name] = param                
             elif line == "":
                 break
             else:

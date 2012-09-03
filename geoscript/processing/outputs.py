@@ -69,6 +69,9 @@ class OutputTable(Output):
 class OutputNumber(Output):
     pass
 
+class OutputFile(Output):
+    pass
+
 class OutputObject(Output):
     pass
 

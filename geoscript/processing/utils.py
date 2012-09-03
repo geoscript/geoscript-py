@@ -6,6 +6,10 @@ def isWindows():
     name = java.lang.System.getProperty( "os.name" )
     return "windows" in name.lower()
 
+def isMac():
+    name = java.lang.System.getProperty( "os.name" )
+    return "mac" in name.lower()
+
 def userFolder():
     userfolder = os.path.expanduser("~") + os.sep + "geoscript"
     mkdir(userfolder)
