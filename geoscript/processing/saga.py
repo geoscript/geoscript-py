@@ -10,8 +10,6 @@ from geoscript.processing.parameters import *
 from geoscript.processing.process import Process
 from geoscript.processing.outputs import getoutputfromstring, \
     OutputRaster, OutputVector
-from geoscript.layer.shapefile import Shapefile
-
 
 def sagaBatchJobFilename():
     if isWindows():
@@ -53,9 +51,7 @@ def executeSaga():
         universal_newlines=True,
         ).stdout
     for line in iter(proc.readline, ''):
-
         # TODO: comunicate progress
-
         pass
 
 
@@ -109,13 +105,10 @@ class SagaProcess(Process):
             elif line.startswith('DontResample'):
                 pass
             elif line.startswith('Extent'):
-
-                # self.resample = False
-                                            # An extent parameter that wraps 4 SAGA numerical parameters
-
+                 # An extent parameter that wraps 4 SAGA numerical parameters
                 self.extentParamNames = line[6:].strip().split(' ')
                 param = ParameterExtent(self.OUTPUT_EXTENT,
-                        'Output extent', '0,1,0,1')
+                        'Output extent', True)
                 self.inputs[param.name] = param
             elif line == '':
                 break

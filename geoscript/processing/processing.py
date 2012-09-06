@@ -7,7 +7,7 @@ from geoscript.processing.grass import GrassProvider
 
 # The list of providers whose processes are available to be run or queried
 
-providers = [GeotoolsProvider()]#, SagaProvider(), GrassProvider()]
+providers = [GeotoolsProvider(), SagaProvider(), GrassProvider()]
 
 
 def processes(text=None):

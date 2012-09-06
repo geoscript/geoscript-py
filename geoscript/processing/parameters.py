@@ -38,9 +38,13 @@ class Parameter:
 
     def isDefaultValueOK(self):
         return True
+    
+    def setDefaultValue(self):
+        if hasattr(self, 'default'):
+            self.value = self.default
 
     def __str__(self):
-        return self.name + ' <' + self.__class__.__name__ + '>'
+        return self.name + ' <' + self.__class__.__name__ + '>' + self.description
 
     def description(self):
         return self.name + ' <' + self.__class__.__name__ + '>'
@@ -114,16 +118,15 @@ class ParameterExtent(Parameter):
         self,
         name='',
         description='',
-        default=Bounds(0, 0, 1, 1),
-        ):
+        optional=True):
+        
         Parameter.__init__(self, name, description)
-        self.default = default
+        self.optional = optional
         self.value = None  # The value is a Bounds object
 
     def setValue(self, obj):
         if obj is None:
-            self.value = self.default
-            return True
+            return self.optional                      
         if isinstance(obj, Bounds):
             self.value = obj
         elif isinstance(obj, list):
@@ -136,7 +139,6 @@ class ParameterExtent(Parameter):
             except:
                 return False
         elif isinstance(obj, str):
-
             tokens = obj.split(',')
             if len(tokens) != 4:
                 return False
@@ -149,6 +151,9 @@ class ParameterExtent(Parameter):
         else:
             return False
 
+    def asbounds(self):
+        return self.value
+    
     def aslist(self):
         return [self.value.getwest(), self.value.getsouth(),
                 self.value.geteast(), self.value.getnorth()]
@@ -252,7 +257,7 @@ class ParameterGeometry(Parameter):
 
     def setValue(self, value):
 
-        # TODO: check that obj is a valid object
+        # TODO: check that obj is a valid object, and accept WKT string
 
         if value == None:
             if self.optional:
@@ -461,7 +466,7 @@ class ParameterObject(Parameter):
 
     def __str__(self):
         return self.name + ' <' + self.__class__.__name__ + ':' \
-            + str(self.objecttype) + '>'
+            + str(self.objecttype) + '>' + self.description
 
 
 class ParameterRange(Parameter):
@@ -574,10 +579,10 @@ class ParameterRaster(Parameter):
 
     def __str__(self):
         if self.optional:
-            return self.name + ' (optional) <' \
-                + self.__class__.__name__ + '>'
+            return self.name + ' <' \
+                + self.__class__.__name__ + '(optional)> ' + self.description
         else:
-            return self.name + ' <' + self.__class__.__name__ + '>'
+            return self.name + ' <' + self.__class__.__name__ + '> ' + self.description
 
 
 class ParameterSelection(Parameter):
@@ -624,7 +629,7 @@ class ParameterSelection(Parameter):
             + self.description + '|' + ';'.join(self.options)
 
     def __str__(self):
-        s = self.name + ' <' + self.__class__.__name__ + '>\n'
+        s = self.name + ' <' + self.__class__.__name__ + '> '  + self.description + '\n'
         s += len(self.name) * ' ' + 'Options:\n'
         i = 0
         for opt in self.options:
@@ -769,7 +774,7 @@ class ParameterTableField(Parameter):
 
     def __str__(self):
         return self.name + ' <' + self.__class__.__name__ + ' from ' \
-            + self.parent + '>'
+            + self.parent + '> ' + self.description
 
 
 class ParameterVector(Parameter):
@@ -843,10 +848,10 @@ class ParameterVector(Parameter):
 
     def __str__(self):
         if self.optional:
-            return self.name + ' (optional) <' \
-                + self.__class__.__name__ + '>'
+            return self.name + ' <' \
+                + self.__class__.__name__ + '  (optional)> ' + self.description
         else:
-            return self.name + ' <' + self.__class__.__name__ + '>'
+            return self.name + ' <' + self.__class__.__name__ + '>' + self.description
 
 
 def getparameterfromstring(s):

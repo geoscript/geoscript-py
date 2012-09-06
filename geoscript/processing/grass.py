@@ -8,7 +8,7 @@ import subprocess
 import stat
 import shutil
 from geoscript.processing.utils import userFolder, mkdir, isWindows, \
-    isMac
+    isMac, tempfolder
 from geoscript.processing.outputs import getoutputfromstring, \
     OutputFile, OutputRaster, OutputVector
 from geoscript.processing.parameters import getparameterfromstring, \
@@ -68,8 +68,8 @@ def createGrassScript(commands):
     output = open(gisrc, 'w')
     location = 'temp_location'
     mapset = 'user'
-    gisdbase = os.path.join(os.path.expanduser('~'), 'sextante',
-                            'tempdata', 'grassdata')
+    gisdbase = os.path.join(tempfolder(), 'grassdata')
+    mkdir(gisdbase)
     output.write('GISDBASE: ' + gisdbase + '\n')
     output.write('LOCATION_NAME: ' + location + '\n')
     output.write('MAPSET: ' + mapset + '\n')
@@ -79,17 +79,16 @@ def createGrassScript(commands):
     output = open(script, 'w')
     output.write('set HOME=' + os.path.expanduser('~') + '\n')
     output.write('set GISRC=' + gisrc + '\n')
-    output.write('set GRASS_SH=' + shell + '\\bin\\sh.exe\n')
-    output.write('set PATH=' + shell + os.sep + 'bin;' + shell + os.sep
-                 + 'lib;' + '%PATH%\n')
+    output.write('set WINGISRC=' + gisrc + '\n')    
     output.write('set WINGISBASE=' + folder + '\n')
     output.write('set GISBASE=' + folder + '\n')
-    output.write('set GRASS_PROJSHARE=' + folder + os.sep + 'share'
-                 + os.sep + 'proj' + '\n')
+    output.write('set GRASS_SH=%GISBASE%\\msys\\bin\\sh.exe\n')
+    output.write('set PATH=%GISBASE%\\msys\\bin;%PATH%\n')
+    output.write('set PATH=%GISBASE%\\extrabin;%GISBASE%\\extralib;%PATH%\n')
+    output.write('set PATH=%GISBASE%\\tcl-tk\\bin;%GISBASE%\\sqlite\\bin;%GISBASE%\\gpsbabel;%PATH%\n')
+    output.write('set PATH=%GISBASE%\\bin;%GISBASE%\\scripts;%PATH%\n')  
+    output.write('set GRASS_PROJSHARE=%GISBASE%\\proj\n')
     output.write('set GRASS_MESSAGE_FORMAT=gui\n')
-
-    # Replacement code for etc/Init.bat
-
     output.write('if "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\\bin;%WINGISBASE%\\lib;%PATH%\n'
                  )
     output.write('if not "%GRASS_ADDON_PATH%"=="" set PATH=%WINGISBASE%\\bin;%WINGISBASE%\\lib;%GRASS_ADDON_PATH%;%PATH%\n'
@@ -102,6 +101,12 @@ def createGrassScript(commands):
     output.write(':langset\n')
     output.write('\n')
     output.write('set PATHEXT=%PATHEXT%;.PY\n')
+    output.write('set GRASS_HTML_BROWSER=explorer\n')
+    output.write('set GDAL_DATA=%GISBASE%\\share\\gdal\n')
+    output.write('set PROJ_LIB=%GISBASE%\\proj\n')
+    output.write('set GEOTIFF_CSV=%GISBASE%\share\epsg_csv\n')
+    output.write('set PYTHONHOME=%GISBASE%\Python27\n')
+    output.write('if "x%GRASS_PYTHON%" == "x" set GRASS_PYTHON=python\n')
     output.write('set PYTHONPATH=%PYTHONPATH%;%WINGISBASE%\\etc\\python;%WINGISBASE%\\etc\\wxpython\\n'
                  )
     output.write('\n')
@@ -126,10 +131,9 @@ def createGrassBatchJobFileFromGrassCommands(commands):
 
 
 def grassMapsetFolder():
-    tempfolder = os.path.join(os.path.expanduser('~'), 'sextante',
-                              'tempdata', 'grassdata', 'temp_location')
-    mkdir(tempfolder)
-    return tempfolder
+    folder = os.path.join(tempfolder(), 'grassdata', 'temp_location')
+    mkdir(folder)
+    return folder
 
 
 def createTempMapset(latlon):
@@ -141,7 +145,7 @@ def createTempMapset(latlon):
     mkdir(os.path.join(folder, 'PERMANENT'))
     mkdir(os.path.join(folder, 'user'))
     mkdir(os.path.join(folder, 'PERMANENT', '.tmp'))
-    writeGrassWindow(os.path.join(folder, 'PERMANENT', 'DEFAULT_WIND'))
+    writeGrassWindow(os.path.join(folder, 'PERMANENT', 'DEFAULT_WIND'), latlon)
     outfile = open(os.path.join(folder, 'PERMANENT', 'MYNAME'), 'w')
     if not latlon:
         outfile.write('SEXTANTE GRASS interface: temporary x/y data processing location.\n'
@@ -163,7 +167,7 @@ def createTempMapset(latlon):
         outfile.write('units: degrees\n')
         outfile.write('meters: 1.0\n')
         outfile.close()
-    writeGrassWindow(os.path.join(folder, 'PERMANENT', 'WIND'))
+    writeGrassWindow(os.path.join(folder, 'PERMANENT', 'WIND'), latlon)
     mkdir(os.path.join(folder, 'user', 'dbf'))
     mkdir(os.path.join(folder, 'user', '.tmp'))
     outfile = open(os.path.join(folder, 'user', 'VAR'), 'w')
@@ -245,13 +249,17 @@ def executeGrass(commands):
         universal_newlines=True,
         ).stdout
     for line in iter(proc.readline, ''):
-        if 'GRASS_INFO_PERCENT' in line:
-            try:
-                percentage = int(line[len('GRASS_INFO_PERCENT') + 2:])
-            except:
-                pass
-        else:
-            pass
+        pass
+        #=======================================================================
+        # if 'GRASS_INFO_PERCENT' in line:
+        #    try:
+        #        percentage = int(line[len('GRASS_INFO_PERCENT') + 2:])
+        #    except:
+        #        pass
+        # else:
+        #    print line
+        #    pass
+        #=======================================================================
     shutil.rmtree(grassMapsetFolder(), True)
 
 
@@ -300,14 +308,15 @@ class GrassProcess(Process):
         self.inputs = {}
         self.outputs = {}
         lines = text.split('\n')
-        self.name = 'grass:' + lines[0].strip('\n').strip()
+        self.grassname = lines[0].strip('\n').strip()
         desc = lines[1].strip('\n').strip()
-        self.grassname = desc[:desc.find(' ')]
+        self.name = "grass:" + desc[:desc.find(' ')]
         self.description = desc[desc.find(' ') + 2:]
         for i in range(3, len(lines)):
             line = lines[i].strip('\n').strip()
             if line.startswith('Parameter'):
                 param = getparameterfromstring(line)
+                param.name = param.name.replace("-","")
                 self.inputs[param.name] = param
             elif line == '':
                 break
@@ -322,6 +331,7 @@ class GrassProcess(Process):
                                 'Region cellsize', 0, None, 1.0)
         self.inputs[param.name] = param
 
+    
     def _run(self):
         if isWindows():
             path = grassPath()
@@ -332,19 +342,7 @@ class GrassProcess(Process):
         commands = []
         self.exportedLayers = {}
 
-        region = \
-            str(self.getParameterValue(self.GRASS_REGION_EXTENT_PARAMETER))
-        regionCoords = region.split(',')
         createTempMapset(isLatLon())
-
-        command = 'g.region'
-        command += ' n=' + str(regionCoords[3])
-        command += ' s=' + str(regionCoords[2])
-        command += ' e=' + str(regionCoords[1])
-        command += ' w=' + str(regionCoords[0])
-        command += ' res=' \
-            + str(self.inputs[self.GRASS_REGION_CELLSIZE_PARAMETER].value)
-        commands.append(command)
 
         # 1: Export layer to grass mapset
 
@@ -375,8 +373,37 @@ class GrassProcess(Process):
                     for layer in layers:
                         commands.append(self.exportVectorLayer(layer))
 
-        # 2: set parameters and outputs
-
+        #2. set GRASS region 
+        region = self.inputs[self.GRASS_REGION_EXTENT_PARAMETER].asbounds()
+        cellsize = self.inputs[self.GRASS_REGION_CELLSIZE_PARAMETER].value
+        
+        command = 'g.region'
+        if region is None or cellsize is None:
+            found = False
+            for param in self.inputs.values():
+                if param.value:
+                    if isinstance(param, ParameterRaster):
+                        command += " rast=" + self.exportedLayers[param.asfile()]
+                        found = True
+                        break;
+                    elif isinstance(param, ParameterVector):
+                        command += " vect=" + self.exportedLayers[param.asfile()]
+                        found = True
+                        break;
+                    elif isinstance(param, ParameterMultipleInput):
+                        #TODO:*******
+                        pass
+            if not found:
+                raise Exception("GRASS region has to be explicitly defined")
+        else:            
+            command += ' n=' + str(region.getnorth())
+            command += ' s=' + str(region.getsouth())
+            command += ' e=' + str(region.geteast())
+            command += ' w=' + str(region.getwest())
+            command += ' res=' + str(cellsize)
+        commands.append(command)
+        
+        # 3: set parameters and outputs
         command = self.grassname
         for param in self.inputs.values():
             if param.value == None:
@@ -385,23 +412,24 @@ class GrassProcess(Process):
                 or param.name == self.GRASS_REGION_EXTENT_PARAMETER:
                 continue
             if isinstance(param, (ParameterRaster, ParameterVector)):
-                value = param.value
+                value = param.asfile()
                 if value in self.exportedLayers.keys():
                     command += ' ' + param.name + '=' \
                         + self.exportedLayers[value]
                 else:
                     command += ' ' + param.name + '=' + value
             elif isinstance(param, ParameterMultipleInput):
-                s = param.value
+                files = param.asfiles()
+                s = ",".join(files)
                 for layer in self.exportedLayers.keys():
                     s = s.replace(layer, self.exportedLayers[layer])
-                s = s.replace(';', ',')
+                #s = s.replace(';', ',')
                 command += ' ' + param.name + '=' + s
             elif isinstance(param, ParameterBoolean):
                 if param.value:
-                    command += ' ' + param.name
+                    command += ' -' + param.name
             elif isinstance(param, ParameterSelection):
-                idx = int(param.value)
+                idx = param.asindex()
                 command += ' ' + param.name + '=' \
                     + str(param.options[idx])
             else:
@@ -416,7 +444,7 @@ class GrassProcess(Process):
         command += ' --overwrite'
         commands.append(command)
 
-        # 3:Export resulting layers to a format that qgis can read
+        # 4:Export resulting layers to a format that qgis can read
 
         for out in self.outputs.values():
             if isinstance(out, OutputRaster):
@@ -439,7 +467,7 @@ class GrassProcess(Process):
                 command += ' type=auto'
                 commands.append(command)
 
-        # 4 Run GRASS)
+        # 5. Run GRASS
 
         executeGrass(commands)
 

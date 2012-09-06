@@ -29,6 +29,8 @@ class Process():
                 if not inp.isDefaultValueOK():
                     print "Missing mandatory " + inp.name
                     return 
+                else:
+                    inp.setDefaultValue()                
         for out in self.outputs.values():
             if out.name in args.keys():
                 out.setValue(args[out.name])
