@@ -827,9 +827,7 @@ class ParameterVector(Parameter):
         if isinstance(self.value, Layer):
             return self.value
         elif isinstance(self.value, str):
-
             # TODO: do not assume that the file is a shapefile
-
             return Shapefile(file=self.value)
 
     def asfile(self):
