@@ -131,7 +131,7 @@ ParameterVector|SHAPES|Points|0|False
 ParameterTableField|FIELD|Attribute|SHAPES|-1
 ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterNumber|LEVEL|Resolution|None|None|1.0
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -490,7 +490,7 @@ ParameterRaster|SOURCE|Source|False
 ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
 ParameterSelection|TARGET_TYPE|Target|[0] user defined grid system
 ParameterBoolean|TARGET_AREA        |Use Target Area Polygon|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
 ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|GET_USER_GRID|Grid
 OutputVector|POINTS_POINTS|Points
@@ -505,7 +505,7 @@ ParameterMultipleInput|SOURCE|Source|3.0|False
 ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
 ParameterSelection|TARGET_TYPE|Target|[0] user defined grid system
 ParameterBoolean|TARGET_AREA               |Use Target Area Polygon|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
 ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|TARGET|Target
 OutputVector|POINTS_POINTS|Points
@@ -541,7 +541,7 @@ OutputRaster|RESULT|Covered Distance
 Create Graticule
 shapes_tools
 ParameterVector|EXTENT|Extent|-1|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent X_EXTENT_MIN X_EXTENT_MAX Y_EXTENT_MIN Y_EXTENT_MAX
 ParameterNumber|DISTX|Division Width|None|None|1.0
 ParameterNumber|DISTY|Division Height|None|None|1.0
 ParameterSelection|TYPE|Type|[0] Lines;[1] Rectangles
@@ -578,7 +578,7 @@ ParameterNumber|NPMIN|Minimal Number of Points|None|None|3
 ParameterNumber|NPMAX|Maximal Number of Points|None|None|20
 ParameterNumber|NPPC|Points per Square|None|None|5
 ParameterNumber|K|Tolerance|None|None|140.0
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -996,7 +996,7 @@ ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
 ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
 ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
 ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_QUALITY|Quality
 OutputRaster|USER_INTERCEPT|Intercept
@@ -1040,7 +1040,7 @@ ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
 ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
 ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
 ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|0.0
 OutputRaster|USER_GRID|Grid
 OutputRaster|USER_QUALITY|Quality
@@ -1282,7 +1282,7 @@ ParameterNumber|RADIUS|Search Radius|None|None|100.0
 ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
 ParameterSelection|POINTS|Number of Points|[0] maximum number of points;[1] all points
 ParameterNumber|NPOINTS|Maximum Number of Points|None|None|10
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|0.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1316,7 +1316,7 @@ ParameterTableField|POPULATION|Weight|POINTS|-1
 ParameterNumber|RADIUS|Radius|None|None|10
 ParameterSelection|KERNEL|Kernel|[0] quartic kernel;[1] gaussian kernel
 ParameterSelection|TARGET|Target Grid|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1510,7 +1510,7 @@ ParameterSelection|METHOD|Method|[0] without B-spline refinement;[1] with B-spli
 ParameterNumber|EPSILON|Threshold Error|None|None|0.0001
 ParameterNumber|LEVEL_MAX|Maximum Level|None|None|11.0
 ParameterSelection|DATATYPE|Data Type|[0] same as input grid;[1] floating point
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1522,7 +1522,7 @@ ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterSelection|METHOD|Method|[0] without B-spline refinement;[1] with B-spline refinement
 ParameterNumber|EPSILON|Threshold Error|None|None|0.0001
 ParameterNumber|LEVEL_MAX|Maximum Level|None|None|11.0
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1579,7 +1579,7 @@ ParameterVector|SHAPES|Points|0|False
 ParameterTableField|FIELD|Attribute|SHAPES|-1
 ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterBoolean|SIBSON         |Sibson|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1588,7 +1588,7 @@ grid_gridding
 ParameterVector|SHAPES|Points|0|False
 ParameterTableField|FIELD|Attribute|SHAPES|-1
 ParameterSelection|TARGET|Target Grid|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -1617,7 +1617,7 @@ ParameterNumber|POW_A|Power Function - A|None|None|1.0
 ParameterNumber|POW_B|Power Function - B|None|None|0.5
 ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
 ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
 OutputRaster|GRID|Grid
 OutputRaster|VARIANCE|Variance
 ----
@@ -1693,7 +1693,7 @@ ParameterNumber|NPOINTS_MIN|Min.Number of m_Points|None|None|4
 ParameterNumber|NPOINTS_MAX|Max. Number of m_Points|None|None|20
 ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
 ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
 OutputRaster|GRID|Grid
 OutputRaster|VARIANCE|Variance
 ----
@@ -1847,7 +1847,7 @@ ParameterNumber|XORDER|Maximum X Order|None|None|4
 ParameterNumber|YORDER|Maximum Y Order|None|None|4
 ParameterNumber|TORDER|Maximum Total Order|None|None|4
 ParameterSelection|TARGET|Trend Surface|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputVector|RESIDUALS|Residuals
 OutputRaster|USER_GRID|Grid
@@ -1893,7 +1893,7 @@ ParameterString|TARGET_PROJ|Target Projection Parameters|
 ParameterRaster|SOURCE|Source|False
 ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
 ParameterSelection|TARGET_TYPE|Target|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
 ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|GET_USER_GRID|Grid
 ----
@@ -1905,7 +1905,7 @@ ParameterMultipleInput|SOURCE|Source|3.0|False
 ParameterBoolean|CREATE_XY                 |Create X/Y Grids|True
 ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
 ParameterSelection|TARGET_TYPE|Target|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
 ParameterNumber|GET_USER_SIZE|Cellsize|None|None|0.0
 OutputRaster|TARGET|Target
 OutputRaster|SHAPES|Shapes
@@ -2059,7 +2059,7 @@ ParameterBoolean|KEEP_TYPE              |Preserve Data Type|True
 ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterSelection|SCALE_UP_METHOD|Interpolation Method|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation;[5] Mean Value;[6] Mean Value (cell area weighted);[7] Minimum Value;[8] Maximum Value;[9] Majority
 ParameterSelection|SCALE_DOWN_METHOD|Interpolation Method|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2145,7 +2145,7 @@ ParameterSelection|MULTIPLE|Method for Multiple Values|[0] first;[1] last;[2] mi
 ParameterSelection|LINE_TYPE|Method for Lines|[0] thin;[1] thick
 ParameterSelection|GRID_TYPE|Preferred Target Grid Type|[0] Integer (1 byte);[1] Integer (2 byte);[2] Integer (4 byte);[3] Floating Point (4 byte);[4] Floating Point (8 byte)
 ParameterSelection|TARGET|Target Grid|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2365,7 +2365,7 @@ ParameterVector|SHAPES|Points|0|False
 ParameterTableField|FIELD|Attribute|SHAPES|-1
 ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterNumber|REGUL|Regularisation|None|None|0.0
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2379,7 +2379,7 @@ ParameterNumber|RADIUS|Search Radius|None|None|100.0
 ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
 ParameterSelection|SELECT|Points Selection|[0] all points in search radius;[1] maximum number of points
 ParameterNumber|MAXPOINTS|Maximum Number of Points|None|None|10
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2391,7 +2391,7 @@ ParameterSelection|TARGET|Target Grid|[0] user defined
 ParameterNumber|REGUL|Regularisation|None|None|0.0
 ParameterSelection|LEVEL|Neighbourhood|[0] immediate;[1] level 1;[2] level 2
 ParameterBoolean|FRAME          |Add Frame|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2521,7 +2521,7 @@ grid_gridding
 ParameterVector|SHAPES|Points|0|False
 ParameterTableField|FIELD|Attribute|SHAPES|-1
 ParameterSelection|TARGET|Target Grid|[0] user defined
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
 ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
 OutputRaster|USER_GRID|Grid
 ----
@@ -2546,7 +2546,7 @@ ParameterMultipleInput|GRIDS|Grids|3.0|False
 ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
 ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
 ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
 OutputRaster|GRID|Grid
 OutputRaster|VARIANCE|Variance
 ----
@@ -2574,7 +2574,7 @@ ParameterNumber|NPOINTS_MAX|Max. Number of m_Points|None|None|20
 ParameterNumber|MAXRADIUS|Maximum Search Radius (map units)|None|None|1000.0
 ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
 ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
-ParameterExtent|OUTPUT_EXTENT|Output extent|0,1,0,1
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
 OutputRaster|GRID|Grid
 OutputRaster|VARIANCE|Variance
 ----
