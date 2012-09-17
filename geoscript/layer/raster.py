@@ -16,6 +16,7 @@ from org.geotools.coverage.processing import CoverageProcessor
 from org.geotools.process.raster.gs import ScaleCoverage, CropCoverage
 from org.geotools.process.raster.gs import RasterAsPointCollectionProcess
 from org.geotools.coverage.grid.io import GridFormatFinder
+import math
 
 class Raster(object):
     
@@ -24,14 +25,14 @@ class Raster(object):
   DATA_TYPE_BYTE = DataBuffer.TYPE_BYTE;
   DATA_TYPE_INT = DataBuffer.TYPE_INT;
   DATA_TYPE_FLOAT = DataBuffer.TYPE_FLOAT;
-  DATA_TYPE_DOUBLE = DataBuffer.TYPE_DOUBLE;
-
+  DATA_TYPE_DOUBLE = DataBuffer.TYPE_DOUBLE;   
+      
   @staticmethod
   def create(data, bounds, nband=1, bands=None, dataType=DataBuffer.TYPE_FLOAT):
     """
     Creates a new Raster. *data* may be specified as a two dimensional list or
-    array (if the layer has just 1 band) or a tridimensional one if the layer has more
-    than 1 band. It may be also specified as a WritableRaster. 
+    array [x][y] (if the layer has just 1 band) or a tridimensional one if the layer has more
+    than 1 band. 
     
     Use *nbands* to set the number of bands. You can also use *bands*, passing a list
     of *Band* objects.
@@ -92,6 +93,10 @@ class Raster(object):
     self.initnodata()
     
   def initnodata(self):
+    '''this method tries to find a nodata value for the layer. 
+    This value should be used under the assumption that there 
+    is only one single value for all bands in the layer'''
+      
     value = self._coverage.getProperty("GC_NODATA")
     try:
       self.nodatavalue = float(value)     
@@ -180,7 +185,7 @@ class Raster(object):
     '''
       
     try:
-      #this should be done in geotools, but it throws an exception instead (might not very efficient)
+      #this should be done in geotools, but it throws an exception instead (which might not very efficient)
       if self.isinwindow(x, y): 
         tile = self._image.getTile(self._image.XToTileX(x), self._image.YToTileY(y));
         return tile.getSampleDouble(x, y, band)
@@ -199,9 +204,28 @@ class Raster(object):
     are outside the extent of the layer.
       ''' 
     return list(self._coverage.evaluate(DirectPosition2D(x, y)))[band]
+
+  def getvalueatexternalcoord(self, x, y, band, raster):
+    '''Returns the value of this layer at a given pixel coordinate
+    expressed by its x(col) and y(row) components. This x and y
+    components are not referred to the pixel space of this layer,
+    but the pixel space of another one.
+    This method should be used to make it easier to combine layer with
+    different extent and/or cellsize.
+        
+    *band* is the zero-based band order of the band to query
+      
+    Return the no-data value of the layer in case the passed coordinates
+    are outside the extent of the layer.
+    
+    '''
+    wx = raster.getextent().getwest() + raster.pixelsize[0] * x
+    wy = raster.getextent().getnorth() - raster.pixelsize[1] * y
+    return self.getvalueatcoord(wx, wy, band)
+    
     
   def isinwindow(self, x, y):
-    '''Returns True if the passed pixel coordinates are within the 
+    '''Returns True if the passed cell coordinates are within the 
     extent of the layer'''
     if (x < 0) or (y < 0) :
         return False        
@@ -222,6 +246,12 @@ class Raster(object):
   
      The location can be specified with the *point* parameter (world space) or
      with the *pixel* parameter (image space).
+     
+     When used with the pixel parameter, this will behave as the getvalueatcell
+     method. However, interpolation might be involved in this case, as the pixel
+     is converted to a world coordinate before evaluation. For repeated calls to 
+     this method (such as a full scanning of an image, getvalueatcell is recommended
+     instead
      """
      if point:
        p = Point(point)
@@ -369,6 +399,39 @@ class Raster(object):
       yield Feature(f=f)
 
     it.close()
+    
+  def getslopeatcell(self, x, y):
+    '''
+    Returns the value of the slope for a given cell, in radians.
+    Slope is calculated using the first band of the layer, as it
+    is supposed to be applied for layers containing a single variable.
+    '''
+    OFFSETX = [ 0, 1, 1, 1, 0, -1, -1, -1 ]
+    OFFSETY = [ 1, 1, 0, -1, -1, -1, 0, 1 ]
+    iSub =  [5, 8, 7, 6, 3, 0, 1, 2 ]
+    z = self.getvalueatcell(x, y, 0)
+    if z == self.nodatavalue:
+      return self.nodatavalue;
+    else:
+      zm = [0] * 8
+      zm[4] = 0.0
+    for i in range(8):
+      z2 = self.getvalueatcell(x + OFFSETX[i], y + OFFSETY[i]);
+      if z2 != self.nodatavalue:
+        zm[iSub[i]] = z2 - z;
+      else:
+        z2 = self.getvaluatcell(x + OFFSETX[(i + 4) % 8], y
+                            + OFFSETY[(i + 4) % 8]);
+        if z2 != self.nodatavalue:
+          zm[iSub[i]] = z - z2;
+        else:
+          zm[iSub[i]] = 0.0;
+    
+    G = (zm[5] - zm[3]) / self.pixelsize[0] / 2.
+    H = (zm[7] - zm[1]) / self.pixelsize[0] / 2.
+    k2 = G * G + H * H;
+    slope = math.atan(math.sqrt(k2));
+    return slope
  
   def __add__(self, other):
     if isinstance(other, Raster):

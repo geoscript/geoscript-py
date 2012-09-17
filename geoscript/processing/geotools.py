@@ -16,6 +16,7 @@ from org.geotools.feature import FeatureCollection
 from org.geotools.referencing import CRS
 from org.opengis.referencing.crs import CoordinateReferenceSystem
 from com.vividsolutions.jts.geom import Envelope, Geometry
+from org.geotools.data import DataUtilities
 
 
 def getgeoscriptoutputs(outputs):
@@ -65,7 +66,7 @@ def getgeoscriptinputs(inputs):
                     options)
             m[v.name].enum = t;
         else:
-            m[v.name] = ParameterObject(name, v.description, v.type)
+            m[v.name] = ParameterObject(name, desc, v.type)
 
     return m
 
@@ -107,9 +108,8 @@ class GeotoolsProcess(Process):
     def _run(self):
 
         # map the inputs to java.
-
         m = {}
-        for inp in self.input:
+        for inp in self.inputs.values():
             if isinstance(inp, ParameterRaster):
                 m[inp.name] = core.unmap(inp.aslayer())
             elif isinstance(inp, ParameterVector):
@@ -122,14 +122,14 @@ class GeotoolsProcess(Process):
                 m[inp.name] = core.unmap(inp.value)
 
         # run the process
-
         result = self._process.execute(m, None)
 
         # reverse map the outputs back
-
-        r = {}
-        for (k, v) in dict(result).iteritems():
+        for (k, v) in dict(result).iteritems():            
             self.outputs[k].value = core.map(v)
-            r[k] = self.outputs[k]
 
-        return r
+        #featurecollection objects are turned into Layer object, not Cursor
+        for out in self.outputs.values():
+            if isinstance(out, OutputVector):
+                out.value = core.map(DataUtilities.source(core.unmap(out.value)))
+        
