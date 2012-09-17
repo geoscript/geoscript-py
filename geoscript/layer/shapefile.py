@@ -3,9 +3,10 @@ The :mod:`layer.shapefile` module provides support for Shapefile access.
 """
 
 from os import path
-from java import net
 from geoscript import util
 from geoscript.layer import Layer
+from geoscript.workspace.directory import Directory
+import os
 
 class Shapefile(Layer):
   """
@@ -26,6 +27,12 @@ class Shapefile(Layer):
   file = property(getfile, None, None, 'Returns the file path to the Shapefile')
 
   @staticmethod
-  def save(Layer, filename):
-      ##TODO:
-      pass
+  def save(layer, filename):
+    ws = Directory(os.path.dirname(filename))
+    n = os.path.basename(filename)
+    n=n[:n.find('.')]
+    shapefile = ws.create(n, layer.schema.fields)
+    for feature in layer.features():
+        shapefile.add(feature)
+      
+      
