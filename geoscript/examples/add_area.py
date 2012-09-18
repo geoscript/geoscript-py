@@ -25,6 +25,5 @@ if __name__ == '__main__':
         values = feature.values()
         values.append(area)
         result.add(values)
-        print str(values)
         
     
