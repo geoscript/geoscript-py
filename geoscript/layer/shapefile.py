@@ -5,7 +5,7 @@ The :mod:`layer.shapefile` module provides support for Shapefile access.
 from os import path
 from geoscript import util
 from geoscript.layer import Layer
-from geoscript.workspace.directory import Directory
+from geoscript.workspace import Directory
 import os
 
 class Shapefile(Layer):
@@ -18,7 +18,6 @@ class Shapefile(Layer):
     f = util.toFile(file) 
     name = path.splitext(path.basename(file))[0]
     self.shapefile = file
-    from geoscript.workspace import Directory
     Layer.__init__(self, name, Directory(f.canonicalFile.parent))
 
   def getfile(self):
