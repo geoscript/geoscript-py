@@ -28,7 +28,7 @@ def scatterplot(X,Y):
     renderer1 = XYLineAndShapeRenderer(False, True)
     plot = XYPlot(dataset, xAxis, yAxis, renderer1)   
                   
-    jfchart = JFreeChart("Scatterplot", JFreeChart.DEFAULT_TITLE_FONT, plot, True);
+    jfchart = JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, True);
     
     chart = Chart(jfchart)          
         

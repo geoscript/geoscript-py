@@ -205,7 +205,7 @@ class Raster(object):
       ''' 
     return list(self._coverage.evaluate(DirectPosition2D(x, y)))[band]
 
-  def getvalueatexternalcoord(self, x, y, band, raster):
+  def getvalueatexternalcell(self, x, y, band, raster):
     '''Returns the value of this layer at a given pixel coordinate
     expressed by its x(col) and y(row) components. This x and y
     components are not referred to the pixel space of this layer,

@@ -1,12 +1,12 @@
 '''
-Functions in this class returns generators than can be used as input for 
+Functions in this class returns iterables than can be used as input for 
 any of the method in the plot package that create chart.
 
 This functions should simplify the creation of dataset when the data to
 plot comes from a GeoScript layer or can be derived from it
 
-Although most functions return generators, some might returns other data structure
-like dicts or lists, depending on the kind of data being created
+For now, all this functions work with vector layers, althought they might be adapted
+to use also raster ones
 '''  
 
 from geoscript.geom.point import Point
@@ -25,10 +25,17 @@ def x(layer):
         yield  feature.geom.centroid.x
         
 def y(layer):
+    '''returns a generator with y coordinates of features in a vector layer. 
+    If the layer contains lines or polygons, the y coordinate of the centroid is used'''
+    for feature in layer.features():
+        yield  feature.geom.centroid.x
+        
+def xy(layer):
     '''returns a generator with x coordinates of features in a vector layer. 
     If the layer contains lines or polygons, the x coordinate of the centroid is used'''
     for feature in layer.features():
-        yield  feature.geom.centroid.x
+        centroid = feature.geom.centroid 
+        yield  (centroid.x, centroid.y)        
         
 
 def disttopoint(layer, x, y):
@@ -50,17 +57,25 @@ def uniquecounts(layer, attr):
          
         
 def frequency(data, nbins):  
-    '''returns a frequency distribution of a data serie, divided in a given number of bins'''      
+    '''returns a frequency distribution of a data serie, divided in a given number of bins.
+    the distribution is returned as a list of tuples in the form (bin_center, frequency)'''      
     datalist = list(data)
     lo = min(datalist)
     hi = max(datalist)
     binsize = (hi-lo)/(float(nbins))
     freq = [0] * nbins
     for d in datalist:
-        bin = math.ceil((d - lo)/binsize) - 1
+        bin = int(math.ceil((d - lo)/binsize) - 1)
         freq[bin] += 1
-    return freq
+    ret = []
+    i = 0
+    for f in freq:
+        center = binsize / 2 + binsize * i
+        ret.append((center,f))
+        i += 1
+    return ret
 
 def histogram(layer, attr, nbins):
+    return frequency(attribute(attr), nbins)
     
                                   
