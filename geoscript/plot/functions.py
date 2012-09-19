@@ -18,6 +18,22 @@ def attribute(layer, attr):
     for feature in layer.features():
         yield  float(feature.get(attr))
         
+def attributes(layer, attrs, filter=None):
+    '''returns a generator with values of a given set of attribute of a given vector layer.
+    The generator contain tuples with as many values as attribute names were passed'''
+    for feature in layer.features():
+        yield tuple(float(feature.get(attr)) for attr in attrs)   
+
+def attributesasdict(layer, attrs, filter=None):
+    '''returns a dict with attribute names as keys and lists of values for each parameter as values'''
+    ret = {}
+    for attr in attrs:
+        ret[attr] = []
+    for feature in layer.features():
+        for attr in attrs:
+            ret[attr].append(feature.get(attr))               
+    return ret
+
 def x(layer):
     '''returns a generator with x coordinates of features in a vector layer. 
     If the layer contains lines or polygons, the x coordinate of the centroid is used'''
