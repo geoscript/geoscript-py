@@ -1,36 +1,35 @@
 from org.jfree.data.xy import XYSeriesCollection, XYSeries
-from org.jfree.chart.renderer.xy import  XYLineAndShapeRenderer
-from org.jfree.chart import  JFreeChart
-from org.jfree.chart.plot import XYPlot
+from org.jfree.chart import  ChartFactory
+from org.jfree.chart.plot import PlotOrientation
 from org.jfree.chart.axis import NumberAxis
 import itertools
 from geoscript.plot.chart import Chart
+from org.jfree.util import ShapeUtilities
 
-def scatterplot(X,Y):
+def scatterplot(X,Y=None, name="", xlab="", ylab="", size= 3):
+    '''creates a scatterplot from x and y data.
+    Data can be passed as a list of (x,y) tuples or two lists with
+    x and y values'''
     
-    xAxis = NumberAxis("X")   
+    xAxis = NumberAxis(xlab)   
     xAxis.setAutoRangeIncludesZero(False)   
-    yAxis = NumberAxis("Y")   
+    yAxis = NumberAxis(ylab)   
     yAxis.setAutoRangeIncludesZero(False)   
    
-    series = XYSeries("Values"); 
-    xmax = xmin = None       
-    for (x,y) in itertools.izip(X, Y):
+    series = XYSeries("Values");     
+    if Y is not None:
+        iterable = itertools.izip(X, Y)
+    else:
+        iterable = X       
+    for (x,y) in iterable:
         series.add(x, y);
-        if xmax is None:
-            xmax = xmin = x
-        else:
-            xmax = max(xmax, x)
-            xmin = min(xmin, x)
             
     dataset = XYSeriesCollection()
     dataset.addSeries(series);
-    renderer1 = XYLineAndShapeRenderer(False, True)
-    plot = XYPlot(dataset, xAxis, yAxis, renderer1)   
-                  
-    jfchart = JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, True);
+    chart = ChartFactory.createScatterPlot(name, xlab, ylab, dataset,\
+                                           PlotOrientation.VERTICAL, True, True, False)    
+    plot = chart.getPlot()
+    plot.getRenderer().setSeriesShape(0, ShapeUtilities.createRegularCross(size,size));                  
     
-    chart = Chart(jfchart)          
-        
-    return chart
+    return Chart(chart)
     

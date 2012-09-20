@@ -5,6 +5,6 @@ from geoscript.filter import Filter
 
 if __name__ == '__main__':       
     layer = Shapefile('D:/gisdata/denver_shapefiles/census_boundaries.shp')    
-    chart = box(attributesasdict(layer, ['WHITE', 'BLACK', 'AMERI_ES', 'ASIAN', 'OTHER', 'HISPANIC'], Filter("COUNTY == 'denver'")))
+    chart = box(attributesasdict(layer, ['BLACK', 'AMERI_ES', 'ASIAN', 'OTHER', 'HISPANIC'], Filter("COUNTYNAME = 'DENVER'")))
     chart.show()
     

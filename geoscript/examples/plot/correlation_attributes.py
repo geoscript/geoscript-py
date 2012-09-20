@@ -1,8 +1,8 @@
 from geoscript.processing.sampledata import sampledata
-from geoscript.plot import correlation
 from geoscript.plot import attribute
+from geoscript.plot.regression import linearregression
 
 if __name__ == '__main__':       
     layer = sampledata.get('heights')
-    chart = correlation(attribute(layer, 'VALUE'), attribute(layer, 'VALUE'))
+    chart = linearregression(attribute(layer, 'VALUE'), attribute(layer, 'VALUE'))
     chart.show()

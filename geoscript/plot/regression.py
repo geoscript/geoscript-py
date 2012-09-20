@@ -1,5 +1,5 @@
 from org.jfree.data.xy import XYSeriesCollection, XYSeries
-from org.jfree.chart.renderer.xy import  XYLineAndShapeRenderer
+from org.jfree.chart.renderer.xy import  XYLineAndShapeRenderer, XYDotRenderer
 from java.awt import Color
 from org.jfree.chart import  JFreeChart
 from org.jfree.chart.plot import XYPlot
@@ -36,7 +36,7 @@ def regression(X,Y, regtype = 0):
             
     dataset = XYSeriesCollection()
     dataset.addSeries(series);
-    renderer1 = XYLineAndShapeRenderer(False, True)
+    renderer1 = XYDotRenderer()
     plot = XYPlot(dataset, xAxis, yAxis, renderer1)   
       
     if regtype == 1:
@@ -52,7 +52,7 @@ def regression(X,Y, regtype = 0):
                 xmin, xmax, 100, "Fitted Regression Line")   
            
     plot.setDataset(1, regressionData)   
-    renderer2 = XYLineAndShapeRenderer(True, False);   
+    renderer2 = XYLineAndShapeRenderer(True, False)   
     renderer2.setSeriesPaint(0, Color.blue)   
     plot.setRenderer(1, renderer2)
            
