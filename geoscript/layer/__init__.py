@@ -6,6 +6,7 @@ from io.json import writeJSON, readJSON
 from raster import Raster
 from geotiff import GeoTIFF
 from worldimage import WorldImage
+from writableraster import WritableRaster
 
 def _import(mod, clas):
   try:
