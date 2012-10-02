@@ -7,27 +7,40 @@ from geoscript.proj import Projection
 from geoscript.geom import Bounds, Point
 from geoscript.feature import Feature
 from geoscript.layer.band import Band
-from org.opengis.parameter import GeneralParameterValue
-from org.opengis.referencing.datum import PixelInCell
 from org.geotools.factory import Hints
 from org.geotools.geometry import DirectPosition2D
-from org.geotools.parameter import Parameter
-from org.geotools.coverage import CoverageFactoryFinder, GridSampleDimension
+from org.geotools.coverage import CoverageFactoryFinder
 from org.geotools.coverage.grid import GridCoverage2D, GridGeometry2D
 from org.geotools.coverage.grid import GridEnvelope2D, GridCoordinates2D
-from org.geotools.coverage.grid.io import AbstractGridFormat
 from org.geotools.coverage.processing import CoverageProcessor
 from org.geotools.process.raster.gs import ScaleCoverage, CropCoverage
-from org.geotools.process.raster.gs import AddCoveragesProcess
 from org.geotools.process.raster.gs import RasterAsPointCollectionProcess
+from org.geotools.coverage.grid.io import GridFormatFinder
+import math
 
 class Raster(object):
-
+    
+  DEFAULT_NO_DATA = -99999
+  
+  DATA_TYPE_BYTE = DataBuffer.TYPE_BYTE;
+  DATA_TYPE_INT = DataBuffer.TYPE_INT;
+  DATA_TYPE_FLOAT = DataBuffer.TYPE_FLOAT;
+  DATA_TYPE_DOUBLE = DataBuffer.TYPE_DOUBLE;   
+      
   @staticmethod
   def create(data, bounds, nband=1, bands=None, dataType=DataBuffer.TYPE_FLOAT):
     """
     Creates a new Raster. *data* may be specified as a two dimensional list or
-    array. It may be also specified as 
+    array [x][y] (if the layer has just 1 band) or a tridimensional one if the layer has more
+    than 1 band. 
+    
+    Use *nbands* to set the number of bands. You can also use *bands*, passing a list
+    of *Band* objects.
+    
+    When *bands* is used, *nbands* is ignored.
+    
+    the *dataType* parameter defines the type of data to use for the layer to create, which
+    is represented as a constant DATA_TYPE_XXX from this same class
     """
     factory = CoverageFactoryFinder.getGridCoverageFactory(None)
 
@@ -37,7 +50,7 @@ class Raster(object):
     nband = len(bands)
 
     if isinstance(data, list):
-      # copy the data into a writeable raster
+      # copy the data into a writable raster
       h, w = len(data), len(data[0])
       wr = RasterFactory.createBandedRaster(dataType, w, h, nband, None)
 
@@ -55,10 +68,10 @@ class Raster(object):
       coverage = factory.create('raster', data, bounds, [b._dim for b in bands])
     else:
       coverage = factory.create('raster', data, bounds)
-
-    return Raster(None, coverage=coverage)
-
-  def __init__(self, format, file=None, proj=None, coverage=None, reader=None):
+    
+    return Raster(coverage=coverage)
+  
+  def __init__(self, format=None, file=None, proj=None, coverage=None, reader=None):
     self.file = file
     self._format = format
     self._coverage = coverage
@@ -70,10 +83,35 @@ class Raster(object):
         if proj:
           proj = Projection(proj)
           hints.put(Hints.DEFAULT_COORDINATE_REFERENCE_SYSTEM, proj._crs) 
-
+        if format is None:
+            self._format = format = GridFormatFinder.findFormat(util.toFile(file))
         self._reader = format.getReader(util.toFile(file), hints)
       self._coverage = self._reader.read(None)
 
+    self._image = self._coverage.geophysics(True).getRenderedImage()
+    self.width, self.height = self.getsize()
+    self.initnodata()
+    
+  def initnodata(self):
+    '''this method tries to find a nodata value for the layer. 
+    This value should be used under the assumption that there 
+    is only one single value for all bands in the layer'''
+      
+    value = self._coverage.getProperty("GC_NODATA")
+    try:
+      self.nodatavalue = float(value)     
+      return;
+    except:
+      dimList = self._coverage.getSampleDimensions()      
+      for i  in range(len(dimList)):
+        noDataList = dimList[i].getNoDataValues()
+        if (noDataList is not None) and (len(noDataList) > 0):
+          self.nodatavalue = noDataList[0];
+          return;
+        
+      self.nodatavalue = self.DEFAULT_NO_DATA
+      
+  
   def getname(self):
     return os.path.basename(self.file) if self.file else 'raster'
 
@@ -122,30 +160,105 @@ class Raster(object):
   blocksize = property(getblocksize, None)
 
   def getpixelsize(self):
+    '''
+    returns a (x_pixelsize, y_pixelsize) tuple
+    '''
     b = self.extent
     s = self.size
-    return (b.width/s[0], b.height/s[1])
+    return (b.width / s[0], b.height / s[1])
 
   pixelsize = property(getpixelsize, None)
 
   def getdata(self):
-     return self._coverage.getRenderedImage().getData() 
+    return self._coverage.getRenderedImage().getData() 
 
   data = property(getdata, None)
+  
+  def getvalueatcell(self, x, y, band=0):
+    '''Returns the value of this layer at a given pixel coordinate
+    expressed by its x(col) and y(row) components.
+      
+    *band* is the zero-based band order of the band to query
+     
+    Return the no-data value of the layer in case the passed coordinates
+    are outside the extent of the layer.
+    '''
+      
+    try:
+      #this should be done in geotools, but it throws an exception instead (which might not very efficient)
+      if self.isinwindow(x, y): 
+        tile = self._image.getTile(self._image.XToTileX(x), self._image.YToTileY(y));
+        return tile.getSampleDouble(x, y, band)
+      else:
+          return self.nodatavalue
+    except:      
+      return self.nodatavalue
 
+  def getvalueatcoord(self, x, y, band=0):
+    '''Returns the value of this layer at a given world coordinate
+    expressed by its x and y components.
+      
+    *band* is the zero-based band order of the band to query
+      
+    Return the no-data value of the layer in case the passed coordinates
+    are outside the extent of the layer.
+      ''' 
+    return list(self._coverage.evaluate(DirectPosition2D(x, y)))[band]
+
+  def getvalueatexternalcell(self, x, y, band, raster):
+    '''Returns the value of this layer at a given pixel coordinate
+    expressed by its x(col) and y(row) components. This x and y
+    components are not referred to the pixel space of this layer,
+    but the pixel space of another one.
+    This method should be used to make it easier to combine layer with
+    different extent and/or cellsize.
+        
+    *band* is the zero-based band order of the band to query
+      
+    Return the no-data value of the layer in case the passed coordinates
+    are outside the extent of the layer.
+    
+    '''
+    wx = raster.getextent().getwest() + raster.pixelsize[0] * x
+    wy = raster.getextent().getnorth() - raster.pixelsize[1] * y
+    return self.getvalueatcoord(wx, wy, band)
+    
+    
+  def isinwindow(self, x, y):
+    '''Returns True if the passed cell coordinates are within the 
+    extent of the layer'''
+    if (x < 0) or (y < 0) :
+        return False        
+    if (x >= self.width) or (y >= self.height):
+        return False;        
+    return True;
+   
+  def getnodatavalue(self):
+    '''Returns the no-data value of this layer'''
+    return self.nodatavalue
+ 
+  def isnodatavalue(self, value):
+     return value == self.nodatavalue
+    
   def eval(self, point=None, pixel=None):
      """
      Returns the value of the raster at the specified location.
   
      The location can be specified with the *point* parameter (world space) or
      with the *pixel* parameter (image space).
+     
+     When used with the pixel parameter, this will behave as the getvalueatcell
+     method. However, interpolation might be involved in this case, as the pixel
+     is converted to a world coordinate before evaluation. For repeated calls to 
+     this method (such as a full scanning of an image, getvalueatcell is recommended
+     instead
      """
      if point:
        p = Point(point)
      elif pixel:
        p = self.point(pixel)
      else:
-       p = self.point((0,0))
+       p = self.point((0, 0))
 
      return list(self._coverage.evaluate(DirectPosition2D(p.x, p.y)))
 
@@ -193,8 +306,8 @@ class Raster(object):
          #dy = rect[3] / float(self.size[1])
 
          e = self.extent
-         bbox = Bounds(e.west + rect[0]*dx, e.south + rect[1]*dy, 
-          e.west + (rect[0]+rect[2])*dx, e.south + (rect[1]+rect[3])*dy, e.proj)
+         bbox = Bounds(e.west + rect[0] * dx, e.south + rect[1] * dy,
+          e.west + (rect[0] + rect[2]) * dx, e.south + (rect[1] + rect[3]) * dy, e.proj)
        else:
          # no bbox or rectangle, use full extent
          bbox = self.extent
@@ -208,8 +321,8 @@ class Raster(object):
        else:
          size = rect[2], rect[3]
 
-     gg = GridGeometry2D(GridEnvelope2D(0,0,*size), bbox)
-     result =  self._op('Resample', Source=self._coverage, 
+     gg = GridGeometry2D(GridEnvelope2D(0, 0, *size), bbox)
+     result = self._op('Resample', Source=self._coverage,
        CoordinateReferenceSystem=self.proj._crs, GridGeometry=gg)
 
      return Raster(self._format, coverage=result, reader=self._reader)
@@ -244,13 +357,13 @@ class Raster(object):
 
     params = {'Source': self._coverage}
     if low: 
-      low = low if isinstance(low, (tuple, list)) else [low]*nb
+      low = low if isinstance(low, (tuple, list)) else [low] * nb
       params['lowValue'] = array(low, 'd')
     if high:
-      high = high if isinstance(high, (tuple, list)) else [high]*nb
+      high = high if isinstance(high, (tuple, list)) else [high] * nb
       params['highValue'] = array(high, 'd')
     if nbins:
-      nbins = nbins if isinstance(nbins, (tuple, list)) else [nbins]*nb
+      nbins = nbins if isinstance(nbins, (tuple, list)) else [nbins] * nb
       params['numBins'] = array(nbins, 'i')
 
     h = self._op('Histogram', **params).getProperty('histogram') 
@@ -286,13 +399,46 @@ class Raster(object):
       yield Feature(f=f)
 
     it.close()
+    
+  def getslopeatcell(self, x, y):
+    '''
+    Returns the value of the slope for a given cell, in radians.
+    Slope is calculated using the first band of the layer, as it
+    is supposed to be applied for layers containing a single variable.
+    '''
+    OFFSETX = [ 0, 1, 1, 1, 0, -1, -1, -1 ]
+    OFFSETY = [ 1, 1, 0, -1, -1, -1, 0, 1 ]
+    iSub =  [5, 8, 7, 6, 3, 0, 1, 2 ]
+    z = self.getvalueatcell(x, y, 0)
+    if z == self.nodatavalue:
+      return self.nodatavalue;
+    else:
+      zm = [0] * 8
+      zm[4] = 0.0
+    for i in range(8):
+      z2 = self.getvalueatcell(x + OFFSETX[i], y + OFFSETY[i]);
+      if z2 != self.nodatavalue:
+        zm[iSub[i]] = z2 - z;
+      else:
+        z2 = self.getvaluatcell(x + OFFSETX[(i + 4) % 8], y
+                            + OFFSETY[(i + 4) % 8]);
+        if z2 != self.nodatavalue:
+          zm[iSub[i]] = z - z2;
+        else:
+          zm[iSub[i]] = 0.0;
+    
+    G = (zm[5] - zm[3]) / self.pixelsize[0] / 2.
+    H = (zm[7] - zm[1]) / self.pixelsize[0] / 2.
+    k2 = G * G + H * H;
+    slope = math.atan(math.sqrt(k2));
+    return slope
  
   def __add__(self, other):
     if isinstance(other, Raster):
       result = self._op('Add', Source0=self._coverage, Source1=other._coverage)
     else:
       result = self._op('AddConst', Source=self._coverage, constants=
-        array(other if isinstance(other, (list,tuple)) else [other], 'd'))
+        array(other if isinstance(other, (list, tuple)) else [other], 'd'))
 
     return Raster(self._format, coverage=result)
    
@@ -301,16 +447,16 @@ class Raster(object):
       return self.__add__(-other)
     else:
       result = self._op('SubtractConst', Source=self._coverage, constants=
-        array(other if isinstance(other, (list,tuple)) else [other], 'd'))
+        array(other if isinstance(other, (list, tuple)) else [other], 'd'))
       return Raster(self._format, coverage=result)
 
   def __mul__(self, other):
     if isinstance(other, Raster):
-      result = self._op('Multiply', Source0=self._coverage, 
+      result = self._op('Multiply', Source0=self._coverage,
         Source1=other._coverage)
     else:
       result = self._op('MultiplyConst', Source=self._coverage, constants=
-        array(other if isinstance(other, (list,tuple)) else [other], 'd'))
+        array(other if isinstance(other, (list, tuple)) else [other], 'd'))
 
     return Raster(self._format, coverage=result)
 
@@ -321,7 +467,7 @@ class Raster(object):
       return self.__mul__(Raster(other._format, coverage=result))
     else:
       result = self._op('DivideByConst', Source=self._coverage, constants=
-        array(other if isinstance(other, (list,tuple)) else [other], 'd'))
+        array(other if isinstance(other, (list, tuple)) else [other], 'd'))
     return Raster(self._format, coverage=result)
 
   def __neg__(self): 
@@ -334,7 +480,7 @@ class Raster(object):
   def _op(self, name, **params):
     op = CoverageProcessor.getInstance().getOperation(name)
     p = op.getParameters()
-    for k,v in params.iteritems():
+    for k, v in params.iteritems():
       p.parameter(k).setValue(v)
 
     return op.doOperation(p, None)
@@ -350,7 +496,7 @@ class Histogram(object):
   def bin(self, i, band=0):
     h = self._histo
     if i < h.getNumBins(band):
-      return (h.getBinLowValue(band, i), h.getBinLowValue(band, i+1))
+      return (h.getBinLowValue(band, i), h.getBinLowValue(band, i + 1))
 
   def count(self, i, band=0):
     return self._histo.getBinSize(band, i)

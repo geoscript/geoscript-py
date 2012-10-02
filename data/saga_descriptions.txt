@@ -1,0 +1,2718 @@
+Accumulated Cost (Anisotropic)
+grid_analysis
+ParameterRaster|COST|Cost Grid|False
+ParameterRaster|DIRECTION|Direction of max cost|False
+ParameterRaster|POINTS|Destination Points|False
+ParameterNumber|K|k factor|None|None|1
+ParameterNumber|THRESHOLD|Threshold for different route|None|None|0
+OutputRaster|ACCCOST|Accumulated Cost
+----
+Accumulated Cost (Isotropic)
+grid_analysis
+ParameterRaster|COST|Cost Grid|False
+ParameterRaster|POINTS|Destination Points|False
+ParameterNumber|THRESHOLD|Threshold for different route|None|None|0.0
+OutputRaster|ACCCOST|Accumulated Cost
+OutputRaster|CLOSESTPT|Closest Point
+----
+Add Coordinates to points
+shapes_points
+ParameterVector|INPUT|Points|0|False
+OutputVector|OUTPUT|Output
+----
+Add Grid Values to Points
+shapes_grid
+ParameterVector|SHAPES|Points|0|False
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|INTERPOL|Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+OutputVector|RESULT|Result
+----
+Add Grid Values to Shapes
+shapes_grid
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|INTERPOL|Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+OutputVector|RESULT|Result
+----
+Add Polygon Attributes to Points
+shapes_points
+ParameterVector|INPUT|Points|0|False
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterTableField|FIELD|Attribute|POLYGONS|-1
+OutputVector|OUTPUT|Result
+----
+Aggregate
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|SIZE|Aggregation Size|None|None|3
+ParameterSelection|METHOD|Method|[0] Sum;[1] Min;[2] Max
+----
+Aggregate Point Observations
+shapes_points
+ParameterVector|REFERENCE|Reference Points|-1|False
+ParameterTableField|REFERENCE_ID|ID|REFERENCE|-1
+ParameterTable|OBSERVATIONS|Observations|False
+ParameterTableField|X|X|OBSERVATIONS|-1
+ParameterTableField|Y|Y|OBSERVATIONS|-1
+ParameterTableField|TRACK|Track|OBSERVATIONS|-1
+ParameterTableField|DATE|Date|OBSERVATIONS|-1
+ParameterTableField|TIME|Time|OBSERVATIONS|-1
+ParameterTableField|PARAMETER|Parameter|OBSERVATIONS|-1
+ParameterNumber|EPS_TIME|Maximum Time Span (Seconds)|None|None|60.0
+ParameterNumber|EPS_SPACE|Maximum Distance|None|None|0.002
+OutputTable|AGGREGATED|Aggregated
+----
+Aggregation Index
+grid_analysis
+ParameterRaster|INPUT|Input Grid|False
+ParameterNumber|MAXNUMCLASS|Max. Number of Classes|None|None|5
+OutputTable|RESULT|Result
+----
+Analytical Hierarchy Process
+grid_analysis
+ParameterMultipleInput|GRIDS|Input Grids|3.0|False
+ParameterTable|TABLE|Pairwise Comparisons Table|False
+OutputRaster|OUTPUT|Output Grid
+----
+Analytical Hillshading
+ta_lighting
+ParameterRaster|ELEVATION|Elevation|False
+ParameterSelection|METHOD|Shading Method|[0] Standard;[1] Standard (max. 90Degree);[2] Combined Shading;[3] Ray Tracing
+ParameterNumber|AZIMUTH|Azimuth [Degree]|None|None|315.0
+ParameterNumber|DECLINATION|Declination [Degree]|None|None|45.0
+ParameterNumber|EXAGGERATION|Exaggeration|None|None|4.0
+OutputRaster|SHADE|Analytical Hillshading
+----
+Average With Mask 1
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterRaster|MASK|Mask Grid|False
+ParameterNumber|V|Mask value|None|None|0.0
+ParameterNumber|RX|Radius X|None|None|3.0
+ParameterNumber|RY|Radius Y|None|None|3.0
+OutputRaster|RESULT|AWM1 Grid
+----
+Average With Mask 2
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterRaster|MASK|Mask Grid|False
+ParameterNumber|V|Mask value|None|None|0.0
+ParameterNumber|RX|Radius X|None|None|3.0
+ParameterNumber|RY|Radius Y|None|None|3.0
+OutputRaster|RESULT|AWM2 Grid
+----
+Average With Thereshold 1
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterNumber|RX|Radius X|0.0|None|1.0
+ParameterNumber|RY|Radius Y|0.0|None|1.0
+ParameterNumber|THRESH|Threshold|None|None|10.0
+OutputRaster|RESULT|AWT Grid
+----
+Average With Thereshold 3
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterNumber|RX|Radius X|0.0|None|3.0
+ParameterNumber|RY|Radius Y|0.0|None|3.0
+ParameterNumber|THRESH|Threshold|None|None|0.0
+OutputRaster|RESULT|AWT Grid
+----
+Average With Threshold 2
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterNumber|RX|Radius X|1.0|None|3.0
+ParameterNumber|RY|Radius Y|1.0|None|3.0
+ParameterNumber|THRESH|Threshold|None|None|0.0
+OutputRaster|RESULT|AWT Grid
+----
+B-Spline Approximation
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|LEVEL|Resolution|None|None|1.0
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Basic Terrain Analysis
+ta_compound
+ParameterRaster|ELEVATION|Elevation|False
+OutputRaster|SHADE|Analytical Hillshading
+OutputRaster|SLOPE|Slope
+OutputRaster|ASPECT|Aspect
+OutputRaster|HCURV|Plan Curvature
+OutputRaster|VCURV|Profile Curvature
+OutputRaster|CONVERGENCE|Convergence Index
+OutputRaster|CAREA|Catchment Area
+OutputRaster|WETNESS|Wetness Index
+OutputRaster|LSFACTOR|LS-Factor
+OutputVector|CHANNELS|Channel Network
+OutputVector|BASINS|Drainage Basins
+OutputRaster|CHNL_ALTI|Altitude above Channel Network
+OutputRaster|CHNL_BASE|Channel Network Base Level
+----
+Bifurcation
+recreations_fractals
+ParameterNumber|ITERATIONS|Value Count|None|None|10
+ParameterNumber|NVALUES|Value Count|None|None|10
+ParameterNumber|SEED|Seed Value|None|None|1.0
+ParameterNumber|RANGE_MIN|Min|None|None|0.0
+ParameterNumber|RANGE_MAX|Max|None|None|1.0
+ParameterNumber|STEP|Number of Steps|None|None|1
+OutputTable|TABLE|Output
+----
+Burn Stream Network into DEM
+ta_preprocessor
+ParameterRaster|DEM|DEM|False
+ParameterRaster|STREAM|Streams|False
+ParameterSelection|METHOD|Method|[0] simply decrease cell's value by epsilon;[1] lower cell's value to neighbours minimum value minus epsilon
+ParameterNumber|EPSILON|Epsilon|None|None|1.0
+OutputRaster|BURN|Processed DEM
+----
+Catchment Area (Flow Tracing)
+ta_hydrology
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SINKROUTE|Sink Routes|True
+ParameterRaster|WEIGHT|Weight|True
+ParameterRaster|MATERIAL|Material|True
+ParameterRaster|TARGET|Target|True
+ParameterNumber|STEP|Step|None|None|1
+ParameterSelection|Method|Method|[0] Rho 8;[1] Kinematic Routing Algorithm;[2] DEMON
+ParameterNumber|MINDQV|DEMON - Min. DQV|None|None|0.0
+ParameterBoolean|CORRECT         |Flow Correction|True
+OutputRaster|CAREA|Catchment Area
+OutputRaster|CHEIGHT|Catchment Height
+OutputRaster|CSLOPE|Catchment Slope
+OutputRaster|ACCU_TOT|Total accumulated Material
+OutputRaster|ACCU_LEFT|Accumulated Material from _left_ side
+OutputRaster|ACCU_RIGHT|Accumulated Material from _right_ side
+----
+Catchment Area (Mass-Flux Method)
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+ParameterSelection|METHOD|Flow Split Method|[0] flow width (original);[1] cell area
+ParameterBoolean|B_SLOPE       |Slope|True
+ParameterBoolean|B_ASPECT      |Aspect|True
+ParameterBoolean|B_AREA        |Flow Accumulation|True
+ParameterBoolean|B_FLOW        |Flow Lines|True
+OutputRaster|AREA|Flow Accumulation
+OutputRaster|G_SLOPE|Slope
+OutputRaster|G_ASPECT|Aspect
+OutputRaster|G_AREA|Flow Accumulation
+OutputRaster|G_FLOW|Flow Lines
+----
+Catchment Area (Parallel)
+ta_hydrology
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SINKROUTE|Sink Routes|True
+ParameterRaster|WEIGHT|Weight|True
+ParameterRaster|MATERIAL|Material|True
+ParameterRaster|TARGET|Target|True
+ParameterNumber|STEP|Step|None|None|1
+ParameterSelection|Method|Method|[0] Deterministic 8;[1] Rho 8;[2] Braunschweiger Reliefmodell;[3] Deterministic Infinity;[4] Multiple Flow Direction;[5] Multiple Triangular Flow Directon
+ParameterBoolean|DOLINEAR             |Linear Flow|True
+ParameterNumber|LINEARTHRS|Linear Flow Threshold|None|None|500.0
+ParameterRaster|LINEARTHRS_GRID|Linear Flow Threshold Grid|True
+ParameterRaster|CHDIR_GRID|Channel Direction|True
+ParameterNumber|CONVERGENCE|Convergence|None|None|1.0
+OutputRaster|CAREA|Catchment Area
+OutputRaster|CHEIGHT|Catchment Height
+OutputRaster|CSLOPE|Catchment Slope
+OutputRaster|ACCU_TOT|Total accumulated Material
+OutputRaster|ACCU_LEFT|Accumulated Material from _left_ side
+OutputRaster|ACCU_RIGHT|Accumulated Material from _right_ side
+OutputRaster|CASPECT|Catchment Aspect
+OutputRaster|FLWPATH|Flow Path Length
+----
+Catchment Area (Recursive)
+ta_hydrology
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SINKROUTE|Sink Routes|True
+ParameterRaster|WEIGHT|Weight|True
+ParameterRaster|MATERIAL|Material|True
+ParameterRaster|TARGET|Target|True
+ParameterNumber|STEP|Step|None|None|1
+ParameterRaster|TARGETS|Target Areas|True
+ParameterSelection|Method|Method|[0] Deterministic 8;[1] Rho 8;[2] Deterministic Infinity;[3] Multiple Flow Direction
+ParameterNumber|CONVERGENCE|Convergence|None|None|1.1
+OutputRaster|CAREA|Catchment Area
+OutputRaster|CHEIGHT|Catchment Height
+OutputRaster|CSLOPE|Catchment Slope
+OutputRaster|ACCU_TOT|Total accumulated Material
+OutputRaster|ACCU_LEFT|Accumulated Material from _left_ side
+OutputRaster|ACCU_RIGHT|Accumulated Material from _right_ side
+OutputRaster|FLOWLEN|Flow Path Length
+----
+Cell Balance
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|WEIGHTS|Parameter|True
+ParameterNumber|WEIGHT|Default Weight|None|None|1.0
+ParameterSelection|METHOD|Method|[0] Deterministic 8;[1] Multiple Flow Direction
+OutputRaster|BALANCE|Cell Balance
+----
+Change Date Format
+table_tools
+ParameterTable|TABLE|Table|False
+ParameterTableField|FIELD|Date Field|TABLE|-1
+ParameterSelection|FMT_IN|Input Format|[0] dd.mm.yy;[1] yy.mm.dd;[2] dd:mm:yy;[3] yy:mm:dd;[4] ddmmyyyy, fix size;[5] yyyymmdd, fix size;[6] ddmmyy, fix size;[7] yymmdd, fix size;[8] Julian Day
+ParameterSelection|FMT_OUT|Output Format|[0] dd.mm.yy;[1] yy.mm.dd;[2] dd:mm:yy;[3] yy:mm:dd;[4] ddmmyyyy, fix size;[5] yyyymmdd, fix size;[6] ddmmyy, fix size;[7] yymmdd, fix size;[8] Julian Day
+OutputTable|OUTPUT|Output
+----
+Change Detection
+imagery_classification
+ParameterRaster|INITIAL|Initial State|False
+ParameterTable|INI_LUT|Look-up Table|True
+ParameterTableField|INI_LUT_MIN|Value|INI_LUT|-1
+ParameterTableField|INI_LUT_MAX|Value (Maximum)|INI_LUT|-1
+ParameterTableField|INI_LUT_NAM|Name|INI_LUT|-1
+ParameterRaster|FINAL|Final State|False
+ParameterTable|FIN_LUT|Look-up Table|True
+ParameterTableField|FIN_LUT_MIN|Value|FIN_LUT|-1
+ParameterTableField|FIN_LUT_MAX|Value (Maximum)|FIN_LUT|-1
+ParameterTableField|FIN_LUT_NAM|Name|FIN_LUT|-1
+ParameterBoolean|NOCHANGE         |Report Unchanged Classes|True
+ParameterSelection|OUTPUT|Output as...|[0] cells;[1] percent;[2] area
+OutputRaster|CHANGE|Changes
+OutputTable|CHANGES|Changes
+----
+Change Grid Values
+grid_tools
+ParameterRaster|GRID_IN|Grid|False
+ParameterSelection|METHOD|Replace Condition|[0] Grid value equals low value;[1] Low value < grid value < high value;[2] Low value <= grid value < high value
+ParameterFixedTable|LOOKUP|Lookup Table|3|Low Value;High Value;Replace with|False
+OutputRaster|GRID_OUT|Changed Grid
+----
+Change Time Format
+table_tools
+ParameterTable|TABLE|Table|False
+ParameterTableField|FIELD|Time Field|TABLE|-1
+ParameterSelection|FMT_IN|Input Format|[0] hh.mm.ss;[1] hh:mm:ss;[2] hhmmss, fix size;[3] hours;[4] minutes;[5] seconds
+ParameterSelection|FMT_OUT|Output Format|[0] hh.mm.ss;[1] hh:mm:ss;[2] hhmmss, fix size;[3] hours;[4] minutes;[5] seconds
+OutputTable|OUTPUT|Output
+----
+Change Vector Analysis
+grid_analysis
+ParameterRaster|A1|Grid A. Init|False
+ParameterRaster|A2|Grid A. Final|False
+ParameterRaster|B1|Grid B. Init|False
+ParameterRaster|B2|Grid B. Final|False
+OutputRaster|DIST|Distance
+OutputRaster|ANGLE|Angle
+----
+Channel Network
+ta_channels
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SINKROUTE|Flow Direction|True
+ParameterRaster|INIT_GRID|Initiation Grid|False
+ParameterSelection|INIT_METHOD|Initiation Type|[0] Less than;[1] Equals;[2] Greater than
+ParameterNumber|INIT_VALUE|Initiation Threshold|None|None|0.0
+ParameterRaster|DIV_GRID|Divergence|True
+ParameterNumber|DIV_CELLS|Tracing: Max. Divergence|None|None|10.0
+ParameterRaster|TRACE_WEIGHT|Tracing: Weight|True
+ParameterNumber|MINLEN|Min. Segment Length|0.0|None|10.0
+OutputRaster|CHNLNTWRK|Channel Network
+OutputRaster|CHNLROUTE|Channel Direction
+OutputVector|SHAPES|Channel Network
+----
+Channel Network and Drainage Basins
+ta_channels
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|THRESHOLD|Threshold|None|None|5.0
+OutputRaster|DIRECTION|Flow Direction
+OutputRaster|CONNECTION|Flow Connectivity
+OutputRaster|ORDER|Strahler Order
+OutputRaster|BASIN|Drainage Basins
+OutputVector|SEGMENTS|Channels
+OutputVector|BASINS|Drainage Basins
+OutputVector|NODES|Junctions
+----
+Clip Grid with Polygon
+shapes_grid
+ParameterMultipleInput|INPUT|Input|3.0|False
+ParameterVector|POLYGONS|Polygons|2|False
+OutputRaster|OUTPUT|Output
+----
+Clip Points with Polygons
+shapes_points
+ParameterVector|POINTS|Points|0|False
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterTableField|FIELD|Add Attribute to Clipped Points|POLYGONS|-1
+ParameterSelection|METHOD|Clipping Options|[0] one layer for all points;[1] separate layer for each polygon
+OutputVector|CLIPS|Clipped Points
+----
+Close Gaps
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterRaster|MASK|Mask|True
+ParameterNumber|THRESHOLD|Tension Threshold|None|None|0.1
+OutputRaster|RESULT|Changed Grid
+----
+Close Gaps with Spline
+grid_tools
+ParameterRaster|GRID|Grid|False
+ParameterRaster|MASK|Mask|True
+ParameterNumber|MAXGAPCELLS|Only Process Gaps with Less Cells|None|None|0
+ParameterNumber|MAXPOINTS|Maximum Points|None|None|1000
+ParameterNumber|LOCALPOINTS|Number of Points for Local Interpolation|None|None|10
+ParameterBoolean|EXTENDED         |Extended Neighourhood|True
+ParameterSelection|NEIGHBOURS|Neighbourhood|[0] Neumann;[1] Moore
+ParameterNumber|RADIUS|Radius (Cells)|None|None|0
+ParameterNumber|RELAXATION|Relaxation|None|None|0.0
+OutputRaster|CLOSED|Closed Gaps Grid
+----
+Close One Cell Gaps
+grid_tools
+ParameterRaster|INPUT|Grid|False
+OutputRaster|RESULT|Changed Grid
+----
+Cluster Analysis
+table_calculus
+ParameterTable|TABLE|Table|False
+ParameterSelection|METHOD|Method|[0] Iterative Minimum Distance (Forgy 1965);[1] Hill-Climbing (Rubin 1967);[2] Combined Minimum Distance / Hillclimbing
+ParameterNumber|NCLUSTER|Clusters|None|None|5
+ParameterBoolean|NORMALISE       |Normalise|True
+OutputTable|STATISTICS|Statistics
+----
+Cluster Analysis for Grids
+imagery_classification
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|METHOD|Method|[0] Iterative Minimum Distance (Forgy 1965);[1] Hill-Climbing (Rubin 1967);[2] Combined Minimum Distance / Hillclimbing
+ParameterNumber|NCLUSTER|Clusters|None|None|5
+ParameterBoolean|NORMALISE       |Normalise|True
+ParameterBoolean|OLDVERSION      |Old Version|True
+OutputRaster|CLUSTER|Clusters
+OutputTable|STATISTICS|Statistics
+----
+Color Blending
+grid_visualisation
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterNumber|NSTEPS|Interpolation Steps|None|None|0
+ParameterSelection|RANGE|Color Stretch|[0] fit to each grid;[1] fit to overall range;[2] fit to overall 1.5 standard deviation;[3] fit to overall 2.0 standard deviation
+OutputRaster|GRID|Grid
+----
+Combine Grids
+grid_tools
+ParameterRaster|GRID1|Grid 1|False
+ParameterRaster|GRID2|Grid 2|False
+ParameterFixedTable|LOOKUP|LookUp Table|3|Value in Grid 1;Value in Grid 2;Resulting Value|False
+OutputRaster|RESULT|Result
+----
+Contour Lines from Grid
+shapes_grid
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|ZMIN|Minimum Contour Value|None|None|0.0
+ParameterNumber|ZMAX|Maximum Contour Value|None|None|10000.0
+ParameterNumber|ZSTEP|Equidistance|None|None|100.0
+OutputVector|CONTOUR|Contour Lines
+----
+Convergence Index (Search Radius)
+ta_morphometry
+ParameterRaster|ELEVATION|Elevation|False
+ParameterNumber|RADIUS|Radius [Cells]|1.0|None|10
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1
+ParameterBoolean|SLOPE                             |Gradient|True
+ParameterSelection|DIFFERENCE|Difference|[0] direction to the center cell;[1] center cell's aspect direction
+OutputRaster|CONVERGENCE|Convergence Index
+----
+Convergence Index
+ta_morphometry
+ParameterRaster|ELEVATION|Elevation|False
+ParameterSelection|METHOD|Method|[0] Aspect;[1] Gradient
+ParameterSelection|NEIGHBOURS|Gradient Calculation|[0] 2 x 2;[1] 3 x 3
+OutputRaster|RESULT|Convergence Index
+----
+Convert Data Storage Type
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|TYPE|Data storage type|[0] bit;[1] unsigned 1 byte integer;[2] signed 1 byte integer;[3] unsigned 2 byte integer;[4] signed 2 byte integer;[5] unsigned 4 byte integer;[6] signed 4 byte integer;[7] 4 byte floating point number;[8] 8 byte floating point number
+OutputRaster|OUTPUT|Converted Grid
+----
+Convert Lines to Points
+shapes_points
+ParameterVector|LINES|Lines|1|False
+ParameterBoolean|ADD         |Insert Additional Points|True
+ParameterNumber|DIST|Insert Distance|0.0|None|1.0
+OutputVector|POINTS|Points
+----
+Convert Lines to Polygons
+shapes_polygons
+ParameterVector|LINES|Lines|1|False
+OutputVector|POLYGONS|Polygons
+----
+Convert Multipoints to Points
+shapes_points
+ParameterVector|MULTIPOINTS|Multipoints|0|False
+OutputVector|POINTS|Points
+----
+Convert Points to Line(s)
+shapes_lines
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|ORDER|Order by...|POINTS|-1
+ParameterTableField|SEPARATE|Separate by...|POINTS|-1
+OutputVector|LINES|Lines
+----
+Convert Polygon/Line Vertices to Points
+shapes_polygons
+ParameterVector|SHAPES|Shapes|-1|False
+OutputVector|POINTS|Points
+----
+Convert Polygons to Lines
+shapes_lines
+ParameterVector|POLYGONS|Polygons|2|False
+OutputVector|LINES|Lines
+----
+Convert Table to Points
+shapes_points
+ParameterTable|TABLE|Table|False
+ParameterTableField|X|X|TABLE|-1
+ParameterTableField|Y|Y|TABLE|-1
+OutputVector|POINTS|Points
+----
+Convex Hull
+shapes_points
+ParameterVector|SHAPES|Points|0|False
+ParameterSelection|POLYPOINTS|Hull Construction|[0] one hull for all shapes;[1] one hull per shape;[2] one hull per shape part
+OutputVector|HULLS|Convex Hull
+OutputVector|BOXES|Minimum Bounding Box
+----
+Coordinate Transformation (Grid)
+pj_proj4
+ParameterSelection|CRS_METHOD|Get CRS Definition from...|[0] Proj4 Parameters;[1] EPSG Code;[2] Well Known Text File
+ParameterString|CRS_PROJ4|Proj4 Parameters|
+ParameterString|CRS_FILE|Well Known Text File|
+ParameterNumber|CRS_EPSG|EPSG Code|None|None|0
+ParameterRaster|SOURCE|Source|False
+ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|TARGET_TYPE|Target|[0] user defined grid system
+ParameterBoolean|TARGET_AREA        |Use Target Area Polygon|True
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
+ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|GET_USER_GRID|Grid
+OutputVector|POINTS_POINTS|Points
+----
+Coordinate Transformation (Grid List)
+pj_proj4
+ParameterSelection|CRS_METHOD|Get CRS Definition from...|[0] Proj4 Parameters;[1] EPSG Code;[2] Well Known Text File
+ParameterString|CRS_PROJ4|Proj4 Parameters|
+ParameterString|CRS_FILE|Well Known Text File|
+ParameterNumber|CRS_EPSG|EPSG Code|None|None|0
+ParameterMultipleInput|SOURCE|Source|3.0|False
+ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|TARGET_TYPE|Target|[0] user defined grid system
+ParameterBoolean|TARGET_AREA               |Use Target Area Polygon|True
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
+ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|TARGET|Target
+OutputVector|POINTS_POINTS|Points
+----
+Coordinate Transformation (Shapes)
+pj_proj4
+ParameterSelection|CRS_METHOD|Get CRS Definition from...|[0] Proj4 Parameters;[1] EPSG Code;[2] Well Known Text File
+ParameterString|CRS_PROJ4|Proj4 Parameters|
+ParameterString|CRS_FILE|Well Known Text File|
+ParameterNumber|CRS_EPSG|EPSG Code|None|None|0
+ParameterVector|SOURCE|Source|-1|False
+OutputVector|TARGET|Target
+----
+Coordinate Transformation (Shapes List)
+pj_proj4
+ParameterSelection|CRS_METHOD|Get CRS Definition from...|[0] Proj4 Parameters;[1] EPSG Code;[2] Well Known Text File
+ParameterString|CRS_PROJ4|Proj4 Parameters|
+ParameterString|CRS_FILE|Well Known Text File|
+ParameterNumber|CRS_EPSG|EPSG Code|None|None|0
+ParameterMultipleInput|SOURCE|Source|-1.0|False
+OutputVector|TARGET|Target
+----
+Count Points in Polygons
+shapes_points
+ParameterVector|POINTS|Points|0|False
+ParameterVector|POLYGONS|Polygons|2|False
+----
+Covered Distance
+grid_analysis
+ParameterMultipleInput|INPUT|Grids|3.0|False
+OutputRaster|RESULT|Covered Distance
+----
+Create Graticule
+shapes_tools
+ParameterVector|EXTENT|Extent|-1|True
+Extent X_EXTENT_MIN X_EXTENT_MAX Y_EXTENT_MIN Y_EXTENT_MAX
+ParameterNumber|DISTX|Division Width|None|None|1.0
+ParameterNumber|DISTY|Division Height|None|None|1.0
+ParameterSelection|TYPE|Type|[0] Lines;[1] Rectangles
+OutputVector|GRATICULE|Graticule
+----
+Crop to Data
+grid_tools
+ParameterMultipleInput|INPUT|Grids|3.0|False
+OutputRaster|OUTPUT|Cropped Grids
+----
+Cross-Classification and Tabulation
+grid_analysis
+ParameterRaster|INPUT|Input Grid 1|False
+ParameterRaster|INPUT2|Input Grid 2|False
+ParameterNumber|MAXNUMCLASS|Max. Number of Classes|None|None|5
+OutputRaster|RESULTGRID|Cross-Classification Grid
+OutputTable|RESULTTABLE|Cross-Tabulation Table
+----
+Cross Profiles
+ta_profiles
+ParameterRaster|DEM|DEM|False
+ParameterVector|LINES|Lines|1|False
+ParameterNumber|DIST_LINE|Profile Distance|0.0|None|10.0
+ParameterNumber|DIST_PROFILE|Profile Length|0.0|None|10.0
+ParameterNumber|NUM_PROFILE|Profile Samples|1.0|None|10.0
+OutputVector|PROFILES|Cross Profiles
+----
+Cubic Spline Approximation
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|NPMIN|Minimal Number of Points|None|None|3
+ParameterNumber|NPMAX|Maximal Number of Points|None|None|20
+ParameterNumber|NPPC|Points per Square|None|None|5
+ParameterNumber|K|Tolerance|None|None|140.0
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Curvature Classification
+ta_morphometry
+ParameterRaster|CPLAN|Plan Curvature|False
+ParameterRaster|CPROF|Profile Curvature|False
+ParameterNumber|THRESHOLD|Threshold for plane|None|None|0.001
+OutputRaster|CLASS|Curvature Classification
+----
+Cut Shapes Layer
+shapes_tools
+ParameterMultipleInput|SHAPES|Shapes|-1.0|False
+ParameterSelection|METHOD|Method|[0] completely contained;[1] intersects;[2] center
+ParameterSelection|TARGET|Extent|[0] user defined;[1] grid project[do not use this option!];[2] shapes layer extent;[3] polygons
+ParameterNumber|CUT_AX|Left|None|None|0.0
+ParameterNumber|CUT_BX|Right|None|None|0.0
+ParameterNumber|CUT_AY|Bottom|None|None|0.0
+ParameterNumber|CUT_BY|Top|None|None|0.0
+ParameterNumber|CUT_DX|Horizontal Range|None|None|0.0
+ParameterNumber|CUT_DY|Vertical Range|None|None|0.0
+ParameterVector|SHAPES_SHAPES|Shapes|-1|False
+ParameterVector|POLYGONS_POLYGONS|Polygons|-1|False
+OutputVector|CUT|Cut
+OutputVector|EXTENT|Extent
+----
+Daily to Hourly PET
+table_calculus
+ParameterTable|DAYS|Daily Data|False
+ParameterTableField|JD|Julian Day|DAYS|-1
+ParameterTableField|ET|Evapotranspiration|DAYS|-1
+ParameterTableField|P|Precipitation|DAYS|-1
+ParameterNumber|LAT|Latitude|None|None|0.0
+OutputTable|HOURS|Hourly Data
+----
+Decision Tree
+imagery_classification
+ParameterRaster|ROOT_GRID|Grid|False
+ParameterNumber|ROOT_THRESHOLD|Threshold|None|None|0.0
+ParameterString|ROOT_A|NAME|Name
+ParameterBoolean|ROOT_A|NODE         |False
+ParameterString|ROOT_B|NAME|Name
+ParameterBoolean|ROOT_B|NODE         |False
+OutputRaster|CLASSES|Decision Tree
+----
+Destriping 1
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterNumber|ANG|Angle (in degrees)|None|None|0.0
+ParameterNumber|R|Radius|None|None|19.0
+ParameterNumber|D|Stripes distance|None|None|2.0
+OutputRaster|RESULT3|Destriped Grid
+OutputRaster|RESULT1|Low-pass 1
+OutputRaster|RESULT2|Low-pass 2
+----
+Destriping 2
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterRaster|MASK|Mask Grid|False
+ParameterNumber|ANG|Angle (in degrees)|None|None|0.0
+ParameterNumber|R|Radius|None|None|20.0
+ParameterNumber|D|Stripes distance|None|None|1.0
+ParameterNumber|MIN|Min|None|None|-10.0
+ParameterNumber|MAX|Max|None|None|10.0
+ParameterNumber|MMIN|Mask Min|None|None|-10000.0
+ParameterNumber|MMAX|Mask Max|None|None|10000.0
+OutputRaster|RESULT3|Destriped Grid
+OutputRaster|RESULT1|Low-pass 1
+OutputRaster|RESULT2|Low-pass 2
+----
+Directional Average 1
+contrib_a_perego
+ParameterRaster|INPUT|Input|False
+ParameterNumber|ANG|Angle (in degrees)|None|None|0.0
+ParameterNumber|R1|Main Radius|None|None|1
+ParameterNumber|R2|Transversal radius|None|None|0.5
+OutputRaster|RESULT|Output Grid
+----
+Directional Statistics for Single Grid
+geostatistics_grid
+ParameterRaster|GRID|Grid|False
+ParameterVector|POINTS|Points|-1|True
+ParameterNumber|DIRECTION|Direction [Degree]|None|None|0.0
+ParameterNumber|TOLERANCE|Tolerance [Degree]|None|None|0.0
+ParameterNumber|MAXDISTANCE|Maximum Distance [Cells]|None|None|0
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET|Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+OutputRaster|MEAN|Arithmetic Mean
+OutputRaster|DIFMEAN|Difference from Arithmetic Mean
+OutputRaster|MIN|Minimum
+OutputRaster|MAX|Maximum
+OutputRaster|RANGE|Range
+OutputRaster|VAR|Variance
+OutputRaster|STDDEV|Standard Deviation
+OutputRaster|STDDEVLO|Mean less Standard Deviation
+OutputRaster|STDDEVHI|Mean plus Standard Deviation
+OutputRaster|DEVMEAN|Deviation from Arithmetic Mean
+OutputRaster|PERCENT|Percentile
+OutputVector|POINTS_OUT|Directional Statistics for Points
+----
+Distance Matrix
+shapes_points
+ParameterVector|POINTS|Points|0|False
+OutputTable|TABLE|Distance Matrix Table
+----
+Diurnal Anisotropic Heating
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|ALPHA_MAX|Alpha Max (Degree)|None|None|202.5
+OutputRaster|DAH|Diurnal Anisotropic Heating
+----
+Downslope Distance Gradient
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|DISTANCE|Vertical Distance|None|None|10
+ParameterSelection|OUTPUT|Output|[0] distance;[1] gradient (tangens);[2] gradient (degree)
+OutputRaster|GRADIENT|Gradient
+OutputRaster|DIFFERENCE|Gradient Difference
+----
+DTM Filter (slope-based)
+grid_filter
+ParameterRaster|INPUT|Grid to filter|False
+ParameterNumber|RADIUS|Search Radius|1.0|None|2
+ParameterNumber|TERRAINSLOPE|Approx. Terrain Slope|None|None|30.0
+ParameterBoolean|STDDEV            |Use Confidence Interval|True
+OutputRaster|GROUND|Bare Earth
+OutputRaster|NONGROUND|Removed Objects
+----
+Edge Contamination
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+OutputRaster|CONTAMINATION|Edge Contamination
+----
+Effective Air Flow Heights
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|DIR|Wind Direction|True
+ParameterRaster|LEN|Wind Speed|True
+ParameterNumber|DIR_CONST|Constant Wind Direction [Degree]|None|None|135
+ParameterBoolean|OLDVER         |Old Version|True
+ParameterNumber|MAXDIST|Search Distance [km]|0.0|None|300
+ParameterNumber|ACCEL|Acceleration|None|None|1.5
+ParameterBoolean|PYRAMIDS       |Use Pyramids with New Version|True
+ParameterNumber|LEEFACT|Lee Factor|None|None|0.5
+ParameterNumber|LUVFACT|Luv Factor|None|None|1.0
+ParameterSelection|DIR_UNITS|Wind Direction Units|[0] radians;[1] degree
+ParameterNumber|LEN_SCALE|Wind Speed Scale Factor|None|None|1.0
+OutputRaster|AFH|Effective Air Flow Heights
+----
+Enumerate Table Field
+table_tools
+ParameterTable|INPUT|Input|False
+ParameterTableField|FIELD|Attribute|INPUT|-1
+OutputTable|OUTPUT|Output
+----
+Fast Region Growing Algorithm
+imagery_rga
+ParameterMultipleInput|INPUT|Input Grids|3.0|False
+ParameterRaster|START|Seeds Grid|False
+ParameterRaster|REP|Smooth Rep|True
+OutputRaster|RESULT|Segmente
+OutputRaster|MEAN|Mean
+----
+Fast Representativeness
+geostatistics_grid
+ParameterRaster|INPUT|Input|False
+ParameterNumber|LOD|Level of Generalisation|None|None|16
+OutputRaster|RESULT|Output
+OutputRaster|RESULT_LOD|Output Lod
+OutputRaster|SEEDS|Output Seeds
+----
+Fill Gaps in Records
+table_calculus
+ParameterTable|TABLE|Table|False
+ParameterTableField|ORDER|Order|TABLE|-1
+ParameterSelection|METHOD|Interpolation|[0] Nearest Neighbour;[1] Linear;[2] Spline
+OutputTable|NOGAPS|Table without Gaps
+----
+Fill Sinks (Planchon/Darboux, 2001)
+ta_preprocessor
+ParameterRaster|DEM|DEM|False
+ParameterNumber|MINSLOPE|Minimum Slope [Degree]|0.0|None|0.01
+OutputRaster|RESULT|Filled DEM
+----
+Fill Sinks (Wang & Liu)
+ta_preprocessor
+ParameterRaster|ELEV|DEM|False
+ParameterNumber|MINSLOPE|Minimum Slope [Degree]|0.0|None|0.01
+OutputRaster|FILLED|Filled DEM
+OutputRaster|FDIR|Flow Directions
+OutputRaster|WSHED|Watershed Basins
+----
+Fill Sinks XXL (Wang & Liu)
+ta_preprocessor
+ParameterRaster|ELEV|DEM|False
+ParameterNumber|MINSLOPE|Minimum Slope [Degree]|0.0|None|0.01
+OutputRaster|FILLED|Filled DEM
+----
+Filter Clumps
+grid_filter
+ParameterRaster|GRID|Input Grid|False
+ParameterNumber|THRESHOLD|Min. Size|1.0|None|10
+OutputRaster|OUTPUT|Filtered Grid
+----
+Fire Risk Analysis
+sim_fire_spreading
+ParameterRaster|DEM|DEM|False
+ParameterRaster|FUEL|Fuel Model|False
+ParameterRaster|WINDSPD|Wind Speed|False
+ParameterRaster|WINDDIR|Wind Direction|False
+ParameterRaster|M1H|Dead Fuel Moisture 1H|False
+ParameterRaster|M10H|Dead Fuel Moisture 10H|False
+ParameterRaster|M100H|Dead Fuel Moisture 100H|False
+ParameterRaster|MHERB|Herbaceous Fuel Moisture|False
+ParameterRaster|MWOOD|Wood Fuel Moisture|False
+ParameterRaster|VALUE|Value|True
+ParameterRaster|BASEPROB|Base Probability|True
+ParameterNumber|MONTECARLO|Number of Events|None|None|1000
+ParameterNumber|INTERVAL|Fire Length|None|None|100
+OutputRaster|DANGER|Danger
+OutputRaster|COMPPROB|Compound Probability
+OutputRaster|PRIORITY|Priority Index
+----
+Fit N Points to shape
+shapes_points
+ParameterVector|SHAPES|Shapes|2|False
+ParameterNumber|NUMPOINTS|Number of points|1.0|None|10
+OutputVector|POINTS|Points
+----
+Flat Detection
+ta_preprocessor
+ParameterRaster|DEM|DEM|False
+ParameterSelection|FLAT_OUTPUT|Flat Area Values|[0] elevation;[1] enumeration
+OutputRaster|NOFLATS|No Flats
+OutputRaster|FLATS|Flat Areas
+----
+Flow Path Length
+ta_hydrology
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SEED|Seeds|True
+ParameterBoolean|SEEDS_ONLY       |Seeds Only|True
+ParameterSelection|METHOD|Flow Routing Algorithm|[0] Deterministic 8 (D8);[1] Multiple Flow Direction (FD8)
+ParameterNumber|CONVERGENCE|Convergence (FD8)|None|None|1.1
+OutputRaster|LENGTH|Flow Path Length
+----
+Flow Width and Specific Catchment Area
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|TCA|Total Catchment Area (TCA)|True
+ParameterSelection|METHOD|Method|[0] Deterministic 8;[1] Multiple Flow Direction (Quinn et al. 1991);[2] Aspect
+OutputRaster|WIDTH|Flow Width
+OutputRaster|SCA|Specific Catchment Area (SCA)
+----
+Fractal Dimension of Grid Surface
+recreations_fractals
+ParameterRaster|INPUT|Input|False
+OutputTable|RESULT|Result
+----
+Fragmentation (Alternative)
+grid_analysis
+ParameterRaster|CLASSES|Classification|False
+ParameterNumber|CLASS|Class Identifier|None|None|1
+ParameterNumber|NEIGHBORHOOD_MIN|Neighborhood|1.0|None|1
+ParameterNumber|NEIGHBORHOOD_MAX|Neighborhood|1.0|None|1
+ParameterSelection|AGGREGATION|Level Aggregation|[0] average;[1] multiplicative
+ParameterBoolean|BORDER                |Add Border|True
+ParameterNumber|WEIGHT|Connectivity Weighting|None|None|1.1
+ParameterNumber|DENSITY_MIN|Minimum Density [Percent]|None|None|10
+ParameterNumber|DENSITY_INT|Minimum Density for Interior Forest [Percent]|None|None|99
+ParameterNumber|LEVEL_GROW|Search Distance Increment|None|None|0.0
+ParameterBoolean|DENSITY_MEAN          |Density from Neighbourhood|True
+OutputRaster|DENSITY|Density [Percent]
+OutputRaster|CONNECTIVITY|Connectivity [Percent]
+OutputRaster|FRAGMENTATION|Fragmentation
+OutputTable|FRAGSTATS|Summary
+----
+Fragmentation (Standard)
+grid_analysis
+ParameterRaster|CLASSES|Classification|False
+ParameterNumber|CLASS|Class Identifier|None|None|1
+ParameterNumber|NEIGHBORHOOD_MIN|Neighborhood|1.0|None|3
+ParameterNumber|NEIGHBORHOOD_MAX|Neighborhood|1.0|None|3
+ParameterSelection|AGGREGATION|Level Aggregation|[0] average;[1] multiplicative
+ParameterBoolean|BORDER|Add Border|True
+ParameterNumber|WEIGHT|Connectivity Weighting|None|None|1.1
+ParameterNumber|DENSITY_MIN|Minimum Density [Percent]|None|None|10
+ParameterNumber|DENSITY_INT|Minimum Density for Interior Forest [Percent]|None|None|99
+ParameterSelection|CIRCULAR|Neighborhood Type|[0] square;[1] circle
+ParameterBoolean|DIAGONAL|Include diagonal neighbour relations|True
+OutputRaster|DENSITY|Density [Percent]
+OutputRaster|CONNECTIVITY|Connectivity [Percent]
+OutputRaster|FRAGMENTATION|Fragmentation
+OutputTable|FRAGSTATS|Summary
+----
+Fragmentation Classes from Density and Connectivity
+grid_analysis
+ParameterRaster|DENSITY|Density [Percent]|False
+ParameterRaster|CONNECTIVITY|Connectivity [Percent]|False
+ParameterBoolean|BORDER|Add Border|True
+ParameterNumber|WEIGHT|Connectivity Weighting|None|None|0
+ParameterNumber|DENSITY_MIN|Minimum Density [Percent]|0.0|100.0|10
+ParameterNumber|DENSITY_INT|Minimum Density for Interior Forest [Percent]|0.0|100.0|99
+OutputRaster|FRAGMENTATION|Fragmentation
+----
+Function
+grid_calculus
+ParameterNumber|XMIN|xmin|None|None|0.0
+ParameterNumber|XMAX|xmax|None|None|0.0
+ParameterNumber|YMIN|ymin|None|None|0.0
+ParameterNumber|YMAX|ymax|None|None|0.0
+ParameterString|FORMUL|Formula|
+OutputRaster|RESULT|Function
+----
+Function Fit
+table_calculus
+ParameterTable|SOURCE|Source|False
+ParameterTableField|YFIELD|y - Values|SOURCE|-1
+ParameterSelection|USE_X|Use x -Values|[0] No;[1] Yes
+ParameterTableField|XFIELD|x - Values|SOURCE|-1
+ParameterString|FORMEL|Formula|
+ParameterNumber|ITER|Iterationen|None|None|0
+ParameterNumber|LAMDA|Max Lamda|None|None|0.0
+----
+Fuzzify
+grid_calculus
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|A|A|None|None|0.0
+ParameterNumber|B|B|None|None|0.0
+ParameterNumber|C|C|None|None|0.0
+ParameterNumber|D|D|None|None|0.0
+ParameterSelection|TYPE|Membership Function Type|[0] linear;[1] sigmoidal;[2] j-shaped
+ParameterBoolean|AUTOFIT     |Adjust to Grid|True
+OutputRaster|OUTPUT|Fuzzified Grid
+----
+Fuzzy Intersection (AND)
+grid_calculus
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|TYPE|Operator Type|[0] min(a, b) (non-interactive);[1] a * b;[2] max(0, a + b - 1)
+OutputRaster|AND|Intersection
+----
+Fuzzy Union (OR)
+grid_calculus
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|TYPE|Operator Type|[0] max(a, b) (non-interactive);[1] a + b - a * b;[2] min(1, a + b)
+OutputRaster|OR|Union
+----
+Gaussian Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|SIGMA|Standard Deviation|None|None|1
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterNumber|RADIUS|Search Radius|None|None|3
+OutputRaster|RESULT|Filtered Grid
+----
+Gaussian Landscapes
+recreations_fractals
+ParameterNumber|NX|Width (Cells)|None|None|100
+ParameterNumber|NY|Height (Cells)|None|None|100
+ParameterNumber|H|Roughness/Smoothness|None|None|0.0
+ParameterSelection|METHOD|Method|[0] Simple;[1] Flattening
+ParameterNumber|M|Flattening|None|None|0.0
+OutputRaster|GRID|Grid
+----
+Geographically Weighted Multiple Regression (Points)
+geostatistics_regression
+ParameterVector|POINTS|Points|-1|False
+ParameterTableField|DEPENDENT|Dependent Variable|POINTS|-1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|100
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
+ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
+ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
+OutputVector|REGRESSION|Regression
+----
+Geographically Weighted Multiple Regression (Points/Grids)
+geostatistics_regression
+ParameterMultipleInput|PREDICTORS|Predictors|3.0|False
+ParameterBoolean|PARAMETERS                        |Output of Regression Parameters|True
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|DEPENDENT|Dependent Variable|POINTS|-1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|100
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
+ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
+ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
+OutputRaster|REGRESSION|Regression
+OutputRaster|QUALITY|Coefficient of Determination
+OutputRaster|SLOPES|Regression Parameters
+OutputVector|RESIDUALS|Residuals
+----
+Geographically Weighted Multiple Regression
+geostatistics_regression
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|DEPENDENT|Dependent Variable|POINTS|-1
+ParameterSelection|TARGET|Target Grids|[0] user defined
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|100
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
+ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
+ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_QUALITY|Quality
+OutputRaster|USER_INTERCEPT|Intercept
+OutputRaster|GRID_QUALITY|Quality
+OutputRaster|GRID_INTERCEPT|Intercept
+----
+Geographically Weighted Regression (Points/Grid)
+geostatistics_regression
+ParameterRaster|PREDICTOR|Predictor|False
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|DEPENDENT|Dependent Variable|POINTS|-1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|0
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
+ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
+ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
+OutputRaster|REGRESSION|Regression
+OutputRaster|QUALITY|Coefficient of Determination
+OutputRaster|INTERCEPT|Intercept
+OutputRaster|SLOPE|Slope
+OutputVector|RESIDUALS|Residuals
+----
+Geographically Weighted Regression
+geostatistics_regression
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|DEPENDENT|Dependent Variable|POINTS|-1
+ParameterTableField|PREDICTOR|Predictor|POINTS|-1
+ParameterSelection|TARGET|Target Grids|[0] user defined
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|0
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|0.0
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|100
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|NPOINTS|Number of Points|[0] maximum number of observations;[1] all points
+ParameterNumber|MAXPOINTS|Maximum Number of Observations|None|None|10
+ParameterNumber|MINPOINTS|Minimum Number of Observations|None|None|4
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|0.0
+OutputRaster|USER_GRID|Grid
+OutputRaster|USER_QUALITY|Quality
+OutputRaster|USER_INTERCEPT|Intercept
+OutputRaster|USER_SLOPE|Slope
+----
+Geometric Figures
+grid_calculus
+ParameterNumber|CELL_COUNT|Cell Count|None|None|0
+ParameterNumber|CELL_SIZE|Cell Size|None|None|0
+ParameterSelection|FIGURE|Figure|[0] Cone (up);[1] Cone (down);[2] Plane
+ParameterNumber|PLANE|Direction of Plane [Degree]|None|None|0
+OutputRaster|RESULT|Result
+----
+Get Shapes Extents
+shapes_tools
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterBoolean|PARTS        |Parts|True
+OutputVector|EXTENTS|Extents
+----
+Global Moran's I for Grids
+geostatistics_grid
+ParameterRaster|GRID|Grid|False
+ParameterSelection|CONTIGUITY|Case of contiguity|[0] Rook;[1] Queen
+OutputTable|RESULT|Result
+----
+Gradient Vector from Cartesian to Polar Coordinates
+grid_calculus
+ParameterRaster|DX|X Component|False
+ParameterRaster|DY|Y Component|False
+ParameterSelection|UNITS|Polar Angle Units|[0] radians;[1] degree
+ParameterSelection|SYSTEM|Polar Coordinate System|[0] mathematical;[1] geographical;[2] user defined
+ParameterNumber|SYSTEM_ZERO|User defined Zero Direction|None|None|0.0
+ParameterSelection|SYSTEM_ORIENT|User defined Orientation|[0] clockwise;[1] counterclockwise
+OutputRaster|DIR|Direction
+OutputRaster|LEN|Length
+----
+Gradient Vector from Polar to Cartesian Coordinates
+grid_calculus
+ParameterRaster|DIR|Direction|False
+ParameterRaster|LEN|Length|False
+ParameterSelection|UNITS|Polar Angle Units|[0] radians;[1] degree
+ParameterSelection|SYSTEM|Polar Coordinate System|[0] mathematical;[1] geographical;[2] user defined
+ParameterNumber|SYSTEM_ZERO|User defined Zero Direction|None|None|0.0
+ParameterSelection|SYSTEM_ORIENT|User defined Orientation|[0] clockwise;[1] counterclockwise
+OutputRaster|DX|X Component
+OutputRaster|DY|Y Component
+----
+Gradient Vectors from Directional Components
+shapes_grid
+ParameterRaster|X|X Component|False
+ParameterRaster|Y|Y Component|False
+ParameterNumber|STEP|Step|None|None|1
+ParameterNumber|SIZE_MIN|Size Range Min|None|None|25.0
+ParameterNumber|SIZE_MAX|Size Range Max|None|None|100.0
+ParameterSelection|AGGR|Aggregation|[0] nearest neighbour;[1] mean value
+ParameterSelection|STYLE|Style|[0] simple line;[1] arrow;[2] arrow (centered to cell)
+OutputVector|VECTORS|Gradient Vectors
+----
+Gradient Vectors from Direction and Length
+shapes_grid
+ParameterRaster|DIR|Direction|False
+ParameterRaster|LEN|Length|False
+ParameterNumber|STEP|Step|None|None|1
+ParameterNumber|SIZE_MIN|Size Range Min|None|None|25.0
+ParameterNumber|SIZE_MAX|Size Range Max|None|None|100.0
+ParameterSelection|AGGR|Aggregation|[0] nearest neighbour;[1] mean value
+ParameterSelection|STYLE|Style|[0] simple line;[1] arrow;[2] arrow (centered to cell)
+OutputVector|VECTORS|Gradient Vectors
+----
+Gradient Vectors from Surface
+shapes_grid
+ParameterRaster|SURFACE|Surface|False
+ParameterNumber|STEP|Step|None|None|1
+ParameterNumber|SIZE_MIN|Size Range Min|None|None|25.0
+ParameterNumber|SIZE_MAX|Size Range Max|None|None|100.0
+ParameterSelection|AGGR|Aggregation|[0] nearest neighbour;[1] mean value
+ParameterSelection|STYLE|Style|[0] simple line;[1] arrow;[2] arrow (centered to cell)
+OutputVector|VECTORS|Gradient Vectors
+----
+Grid Buffer
+grid_tools
+ParameterRaster|FEATURES|Features Grid|False
+ParameterNumber|DIST|Distance|None|None|1000
+ParameterSelection|BUFFERTYPE|Buffer Distance|[0] Fixed;[1] Cell value
+OutputRaster|BUFFER|Buffer Grid
+----
+Grid Calculator
+grid_calculus
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterString|FORMULA|Formula|
+ParameterBoolean|USE_NODATA   |Use NoData|True
+OutputRaster|RESULT|Result
+----
+Grid Difference
+grid_calculus
+ParameterRaster|A|A|False
+ParameterRaster|B|B|False
+OutputRaster|C|Difference (A - B)
+----
+Grid Division
+grid_calculus
+ParameterRaster|A|Dividend|False
+ParameterRaster|B|Divisor|False
+OutputRaster|C|Quotient
+----
+Grid Masking
+grid_tools
+ParameterRaster|GRID|Grid|False
+ParameterRaster|MASK|Mask|False
+OutputRaster|MASKED|Masked Grid
+----
+Grid Normalisation
+grid_calculus
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|RANGE_MIN|Target Range|None|None|0
+ParameterNumber|RANGE_MAX|Target Range|None|None|1
+OutputRaster|OUTPUT|Normalised Grid
+----
+Grid Orientation
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|METHOD|Method|[0] Copy;[1] Flip;[2] Mirror;[3] Invert
+OutputRaster|RESULT|Changed Grid
+----
+Grid Proximity Buffer
+grid_tools
+ParameterRaster|SOURCE|Source Grid|False
+ParameterNumber|DIST|Buffer distance|None|None|500.0
+ParameterNumber|IVAL|Equidistance|None|None|100.0
+OutputRaster|DISTANCE|Distance Grid
+OutputRaster|ALLOC|Allocation Grid
+OutputRaster|BUFFER|Buffer Grid
+----
+Grids from classified grid and table
+grid_tools
+ParameterTable|TABLE|Table|False
+ParameterTableField|ID_FIELD|Attribute|TABLE|-1
+ParameterRaster|CLASSES|Classes|False
+OutputRaster|GRIDS|Grids
+----
+Grid Shrink/Expand
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|OPERATION|Operation|[0] Shrink;[1] Expand
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterNumber|RADIUS|Radius|0.0|None|1
+ParameterSelection|METHOD_EXPAND|Method|[0] min;[1] max;[2] mean;[3] majority
+OutputRaster|RESULT|Result Grid
+----
+Grid Skeletonization
+imagery_segmentation
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|METHOD|Method|[0] Standard;[1] Hilditch's Algorithm;[2] Channel Skeleton
+ParameterSelection|INIT_METHOD|Initialisation|[0] Less than;[1] Greater than
+ParameterNumber|INIT_THRESHOLD|Threshold (Init.)|None|None|0.0
+ParameterNumber|CONVERGENCE|Convergence|None|None|3.0
+OutputRaster|RESULT|Skeleton
+OutputVector|VECTOR|Skeleton
+----
+Grids Product
+grid_calculus
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+OutputRaster|RESULT|Product
+----
+Grids Sum
+grid_calculus
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+OutputRaster|RESULT|Sum
+----
+Grid Standardisation
+grid_calculus
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|STRETCH|Stretch Factor|0.0|None|1.0
+OutputRaster|OUTPUT|Standardised Grid
+----
+Grid Statistics for Polygons
+shapes_grid
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterBoolean|COUNT         |Number of Cells|True
+ParameterBoolean|MIN           |Minimum|True
+ParameterBoolean|MAX           |Maximum|True
+ParameterBoolean|RANGE         |Range|True
+ParameterBoolean|SUM           |Sum|True
+ParameterBoolean|MEAN          |Mean|True
+ParameterBoolean|VAR           |Variance|True
+ParameterBoolean|STDDEV        |Standard Deviation|True
+ParameterNumber|QUANTILE|Quantiles|None|None|0
+OutputVector|RESULT|Statistics
+----
+Grid Values to Points (randomly)
+shapes_grid
+ParameterRaster|GRID|Grid|False
+ParameterNumber|FREQ|Frequency|None|None|100
+OutputVector|POINTS|Points
+----
+Grid Values to Points
+shapes_grid
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterVector|POLYGONS|Polygons|-1|True
+ParameterBoolean|NODATA        |Exclude NoData Cells|True
+ParameterSelection|TYPE|Type|[0] nodes;[1] cells
+OutputVector|SHAPES|Shapes
+----
+Grid Volume
+grid_calculus
+ParameterRaster|GRID|Grid|False
+ParameterSelection|METHOD|Method|[0] Count Only Above Base Level;[1] Count Only Below Base Level;[2] Subtract Volumes Below Base Level;[3] Add Volumes Below Base Level
+ParameterNumber|LEVEL|Base Level|None|None|0.0
+----
+Histogram Surface
+grid_visualisation
+ParameterRaster|GRID|Grid|False
+ParameterSelection|METHOD|Method|[0] rows;[1] columns;[2] circle
+OutputRaster|HIST|Histogram
+----
+Hypsometry
+ta_morphometry
+ParameterRaster|ELEVATION|Elevation|False
+ParameterNumber|COUNT|Number of Classes|None|None|100.0
+ParameterSelection|SORTING|Sort|[0] up;[1] down
+ParameterSelection|METHOD|Classification Constant|[0] height;[1] area
+ParameterBoolean|BZRANGE         |Use Z-Range|True
+ParameterNumber|ZRANGE_MIN|Z-Range Min|None|None|0.0
+ParameterNumber|ZRANGE_MAX|Z-Range Max|None|None|1000.0
+OutputTable|TABLE|Hypsometry
+----
+Inverse Distance Weighted
+grid_gridding
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|WEIGHTING|Distance Weighting|[0] inverse distance to a power;[1] linearly decreasing within search radius;[2] exponential weighting scheme;[3] gaussian weighting scheme
+ParameterNumber|POWER|Inverse Distance Power|0.0|None|2
+ParameterNumber|BANDWIDTH|Exponential and Gaussian Weighting Bandwidth|0.0|None|1
+ParameterSelection|RANGE|Search Range|[0] search radius (local);[1] no search radius (global)
+ParameterNumber|RADIUS|Search Radius|None|None|100.0
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|POINTS|Number of Points|[0] maximum number of points;[1] all points
+ParameterNumber|NPOINTS|Maximum Number of Points|None|None|10
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|0.0
+OutputRaster|USER_GRID|Grid
+----
+Invert Data/No-Data
+grid_tools
+ParameterRaster|INPUT|Grid|False
+OutputRaster|OUTPUT|Result
+----
+Join Attributes from a Table (Shapes)
+table_tools
+ParameterVector|TABLE_A|Shapes|-1|False
+ParameterTable|TABLE_B|Join Table|False
+ParameterTableField|ID_A|Identifier|TABLE_B|-1
+ParameterTableField|ID_B|Identifier|TABLE_B|-1
+ParameterBoolean|KEEPALL      |Keep All|True
+OutputVector|RESULT|Result
+----
+Join Attributes from a Table
+table_tools
+ParameterTable|TABLE_A|Table|False
+ParameterTable|TABLE_B|Join Table|False
+ParameterTableField|ID_A|Identifier|TABLE_B|-1
+ParameterTableField|ID_B|Identifier|TABLE_B|-1
+ParameterBoolean|KEEPALL      |Keep All|True
+OutputTable|RESULT|Result
+----
+Kernel Density Estimation
+grid_gridding
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|POPULATION|Weight|POINTS|-1
+ParameterNumber|RADIUS|Radius|None|None|10
+ParameterSelection|KERNEL|Kernel|[0] quartic kernel;[1] gaussian kernel
+ParameterSelection|TARGET|Target Grid|[0] user defined
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Lake Flood
+ta_hydrology
+ParameterRaster|ELEV|DEM|False
+ParameterRaster|SEEDS|Seeds|False
+ParameterBoolean|LEVEL         |Absolute Water Levels|True
+OutputRaster|OUTDEPTH|Lake
+OutputRaster|OUTLEVEL|Surface
+----
+Land Surface Temperature
+ta_morphometry
+ParameterRaster|DEM|Elevation [m]|False
+ParameterRaster|SWR|Short Wave Radiation [kW/m2]|False
+ParameterRaster|LAI|Leaf Area Index|False
+ParameterNumber|Z_REFERENCE|Elevation at Reference Station [m]|None|None|0.0
+ParameterNumber|T_REFERENCE|Temperature at Reference Station [Deg.Celsius]|None|None|0.0
+ParameterNumber|T_GRADIENT|Temperature Gradient [Deg.Celsius/km]|None|None|6.5
+ParameterNumber|C_FACTOR|C Factor|None|None|1.0
+OutputRaster|LST|Land Surface Temperature [Deg.Celsius]
+----
+Laplacian Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|METHOD|Method|[0] standard kernel 1;[1] standard kernel 2;[2] Standard kernel 3;[3] user defined kernel
+ParameterNumber|SIGMA|Standard Deviation (Percent of Radius)|None|None|0
+ParameterNumber|RADIUS|Radius|None|None|1
+ParameterSelection|MODE|Search Mode|[0] square;[1] circle
+OutputRaster|RESULT|Filtered Grid
+----
+Layer of extreme value
+grid_analysis
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|CRITERIA|Method|[0] Maximum;[1] Minimum
+OutputRaster|RESULT|Result
+----
+Least Cost Paths
+grid_analysis
+ParameterVector|SOURCE|Source Point(s)|0|False
+ParameterRaster|DEM|Accumulated cost|False
+ParameterMultipleInput|VALUES|Values|3.0|True
+OutputVector|POINTS|Profile (points)
+OutputVector|LINE|Profile (lines)
+----
+Line-Polygon Intersection
+shapes_lines
+ParameterVector|LINES|Lines|1|False
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterSelection|METHOD|Output|[0] one multi-line per polygon;[1] keep original line attributes
+OutputVector|INTERSECT|Intersection
+----
+Line Dissolve
+shapes_lines
+ParameterVector|LINES|Lines|-1|False
+ParameterTableField|FIELD_1|1. Attribute|LINES|-1
+ParameterTableField|FIELD_2|2. Attribute|LINES|-1
+ParameterTableField|FIELD_3|3. Attribute|LINES|-1
+ParameterSelection|ALL|Dissolve...|[0] lines with same attribute value(s);[1] all lines
+OutputVector|DISSOLVED|Dissolved Lines
+----
+Line Properties
+shapes_lines
+ParameterVector|LINES|Lines|1|False
+ParameterBoolean|BPARTS      |Number of Parts|True
+ParameterBoolean|BPOINTS     |Number of Vertices|True
+ParameterBoolean|BLENGTH     |Length|True
+OutputVector|OUTPUT|Lines with Property Attributes
+----
+Line Simplification
+shapes_lines
+ParameterVector|LINES|Lines|1|False
+ParameterNumber|TOLERANCE|Tolerance|None|None|1.0
+OutputVector|OUTPUT|Simplified Lines
+----
+Local Minima and Maxima
+shapes_grid
+ParameterRaster|GRID|Grid|False
+OutputVector|MINIMA|Minima
+OutputVector|MAXIMA|Maxima
+----
+LS Factor
+ta_hydrology
+ParameterRaster|SLOPE|Slope|False
+ParameterRaster|AREA|Catchment Area|False
+ParameterSelection|CONV|Area to Length Conversion|[0] no conversion (areas already given as specific catchment area);[1] 1 / cell size (specific catchment area);[2] square root (catchment length)
+ParameterSelection|METHOD|Method (LS)|[0] Moore et al. 1991;[1] Desmet & Govers 1996;[2] Boehner & Selige 2006
+ParameterNumber|EROSIVITY|Rill/Interrill Erosivity|None|None|0.0
+ParameterSelection|STABILITY|Stability|[0] stable;[1] instable (thawing)
+OutputRaster|LS|LS Factor
+----
+Majority Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterNumber|RADIUS|Radius|1.0|None|1
+ParameterNumber|THRESHOLD|Threshold [Percent]|0.0|None|0
+OutputRaster|RESULT|Filtered Grid
+----
+Mass Balance Index
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|HREL|Vertical Distance to Channel Network|True
+ParameterNumber|TSLOPE|T Slope|None|None|15.0
+ParameterNumber|TCURVE|T Curvature|None|None|0.01
+ParameterNumber|THREL|T Vertical Distance to Channel Network|None|None|15.0
+OutputRaster|MBI|Mass Balance Index
+----
+Merge Shapes Layers
+shapes_tools
+ParameterVector|MAIN|Main Layer|-1|False
+ParameterMultipleInput|LAYERS|Additional Layers|-1.0|True
+OutputVector|OUT|Merged Layer
+----
+Merging
+grid_tools
+ParameterMultipleInput|GRIDS|Grids to Merge|3.0|False
+ParameterSelection|TYPE|Preferred data storage type|[0] 1 bit;[1] 1 byte unsigned integer;[2] 1 byte signed integer;[3] 2 byte unsigned integer;[4] 2 byte signed integer;[5] 4 byte unsigned integer;[6] 4 byte signed integer;[7] 4 byte floating point;[8] 8 byte floating point
+ParameterSelection|INTERPOL|Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|OVERLAP|Overlapping Cells|[0] mean value;[1] first value in order of grid list
+ParameterNumber|MERGE_INFO_MESH_SIZE|Cell Size|0.0|None|1.0
+OutputRaster|MERGED|Merged Grid
+----
+Metric Conversions
+grid_calculus
+ParameterRaster|GRID|Grid|False
+ParameterSelection|CONVERSION|Conversion|[0] radians to degree;[1] degree to radians;[2] Celsius to Fahrenheit;[3] Fahrenheit to Celsius
+OutputRaster|CONV|Converted Grid
+----
+Minimum Distance Analysis
+geostatistics_points
+ParameterVector|POINTS|Points|0|False
+OutputTable|TABLE|Minimum Distance Analysis
+----
+Modifed Quadratic Shepard
+grid_gridding
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|QUADRATIC_NEIGHBORS|Quadratic Neighbors|1.0|None|13
+ParameterNumber|WEIGHTING_NEIGHBORS|Weighting Neighbors|1.0|None|19
+ParameterNumber|USER_XMIN|Left|None|None|0.0
+ParameterNumber|USER_XMAX|Right|None|None|0.0
+ParameterNumber|USER_YMIN|Bottom|None|None|0.0
+ParameterNumber|USER_YMAX|Top|None|None|0.0
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Morphological Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterNumber|RADIUS|Radius|None|None|1
+ParameterSelection|METHOD|Method|[0] Dilation;[1] Erosion;[2] Opening;[3] Closing
+OutputRaster|RESULT|Filtered Grid
+----
+Morphometric Protection Index
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|RADIUS|Radius|None|None|2000.0
+OutputRaster|PROTECTION|Protection Index
+----
+Multi-Band Variation
+geostatistics_grid
+ParameterMultipleInput|BANDS|Grids|3.0|False
+ParameterNumber|RADIUS|Radius [Cells]|None|None|1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+OutputRaster|MEAN|Mean Distance
+OutputRaster|STDDEV|Standard Deviation
+OutputRaster|DIFF|Distance
+----
+Multi Direction Lee Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|NOISE_ABS|Estimated Noise (absolute)|None|None|1.0
+ParameterNumber|NOISE_REL|Estimated Noise (relative)|None|None|1.0
+ParameterBoolean|WEIGHTED       |Weighted|True
+ParameterSelection|METHOD|Method|[0] noise variance given as absolute value;[1] noise variance given relative to mean standard deviation;[2] original calculation (Ringeler)
+OutputRaster|RESULT|Filtered Grid
+OutputRaster|STDDEV|Minimum Standard Deviation
+OutputRaster|DIR|Direction of Minimum Standard Deviation
+----
+Multilevel B-Spline Interpolation (from Grid)
+grid_spline
+ParameterRaster|GRIDPOINTS|Grid|False
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|METHOD|Method|[0] without B-spline refinement;[1] with B-spline refinement
+ParameterNumber|EPSILON|Threshold Error|None|None|0.0001
+ParameterNumber|LEVEL_MAX|Maximum Level|None|None|11.0
+ParameterSelection|DATATYPE|Data Type|[0] same as input grid;[1] floating point
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Multilevel B-Spline Interpolation
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|METHOD|Method|[0] without B-spline refinement;[1] with B-spline refinement
+ParameterNumber|EPSILON|Threshold Error|None|None|0.0001
+ParameterNumber|LEVEL_MAX|Maximum Level|None|None|11.0
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Multiple Regression Analysis (Grid/Grids)
+geostatistics_regression
+ParameterRaster|DEPENDENT|Dependent|False
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterBoolean|COORD_X         |Include X Coordinate|True
+ParameterBoolean|COORD_Y         |Include Y Coordinate|True
+ParameterSelection|METHOD|Method|[0] include all;[1] forward;[2] backward;[3] stepwise
+ParameterNumber|P_IN|P in|None|None|5
+ParameterNumber|P_OUT|P out|None|None|5
+OutputRaster|REGRESSION|Regression
+OutputRaster|RESIDUALS|Residuals
+OutputTable|INFO_COEFF|Details: Coefficients
+OutputTable|INFO_MODEL|Details: Model
+OutputTable|INFO_STEPS|Details: Steps
+----
+Multiple Regression Analysis (Points/Grids)
+geostatistics_regression
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterTableField|ATTRIBUTE|Attribute|SHAPES|-1
+ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterBoolean|COORD_X         |Include X Coordinate|True
+ParameterBoolean|COORD_Y         |Include Y Coordinate|True
+ParameterSelection|METHOD|Method|[0] include all;[1] forward;[2] backward;[3] stepwise
+ParameterNumber|P_IN|P in|None|None|5
+ParameterNumber|P_OUT|P out|None|None|5
+OutputTable|INFO_COEFF|Details: Coefficients
+OutputTable|INFO_MODEL|Details: Model
+OutputTable|INFO_STEPS|Details: Steps
+OutputVector|RESIDUALS|Residuals
+OutputRaster|REGRESSION|Regression
+----
+Multiresolution Index of Valley Bottom Flatness (MRVBF)
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|T_SLOPE|Initial Threshold for Slope|None|None|16
+ParameterNumber|T_PCTL_V|Threshold for Elevation Percentile (Lowness)|None|None|0.4
+ParameterNumber|T_PCTL_R|Threshold for Elevation Percentile (Upness)|None|None|0.35
+ParameterNumber|P_SLOPE|Shape Parameter for Slope|None|None|4.0
+ParameterNumber|P_PCTL|Shape Parameter for Elevation Percentile|None|None|3.0
+ParameterBoolean|UPDATE        |Update Views|True
+ParameterBoolean|CLASSIFY      |Classify|True
+ParameterNumber|MAX_RES|Maximum Resolution (Percentage)|None|None|100
+OutputRaster|MRVBF|MRVBF
+OutputRaster|MRRTF|MRRTF
+----
+Natural Neighbour
+grid_gridding
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterBoolean|SIBSON         |Sibson|True
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Nearest Neighbour
+grid_gridding
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Ordered Weighted Averaging (OWA)
+grid_analysis
+ParameterMultipleInput|GRIDS|Input Grids|3.0|False
+ParameterFixedTable|WEIGHTS|Weights|3|Weight|False
+OutputRaster|OUTPUT|Output Grid
+----
+Ordinary Kriging (Global)
+geostatistics_kriging
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterBoolean|BVARIANCE              |Create Variance Grid|True
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|MODEL|Variogram Model|[0] Spherical Model;[1] Exponential Model;[2] Gaussian Model;[3] Linear Regression;[4] Exponential Regression;[5] Power Function Regression
+ParameterBoolean|BLOCK                  |Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|1.0|None|100
+ParameterBoolean|BLOG                   |Logarithmic Transformation|True
+ParameterNumber|NUGGET|Nugget|None|None|0.0
+ParameterNumber|SILL|Sill|None|None|0.0
+ParameterNumber|RANGE|Range|None|None|0.0
+ParameterNumber|LIN_B|Linear Regression|None|None|1.0
+ParameterNumber|EXP_B|Exponential Regression|None|None|0.1
+ParameterNumber|POW_A|Power Function - A|None|None|1.0
+ParameterNumber|POW_B|Power Function - B|None|None|0.5
+ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
+ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
+OutputRaster|GRID|Grid
+OutputRaster|VARIANCE|Variance
+----
+Ordinary Kriging (VF)
+geostatistics_kriging
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|ZFIELD|Attribute|POINTS|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|TQUALITY|Type of Quality Measure|[0] standard deviation;[1] variance
+ParameterBoolean|LOG                |Logarithmic Transformation|True
+ParameterBoolean|BLOCK              |Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|None|None|100.0
+ParameterNumber|VAR_MAXDIST|Maximum Distance|None|None|0.0
+ParameterNumber|VAR_NCLASSES|Lag Distance Classes|None|None|0.0
+ParameterNumber|VAR_NSKIP|Skip|None|None|0.0
+ParameterString|VAR_MODEL|Model|
+ParameterSelection|GLOBAL|Search Range|[0] local;[1] global
+ParameterNumber|MAXRADIUS|Maximum Search Radius (map units)|None|None|0
+ParameterSelection|ALL_POINTS|Number of Points|[0] maximum number of points;[1] all points in search distance
+ParameterNumber|NPOINTS_MIN|Minimum|None|None|4.0
+ParameterNumber|NPOINTS_MAX|Maximum|None|None|20.0
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterBoolean|USER_BVARIANCE     |Create Quality Grid|True
+ParameterNumber|USER_XMIN|Left|None|None|0.0
+ParameterNumber|USER_XMAX|Right|None|None|0.0
+ParameterNumber|USER_YMIN|Bottom|None|None|0.0
+ParameterNumber|USER_YMAX|Top|None|None|0.0
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+OutputRaster|USER_VARIANCE|Quality Measure
+----
+Ordinary Kriging (VF, Global)
+geostatistics_kriging
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|ZFIELD|Attribute|POINTS|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|TQUALITY|Type of Quality Measure|[0] standard deviation;[1] variance
+ParameterBoolean|LOG                |Logarithmic Transformation|True
+ParameterBoolean|BLOCK              |Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|None|None|100.0
+ParameterNumber|VAR_MAXDIST|Maximum Distance|None|None|0.0
+ParameterNumber|VAR_NCLASSES|Lag Distance Classes|None|None|0.0
+ParameterNumber|VAR_NSKIP|Skip|None|None|0.0
+ParameterString|VAR_MODEL|Model|
+ParameterBoolean|USER_BVARIANCE     |Create Quality Grid|True
+ParameterNumber|USER_XMIN|Left|None|None|0.0
+ParameterNumber|USER_XMAX|Right|None|None|0.0
+ParameterNumber|USER_YMIN|Bottom|None|None|0.0
+ParameterNumber|USER_YMAX|Top|None|None|0.0
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+OutputRaster|USER_VARIANCE|Quality Measure
+----
+Ordinary Kriging
+geostatistics_kriging
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterBoolean|BVARIANCE              |Create Variance Grid|True
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|MODEL|Variogram Model|[0] Spherical Model;[1] Exponential Model;[2] Gaussian Model;[3] Linear Regression;[4] Exponential Regression;[5] Power Function Regression
+ParameterBoolean|BLOCK                  |Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|1.0|None|100
+ParameterBoolean|BLOG                   |Logarithmic Transformation|True
+ParameterNumber|NUGGET|Nugget|None|None|0.0
+ParameterNumber|SILL|Sill|None|None|10.0
+ParameterNumber|RANGE|Range|None|None|100.0
+ParameterNumber|LIN_B|Linear Regression|None|None|1.0
+ParameterNumber|EXP_B|Exponential Regression|None|None|0.1
+ParameterNumber|POW_A|Power Function - A|None|None|1
+ParameterNumber|POW_B|Power Function - B|None|None|0.5
+ParameterNumber|MAXRADIUS|Maximum Search Radius (map units)|None|None|1000.0
+ParameterNumber|NPOINTS_MIN|Min.Number of m_Points|None|None|4
+ParameterNumber|NPOINTS_MAX|Max. Number of m_Points|None|None|20
+ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
+ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
+OutputRaster|GRID|Grid
+OutputRaster|VARIANCE|Variance
+----
+Overland Flow - Kinematic Wave D8
+sim_hydrology
+ParameterRaster|DEM|Elevation|False
+ParameterVector|GAUGES|Gauges|-1|True
+ParameterNumber|TIME_SPAN|Simulation Time [h]|None|None|24
+ParameterNumber|TIME_STEP|Simulation Time Step [h]|None|None|0.1
+ParameterNumber|ROUGHNESS|Manning's Roughness|None|None|0.03
+ParameterNumber|NEWTON_MAXITER|Max. Iterations|None|None|100
+ParameterNumber|NEWTON_EPSILON|Epsilon|None|None|0.0001
+ParameterSelection|PRECIP|Precipitation|[0] Homogenous;[1] Above Elevation;[2] Left Half
+ParameterNumber|THRESHOLD|Threshold Elevation|None|None|0.0
+OutputRaster|FLOW|Runoff
+OutputTable|GAUGES_FLOW|Flow at Gauges
+----
+Overland Flow Distance to Channel Network
+ta_channels
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|CHANNELS|Channel Network|False
+ParameterSelection|METHOD|Flow Algorithm|[0] D8;[1] MFD
+OutputRaster|DISTANCE|Overland Flow Distance
+OutputRaster|DISTVERT|Vertical Overland Flow Distance
+OutputRaster|DISTHORZ|Horizontal Overland Flow Distance
+----
+Patching
+grid_tools
+ParameterRaster|ORIGINAL|Grid|False
+ParameterRaster|ADDITIONAL|Patch Grid|False
+ParameterSelection|INTERPOLATION|Interpolation Method|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+OutputRaster|COMPLETED|Completed Grid
+----
+Pattern Analysis
+grid_analysis
+ParameterRaster|INPUT|Input Grid|False
+ParameterSelection|WINSIZE|Size of Analysis Window|[0] 3 X 3;[1] 5 X 5;[2] 7 X 7
+ParameterNumber|MAXNUMCLASS|Max. Number of Classes|None|None|0
+OutputRaster|RELATIVE|Relative Richness
+OutputRaster|DIVERSITY|Diversity
+OutputRaster|DOMINANCE|Dominance
+OutputRaster|FRAGMENTATION|Fragmentation
+OutputRaster|NDC|Number of Different Classes
+OutputRaster|CVN|Center Versus Neighbours
+----
+Points Filter
+shapes_points
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|FIELD|Attribute|POINTS|-1
+ParameterNumber|RADIUS|Radius|None|None|1
+ParameterNumber|MINNUM|Minimum Number of Points|None|None|0
+ParameterNumber|MAXNUM|Maximum Number of Points|None|None|0
+ParameterBoolean|QUADRANTS      |Quadrants|True
+ParameterSelection|METHOD|Filter Criterion|[0] keep maxima (with tolerance);[1] keep minima (with tolerance);[2] remove maxima (with tolerance);[3] remove minima (with tolerance);[4] remove below percentile;[5] remove above percentile
+ParameterNumber|TOLERANCE|Tolerance|None|None|0.0
+ParameterNumber|PERCENT|Percentile|None|None|50
+OutputVector|FILTER|Filtered Points
+----
+Point Statistics for Polygons
+shapes_polygons
+ParameterVector|POINTS|Points|0|False
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterBoolean|SUM             |Sum|True
+ParameterBoolean|AVG             |Mean|True
+ParameterBoolean|VAR             |Variance|True
+ParameterBoolean|DEV             |Deviation|True
+ParameterBoolean|MIN             |Minimum|True
+ParameterBoolean|MAX             |Maximum|True
+ParameterBoolean|NUM             |Count|True
+OutputVector|STATISTICS|Statistics
+----
+Points Thinning
+shapes_points
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|FIELD|Attribute|POINTS|-1
+ParameterNumber|RESOLUTION|Resolution|0.0|None|1.0
+OutputVector|THINNED|Thinned Points
+----
+Polar to Cartesian Coordinates
+shapes_tools
+ParameterVector|POLAR|Polar Coordinates|-1|False
+ParameterTableField|F_EXAGG|Exaggeration|POLAR|-1
+ParameterNumber|D_EXAGG|Exaggeration Factor|None|None|1
+ParameterNumber|RADIUS|Radius|None|None|6371000.0
+ParameterBoolean|DEGREE       |Degree|True
+OutputVector|CARTES|Cartesian Coordinates
+----
+Polygon-Line Intersection
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterVector|LINES|Lines|1|False
+OutputVector|INTERSECT|Intersection
+----
+Polygon Centroids
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterBoolean|METHOD         |Centroids for each part|True
+OutputVector|CENTROIDS|Centroids
+----
+Polygon Dissolve
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterTableField|FIELD_1|1. Attribute|POLYGONS|-1
+ParameterTableField|FIELD_2|2. Attribute|POLYGONS|-1
+ParameterTableField|FIELD_3|3. Attribute|POLYGONS|-1
+ParameterSelection|DISSOLVE|Dissolve...|[0] polygons with same attribute value;[1] all polygons;[2] polygons with same attribute value (keep inner boundaries);[3] all polygons (keep inner boundaries)
+OutputVector|DISSOLVED|Dissolved Polygons
+----
+Polygon Intersection
+shapes_polygons
+ParameterVector|SHAPES_A|Layer A|2|False
+ParameterTableField|FIELD_A|Attribute A|SHAPES_A|-1
+ParameterVector|SHAPES_B|Layer B|2|False
+ParameterTableField|FIELD_B|Attribute B|SHAPES_B|-1
+ParameterSelection|METHOD|Method|[0] Complete Intersection;[1] Intersection;[2] Difference (A - B);[3] Difference (B - A)
+ParameterBoolean|SPLITPARTS     |Split Parts|True
+OutputVector|SHAPES_AB|Intersection
+----
+Polygon Parts to Separate Polygons
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterBoolean|LAKES         |Ignore Lakes|True
+OutputVector|PARTS|Polygon Parts
+----
+Polygon Properties
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+ParameterBoolean|BPARTS        |Number of Parts|True
+ParameterBoolean|BPOINTS       |Number of Vertices|True
+ParameterBoolean|BLENGTH       |Perimeter|True
+ParameterBoolean|BAREA         |Area|True
+OutputVector|OUTPUT|Polygons with Property Attributes
+----
+Polygon Shape Indices
+shapes_polygons
+ParameterVector|SHAPES|Shapes|2|False
+OutputVector|INDEX|Shape Index
+----
+Polygons to Edges and Nodes
+shapes_polygons
+ParameterVector|POLYGONS|Polygons|2|False
+OutputVector|EDGES|Edges
+OutputVector|NODES|Nodes
+----
+Polynomial Regression
+geostatistics_regression
+ParameterVector|POINTS|Points|-1|False
+ParameterTableField|ATTRIBUTE|Attribute|POINTS|-1
+ParameterSelection|POLYNOM|Polynom|[0] simple planar surface;[1] bi-linear saddle;[2] quadratic surface;[3] cubic surface;[4] user defined
+ParameterNumber|XORDER|Maximum X Order|None|None|4
+ParameterNumber|YORDER|Maximum Y Order|None|None|4
+ParameterNumber|TORDER|Maximum Total Order|None|None|4
+ParameterSelection|TARGET|Trend Surface|[0] user defined
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputVector|RESIDUALS|Residuals
+OutputRaster|USER_GRID|Grid
+----
+Polynomial Trend from Grids
+grid_calculus
+ParameterMultipleInput|GRIDS|Dependent Variables|3.0|False
+ParameterMultipleInput|Y_GRIDS|Independent Variable (per Grid and Cell)|3.0|True
+ParameterFixedTable|Y_TABLE|Independent Variable (per Grid)|3|Value|False
+ParameterSelection|POLYNOM|Type of Approximated Function|[0] first order polynom (linear regression);[1] second order polynom;[2] third order polynom;[3] fourth order polynom;[4] fifth order polynom
+OutputRaster|PARMS|Polynomial Coefficients
+OutputRaster|QUALITY|Coefficient of Determination
+----
+Principle Components Analysis
+table_calculus
+ParameterTable|TABLE|Table|False
+ParameterSelection|METHOD|Method|[0] correlation matrix;[1] variance-covariance matrix;[2] sums-of-squares-and-cross-products matrix
+ParameterNumber|NFIRST|Number of Components|None|None|3
+OutputTable|PCA|Principle Components
+----
+Profile from points
+ta_profiles
+ParameterRaster|GRID|Grid|False
+ParameterTable|TABLE|Input|False
+ParameterTableField|X|X|TABLE|-1
+ParameterTableField|Y|Y|TABLE|-1
+OutputTable|RESULT|Result
+----
+Profiles from Lines
+ta_profiles
+ParameterRaster|DEM|DEM|False
+ParameterMultipleInput|VALUES|Values|3.0|True
+ParameterVector|LINES|Lines|1|False
+ParameterTableField|NAME|Name|LINES|-1
+ParameterBoolean|SPLIT         |Each Line as new Profile|True
+OutputVector|PROFILE|Profiles
+OutputVector|PROFILES|Profiles
+----
+Proj.4 (Command Line Arguments, Grid)
+pj_proj4
+ParameterString|SOURCE_PROJ|Source Projection Parameters|
+ParameterString|TARGET_PROJ|Target Projection Parameters|
+ParameterRaster|SOURCE|Source|False
+ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|TARGET_TYPE|Target|[0] user defined
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
+ParameterNumber|GET_USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|GET_USER_GRID|Grid
+----
+Proj.4 (Command Line Arguments, List of Grids)
+pj_proj4
+ParameterString|SOURCE_PROJ|Source Projection Parameters|
+ParameterString|TARGET_PROJ|Target Projection Parameters|
+ParameterMultipleInput|SOURCE|Source|3.0|False
+ParameterBoolean|CREATE_XY                 |Create X/Y Grids|True
+ParameterSelection|INTERPOLATION|Interpolation|[0] Nearest Neigbhor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|TARGET_TYPE|Target|[0] user defined
+Extent GET_USER_XMIN GET_USER_XMAX GET_USER_YMIN GET_USER_YMAX
+ParameterNumber|GET_USER_SIZE|Cellsize|None|None|0.0
+OutputRaster|TARGET|Target
+OutputRaster|SHAPES|Shapes
+OutputRaster|OUT_X|X Coordinates
+OutputRaster|OUT_Y|Y Coordinates
+----
+Proj.4 (Command Line Arguments, List of Shapes Layers)
+pj_proj4
+ParameterString|SOURCE_PROJ|Source Projection Parameters|
+ParameterString|TARGET_PROJ|Target Projection Parameters|
+ParameterMultipleInput|SOURCE|Source|-1.0|False
+OutputVector|TARGET|Target
+----
+Proj.4 (Command Line Arguments, Shapes)
+pj_proj4
+ParameterString|SOURCE_PROJ|Source Projection Parameters|
+ParameterString|TARGET_PROJ|Target Projection Parameters|
+ParameterVector|SOURCE|Source|-1|False
+OutputVector|TARGET|Target
+----
+Proximity Grid
+grid_tools
+ParameterRaster|FEATURES|Features|False
+OutputRaster|DISTANCE|Distance
+OutputRaster|DIRECTION|Direction
+OutputRaster|ALLOCATION|Allocation
+----
+Pythagoras' Tree
+recreations_fractals
+ParameterSelection|TYPE|Shape Type|[0] Lines;[1] Polygons
+ParameterNumber|ANGLE|Angle [Degree]|None|None|0
+ParameterNumber|MINSIZE|Minimum Size [%]|None|None|0
+ParameterSelection|METHOD|Method|[0] Fixed angle;[1] Constant variation range;[2] Low variation for low sizes;[3] High variation for low sizes
+ParameterNumber|VARRANGE_MIN|Constant Variation Range [Degree]|None|None|0
+ParameterNumber|VARRANGE_MAX|Constant Variation Range [Degree]|None|None|1
+OutputVector|RESULT|Pythagoras' Tree
+----
+QuadTree Structure to Shapes
+shapes_tools
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterTableField|ATTRIBUTE|Attribute|SHAPES|-1
+OutputVector|POLYGONS|Polygons
+OutputVector|LINES|Lines
+OutputVector|POINTS|Duplicated Points
+----
+Radius of Variance (Grid)
+geostatistics_grid
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|VARIANCE|Standard Deviation|0.0|None|1.0
+ParameterNumber|RADIUS|Maximum Search Radius (cells)|0.0|None|20
+ParameterSelection|OUTPUT|Type of Output|[0] Cells;[1] Map Units
+OutputRaster|RESULT|Variance Radius
+----
+Random Field
+grid_calculus
+ParameterNumber|NX|Width (Cells)|None|None|100
+ParameterNumber|NY|Height (Cells)|None|None|100
+ParameterNumber|CELLSIZE|Cellsize|None|None|1.0
+ParameterNumber|XMIN|West|None|None|0.0
+ParameterNumber|YMIN|South|None|None|0.0
+ParameterSelection|METHOD|Method|[0] Uniform;[1] Gaussian
+ParameterNumber|RANGE_MIN|Range Min|None|None|0.0
+ParameterNumber|RANGE_MAX|Range Max|None|None|1.0
+ParameterNumber|MEAN|Arithmetic Mean|None|None|0.0
+ParameterNumber|STDDEV|Standard Deviation|None|None|1.0
+OutputRaster|OUTPUT|Random Field
+----
+Random Terrain Generation
+grid_calculus
+ParameterNumber|RADIUS|Radius (cells)|None|None|10
+ParameterNumber|ITERATIONS|Iterations|None|None|10
+ParameterSelection|TARGET_TYPE|Target Dimensions|[0] User defined
+ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
+ParameterNumber|USER_COLS|Cols|1.0|None|100
+ParameterNumber|USER_ROWS|Rows|1.0|None|100
+OutputRaster|TARGET_GRID|Grid
+----
+Rank Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterNumber|RADIUS|Radius|1.0|None|1
+ParameterNumber|RANK|Rank [Percent]|None|None|50
+OutputRaster|RESULT|Filtered Grid
+----
+Real Area Calculation
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+OutputRaster|AREA|Real Area Grid
+----
+Reclassify Grid Values
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|METHOD|Method|[0] single;[1] range;[2] simple table
+ParameterNumber|OLD|old value (for single value change)|None|None|0.0
+ParameterNumber|NEW|new value (for single value change)|None|None|1.0
+ParameterSelection|SOPERATOR|operator (for single value change)|[0] =;[1] <;[2] <=;[3] >=;[4] >
+ParameterNumber|MIN|minimum value (for range)|None|None|0.0
+ParameterNumber|MAX|maximum value (for range)|None|None|1.0
+ParameterNumber|RNEW|new value(for range)|None|None|2.0
+ParameterSelection|ROPERATOR|operator (for range)|[0] <=;[1] <
+ParameterFixedTable|RETAB|Lookup Table|3|minimum;maximum;new|False
+ParameterSelection|TOPERATOR|operator (for table)|[0] min <= value < max;[1] min <= value <= max;[2] min < value <= max;[3] min < value < max
+ParameterBoolean|NODATAOPT      |replace no data values|True
+ParameterNumber|NODATA|new value for no data values|None|None|0.0
+ParameterBoolean|OTHEROPT       |replace other values|True
+ParameterNumber|OTHERS|new value for other values|None|None|0.0
+OutputRaster|RESULT|Reclassified Grid
+----
+Regression Analysis (Points/Grid)
+geostatistics_regression
+ParameterRaster|GRID|Grid|False
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterTableField|ATTRIBUTE|Attribute|SHAPES|-1
+ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterSelection|METHOD|Regression Function|[0] Y = a + b * X (linear);[1] Y = a + b / X;[2] Y = a / (b - X);[3] Y = a * X^b (power);[4] Y = a e^(b * X) (exponential);[5] Y = a + b * ln(X) (logarithmic)
+OutputRaster|REGRESSION|Regression
+OutputVector|RESIDUAL|Residuals
+----
+Relative Heights and Slope Positions
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|W|w|None|None|0.5
+ParameterNumber|T|t|None|None|10.0
+ParameterNumber|E|e|None|None|2.0
+OutputRaster|HO|Slope Height
+OutputRaster|HU|Valley Depth
+OutputRaster|NH|Normalized Height
+OutputRaster|SH|Standardized Height
+OutputRaster|MS|Mid-Slope Positon
+----
+Remove Duplicate Points
+shapes_points
+ParameterVector|POINTS|Points|-1|False
+ParameterTableField|FIELD|Attribute|POINTS|-1
+ParameterSelection|METHOD|Point to Keep|[0] first point;[1] last point;[2] point with minimum attribute value;[3] point with maximum attribute value
+ParameterSelection|NUMERIC|Numeric Attribute Values|[0] take value from the point to be kept;[1] minimum value of all duplicates;[2] maximum value of all duplicates;[3] mean value of all duplicates
+OutputVector|RESULT|Result
+----
+Representativeness (Grid)
+geostatistics_grid
+ParameterRaster|INPUT|Grid|False
+ParameterNumber|RADIUS|Radius (Cells)|1.0|None|10
+ParameterNumber|EXPONENT|Exponent|None|None|1
+OutputRaster|RESULT|Representativeness
+----
+Resampling
+grid_tools
+ParameterRaster|INPUT|Grid|False
+ParameterBoolean|KEEP_TYPE              |Preserve Data Type|True
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|SCALE_UP_METHOD|Interpolation Method|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation;[5] Mean Value;[6] Mean Value (cell area weighted);[7] Minimum Value;[8] Maximum Value;[9] Majority
+ParameterSelection|SCALE_DOWN_METHOD|Interpolation Method|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Residual Analysis (Grid)
+geostatistics_grid
+ParameterRaster|GRID|Grid|False
+ParameterNumber|RADIUS|Radius (Cells)|1.0|None|7
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET|Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|1.0
+OutputRaster|MEAN|Mean Value
+OutputRaster|DIFF|Difference from Mean Value
+OutputRaster|STDDEV|Standard Deviation
+OutputRaster|RANGE|Value Range
+OutputRaster|MIN|Minimum Value
+OutputRaster|MAX|Maximum Value
+OutputRaster|DEVMEAN|Deviation from Mean Value
+OutputRaster|PERCENT|Percentile
+----
+RGB Composite
+grid_visualisation
+ParameterRaster|GRID_R|R|False
+ParameterRaster|GRID_G|G|False
+ParameterRaster|GRID_B|B|False
+ParameterSelection|METHOD_R|Method for R value|0-255;Rescale to 0 - 255
+ParameterSelection|METHOD_G|Method for G value|0-255;Rescale to 0 - 255
+ParameterSelection|METHOD_B|Method for B value|0-255;Rescale to 0 - 255
+OutputRaster|GRID_RGB|Output RGB
+----
+Running Average
+table_calculus
+ParameterTable|INPUT|Input|False
+ParameterTableField|FIELD|Attribute|INPUT|-1
+ParameterNumber|COUNT|Number of Records|0.0|None|10
+OutputTable|OUTPUT|Output
+----
+SAGA Wetness Index
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|T|t|None|None|10
+OutputRaster|C|Catchment area
+OutputRaster|GN|Catchment slope
+OutputRaster|CS|Modified catchment area
+OutputRaster|SB|Wetness index
+----
+Seed Generation
+imagery_segmentation
+ParameterMultipleInput|GRIDS|Features|3.0|False
+ParameterNumber|FACTOR|Bandwidth (Cells)|0.0|None|2
+ParameterSelection|TYPE_SURFACE|Type of Surface|[0] smoothed surface;[1] variance (a);[2] variance (b)
+ParameterSelection|TYPE_SEEDS|Extraction of...|[0] minima;[1] maxima;[2] minima and maxima
+ParameterSelection|TYPE_MERGE|Feature Aggregation|[0] additive;[1] multiplicative
+ParameterBoolean|NORMALIZE         |Normalized|True
+OutputRaster|SURFACE|Surface
+OutputRaster|SEEDS_GRID|Seeds Grid
+OutputVector|SEEDS|Seeds
+----
+Separate points by direction
+shapes_points
+ParameterVector|POINTS|Points|0|False
+ParameterNumber|DIRECTIONS|Number of Directions|1.0|None|4
+ParameterNumber|TOLERANCE|Tolerance (Degree)|0.0|None|5
+OutputVector|OUTPUT|Ouput
+----
+Shapes Buffer
+shapes_tools
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterSelection|BUF_TYPE|Buffer Distance|[0] fixed value;[1] attribute field
+ParameterNumber|BUF_DIST|Buffer Distance (Fixed)|None|None|100.0
+ParameterTableField|BUF_FIELD|Buffer Distance (Attribute)|SHAPES|-1
+ParameterNumber|BUF_SCALE|Scaling Factor for Attribute Value|None|None|1.0
+ParameterNumber|BUF_ZONES|Number of Buffer Zones|1.0|None|1.0
+ParameterNumber|DCIRCLE|Circle Point Distance [Degree]|None|None|5.0
+ParameterBoolean|DISSOLVE       |Dissolve Buffers|True
+OutputVector|BUFFER|Buffer
+----
+Shapes to Grid
+grid_gridding
+ParameterVector|INPUT|Shapes|-1|False
+ParameterTableField|FIELD|Attribute|INPUT|-1
+ParameterSelection|MULTIPLE|Method for Multiple Values|[0] first;[1] last;[2] minimum;[3] maximum;[4] mean
+ParameterSelection|LINE_TYPE|Method for Lines|[0] thin;[1] thick
+ParameterSelection|GRID_TYPE|Preferred Target Grid Type|[0] Integer (1 byte);[1] Integer (2 byte);[2] Integer (4 byte);[3] Floating Point (4 byte);[4] Floating Point (8 byte)
+ParameterSelection|TARGET|Target Grid|[0] user defined
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Simple Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterSelection|MODE|Search Mode|[0] Square;[1] Circle
+ParameterSelection|METHOD|Filter|[0] Smooth;[1] Sharpen;[2] Edge
+ParameterNumber|RADIUS|Radius|None|None|2
+OutputRaster|RESULT|Filtered Grid
+----
+Simple Region Growing
+imagery_segmentation
+ParameterRaster|SEEDS|Seeds|False
+ParameterMultipleInput|FEATURES|Features|3.0|False
+ParameterSelection|METHOD|Method|[0] feature space and position;[1] feature space
+ParameterSelection|NEIGHBOUR|Neighbourhood|[0] 4 (von Neumann);[1] 8 (Moore)
+ParameterNumber|SIG_1|Variance in Feature Space|None|None|1.0
+ParameterNumber|SIG_2|Variance in Position Space|None|None|1.0
+ParameterNumber|THRESHOLD|Threshold - Similarity|None|None|0.0
+ParameterBoolean|REFRESH         |Refresh|True
+ParameterNumber|LEAFSIZE|Leaf Size (for Speed Optimisation)|None|None|256
+OutputRaster|SEGMENTS|Segments
+OutputRaster|SIMILARITY|Similarity
+OutputTable|TABLE|Seeds
+----
+Simulation
+sim_fire_spreading
+ParameterRaster|DEM|DEM|False
+ParameterRaster|FUEL|Fuel Model|False
+ParameterRaster|WINDSPD|Wind Speed|False
+ParameterRaster|WINDDIR|Wind Direction|False
+ParameterRaster|M1H|Dead Fuel Moisture 1H|False
+ParameterRaster|M10H|Dead Fuel Moisture 10H|False
+ParameterRaster|M100H|Dead Fuel Moisture 100H|False
+ParameterRaster|MHERB|Herbaceous Fuel Moisture|False
+ParameterRaster|MWOOD|Wood Fuel Moisture|False
+ParameterRaster|IGNITION|Ignition Points|False
+ParameterBoolean|UPDATEVIEW     |Update View|True
+OutputRaster|TIME|Time
+OutputRaster|FLAME|Flame Length
+OutputRaster|INTENSITY|Intensity
+----
+Sink Drainage Route Detection
+ta_preprocessor
+ParameterRaster|ELEVATION|Elevation|False
+ParameterBoolean|THRESHOLD       |Threshold|True
+ParameterNumber|THRSHEIGHT|Threshold Height|None|None|100.0
+OutputRaster|SINKROUTE|Sink Route
+----
+Sink Removal
+ta_preprocessor
+ParameterRaster|DEM|DEM|False
+ParameterRaster|SINKROUTE|Sink Route|True
+ParameterSelection|METHOD|Method|[0] Deepen Drainage Routes;[1] Fill Sinks
+ParameterBoolean|THRESHOLD        |Threshold|True
+ParameterNumber|THRSHEIGHT|Threshold Height|None|None|100.0
+OutputRaster|DEM_PREPROC|Preprocessed DEM
+----
+Sky View Factor
+ta_lighting
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|MAXRADIUS|Maximum Search Radius|0.0|None|10000
+ParameterSelection|METHOD|Method|[0] multi scale;[1] sectors
+ParameterNumber|LEVEL_INC|Multi Scale Factor|None|None|3
+ParameterNumber|NDIRS|Number of Sectors|1.0|None|8
+OutputRaster|VISIBLE|Visible Sky
+OutputRaster|SVF|Sky View Factor
+OutputRaster|SIMPLE|Sky View Factor (Simplified)
+OutputRaster|TERRAIN|Terrain View Factor
+----
+Slope, Aspect, Curvature
+ta_morphometry
+ParameterRaster|ELEVATION|Elevation|False
+ParameterSelection|METHOD|Method|[0] Maximum Slope (Travis et al. 1975);[1] Maximum Triangle Slope (Tarboton 1997);[2] Least Squares Fitted Plane (Horn 1981, Costa-Cabral & Burgess 1996);[3] Fit 2.Degree Polynom (Bauer, Rohdenburg, Bork 1985);[4] Fit 2.Degree Polynom (Heerdegen & Beran 1982);[5] Fit 2.Degree Polynom (Zevenbergen & Thorne 1987);[6] Fit 3.Degree Polynom (Haralick 1983)
+OutputRaster|SLOPE|Slope
+OutputRaster|ASPECT|Aspect
+OutputRaster|CURV|Curvature
+OutputRaster|HCURV|Plan Curvature
+OutputRaster|VCURV|Profile Curvature
+----
+Slope Length
+ta_hydrology
+ParameterRaster|DEM|Elevation|False
+OutputRaster|LENGTH|Slope Length
+----
+Soil Texture Classification
+grid_analysis
+ParameterRaster|SAND|Sand|True
+ParameterRaster|SILT|Silt|True
+ParameterRaster|CLAY|Clay|True
+OutputRaster|TEXTURE|Soil Texture
+OutputRaster|SUM|Sum
+----
+Sort Grid
+grid_tools
+ParameterRaster|GRID|Input Grid|False
+ParameterBoolean|DOWN        |Down sort|True
+OutputRaster|OUTPUT|Sorted Grid
+----
+Spatial Point Pattern Analysis
+geostatistics_points
+ParameterVector|POINTS|Points|0|False
+ParameterNumber|STEP|Vertex Distance [Degree]|None|None|5
+OutputVector|CENTRE|Mean Centre
+OutputVector|STDDIST|Standard Distance
+OutputVector|BBOX|Bounding Box
+----
+Split Shapes by Attribute
+shapes_tools
+ParameterVector|TABLE|Table/Shapes|-1|False
+ParameterTableField|FIELD|Attribute|TABLE|-1
+OutputTable|CUTS|Cuts
+----
+Split Shapes Layer
+shapes_tools
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterNumber|NX|Number of horizontal tiles|None|None|10
+ParameterNumber|NY|Number of vertical tiles|None|None|10
+ParameterSelection|METHOD|Method|[0] completely contained;[1] intersects;[2] center
+OutputVector|CUTS|Tiles
+OutputVector|EXTENT|Extent
+----
+Split Shapes Layer Completely
+shapes_tools
+ParameterVector|SHAPES|Input|-1|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|NAMING|Name by...|[0] number of order;[1] attribute
+OutputVector|LIST|Output
+----
+Split Shapes Layer Randomly
+shapes_tools
+ParameterVector|SHAPES|Shapes|-1|False
+ParameterNumber|PERCENT|Relation B / A|None|None|1
+OutputVector|A|Group A
+OutputVector|B|Group B
+----
+Statistics for Grids
+geostatistics_grid
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+OutputRaster|MEAN|Arithmetic Mean
+OutputRaster|MIN|Minimum
+OutputRaster|MAX|Maximum
+OutputRaster|VAR|Variance
+OutputRaster|STDDEV|Standard Deviation
+OutputRaster|STDDEVLO|Mean less Standard Deviation
+OutputRaster|STDDEVHI|Mean plus Standard Deviation
+----
+Strahler Order
+ta_channels
+ParameterRaster|DEM|Elevation|False
+OutputRaster|STRAHLER|Strahler Order
+----
+Stream Power Index
+ta_hydrology
+ParameterRaster|SLOPE|Slope|False
+ParameterRaster|AREA|Catchment Area|False
+ParameterSelection|CONV|Area Conversion|[0] no conversion (areas already given as specific catchment area);[1] 1 / cell size (pseudo specific catchment area)
+OutputRaster|SPI|Stream Power Index
+----
+Supervised Classification
+imagery_classification
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterVector|ROI|Training Areas|2|False
+ParameterTableField|ROI_ID|Class Identifier|ROI|-1
+ParameterSelection|METHOD|Method|[0] parallelepiped;[1] minimum distance;[2] mahalanobis distance;[3] maximum likelihood;[4] spectral angle mapping;[5] binary encoding
+ParameterBoolean|NORMALISE            |Normalise|True
+ParameterNumber|THRESHOLD_DIST|Distance Threshold|None|None|0.0
+ParameterNumber|THRESHOLD_PROB|Probability Threshold (Percent)|None|None|0.0
+ParameterSelection|RELATIVE_PROB|Probability Reference|[0] absolute;[1] relative
+ParameterNumber|THRESHOLD_ANGLE|Spectral Angle Threshold (Degree)|None|None|0.0
+OutputTable|CLASS_INFO|Class Information
+OutputRaster|CLASSES|Classification
+OutputRaster|QUALITY|Quality
+----
+Surface Specific Points
+ta_morphometry
+ParameterRaster|ELEVATION|Elevation|False
+ParameterSelection|METHOD|Method|[0] Mark Highest Neighbour;[1] Opposite Neighbours;[2] Flow Direction;[3] Flow Direction (up and down);[4] Peucker & Douglas
+ParameterNumber|THRESHOLD|Threshold|None|None|2.0
+OutputRaster|RESULT|Result
+----
+Table Calculator (Shapes)
+table_calculus
+ParameterString|FORMULA|Formula|
+ParameterString|NAME|Field Name|
+ParameterVector|TABLE|Shapes|-1|False
+ParameterTableField|FIELD|Field|TABLE|-1
+OutputVector|RESULT|Result
+----
+Table Calculator
+table_calculus
+ParameterString|FORMULA|Formula|
+ParameterString|NAME|Field Name|
+ParameterTable|TABLE|Table|False
+ParameterTableField|FIELD|Field|TABLE|-1
+OutputTable|RESULT|Result
+----
+Terrain Ruggedness Index (TRI)
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|RADIUS|Radius (Cells)|1.0|None|1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|0.0|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|0.0|None|1.0
+OutputRaster|TRI|Terrain Ruggedness Index (TRI)
+----
+Thiessen Polygons
+shapes_points
+ParameterVector|POINTS|Points|0|False
+OutputVector|POLYGONS|Polygons
+----
+Thin Plate Spline (Global)
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|REGUL|Regularisation|None|None|0.0
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Thin Plate Spline (Local)
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|REGUL|Regularisation|None|None|0.0001
+ParameterNumber|RADIUS|Search Radius|None|None|100.0
+ParameterSelection|MODE|Search Mode|[0] all directions;[1] quadrants
+ParameterSelection|SELECT|Points Selection|[0] all points in search radius;[1] maximum number of points
+ParameterNumber|MAXPOINTS|Maximum Number of Points|None|None|10
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Thin Plate Spline (TIN)
+grid_spline
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterNumber|REGUL|Regularisation|None|None|0.0
+ParameterSelection|LEVEL|Neighbourhood|[0] immediate;[1] level 1;[2] level 2
+ParameterBoolean|FRAME          |Add Frame|True
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Threshold Buffer
+grid_tools
+ParameterRaster|FEATURES|Features Grid|False
+ParameterRaster|VALUE|Value Grid|False
+ParameterRaster|THRESHOLDGRID|Threshold Grid|True
+ParameterNumber|THRESHOLD|Threshold|None|None|0.0
+ParameterSelection|THRESHOLDTYPE|Threshold Type|[0] Absolute;[1] Relative from cell value
+OutputRaster|BUFFER|Buffer Grid
+----
+TOPMODEL
+sim_hydrology
+ParameterRaster|ATANB|Topographic Wetness Index|False
+ParameterTable|WEATHER|Weather Records|False
+ParameterTableField|RECORD_P|Precipitation [m / dt]|WEATHER|-1
+ParameterTableField|RECORD_ET|Evapotranspiration [m / dt]|WEATHER|-1
+ParameterTableField|RECORD_DATE|Date/Time|WEATHER|-1
+ParameterNumber|DTIME|Time Step [h]|None|None|1.0
+ParameterNumber|NCLASSES|Number of Classes|None|None|30
+ParameterNumber|P_QS0|Initial subsurface flow per unit area [m/h]|None|None|3.28e-05
+ParameterNumber|P_LNTE|Areal average of ln(T0) = ln(Te) [ln(m^2/h)]|None|None|5.0
+ParameterNumber|P_MODEL|Model parameter [m]|None|None|0.032
+ParameterNumber|P_SR0|Initial root zone storage deficit [m]|None|None|0.002
+ParameterNumber|P_SRZMAX|Maximum root zone storage deficit [m]|None|None|0.05
+ParameterNumber|P_SUZ_TD|Unsaturated zone time delay per unit storage deficit [h]|None|None|50.0
+ParameterNumber|P_VCH|Main channel routing velocity [m/h]|None|None|3600.0
+ParameterNumber|P_VR|Internal subcatchment routing velocity [m/h]|None|None|3600.0
+ParameterNumber|P_K0|Surface hydraulic conductivity [m/h]|None|None|1.0
+ParameterNumber|P_PSI|Wetting front suction [m]|None|None|0.2
+ParameterNumber|P_DTHETA|Water content change across the wetting front|None|None|0.1
+ParameterBoolean|BINF             |Green-Ampt Infiltration|True
+OutputRaster|MOIST|Soil Moisture Deficit
+OutputTable|TABLE|Simulation Output
+----
+Topographic Correction
+ta_lighting
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|ORIGINAL|Original Image|False
+ParameterNumber|AZI|Azimuth|None|None|180.0
+ParameterNumber|HGT|Height|None|None|45.0
+ParameterSelection|METHOD|Method|[0] Cosine Correction (Teillet et al. 1982);[1] Cosine Correction (Civco 1989);[2] Minnaert Correction;[3] Minnaert Correction with Slope (Riano et al. 2003);[4] Minnaert Correction with Slope (Law & Nichol 2004);[5] C Correction;[6] Normalization (after Civco, modified by Law & Nichol)
+ParameterNumber|MINNAERT|Minnaert Correction|None|None|0.5
+ParameterNumber|MAXCELLS|Maximum Cells (C Correction Analysis)|None|None|1000
+ParameterSelection|MAXVALUE|Value Range|[0] 1 byte (0-255);[1] 2 byte (0-65535)
+OutputRaster|CORRECTED|Corrected Image
+----
+Topographic Position Index (TPI)
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterBoolean|STANDARD                          |Standardize|True
+ParameterNumber|RADIUS_MIN|Min Radius|0.0|None|0.0
+ParameterNumber|RADIUS_MAX|Max Radius|None|None|100.0
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|None|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|75.0
+OutputRaster|TPI|Topographic Position Index
+----
+Topographic Wetness Index (TWI)
+ta_hydrology
+ParameterRaster|SLOPE|Slope|False
+ParameterRaster|AREA|Catchment Area|False
+ParameterRaster|TRANS|Transmissivity|True
+ParameterSelection|CONV|Area Conversion|[0] no conversion (areas already given as specific catchment area);[1] 1 / cell size (pseudo specific catchment area)
+ParameterSelection|METHOD|Method (TWI)|[0] Standard;[1] TOPMODEL
+OutputRaster|TWI|Topographic Wetness Index
+----
+TPI Based Landform Classification
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|RADIUS_A_MIN|Min Radius A|None|None|0
+ParameterNumber|RADIUS_A_MAX|Max Radius A|None|None|100
+ParameterNumber|RADIUS_B_MIN|Min Radius B|None|None|0
+ParameterNumber|RADIUS_B_MAX|Min Radius B|None|None|1000
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|0.0|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|None|None|75.0
+OutputRaster|LANDFORMS|Landforms
+----
+Transect through polygon shapefile
+shapes_transect
+ParameterVector|TRANSECT|Line Transect(s)|1|False
+ParameterVector|THEME|Theme|-1|False
+ParameterTableField|THEME_FIELD|Theme Field|THEME|-1
+OutputTable|TRANSECT_RESULT|Result table
+----
+Transform Shapes
+shapes_tools
+ParameterVector|IN|Shapes|-1|False
+ParameterNumber|DX|dX|None|None|0.0
+ParameterNumber|DY|dY|None|None|0.0
+ParameterNumber|ANGLE|Angle|None|None|0.0
+ParameterNumber|SCALEX|Scale Factor X|None|None|0.0
+ParameterNumber|SCALEY|Scale Factor Y|None|None|0.0
+ParameterNumber|ANCHORX|X|None|None|0.0
+ParameterNumber|ANCHORY|Y|None|None|0.0
+OutputVector|OUT|Output
+----
+Transpose Table
+table_tools
+ParameterTable|INPUT|Input|False
+OutputTable|OUTPUT|Output
+----
+Trend (Analysis) Shapes
+table_calculus
+ParameterVector|TABLE|Shapes|-1|False
+ParameterTableField|FIELD_X|X Values|TABLE|-1
+ParameterTableField|FIELD_Y|Y Values|TABLE|-1
+ParameterString|FORMULA|Formula|
+ParameterSelection|FORMULAS|Pre-defined Formulas|[0] Linear: a + b * x;[1] Quadric: a + b * x + c * x^2;[2] Cubic: a + b * x + c * x^2 + d * x^3;[3] Logarithmic: a + b * ln(x);[4] Power: a + b * x^c;[5] a + b / x;[6] a + b * (1 - exp(-x / c));[7] a + b * (1 - exp(-(x / c)^2))
+OutputTable|TREND|Table (with Trend)
+----
+Trend Analysis
+table_calculus
+ParameterTable|TABLE|Table|False
+ParameterTableField|FIELD_X|X Values|TABLE|-1
+ParameterTableField|FIELD_Y|Y Values|TABLE|-1
+ParameterString|FORMULA|Formula|
+ParameterSelection|FORMULAS|Pre-defined Formulas|[0] Linear: a + b * x;[1] Quadric: a + b * x + c * x^2;[2] Cubic: a + b * x + c * x^2 + d * x^3;[3] Logarithmic: a + b * ln(x);[4] Power: a + b * x^c;[5] a + b / x;[6] a + b * (1 - exp(-x / c));[7] a + b * (1 - exp(-(x / c)^2))
+OutputTable|TREND|Table (with Trend)
+----
+Triangulation
+grid_gridding
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterSelection|TARGET|Target Grid|[0] user defined
+Extent USER_XMIN USER_XMAX USER_YMIN USER_YMAX
+ParameterNumber|USER_SIZE|Cellsize|None|None|1.0
+OutputRaster|USER_GRID|Grid
+----
+Universal Kriging (Global)
+geostatistics_kriging
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterBoolean|BVARIANCE              |Create Variance Grid|True
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|MODEL|Variogram Model|[0] Spherical Model;[1] Exponential Model;[2] Gaussian Model;[3] Linear Regression;[4] Exponential Regression;[5] Power Function Regression
+ParameterBoolean|BLOCK|Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|1.0|None|100
+ParameterBoolean|BLOG|Logarithmic Transformation|True
+ParameterNumber|NUGGET|Nugget|None|None|0.0
+ParameterNumber|SILL|Sill|None|None|0.0
+ParameterNumber|RANGE|Range|None|None|0.0
+ParameterNumber|LIN_B|Linear Regression|None|None|1
+ParameterNumber|EXP_B|Exponential Regression|None|None|0.5
+ParameterNumber|POW_A|Power Function - A|None|None|1.0
+ParameterNumber|POW_B|Power Function - B|None|None|0.1
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
+ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
+OutputRaster|GRID|Grid
+OutputRaster|VARIANCE|Variance
+----
+Universal Kriging
+geostatistics_kriging
+ParameterVector|SHAPES|Points|0|False
+ParameterTableField|FIELD|Attribute|SHAPES|-1
+ParameterBoolean|BVARIANCE              |Create Variance Grid|True
+ParameterSelection|TARGET|Target Grid|[0] user defined
+ParameterSelection|MODEL|Variogram Model|[0] Spherical Model;[1] Exponential Model;[2] Gaussian Model;[3] Linear Regression;[4] Exponential Regression;[5] Power Function Regression
+ParameterBoolean|BLOCK                  |Block Kriging|True
+ParameterNumber|DBLOCK|Block Size|0.0|None|100
+ParameterBoolean|BLOG                   |Logarithmic Transformation|True
+ParameterNumber|NUGGET|Nugget|None|None|0.0
+ParameterNumber|SILL|Sill|None|None|0.0
+ParameterNumber|RANGE|Range|None|None|0.0
+ParameterNumber|LIN_B|Linear Regression|None|None|1.0
+ParameterNumber|EXP_B|Exponential Regression|None|None|0.1
+ParameterNumber|POW_A|Power Function - A|None|None|1
+ParameterNumber|POW_B|Power Function - B|None|None|0.5
+ParameterMultipleInput|GRIDS|Grids|3.0|False
+ParameterSelection|INTERPOL|Grid Interpolation|[0] Nearest Neighbor;[1] Bilinear Interpolation;[2] Inverse Distance Interpolation;[3] Bicubic Spline Interpolation;[4] B-Spline Interpolation
+ParameterNumber|NPOINTS_MIN|Min.Number of m_Points|None|None|4
+ParameterNumber|NPOINTS_MAX|Max. Number of m_Points|None|None|20
+ParameterNumber|MAXRADIUS|Maximum Search Radius (map units)|None|None|1000.0
+ParameterNumber|USER_CELL_SIZE|Grid Size|0.0|None|1.0
+ParameterBoolean|USER_FIT_EXTENT        |Fit Extent|True
+Extent USER_X_EXTENT_MIN USER_X_EXTENT_MAX USER_Y_EXTENT_MIN USER_Y_EXTENT_MIN
+OutputRaster|GRID|Grid
+OutputRaster|VARIANCE|Variance
+----
+Upslope Area
+ta_hydrology
+ParameterRaster|TARGET|Target Area|True
+ParameterNumber|TARGET_PT_X|Target X coordinate|None|None|0.0
+ParameterNumber|TARGET_PT_Y|Target Y coordinate|None|None|0.0
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|SINKROUTE|Sink Routes|True
+ParameterSelection|METHOD|Method|[0] Deterministic 8;[1] Deterministic Infinity;[2] Multiple Flow Direction
+ParameterNumber|CONVERGE|Convergence|None|None|1.1
+OutputRaster|AREA|Upslope Area
+----
+User Defined Filter
+grid_filter
+ParameterRaster|INPUT|Grid|False
+ParameterTable|FILTER|Filter Matrix|True
+ParameterFixedTable|FILTER_3X3|Default Filter Matrix (3x3)|3|1;2;3|True
+OutputRaster|RESULT|Filtered Grid
+----
+Variogram Cloud
+geostatistics_points
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|FIELD|Attribute|POINTS|-1
+ParameterNumber|DISTMAX|Maximum Distance|None|None|0.0
+ParameterNumber|NSKIP|Skip Number|None|None|1
+OutputTable|RESULT|Variogram Cloud
+----
+Variogram Surface
+geostatistics_points
+ParameterVector|POINTS|Points|0|False
+ParameterTableField|FIELD|Attribute|POINTS|-1
+ParameterNumber|DISTCOUNT|Number of Distance Classes|1.0|None|10
+ParameterNumber|NSKIP|Skip Number|None|None|1
+OutputRaster|COUNT|Number of Pairs
+OutputRaster|VARIANCE|Variogram Surface
+OutputRaster|COVARIANCE|Covariance Surface
+----
+Vectorising Grid Classes
+shapes_grid
+ParameterRaster|GRID|Grid|False
+ParameterSelection|CLASS_ALL|Class Selection|[0] one single class specified by class identifier;[1] all classes
+ParameterNumber|CLASS_ID|Class Identifier|None|None|0
+ParameterSelection|SPLIT|Vectorised class as...|[0] one single (multi-)polygon object;[1] each island as separated polygon
+OutputVector|POLYGONS|Polygons
+----
+Vector Ruggedness Measure (VRM)
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterNumber|RADIUS|Radius (Cells)|None|None|1
+ParameterSelection|DISTANCE_WEIGHTING_WEIGHTING|Distance Weighting|[0] no distance weighting;[1] inverse distance to a power;[2] exponential;[3] gaussian weighting
+ParameterNumber|DISTANCE_WEIGHTING_IDW_POWER|Inverse Distance Weighting Power|0.0|None|1
+ParameterBoolean|DISTANCE_WEIGHTING_IDW_OFFSET     |Inverse Distance Offset|True
+ParameterNumber|DISTANCE_WEIGHTING_BANDWIDTH|Gaussian and Exponential Weighting Bandwidth|0.0|None|1
+OutputRaster|VRM|Vector Terrain Ruggedness (VRM)
+----
+Vegetation Index[distance based]
+imagery_tools
+ParameterRaster|NIR|Near Infrared Band|False
+ParameterRaster|RED|Red Band|False
+ParameterNumber|SLOPE|Slope of the soil line|None|None|0.0
+ParameterNumber|INTERCEPT|Intercept of the soil line|None|None|0.0
+OutputRaster|PVI|PVI (Richardson and Wiegand)
+OutputRaster|PVI1|PVI (Perry & Lautenschlager)
+OutputRaster|PVI2|PVI (Walther & Shabaani)
+OutputRaster|PVI3|PVI (Qi, et al)
+----
+Vegetation Index[slope based]
+imagery_tools
+ParameterRaster|NIR|Near Infrared Band|False
+ParameterRaster|RED|Red Band|False
+OutputRaster|NDVI|Normalized Difference Vegetation Index
+OutputRaster|RATIO|Ratio Vegetation Index
+OutputRaster|TVI|Transformed Vegetation Index
+OutputRaster|CTVI|Corrected Transformed Vegetation Index
+OutputRaster|TTVI|Thiam's Transformed Vegetation Index
+OutputRaster|NRATIO|Normalized Ratio Vegetation Index
+----
+Vertical Distance to Channel Network
+ta_channels
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|CHANNELS|Channel Network|False
+ParameterNumber|THRESHOLD|Tension Threshold [Percentage of Cell Size]|None|None|1
+ParameterBoolean|NOUNDERGROUND  |Keep Base Level below Surface|True
+OutputRaster|DISTANCE|Vertical Distance to Channel Network
+OutputRaster|BASELEVEL|Channel Network Base Level
+----
+Water Retention Capacity
+sim_hydrology
+ParameterVector|SHAPES|Plot Holes|-1|False
+ParameterRaster|DEM|DEM|False
+OutputVector|OUTPUT|Final Parameters
+OutputRaster|RETENTION|Water Retention Capacity
+----
+Watershed Basins
+ta_channels
+ParameterRaster|ELEVATION|Elevation|False
+ParameterRaster|CHANNELS|Channel Network|False
+ParameterRaster|SINKROUTE|Sink Route|True
+ParameterNumber|MINSIZE|Min. Size|None|None|0
+OutputRaster|BASINS|Watershed Basins
+----
+Watershed Segmentation
+imagery_segmentation
+ParameterRaster|GRID|Grid|False
+ParameterSelection|OUTPUT|Output|[0] Seed Value;[1] Segment ID
+ParameterSelection|DOWN|Method|[0] Minima;[1] Maxima
+ParameterSelection|JOIN|Join Segments based on Threshold Value|[0] do not join;[1] seed to saddle difference;[2] seeds difference
+ParameterNumber|THRESHOLD|Threshold|None|None|0
+ParameterBoolean|EDGE           |Allow Edge Pixels to be Seeds|True
+ParameterBoolean|BBORDERS       |Borders|True
+OutputRaster|SEGMENTS|Segments
+OutputVector|SEEDS|Seed Points
+OutputRaster|BORDERS|Borders
+----
+Wind Effect (Windward / Leeward Index)
+ta_morphometry
+ParameterRaster|DEM|Elevation|False
+ParameterRaster|DIR|Wind Direction|True
+ParameterRaster|LEN|Wind Speed|True
+ParameterNumber|DIR_CONST|Constant Wind Direction [Degree]|None|None|135
+ParameterBoolean|OLDVER         |Old Version|True
+ParameterNumber|MAXDIST|Search Distance [km]|0.0|None|300.0
+ParameterNumber|ACCEL|Acceleration|0.0|None|1.5
+ParameterBoolean|PYRAMIDS       |Use Pyramids|True
+ParameterSelection|DIR_UNITS|Wind Direction Units|[0] radians;[1] degree
+ParameterNumber|LEN_SCALE|Wind Speed Scale Factor|0.0|None|1.0
+OutputRaster|EFFECT|Wind Effect
+OutputRaster|LUV|Windward Effect
+OutputRaster|LEE|Leeward Effect
+----
+Zonal Grid Statistics
+geostatistics_grid
+ParameterRaster|ZONES|Zone Grid|False
+ParameterMultipleInput|CATLIST|Categorial Grids|3.0|True
+ParameterMultipleInput|STATLIST|Grids to analyse|3.0|True
+ParameterRaster|ASPECT|Aspect|True
+ParameterBoolean|SHORTNAMES|Short Field Names|True
+OutputTable|OUTTAB|Zonal Statistics
+----

@@ -1,0 +1,1671 @@
+i.atcorr
+i.atcorr - Performs atmospheric correction using the 6S algorithm.
+Imagery (i.*)
+ParameterRaster|iimg|Name of input raster map|False
+ParameterBoolean|-a|Input from ETM+ image taken after July 1, 2000|False
+ParameterBoolean|-b|Input from ETM+ image taken before July 1, 2000|False
+ParameterRaster|ialt|Input altitude raster map in m (optional)|True
+ParameterRaster|ivis|Input visibility raster map in km (optional)|True
+ParameterFile|icnd|Name of input text file|False
+ParameterRange|iscl|Input imagery range [0,255]
+ParameterBoolean|-o|Try to increase computation speed when altitude and/or visibility map is used|True
+ParameterBoolean|-f|Output raster is floating point|False
+ParameterRange|oscl|Rescale output raster map [0,255]
+OutputRaster|oimg|Name for output raster map
+----
+i.fft
+i.fft - Fast Fourier Transform (FFT) for image processing.
+Imagery (i.*)
+ParameterRaster|input_image|Name of input raster map|False
+OutputRaster|real_image|Name for output real part arrays stored as raster map
+OutputRaster|imaginary_image|Name for output imaginary part arrays stored as raster map
+----
+i.his.rgb
+i.his.rgb - Transforms raster maps from HIS (Hue-Intensity-Saturation) color space to RGB (Red-Green-Blue) color space.
+Imagery (i.*)
+ParameterRaster|hue_input|Name of input raster map (hue)|False
+ParameterRaster|intensity_input|Name of input raster map (intensity)|False
+ParameterRaster|saturation_input|Name of input raster map (saturation)|False
+OutputRaster|red_output|Name for output raster map (red)
+OutputRaster|green_output|Name for output raster map (green)
+OutputRaster|blue_output|Name for output raster map (blue)
+----
+i.ifft
+i.ifft - Inverse Fast Fourier Transform (IFFT) for image processing.
+Imagery (i.*)
+ParameterRaster|real_image|Name of input raster map (image fft, real part)|False
+ParameterRaster|imaginary_image|Name of input raster map (image fft, imaginary part)|False
+OutputRaster|output_image|Name for output raster map
+----
+i.rgb.his
+i.rgb.his - Transforms raster maps from RGB (Red-Green-Blue) color space to HIS (Hue-Intensity-Saturation) color space.
+Imagery (i.*)
+ParameterRaster|red_output|Name for input raster map (red)|True
+ParameterRaster|green_output|Name for input raster map (green)|True
+ParameterRaster|blue_output|Name for input raster map (blue)|True
+OutputRaster|hue_input|Name of output raster map (hue)
+OutputRaster|intensity_input|Name of output raster map (intensity)
+OutputRaster|saturation_input|Name of output raster map (saturation)
+----
+i.zc
+i.zc - Zero-crossing "edge detection" raster function for image processing.
+Imagery (i.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|width|x-y extent of the Gaussian filter|1.0|None|9
+ParameterNumber|threshold|Sensitivity of Gaussian filter|0.0|None|10.0
+ParameterNumber|orientations|Number of azimuth directions categorized|0.0|None|1
+OutputRaster|output|Zero crossing raster map
+----
+nviz
+nviz - Visualization and animation tool for GRASS data.
+Visualization(NVIZ)
+ParameterMultipleInput|elevation|Name of elevation raster map|3.0|False
+ParameterMultipleInput|color|Name of raster map(s) for Color|3.0|False
+ParameterMultipleInput|vector|Name of vector lines/areas overlay map(s)|-1.0|False
+ParameterMultipleInput|point|Name of vector points overlay file(s)|0.0|True
+ParameterMultipleInput|volume|Name of existing 3d raster map|3.0|True
+----
+r.slope.aspect
+r.aspect - Generates raster maps of aspect from a elevation raster map.
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterSelection|format|Format for reporting the slope|percent;degrees
+ParameterSelection|prec|Type of output aspect and slope maps|float;double;int
+ParameterNumber|zfactor|Multiplicative factor to convert elevation units to meters|None|None|1.0
+ParameterNumber|min_slp_allowed|Minimum slope val. (in percent) for which aspect is computed|None|None|0.0
+ParameterBoolean|-a|Do not align the current region to the elevation layer|True
+OutputRaster|aspect|Name for output aspect raster map
+----
+r.average
+r.average - Finds the average of values in a cover map within areas assigned the same category value in a user-specified base map.
+Raster (r.*)
+ParameterRaster|base|Name of base raster map|False
+ParameterRaster|cover|Name of cover raster map|False
+ParameterBoolean|-c|Cover values extracted from the category labels of the cover map|False
+OutputRaster|output|Name for output raster map
+----
+r.basins.fill
+r.basins.fill - Generates watershed subbasins raster map.
+Raster (r.*)
+ParameterRaster|c_map|Name of input coded stream network raster map|False
+ParameterRaster|t_map|Name of input thinned ridge network raster map|False
+ParameterNumber|number|Number of passes through the dataset|None|None|0.0
+OutputRaster|result|Name for output raster map
+----
+r.bilinear
+r.bilinear - Bilinear interpolation utility for raster map layers.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|north|Specific input value to be assigned to the north and/or south poles for longitude-latitude grids|None|None|0
+ParameterNumber|east|Specific input value to be assigned to the north and/or south poles for longitude-latitude grids|None|None|0
+OutputRaster|output|Name for output raster map
+----
+r.bitpattern
+r.bitpattern - Compares bit patterns with a raster map.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|pattern|Bit pattern position(s)|
+ParameterString|patval|Bit pattern value|
+OutputRaster|output|Name for output raster map
+----
+r.buffer
+r.buffer - Creates a raster map layer showing buffer zones surrounding cells that contain non-NULL category values.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|distances|Distance zone(s) (e.g. 100,200,300)|
+ParameterSelection|units|Units of distance|meters;kilometers;feet;miles;nautmiles
+ParameterBoolean|-z|Ignore zero (0) data cells instead of NULL cells|False
+OutputRaster|output|Name for output raster map
+----
+r.carve
+r.carve - Takes vector stream data, transforms it to raster and subtracts depth from the output DEM.
+Raster (r.*)
+ParameterRaster|rast|Name of input raster elevation map|False
+ParameterVector|vect|Name of vector input map containing stream(s)|1|False
+ParameterNumber|width|Stream width (in meters). Default is raster cell width|None|None|1
+ParameterNumber|depth|Additional stream depth (in meters)|None|None|1
+ParameterBoolean|-n|No flat areas allowed in flow direction|False
+OutputRaster|output|Name for output raster map
+OutputVector|points|Name for output vector map for adjusted stream points
+----
+r.circle
+r.circle - Creates a raster map containing concentric rings around a given point.
+Raster (r.*)
+ParameterString|coordinate|The coordinate of the center (east,north)|0,0
+ParameterNumber|min|Minimum radius for ring/circle map (in meters)|None|None|10
+ParameterNumber|max|Maximum radius for ring/circle map (in meters)|None|None|20
+ParameterString|mult|Data value multiplier|1
+ParameterBoolean|-b|Generate binary raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.clump
+r.clump - Recategorizes data in a raster map by grouping cells that form physically discrete areas into unique categories.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|title|Title for output raster map|
+OutputRaster|output|Name for output raster map
+----
+r.coin
+r.coin - Tabulates the mutual occurrence (coincidence) of categories for two raster map layers.
+Raster (r.*)
+ParameterRaster|map1|Name of first raster map|False
+ParameterRaster|map2|Name of second raster map|False
+ParameterSelection|units|Unit of measure|c;p;x;y;a;h;k;m
+ParameterBoolean|-w|Wide report, 132 columns (default: 80)|False
+----
+r.colors
+r.colors - Creates/modifies the color table associated with a raster map layer.
+Raster (r.*)
+ParameterRaster|map|Name of input raster map|False
+ParameterSelection|color|Type of color table|aspect;aspectcolr;bcyr;bgyr;byg;byr;celsius;corine;curvature;differences;elevation;etopo2;evi;gdd;grey;grey1.0;grey255;gyr;haxby;ndvi;population;precipitation;rainbow;ramp;rstcurv;ryb;ryg;sepia;slope;srtm;terrain;wave;random;grey.eq;grey.log;rules
+ParameterFile|rules|Path to rules file ("-" to read rules from stdin)|False
+ParameterBoolean|-l|List available rules then exit|False
+ParameterBoolean|-n|Invert colors|False
+ParameterBoolean|-g|Logarithmic scaling|False
+ParameterBoolean|-a|Logarithmic-absolute scaling|False
+ParameterBoolean|-e|Histogram equalization|False
+----
+r.composite
+r.composite - Combines red, green and blue raster maps into a single composite raster map.
+Raster (r.*)
+ParameterRaster|red|Name of raster map to be used for <red>|False
+ParameterRaster|green|Name of raster map to be used for <green>|False
+ParameterRaster|blue|Name of raster map to be used for <blue>|False
+ParameterNumber|levels|Number of levels to be used for each component|1.0|256.0|32
+ParameterNumber|lev_red|Number of levels to be used for <red>|1.0|256.0|32
+ParameterNumber|lev_green|Number of levels to be used for <green>|1.0|256.0|32
+ParameterNumber|lev_blue|Number of levels to be used for <blue>|1.0|256.0|32
+ParameterBoolean|-d|Dither|False
+ParameterBoolean|-c|Use closest color|False
+OutputRaster|output|Name for output raster map
+----
+r.contour
+r.contour.level - Create vector contour from raster at specified levels
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|levels|List of contour levels|
+OutputVector|output|Name of output vector map
+----
+r.contour
+r.contour.step - Create vector contours from raster at specified steps
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|minlevel|Minimum contour level|0
+ParameterString|maxlevel|Maximum contour level|10000
+ParameterString|step|Increment between contour levels|100
+OutputVector|output|Name of output vector map
+----
+r.contour
+r.contour - Produces a vector map of specified contours from a raster map.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|levels|List of contour levels|
+ParameterString|minlevel|Minimum contour level|
+ParameterString|maxlevel|Maximum contour level|
+ParameterString|step|Increment between contour levels|
+ParameterString|cut|Minimum number of points for a contour line (0 -> no limit)|0
+ParameterBoolean|-n|Suppress single crossing error messages|False
+OutputVector|output|Name of output vector map
+----
+r.cost
+r.cost - Creates a raster map showing the cumulative cost of moving between different geographic locations on an input raster map whose cell category values represent cost.
+Raster (r.*)
+ParameterRaster|input|Name of raster map containing grid cell cost information|False
+ParameterVector|start_points|Name of starting vector points map|0|False
+ParameterVector|stop_points|Name of stop vector points map|0|False
+ParameterBoolean|-k|Use the 'Knight's move'; slower, but more accurate|False
+ParameterBoolean|-n|Keep null values in output raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.covar
+r.covar - Outputs a covariance/correlation matrix for user-specified raster map layer(s).
+Raster (r.*)
+ParameterMultipleInput|map|Name of input raster map(s)|3.0|False
+ParameterBoolean|-r|Print correlation matrix|True
+----
+r.cross
+r.cross - Creates a cross product of the category values from multiple raster map layers.
+Raster (r.*)
+ParameterMultipleInput|input|Names of 2-30 input raster maps|3.0|False
+ParameterBoolean|-z|Non-zero data only|False
+OutputRaster|output|Name for output raster map
+----
+r.describe
+r.describe - Prints terse list of category values found in a raster map layer.
+Raster (r.*)
+ParameterRaster|map|Name of input raster map|False
+ParameterString|nv|String representing no data cell value|*
+ParameterNumber|nsteps|Number of quantization steps|1.0|None|255
+ParameterBoolean|-1|Print the output one value per line|False
+ParameterBoolean|-r|Only print the range of the data|False
+ParameterBoolean|-n|Suppress reporting of any NULLs|False
+ParameterBoolean|-d|Use the current region|False
+ParameterBoolean|-i|Read fp map as integer|False
+----
+r.distance
+r.distance - Locates the closest points between objects in two raster maps.
+Raster (r.*)
+ParameterRaster|maps|Maps for computing inter-class distances|False
+ParameterString|fs|Output field separator|:
+ParameterBoolean|-l|Include category labels in the output|False
+ParameterBoolean|-o|Report zero distance if rasters are overlapping|False
+----
+r.drain
+r.drain - Traces a flow through an elevation model on a raster map.
+Raster (r.*)
+ParameterRaster|input|Name of elevation raster map|False
+ParameterString|coordinate|Map coordinates of starting point(s) (E,N)|
+ParameterMultipleInput|vector_points|Name of vector map(s) containing starting point(s)|0.0|False
+ParameterBoolean|-c|Copy input cell values on output|False
+ParameterBoolean|-a|Accumulate input values along the path|False
+ParameterBoolean|-n|Count cell numbers along the path|False
+OutputRaster|output|Name for output raster map
+----
+r.fill.dir
+r.fill.dir - Filters and generates a depressionless elevation map and a flow direction map from a given elevation raster map.
+Raster (r.*)
+ParameterRaster|input|Name of existing raster map containing elevation surface|False
+ParameterSelection|type|Output aspect direction format|grass;agnps;answers
+ParameterBoolean|-f|Find unresolved areas only|False
+OutputRaster|elevation|Output elevation raster map after filling
+OutputRaster|direction|Output direction raster map
+OutputRaster|areas|Output raster map of problem areas
+----
+r.fillnulls
+r.fillnulls - Fills no-data areas in raster maps using v.surf.rst splines interpolation or v.surf.bspline interpolation
+Raster (r.*)
+ParameterRaster|input|Name of input raster map in which to fill nulls|False
+ParameterNumber|tension|Spline tension parameter|None|None|40.0
+ParameterNumber|smooth|Spline smoothing parameter|None|None|0.1
+OutputRaster|output|Name for output raster map with nulls filled by interpolation
+----
+r.flow
+r.flow - Construction of slope curves (flowlines), flowpath lengths, and flowline densities (upslope areas) from a raster digital elevation model (DEM).
+Raster (r.*)
+ParameterRaster|elevin|Input elevation raster map|False
+ParameterRaster|aspin|Input aspect raster map|False
+ParameterRaster|barin|Input barrier raster map|False
+ParameterNumber|skip|Number of cells between flowlines|None|None|1.0
+ParameterNumber|bound|Maximum number of segments per flowline|None|None|5.0
+ParameterBoolean|-u|Compute upslope flowlines instead of default downhill flowlines|False
+ParameterBoolean|-3|3-D lengths instead of 2-D|False
+ParameterBoolean|-m|Use less memory, at a performance penalty|False
+OutputRaster|flout|Output flowline vector map
+OutputRaster|lgout|Output flowpath length raster map
+OutputRaster|dsout|Output flowline density raster map
+----
+r.grow.distance
+r.grow.distance - Generates a raster map layer of distance to features in input layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterSelection|metric|Metric|euclidean;squared;maximum;manhattan
+OutputRaster|distance|Name for distance output map
+OutputRaster|value|Name for value output map
+----
+r.grow
+r.grow - Generates a raster map layer with contiguous areas grown by one cell.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|radius|Radius of buffer in raster cells|None|None|1.01
+ParameterSelection|metric|Metric|euclidean;maximum;manhattan
+ParameterNumber|old|Value to write for input cells which are non-NULL (-1 => NULL)|None|None|0
+ParameterNumber|new|Value to write for "grown" cells|None|None|1
+OutputRaster|output|Name for output raster map
+----
+r.gwflow
+r.gwflow - Numerical calculation program for transient, confined and unconfined groundwater flow in two dimensions.
+Raster (r.*)
+ParameterString|phead|The initial piezometric head in [m]|
+ParameterString|status|Boundary condition status, 0-inactive, 1-active, 2-dirichlet|
+ParameterString|hc_x|X-part of the hydraulic conductivity tensor in [m/s]|
+ParameterString|hc_y|Y-part of the hydraulic conductivity tensor in [m/s]|
+ParameterString|q|Water sources and sinks in [m^3/s]|
+ParameterString|s|Specific yield in [1/m]|
+ParameterString|r|Recharge map e.g: 6*10^-9 per cell in [m^3/s*m^2]|
+ParameterString|top|Top surface of the aquifer in [m]|
+ParameterString|bottom|Bottom surface of the aquifer in [m]|
+ParameterSelection|type|The type of groundwater flow|confined;unconfined
+ParameterString|river_bed|The height of the river bed in [m]|
+ParameterString|river_head|Water level (head) of the river with leakage connection in [m]|
+ParameterString|river_leak|The leakage coefficient of the river bed in [1/s]|
+ParameterString|drain_bed|The height of the drainage bed in [m]|
+ParameterString|drain_leak|The leakage coefficient of the drainage bed in [1/s]|
+ParameterNumber|dt|The calculation time in seconds|None|None|86400.0
+ParameterNumber|maxit|Maximum number of iteration used to solver the linear equation system|None|None|100000.0
+ParameterNumber|error|Error break criteria for iterative solvers (jacobi, sor, cg or bicgstab)|None|None|1e-10
+ParameterSelection|solver|The type of solver which should solve the symmetric linear equation system|gauss;lu;cholesky;jacobi;sor;cg;bicgstab;pcg
+ParameterString|relax|The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing|1
+ParameterBoolean|-s|Use a sparse matrix, only available with iterative solvers|False
+OutputRaster|output|The map storing the numerical result [m]
+----
+r.his
+r.his - Generates red, green and blue raster map layers combining hue, intensity and saturation (HIS) values from user-specified input raster map layers.
+Raster (r.*)
+ParameterRaster|h_map|Name of layer to be used for HUE|False
+ParameterRaster|i_map|Name of layer to be used for INTENSITY|False
+ParameterRaster|s_map|Name of layer to be used for SATURATION|False
+ParameterBoolean|-n|Respect NULL values while drawing|False
+OutputRaster|r_map|Name of output layer to be used for RED
+OutputRaster|g_map|Name of output layer to be used for GREEN
+OutputRaster|b_map|Name of output layer to be used for BLUE
+----
+r.horizon
+r.horizon - Horizon angle computation from a digital elevation model.
+Raster (r.*)
+ParameterRaster|elevin|Name of the input elevation raster map [meters]|False
+ParameterNumber|direction|Direction in which you want to know the horizon height|None|None|0.0
+ParameterNumber|horizonstep|Angle step size for multidirectional horizon [degrees]|None|None|0.0
+ParameterNumber|bufferzone|For horizon rasters, read from the DEM an extra buffer around the present region|None|None|0.0
+ParameterNumber|e_buff|For horizon rasters, read from the DEM an extra buffer eastward the present region|None|None|0.0
+ParameterNumber|w_buff|For horizon rasters, read from the DEM an extra buffer westward the present region|None|None|0.0
+ParameterNumber|n_buff|For horizon rasters, read from the DEM an extra buffer northward the present region|None|None|0.0
+ParameterNumber|s_buff|For horizon rasters, read from the DEM an extra buffer southward the present region|None|None|0.0
+ParameterNumber|maxdistance|The maximum distance to consider when finding the horizon height|None|None|0.0
+ParameterRaster|horizon|Prefix of the horizon raster output maps|False
+ParameterString|coord|Coordinate for which you want to calculate the horizon|0,0
+ParameterString|dist|Sampling distance step coefficient (0.5-1.5)|1.0
+ParameterBoolean|-d|Write output in degrees (default is radians)|False
+----
+r.info
+r.info - Output basic information about a raster map layer.
+Raster (r.*)
+ParameterRaster|map|Name of input raster map|False
+ParameterBoolean|-r|Print range only|False
+ParameterBoolean|-s|Print raster map resolution (NS-res, EW-res) only|False
+ParameterBoolean|-t|Print raster map type only|False
+ParameterBoolean|-g|Print map region only|False
+ParameterBoolean|-h|Print raster history instead of info|False
+ParameterBoolean|-u|Print raster map data units only|False
+ParameterBoolean|-d|Print raster map vertical datum only|False
+ParameterBoolean|-m|Print map title only|False
+ParameterBoolean|-p|Print raster map timestamp (day.month.year hour:minute:seconds) only|False
+----
+r.kappa
+r.kappa - Calculate error matrix and kappa parameter for accuracy assessment of classification result.
+Raster (r.*)
+ParameterRaster|classification|Name of raster map containing classification result|False
+ParameterRaster|reference|Name of raster map containing reference classes|False
+ParameterString|title|Title for error matrix and kappa|ACCURACY ASSESSMENT
+ParameterBoolean|-w|Wide report 132 columns (default: 80)|False
+ParameterBoolean|-h|No header in the report|False
+OutputFile|output|Name for output file containing error matrix and kappa
+----
+r.lake
+r.lake.coords - Fills lake at given point to given level.
+Raster (r.*)
+ParameterRaster|dem|Name of terrain raster map (DEM)|False
+ParameterString|wl|Water level|
+ParameterString|xy|Seed point coordinates|
+ParameterBoolean|-n|Use negative depth values for lake raster map|False
+OutputRaster|lake|Name for output raster map with lake
+----
+r.lake
+r.lake.layer - Fills lake at given point to given level.
+Raster (r.*)
+ParameterRaster|dem|Name of terrain raster map (DEM)|False
+ParameterString|wl|Water level|
+ParameterRaster|seed|Name of raster map with given starting point(s) (at least 1 cell > 0)|False
+ParameterBoolean|-n|Use negative depth values for lake raster map|False
+OutputRaster|lake|Name for output raster map with lake
+----
+r.lake
+r.lake - Fills lake at given point to given level.
+Raster (r.*)
+ParameterRaster|dem|Name of terrain raster map (DEM)|False
+ParameterString|wl|Water level|
+ParameterString|xy|Seed point coordinates|
+ParameterRaster|seed|Name of raster map with given starting point(s) (at least 1 cell > 0)|False
+ParameterBoolean|-n|Use negative depth values for lake raster map|False
+ParameterBoolean|-o|Overwrite seed map with result (lake) map|False
+OutputRaster|lake|Name for output raster map with lake
+----
+r.los
+r.los - Line-of-sight raster analysis program.
+Raster (r.*)
+ParameterRaster|input|Name of elevation raster map|False
+ParameterString|coordinate|Coordinate identifying the viewing position|0,0
+ParameterRaster|patt_map|Binary (1/0) raster map to use as a mask|True
+ParameterString|obs_elev|Viewing position height above the ground|1.75
+ParameterString|max_dist|Maximum distance from the viewing point (meters)|10000
+ParameterBoolean|-c|Consider earth curvature (current ellipsoid)|False
+OutputRaster|output|Name for output raster map
+----
+r.mapcalculator
+r.mapcalculator - Calculate new raster map from a r.mapcalc expression.
+Raster (r.*)
+ParameterRaster|amap|amap|False
+ParameterRaster|bmap|bmap|False
+ParameterRaster|cmap|cmap|False
+ParameterRaster|dmap|dmap|False
+ParameterRaster|emap|emap|False
+ParameterRaster|fmap|fmap|False
+ParameterString|formula|Formula (e.g. A-B or A*C+B|
+OutputRaster|outfile|Name for output raster map
+----
+r.median
+r.median - Finds the median of values in a cover map within areas assigned the same category value in a user-specified base map.
+Raster (r.*)
+ParameterRaster|base|Name of base raster map|False
+ParameterRaster|cover|Name of cover raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.mfilter.fp
+r.mfilter.fp - Raster map matrix filter.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterFile|filter|Filter file|False
+ParameterNumber|repeat|Number of times to repeat the filter|None|None|1
+ParameterString|title|Output raster map title|
+ParameterBoolean|-z|Apply filter only to zero data values|False
+OutputRaster|output|Name for output raster map
+----
+r.mfilter
+r.mfilter - Performs raster map matrix filter.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterFile|filter|Filter file|False
+ParameterNumber|repeat|Number of times to repeat the filter|None|None|1
+ParameterString|title|Output raster map title|
+ParameterBoolean|-z|Apply filter only to zero data values|False
+OutputRaster|output|Name for output raster map
+----
+r.mode
+r.mode - Finds the mode of values in a cover map within areas assigned the same category value in a user-specified base map.
+Raster (r.*)
+ParameterRaster|base|Base map to be reclassified|False
+ParameterRaster|cover|Name of cover raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.neighbors
+r.neighbors - Makes each cell category value a function of the category values assigned to the cells around it, and stores new cell values in an output raster map layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterSelection|method|Neighborhood operation|average;median;mode;minimum;maximum;stddev;sum;variance;diversity;interspersion
+ParameterNumber|size|Neighborhood size|1.0|None|3
+ParameterBoolean|-c|Use circular neighborhood|False
+OutputRaster|output|Name for output raster map
+----
+r.out.arc
+r.out.arc - Converts a raster map layer into an ESRI ARCGRID file.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|dp|Number of decimal places|None|None|8.0
+ParameterBoolean|-h|Suppress printing of header information|False
+ParameterBoolean|-1|List one entry per line instead of full row|False
+OutputFile|output|Name of an output ARC-GRID map (use out=- for stdout)
+----
+r.out.ascii
+r.out.ascii - Converts a raster map layer into an ASCII text file.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|dp|Number of significant digits (floating point only)|None|None|0.0
+ParameterNumber|width|Number of values printed before wrapping a line (only SURFER or MODFLOW format)|None|None|0.0
+ParameterString|null|String to represent null cell (GRASS grid only)|*
+ParameterBoolean|-h|Suppress printing of header information|False
+ParameterBoolean|-s|Write SURFER (Golden Software) ASCII grid|False
+ParameterBoolean|-m|Write MODFLOW (USGS) ASCII array|False
+ParameterBoolean|-i|Force output of integer values|False
+OutputFile|output|Name for output ASCII grid map (use out=- for stdout)
+----
+r.out.gridatb
+r.out.gridatb - Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+OutputFile|output|GRIDATB i/o map file
+----
+r.out.ppm
+r.out.ppm - Converts a GRASS raster map to a PPM image file at the pixel resolution of the currently defined region.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterBoolean|-G|Output greyscale instead of color|True
+OutputFile|output|Name for new PPM file (use '-' for stdout)
+----
+r.out.vrml
+r.out.vrml - Export a raster map to the Virtual Reality Modeling Language (VRML)
+Raster (r.*)
+ParameterRaster|elev|Name of elevation map|False
+ParameterRaster|color|Name of color file|False
+ParameterNumber|exag|Vertical exaggeration|None|None|1.0
+OutputFile|output|Name for new VRML file
+----
+r.param.scale
+r.param.scale - Extracts terrain parameters from a DEM.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|s_tol|Slope tolerance that defines a 'flat' surface (degrees)|None|None|1.0
+ParameterNumber|c_tol|Curvature tolerance that defines 'planar' surface|None|None|0.0001
+ParameterNumber|size|Size of processing window (odd number only, max: 69)|None|None|15
+ParameterSelection|param|Morphometric parameter in 'size' window to calculate|elev;slope;aspect;profc;planc;longc;crosc;minic;maxic;feature
+ParameterNumber|exp|Exponent for distance weighting (0.0-4.0)|None|None|0.0
+ParameterNumber|zscale|Vertical scaling factor|None|None|1.0
+ParameterBoolean|-c|Constrain model through central window cell|False
+OutputRaster|output|Output raster layer containing morphometric parameter
+----
+r.patch
+r.patch - Creates a composite raster map layer by using one (or more) map layer(s) to fill in areas of "no data" in another map layer.
+Raster (r.*)
+ParameterMultipleInput|input|Name of raster maps to be patched together|3.0|False
+ParameterBoolean|-z|Use zero (0) for transparency instead of NULL|False
+OutputRaster|output|Name for resultant raster map
+----
+r.plane
+r.plane - Creates raster plane map given dip (inclination), aspect (azimuth) and one point.
+Raster (r.*)
+ParameterNumber|dip|Dip of plane. Value must be between -90 and 90 degrees|None|None|0.0
+ParameterNumber|azimuth|Azimuth of the plane. Value must be between 0 and 360 degrees|None|None|0.0
+ParameterNumber|easting|Easting coordinate of a point on the plane|None|None|0.0
+ParameterNumber|northing|Northing coordinate of a point on the plane|None|None|0.0
+ParameterNumber|elevation|Name of elevation raster map|None|None|0.0
+ParameterSelection|type|Type of the raster map to be created|int;float;double
+OutputRaster|name|Name of raster plane to be created
+----
+r.profile
+r.profile - Outputs the raster map layer values lying on user-defined line(s).
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|profile|Profile coordinate pairs|
+ParameterString|res|Resolution along profile (default = current region resolution)|
+ParameterString|null|Character to represent no data cell|*
+ParameterBoolean|-i|Interactively select End-Points|False
+ParameterBoolean|-g|Output easting and northing in first two columns of four column output|False
+ParameterBoolean|-c|Output RRR:GGG:BBB color values for each profile point|False
+OutputFile|output|Name of file for output (use output=- for stdout)
+----
+r.quant
+r.quant - Produces the quantization file for a floating-point map.
+Raster (r.*)
+ParameterMultipleInput|input|Raster map(s) to be quantized|1.0|False
+ParameterRaster|basemap|Base map to take quant rules from|False
+ParameterRange|fprange|Floating point range: dmin,dmax
+ParameterRange|range|Integer range: min,max
+ParameterBoolean|-t|Truncate floating point data|False
+ParameterBoolean|-r|Round floating point data|False
+----
+r.quantile
+r.quantile - Compute quantiles using two passes.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|quantiles|Number of quantiles|2.0|None|4
+ParameterString|percentiles|List of percentiles|
+ParameterBoolean|-r|Generate recode rules based on quantile-defined intervals|False
+----
+r.random.cells
+r.random.cells - Generates random cell values with spatial dependence.
+Raster (r.*)
+ParameterNumber|distance|Maximum distance of spatial correlation (value(s) >= 0.0)|None|None|0.0
+ParameterNumber|seed|Random seed (SEED_MIN >= value >= SEED_MAX) (default [random])|None|None|0.0
+OutputRaster|output|Name for output raster map
+----
+r.random
+r.random - Creates a raster map layer and vector point map containing randomly located points.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterRaster|cover|Name of cover raster map|False
+ParameterNumber|n|The number of points to allocate|None|None|10
+OutputRaster|raster_output|Name for output raster map
+OutputVector|vector_output|Name for output vector map
+----
+r.reclass.area
+r.reclass.area - Reclasses a raster map greater or less than user specified area size (in hectares).
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|lesser|Lesser value option that sets the <= area size limit [hectares]|None|None|0.0
+ParameterNumber|greater|Greater value option that sets the >= area size limit [hectares]|None|None|0.0
+OutputRaster|output|Name for output raster map
+----
+r.reclass
+r.reclass - Creates a new map layer whose category values are based upon a reclassification of the categories in an existing raster map layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterFile|rules|File containing reclass rules|False
+OutputRaster|output|Name for output raster map
+----
+r.recode
+r.recode - Recodes categorical raster maps.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterFile|rules|File containing recode rules|False
+ParameterString|title|Title for output raster map|
+ParameterBoolean|-a|Align the current region to the input raster map|False
+ParameterBoolean|-d|Force output to 'double' raster map type (DCELL)|False
+OutputRaster|output|Name for output raster map
+----
+r.regression.line
+r.regression.line - Calculates linear regression from two raster maps: y = a + b*x.
+Raster (r.*)
+ParameterRaster|map1|Map for x coefficient|False
+ParameterRaster|map2|Map for y coefficient|False
+ParameterBoolean|-g|Print in shell script style|False
+ParameterBoolean|-s|Slower but accurate (applies to FP maps only)|False
+OutputFile|output|ASCII file for storing regression coefficients (output to screen if file not specified)
+----
+r.report
+r.report - Reports statistics for raster map layers.
+Raster (r.*)
+ParameterMultipleInput|map|Raster map(s) to report on|3.0|False
+ParameterSelection|units|Units|mi;me;k;a;h;c;p
+ParameterString|null|Character representing no data cell value|*
+ParameterNumber|nsteps|Number of fp subranges to collect stats from|None|None|255
+ParameterBoolean|-h|Suppress page headers|True
+ParameterBoolean|-f|Use formfeeds between pages|True
+ParameterBoolean|-e|Scientific format|True
+ParameterBoolean|-n|Filter out all no data cells|True
+ParameterBoolean|-N|Filter out cells where all maps have no data|True
+ParameterBoolean|-C|Report for cats fp ranges (fp maps only)|True
+ParameterBoolean|-i|Read fp map as integer (use map's quant rules)|True
+OutputHTML|output|Name of an output file to hold the report
+----
+r.resamp.interp
+r.resamp.interp - Resamples raster map layers to a finer grid using interpolation.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterSelection|method|Interpolation method|nearest;bilinear;bicubic
+OutputRaster|output|Name for output raster map
+----
+r.resamp.rst
+r.resamp.rst - Reinterpolates and optionally computes topographic analysis using regularized spline with tension and smoothing.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|ew_res|Desired east-west resolution|0.0|None|1
+ParameterNumber|ns_res|Desired north-south resolution|0.0|None|1
+ParameterBoolean|-t|Use dnorm independent tension|False
+ParameterBoolean|-d|Output partial derivatives instead of topographic parameters|False
+OutputRaster|elev|Output z-file (elevation) map
+----
+r.resamp.stats
+r.resamp.stats - Resamples raster map layers to a coarser grid using aggregation.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterSelection|method|Aggregation method|average;median;mode;minimum;maximum;quart1;quart3;perc90;sum;variance;stddev
+ParameterBoolean|-n|Propagate NULLs|False
+ParameterBoolean|-w|Weight according to area (slower)|False
+OutputRaster|output|Name for output raster map
+----
+r.resample
+r.resample - GRASS raster map layer data resampling capability using nearest neighbors.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.rescale.eq
+r.rescale.eq - Rescales histogram equalized the range of category values in a raster map layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterRange|from|The input data range to be rescaled (default: full range of input map)
+ParameterRange|to|The output data range
+OutputRaster|output|Name for output raster map
+----
+r.rescale
+r.rescale - Rescales the range of category values in a raster map layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterRange|from|The input data range to be rescaled (default: full range of input map)
+ParameterRange|to|The output data range
+OutputRaster|output|Name for output raster map
+----
+r.ros
+r.ros - Generates three, or four raster map layers showing 1) the base (perpendicular) rate of spread (ROS), 2) the maximum (forward) ROS, 3) the direction of the maximum ROS, and optionally 4) the maximum potential spotting distance.
+Raster (r.*)
+ParameterRaster|model|model|False
+ParameterRaster|moisture_1h|moisture_1h|False
+ParameterRaster|moisture_10h|moisture_10h|False
+ParameterRaster|moisture_100h|moisture_100h|False
+ParameterRaster|moisture_live|moisture_live|False
+ParameterRaster|velocity|velocity|False
+ParameterRaster|direction|direction|False
+ParameterRaster|slope|slope|False
+ParameterRaster|aspect|aspect|False
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterBoolean|-v|-v|True
+ParameterBoolean|-s|-s|True
+OutputRaster|output|Name for output raster map
+----
+r.shaded.relief
+r.shaded.relief - Creates shaded relief map from an elevation map (DEM).
+Raster (r.*)
+ParameterRaster|map|Input elevation map|False
+ParameterNumber|altitude|Altitude of the sun in degrees above the horizon|None|None|30.0
+ParameterNumber|azimuth|Azimuth of the sun in degrees to the east of north|None|None|270.0
+ParameterNumber|zmult|Factor for exaggerating relief|None|None|1.0
+ParameterNumber|scale|Scale factor for converting horizontal units to elevation units|None|None|1.0
+ParameterSelection|units|et scaling factor (applies to lat./long. locations only, none: scale=1)|none;meters;feet
+OutputRaster|shadedmap|Output shaded relief map name
+----
+r.sim.sediment
+r.sim.sediment - Sediment transport and erosion/deposition simulation using path sampling method (SIMWE).
+Raster (r.*)
+ParameterRaster|elevin|Name of the elevation raster map [m]|False
+ParameterRaster|wdepth|Name of the water depth raster map [m]|False
+ParameterRaster|dxin|Name of the x-derivatives raster map [m/m]|False
+ParameterRaster|dyin|Name of the y-derivatives raster map [m/m]|False
+ParameterRaster|detin|Name of the detachment capacity coefficient raster map [s/m]|False
+ParameterRaster|tranin|Name of the transport capacity coefficient raster map [s]|False
+ParameterRaster|tauin|Name of the critical shear stress raster map [Pa]|False
+ParameterRaster|manin|Name of the Mannings n raster map|False
+ParameterNumber|maninval|Name of the Mannings n value|None|None|0.1
+ParameterNumber|nwalk|Number of walkers|None|None|1
+ParameterNumber|niter|Time used for iterations [minutes]|None|None|10
+ParameterNumber|outiter|Time interval for creating output maps [minutes]|None|None|2
+ParameterNumber|diffc|Water diffusion constant|None|None|0.8
+OutputRaster|tc|Output transport capacity raster map [kg/ms]
+OutputRaster|et|Output transp.limited erosion-deposition raster map [kg/m2s]
+OutputRaster|conc|Output sediment concentration raster map [particle/m3]
+OutputRaster|flux|Output sediment flux raster map [kg/ms]
+OutputRaster|erdep|Output erosion-deposition raster map [kg/m2s]
+----
+r.sim.water
+r.sim.water - Overland flow hydrologic simulation using path sampling method (SIMWE).
+Raster (r.*)
+ParameterRaster|elevin|Name of the elevation raster map [m]|False
+ParameterRaster|dxin|Name of the x-derivatives raster map [m/m]|False
+ParameterRaster|dyin|Name of the y-derivatives raster map [m/m]|False
+ParameterRaster|rain|Name of the rainfall excess rate (rain-infilt) raster map [mm/hr]|False
+ParameterString|rain_val|Rainfall excess rate unique value [mm/hr]|50
+ParameterRaster|infil|Name of the runoff infiltration rate raster map [mm/hr]|False
+ParameterString|infil_val|Runoff infiltration rate unique value [mm/hr]|0.0
+ParameterRaster|manin|Name of the Mannings n raster map|False
+ParameterString|manin_val|Mannings n unique value|0.1
+ParameterRaster|traps|Name of the flow controls raster map (permeability ratio 0-1)|False
+ParameterString|nwalk|Number of walkers, default is twice the no. of cells|
+ParameterString|niter|Time used for iterations [minutes]|10
+ParameterString|outiter|Time interval for creating output maps [minutes]|2
+ParameterString|diffc|Water diffusion constant|0.8
+ParameterString|hmax|Threshold water depth [m] (diffusion increases after this water depth is reached)|0.3
+ParameterString|halpha|Diffusion increase constant|4.0
+ParameterString|hbeta|Weighting factor for water flow velocity vector|0.5
+ParameterBoolean|-t|Time-series output|True
+OutputRaster|depth|Output water depth raster map [m]
+OutputRaster|disch|Output water discharge raster map [m3/s]
+OutputRaster|err|Output simulation error raster map [m]
+----
+r.slope.aspect
+r.slope.aspect - Generates raster maps of slope, aspect, curvatures and partial derivatives from a elevation raster map.
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterSelection|format|Format for reporting the slope|degrees;percent
+ParameterSelection|prec|Type of output aspect and slope maps|float;double;int
+ParameterNumber|zfactor|Multiplicative factor to convert elevation units to meters|None|None|1.0
+ParameterNumber|min_slp_allowed|Minimum slope val. (in percent) for which aspect is computed|None|None|0.0
+ParameterBoolean|-a|Do not align the current region to the elevation layer|True
+OutputRaster|slope|Name for output slope raster map
+OutputRaster|aspect|Name for output aspect raster map
+OutputRaster|pcurv|Name for output profile curvature raster map
+OutputRaster|tcurv|Name for output tangential curvature raster map
+OutputRaster|dx|Name for output first order partial derivative dx (E-W slope) raster map
+OutputRaster|dy|Name for output first order partial derivative dy (N-S slope) raster map
+OutputRaster|dxx|Name for output second order partial derivative dxx raster map
+OutputRaster|dyy|Name for output second order partial derivative dyy raster map
+OutputRaster|dxy|Name for output second order partial derivative dxy raster map
+----
+r.slope.aspect
+r.slope - Generates raster maps of slope from a elevation raster map.
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterSelection|format|Format for reporting the slope|degrees;percent
+ParameterSelection|prec|Type of output aspect and slope maps|float;double;int
+ParameterNumber|zfactor|Multiplicative factor to convert elevation units to meters|None|None|1.0
+ParameterNumber|min_slp_allowed|Minimum slope val. (in percent) for which aspect is computed|None|None|0.0
+ParameterBoolean|-a|Do not align the current region to the elevation layer|True
+OutputRaster|slope|Name for output slope raster map
+----
+r.spread
+r.spread - Simulates elliptically anisotropic spread on a graphics window and generates a raster map of the cumulative time of spread, given raster maps containing the rates of spread (ROS), the ROS directions and the spread origins.
+Raster (r.*)
+ParameterRaster|max|max|False
+ParameterRaster|dir|dir|False
+ParameterRaster|base|base|False
+ParameterRaster|start|start|False
+ParameterRaster|spot_dist|spot_dist|False
+ParameterRaster|w_speed|w_speed|False
+ParameterRaster|f_mois|f_mois|False
+ParameterSelection|least_size|least_size|3;5;7;9;11;13;15
+ParameterString|comp_dens|comp_dens|
+ParameterString|init_time|init_time|
+ParameterString|lag|lag|
+ParameterRaster|backdrop|backdrop|False
+ParameterBoolean|-v|-v|True
+ParameterBoolean|-d|-d|True
+ParameterBoolean|-s|-s|True
+OutputRaster|output|Name for output raster map
+OutputRaster|x_output|x_output
+OutputRaster|y_output|y_output
+----
+r.spreadpath
+r.spreadpath - Recursively traces the least cost path backwards to cells from which the cumulative cost was determined.
+Raster (r.*)
+ParameterRaster|x_input|x_input|False
+ParameterRaster|y_input|y_input|False
+ParameterString|coordinate|coordinate|0,0
+ParameterBoolean|-v|-v|True
+OutputRaster|output|Name for output raster map
+----
+r.statistics
+r.statistics - Calculates category or object oriented statistics.
+Raster (r.*)
+ParameterRaster|base|Name of base raster map|False
+ParameterRaster|cover|Name of cover raster map|False
+ParameterSelection|method|method|diversity;distribution;average;mode;median;avedev;stddev;variance;skewness;kurtosis;min;max;sum
+ParameterBoolean|-c|Cover values extracted from the category labels of the cover map|False
+OutputRaster|output|Resultant raster map (not used with 'distribution')
+----
+r.stats
+r.stats - Generates area statistics for raster map layers.
+Raster (r.*)
+ParameterMultipleInput|input|Name of input raster map|3.0|False
+ParameterString|fs|Output field separator|space
+ParameterString|nv|String representing no data cell value|*
+ParameterString|nsteps|Number of fp subranges to collect stats from|255
+ParameterBoolean|-1|One cell (range) per line|True
+ParameterBoolean|-A|Print averaged values instead of intervals|False
+ParameterBoolean|-a|Print area totals|False
+ParameterBoolean|-c|Print cell counts|False
+ParameterBoolean|-p|Print APPROXIMATE percents (total percent may not be 100%)|False
+ParameterBoolean|-l|Print category labels|False
+ParameterBoolean|-g|Print grid coordinates (east and north)|False
+ParameterBoolean|-x|Print x and y (column and row)|False
+ParameterBoolean|-r|Print raw indexes of fp ranges (fp maps only)|False
+ParameterBoolean|-n|Suppress reporting of any NULLs|False
+ParameterBoolean|-N|Suppress reporting of NULLs when all values are NULL|False
+ParameterBoolean|-C|Report for cats fp ranges (fp maps only)|False
+ParameterBoolean|-i|Read fp map as integer (use map's quant rules)|False
+OutputFile|output|Name for output file (if omitted or "-" output to stdout)
+----
+r.sum
+r.sum - Sums up the raster cell values.
+Raster (r.*)
+ParameterRaster|rast|Name of incidence or density file|False
+----
+r.sun
+r.sun - Solar irradiance and irradiation model.
+Raster (r.*)
+ParameterRaster|elevin|Name of the input elevation raster map [meters]|False
+ParameterRaster|aspin|Name of the input aspect map (terrain aspect or azimuth of the solar panel) [decimal degrees]|False
+ParameterNumber|aspect|A single value of the orientation (aspect), 270 is south|None|None|270.0
+ParameterRaster|slopein|Name of the input slope raster map (terrain slope or solar panel inclination) [decimal degrees]|False
+ParameterNumber|slope|A single value of inclination (slope)|None|None|0.0
+ParameterRaster|linkein|Name of the Linke atmospheric turbidity coefficient input raster map [-]|False
+ParameterNumber|lin|A single value of the Linke atmospheric turbidity coefficient [-]|None|None|3.0
+ParameterRaster|albedo|Name of the ground albedo coefficient input raster map [-]|False
+ParameterNumber|alb|A single value of the ground albedo coefficient [-]|None|None|0.2
+ParameterRaster|latin|Name of input raster map containing latitudes [decimal degrees]|False
+ParameterRaster|longin|Name of input raster map containing longitudes [decimal degrees]|False
+ParameterRaster|coefbh|Name of real-sky beam radiation coefficient input raster map [-]|False
+ParameterRaster|coefdh|Name of real-sky diffuse radiation coefficient input raster map [-]|False
+ParameterRaster|horizon|The horizon information input map prefix|False
+ParameterNumber|horizonstep|Angle step size for multidirectional horizon [degrees]|None|None|0.0
+ParameterNumber|day|No. of day of the year (1-365)|None|None|0.0
+ParameterNumber|step|Time step when computing all-day radiation sums [decimal hours]|None|None|0.5
+ParameterNumber|declin|Declination value (overriding the internally computed value) [radians]|None|None|0.0
+ParameterNumber|time|Local (solar) time (to be set for mode 1 only) [decimal hours]|None|None|0.0
+ParameterNumber|dist|Sampling distance step coefficient (0.5-1.5)|None|None|1.0
+ParameterNumber|numpartitions|Read the input files in this number of chunks|None|None|1.0
+ParameterNumber|civiltime|Civil time zone value, if none, the time will be local solar time|None|None|0.0
+ParameterBoolean|-s|Incorporate the shadowing effect of terrain|False
+ParameterBoolean|-m|Use the low-memory version of the program|False
+OutputRaster|incidout|Output incidence angle raster map (mode 1 only)
+OutputRaster|beam_rad|Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)
+OutputRaster|insol_time|Output insolation time raster map [h] (mode 2 only)
+OutputRaster|diff_rad|Output diffuse irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)
+OutputRaster|refl_rad|Output ground reflected irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2.day-1] (mode 2)
+OutputRaster|glob_rad|Output global (total) irradiance/irradiation [W.m-2] (mode 1) or irradiance/irradiation raster map [Wh.m-2.day-1] (mode 2)
+----
+r.sunmask
+r.sunmask - Calculates cast shadow areas from sun position and elevation raster map.
+Raster (r.*)
+ParameterRaster|elev|elev|False
+ParameterNumber|altitude|altitude|None|None|0.0
+ParameterNumber|azimuth|azimuth|None|None|0.0
+ParameterNumber|year|year|None|None|0.0
+ParameterNumber|month|month|None|None|1
+ParameterNumber|day|day|None|None|1
+ParameterNumber|hour|hour|None|None|0
+ParameterNumber|minute|minute|None|None|0
+ParameterNumber|second|second|None|None|0
+ParameterNumber|timezone|timezone|None|None|0.0
+ParameterNumber|east|east|None|None|0.0
+ParameterNumber|north|north|None|None|0.0
+ParameterBoolean|-z|-z|True
+ParameterBoolean|-v|-v|True
+ParameterBoolean|-s|-s|True
+ParameterBoolean|-g|-g|True
+OutputRaster|output|Name for output raster map
+----
+r.surf.area
+r.surf.area - Surface area estimation for rasters.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|vscale|Vertical scale|None|None|0.0
+----
+r.surf.contour
+r.surf.contour - Surface generation program from rasterized contours.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.surf.gauss
+r.surf.gauss - Creates a raster map layer of Gaussian deviates.
+Raster (r.*)
+ParameterString|mean|Distribution mean|0.0
+ParameterString|sigma|Standard deviation|1.0
+OutputRaster|output|Name for output raster map
+----
+r.surf.idw
+r.surf.idw - Surface interpolation utility for raster map.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|npoints|Number of interpolation points|1.0|None|12
+ParameterBoolean|-e|Output is the interpolation error|False
+OutputRaster|output|Name for output raster map
+----
+r.surf.idw2
+r.surf.idw2 - Surface generation program.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterNumber|npoints|Number of interpolation points|1.0|None|12
+OutputRaster|output|Name for output raster map
+----
+r.surf.random
+r.surf.random - Produces a raster map of uniform random deviates whose range can be expressed by the user.
+Raster (r.*)
+ParameterNumber|min|Minimum random value|None|None|0
+ParameterNumber|max|Maximum random value|None|None|100
+ParameterBoolean|-i|Create an integer raster map|False
+OutputRaster|output|Name for output raster map
+----
+r.terraflow.short
+r.terraflow.short - Flow computation for massive grids (integer version).
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterBoolean|-s|SFD (D8) flow (default is MFD)|False
+OutputRaster|filled|Name for output filled (flooded) elevation raster map
+OutputRaster|direction|Name for output flow direction raster map
+OutputRaster|swatershed|Name for output sink-watershed raster map
+OutputRaster|accumulation|Name for output flow accumulation raster map
+OutputRaster|tci|Name for output topographic convergence index (tci) raster map
+OutputFile|stats|Name of file containing runtime statistics
+----
+r.terraflow
+r.terraflow - Flow computation for massive grids (float version).
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation raster map|False
+ParameterBoolean|-s|SFD (D8) flow (default is MFD)|False
+OutputRaster|filled|Name for output filled (flooded) elevation raster map
+OutputRaster|direction|Name for output flow direction raster map
+OutputRaster|swatershed|Name for output sink-watershed raster map
+OutputRaster|accumulation|Name for output flow accumulation raster map
+OutputRaster|tci|Name for output topographic convergence index (tci) raster map
+OutputFile|stats|Name of file containing runtime statistics
+----
+r.texture
+r.texture - Generate images with textural features from a raster map.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|size|The size of sliding window (odd and >= 3)|3
+ParameterString|distance|The distance between two samples (>= 1)|1
+ParameterBoolean|-q|Quiet|True
+ParameterBoolean|-a|Angular Second Moment|False
+ParameterBoolean|-c|Contrast|False
+ParameterBoolean|-k|Correlation|False
+ParameterBoolean|-v|Variance|False
+ParameterBoolean|-i|Inverse Diff Moment|False
+ParameterBoolean|-s|Sum Average|False
+ParameterBoolean|-w|Sum Variance|False
+ParameterBoolean|-x|Sum Entropy|False
+ParameterBoolean|-e|Entropy|False
+ParameterBoolean|-d|Difference Variance|False
+ParameterBoolean|-p|Difference Entropy|False
+ParameterBoolean|-m|Measure of Correlation-1|False
+ParameterBoolean|-n|Measure of Correlation-2|False
+ParameterBoolean|-o|Max Correlation Coeff|False
+OutputRaster|prefix|Prefix for output raster map(s)
+----
+r.thin
+r.thin - Thins non-zero cells that denote linear features in a raster map.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterString|iterations|Maximal number of iterations|200
+OutputRaster|output|Name for output raster map
+----
+r.to.vect
+r.to.vect - Converts a raster map into a vector map layer.
+Raster (r.*)
+ParameterRaster|input|Name of input raster map|False
+ParameterSelection|feature|Feature type|line;point;area
+ParameterBoolean|-s|Smooth corners of area features|False
+ParameterBoolean|-v|Use raster values as categories instead of unique sequence (CELL only)|False
+ParameterBoolean|-z|Write raster values as z coordinate. Table is not created. Currently supported only for points|False
+ParameterBoolean|-b|Do not build vector topology (use with care for massive point export)|False
+ParameterBoolean|-q|Quiet - Do not show progress|False
+OutputVector|output|Name for output vector map
+----
+r.topidx
+r.topidx - Creates topographic index map from elevation raster map.
+Raster (r.*)
+ParameterRaster|input|Input elevation map|False
+OutputRaster|Output topographic index map|output
+----
+r.topmodel
+r.topmodel - Simulates TOPMODEL which is a physically based hydrologic model.
+Raster (r.*)
+ParameterRaster|basin|Basin map created by r.water.outlet (MASK)|False
+ParameterRaster|elevation|Elevation map|False
+ParameterNumber|nidxclass|Number of topographic index classes|None|None|30.0
+ParameterString|idxstats|Topographic index statistics file|
+ParameterString|parameters|TOPMODEL Parameters file|
+ParameterString|input|Rainfall and potential evapotranspiration data file|
+ParameterString|output|Output file|
+ParameterString|Qobs|OPTIONAL Observed flow file|
+ParameterNumber|timestep|OPTIONAL Output for given time step|None|None|0.0
+ParameterNumber|idxclass|OPTIONAL Output for given topographic index class|None|None|0.0
+ParameterBoolean|-i|-i|False
+OutputRaster|depressionless|Depressionless elevation map
+OutputRaster|direction|Direction map for depressionless elevation map
+OutputRaster|belevation|Basin elevation map (MASK applied)
+OutputRaster|topidx|Topographic index ln(a/tanB) map (MASK applied)
+----
+r.transect
+r.transect - Outputs raster map layer values lying along user defined transect line(s).
+Raster (r.*)
+ParameterRaster|map|Raster map to be queried|False
+ParameterString|line|Transect definition|0,0,0,100
+ParameterNumber|width|Char string to represent no data cell|None|None|1
+----
+r.univar
+r.univar - Calculates univariate statistics from the non-null cells of a raster map.
+Raster (r.*)
+ParameterMultipleInput|map|Name of input raster map(s)|3.0|False
+ParameterRaster|zones|Raster map used for zoning, must be of type CELL|False
+ParameterNumber|percentile|Percentile to calculate (requires extended statistics flag)|0.0|100.0|90
+ParameterBoolean|-e|Calculate extended statistics|False
+----
+r.volume
+r.volume - Calculates the volume of data "clumps".
+Raster (r.*)
+ParameterRaster|data|Existing raster map representing data that will be summed within clumps|False
+ParameterRaster|clump|Existing raster map, preferably the output of r.clump|False
+ParameterBoolean|-f|Generate unformatted report|False
+OutputVector|centroids|Vector points map to contain clump centroids
+----
+r.walk
+r.walk - Outputs a raster map layer showing the anisotropic cumulative cost of moving based on friction cost.
+Raster (r.*)
+ParameterRaster|elevation|Name of elevation input raster map|False
+ParameterRaster|friction|Name of input raster map containing friction costs|False
+ParameterVector|start_points|Starting points vector map|-1|False
+ParameterVector|stop_points|Stop points vector map|-1|False
+ParameterString|coordinate|The map E and N grid coordinates of a starting point (E,N)|
+ParameterString|stop_coordinate|The map E and N grid coordinates of a stopping point (E,N)|
+ParameterString|max_cost|An optional maximum cumulative cost|0
+ParameterString|null_cost|Cost assigned to null cells. By default, null cells are excluded|
+ParameterString|percent_memory|Percent of map to keep in memory|100
+ParameterString|nseg|Number of the segment to create (segment library)|4
+ParameterString|walk_coeff|Coefficients for walking energy formula parameters a,b,c,d|0.72,6.0,1.9998,-1.9998
+ParameterString|lambda|Lambda coefficients for combining walking energy and friction cost|1.0
+ParameterString|slope_factor|Slope factor determines travel energy cost per height step|-0.2125
+ParameterBoolean|-k|Use the 'Knight's move'; slower, but more accurate|True
+ParameterBoolean|-n|Keep null values in output map|True
+ParameterBoolean|-r|Start with values in raster map|True
+OutputRaster|output|Name of raster map to contain results
+----
+r.water.outlet
+r.water.outlet - Watershed basin creation program.
+Raster (r.*)
+ParameterRaster|drainage|Name of input raster map|False
+ParameterNumber|easting|The map E grid coordinates|None|None|0
+ParameterNumber|northing|The map N grid coordinates|None|None|0
+OutputRaster|basin|Name of raster map to contain results
+----
+r.watershed
+r.watershed - Watershed basin analysis program.
+Raster (r.*)
+ParameterRaster|elevation|Input map: elevation on which entire analysis is based|False
+ParameterRaster|depression|Input map: locations of real depressions|True
+ParameterRaster|flow|Input map: amount of overland flow per cell|True
+ParameterRaster|disturbed.land|Input map or value: percent of disturbed land, for USLE|True
+ParameterRaster|blocking|Input map: terrain blocking overland surface flow, for USLE|True
+ParameterNumber|threshold|Input value: minimum size of exterior watershed basin|None|None|0
+ParameterNumber|max.slope.length|Input value: maximum length of surface flow, for USLE|None|None|0
+ParameterBoolean|-4|Allow only horizontal and vertical flow of water|True
+OutputRaster|accumulation|Output map: number of cells that drain through each cell
+OutputRaster|drainage|Output map: drainage direction
+OutputRaster|basin|Output map: unique label for each watershed basin
+OutputRaster|stream|Output map: stream segments
+OutputRaster|half.basin|Output map: each half-basin is given a unique value
+OutputRaster|visual|Output map: useful for visual display of results
+OutputRaster|length.slope|Output map: slope length and steepness (LS) factor for USLE
+OutputRaster|slope.steepness|Output map: slope steepness (S) factor for USLE
+----
+v.buffer
+v.buffer.column - Creates a buffer around features of given type.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterTableField|bufcolumn|Name of column to use for buffer distances|input|-1
+ParameterNumber|scale|Scaling factor for attribute column values|None|None|1.0
+ParameterString|tolerance|Maximum distance between theoretical arc and polygon segments as multiple of buffer|0.01
+ParameterBoolean|-s|Make outside corners straight|False
+ParameterBoolean|-c|Don't make caps at the ends of polylines|False
+OutputVector|output|Name for output vector map
+----
+v.buffer
+v.buffer.distance - Creates a buffer around features of given type.
+Vector (v.*)
+ParameterVector|input|Name for input vector map|-1|False
+ParameterString|distance|Buffer distance in map units|
+ParameterString|tolerance|Maximum distance between theoretical arc and polygon segments as multiple of buffer|0.01
+ParameterBoolean|-s|Make outside corners straight|False
+ParameterBoolean|-c|Don't make caps at the ends of polylines|False
+OutputVector|output|Name for output vector map
+----
+v.class
+v.class - Classifies attribute data, e.g. for thematic mapping.
+Vector (v.*)
+ParameterVector|map|Name of input vector map|-1|False
+ParameterTableField|column|Column name or expression|map|-1
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterSelection|algorithm|Algorithm to use for classification|int;std;qua;equ;dis
+ParameterNumber|nbclasses|Number of classes to define|2.0|None|3
+ParameterBoolean|-g|Print only class breaks (without min and max)|True
+----
+v.clean
+v.clean - Toolset for cleaning topology of vector map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterSelection|tool|Cleaning tool|break;snap;rmdangle;chdangle;rmbridge;chbridge;rmdupl;rmdac;bpol;prune;rmarea;rmline;rmsa
+ParameterNumber|thresh|Threshold|None|None|0
+OutputVector|output|Name for output vector map
+OutputVector|error|Name for output map where errors are written
+----
+v.delaunay
+v.delaunay - Creates a Delaunay triangulation from an input vector map containing points or centroids.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterBoolean|-r|Use only points in current region|True
+ParameterBoolean|-l|Output triangulation as a graph (lines), not areas|True
+OutputVector|output|Name for output vector map
+----
+v.dissolve
+v.dissolve - Dissolves boundaries between adjacent areas sharing a common category number or attribute.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterTableField|column|Name of column used to dissolve common boundaries|input|-1
+OutputVector|output|Name for output vector map
+----
+v.distance
+v.distance.toattr - Finds the nearest element in vector map 'to' for elements in vector map 'from'.
+Vector (v.*)
+ParameterVector|from|Name of existing vector map (from)|0|False
+ParameterVector|to|Name of existing vector map (to)|-1|False
+ParameterSelection|upload|Values describing the relation between two nearest features|to_attr
+ParameterTableField|column|Column where values specified by 'upload' option will be uploaded|to|-1
+ParameterTableField|to_column|Column name of nearest feature|to|-1
+ParameterBoolean|-a|Calculate distances to all features within the threshold|False
+OutputVector|output|Name for output vector map
+----
+v.distance
+v.distance - Finds the nearest element in vector map 'to' for elements in vector map 'from'.
+Vector (v.*)
+ParameterVector|from|Name of existing vector map (from)|0|False
+ParameterVector|to|Name of existing vector map (to)|-1|False
+ParameterSelection|upload|Values describing the relation between two nearest features|cat;dist;to_x;to_y;to_along;to_angle
+ParameterTableField|column|Column where values specified by 'upload' option will be uploaded|to|-1
+ParameterBoolean|-a|Calculate distances to all features within the threshold|False
+OutputVector|output|Name for output vector map
+----
+v.drape
+v.drape - Converts vector map to 3D by sampling of elevation raster map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterRaster|rast|Elevation raster map for height extraction|False
+ParameterSelection|method|Sampling method|nearest;bilinear;cubic
+ParameterString|scale|Scale factor for sampled raster values|1.0
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterString|null_value|Vector Z value for unknown height|
+OutputVector|output|Name for output vector map
+----
+v.extract
+v.extract - Selects vector objects from an existing vector map and creates a new map containing only the selected objects.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterBoolean|-d|Dissolve common boundaries|True
+OutputVector|Name for output vector map|output
+----
+v.extrude
+v.extrude - Extrudes flat vector object to 3D with defined height.
+Vector (v.*)
+ParameterVector|input|Name of input 2D vector map|-1|False
+ParameterNumber|zshift|Shifting value for z coordinates|None|None|0
+ParameterRaster|elevation|Elevation raster for height extraction|True
+ParameterNumber|height|Fixed height for 3D vector objects|None|None|0
+ParameterTableField|hcolumn|Name of attribute column with object heights|input|-1
+ParameterString|type|Feature type|point,line,boundary,area
+ParameterBoolean|-t|Trace elevation|False
+OutputVector|output|Name of resulting 3D vector map
+----
+v.generalize
+v.generalize - Vector based generalization.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterSelection|method|method|douglas;douglas_reduction;lang;reduction;reumann;remove_small;boyle;sliding_averaging;distance_weighting;chaiken;hermite;snakes;network;displacement
+ParameterNumber|threshold|Maximal tolerance value|None|None|1.0
+ParameterNumber|look_ahead|Look-ahead parameter|None|None|7
+ParameterNumber|reduction|Percentage of the points in the output of 'douglas_reduction' algorithm|None|None|50
+ParameterNumber|slide|Slide of computed point toward the original point|None|None|0.5
+ParameterNumber|angle_thresh|Minimum angle between two consecutive segments in Hermite method|None|None|3
+ParameterNumber|degree_thresh|Degree threshold in network generalization|None|None|0
+ParameterNumber|closeness_thresh|Closeness threshold in network generalization|None|None|0
+ParameterNumber|betweeness_thresh|Betweeness threshold in network generalization|None|None|0
+ParameterNumber|alpha|Snakes alpha parameter|None|None|1.0
+ParameterNumber|beta|Snakes beta parameter|None|None|1.0
+ParameterNumber|iterations|Number of iterations|None|None|1
+ParameterBoolean|-c|Copy attributes|True
+OutputVector|output|Name for output vector map
+----
+v.hull
+v.hull - Produces a convex hull for a given vector map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterBoolean|-a|Use all vector points (do not limit to current region)|False
+OutputVector|output|Name for output vector map
+----
+v.in.dxf
+v.in.dxf - Converts files in DXF format to GRASS vector map format.
+Vector (v.*)
+ParameterFile|input|Name of input DXF file|False
+ParameterString|layers|List of layers to import|
+ParameterBoolean|-e|Ignore the map extent of DXF file|True
+ParameterBoolean|-t|Do not create attribute tables|False
+ParameterBoolean|-f|Import polyface meshes as 3D wire frame|True
+ParameterBoolean|-l|List available layers and exit|False
+ParameterBoolean|-i|Invert selection by layers (don't import layers in list)|False
+ParameterBoolean|-1|Import all objects into one layer|True
+OutputVector|output|Name for output vector map
+----
+v.in.wfs
+v.in.wfs - Import GetFeature from WFS
+Vector (v.*)
+ParameterString|wfs|GetFeature URL starting with 'http'|http://
+OutputVector|output|Name for output vector map
+----
+v.info
+v.info - Outputs basic information about a user-specified vector map.
+Vector (v.*)
+ParameterVector|map|Name of input vector map|-1|False
+ParameterBoolean|-c|Print types/names of table columns for specified layer instead of info|False
+ParameterBoolean|-g|Print map region only|False
+ParameterBoolean|-t|Print topology information only|False
+----
+v.kcv
+v.kcv - Randomly partition points into test/train sets.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|k|Number of partitions|2.0|32767.0|10
+ParameterString|column|Name for new column to which partition number is written|part
+ParameterBoolean|-d|Use drand48()|False
+OutputVector|Name for output vector map|output
+----
+v.lidar.correction
+v.lidar.correction - Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering.
+Vector (v.*)
+ParameterVector|input|Input observation vector map name (v.lidar.growing output)|-1|False
+ParameterString|sce|Interpolation spline step value in east direction|25
+ParameterString|scn|Interpolation spline step value in north direction|25
+ParameterString|lambda_c|Regularization weight in reclassification evaluation|1
+ParameterString|tch|High threshold for object to terrain reclassification|2
+ParameterString|tcl|Low threshold for object to terrain reclassification|1
+ParameterBoolean|-e|Estimate point density and distance|False
+OutputVector|output|Output classified vector map name
+OutputVector|terrain|Only 'terrain' points output vector map
+----
+v.lidar.edgedetection
+v.lidar.edgedetection - Detects the object's edges from a LIDAR data set.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterString|see|Interpolation spline step value in east direction|4
+ParameterString|sen|Interpolation spline step value in north direction|4
+ParameterString|lambda_g|Regularization weight in gradient evaluation|0.01
+ParameterString|tgh|High gradient threshold for edge classification|6
+ParameterString|tgl|Low gradient threshold for edge classification|3
+ParameterString|theta_g|Angle range for same direction detection|0.26
+ParameterString|lambda_r|Regularization weight in residual evaluation|2
+ParameterBoolean|-e|Estimate point density and distance|False
+OutputVector|output|Name for output vector map
+----
+v.lidar.growing
+v.lidar.growing - Building contour determination and Region Growing algorithm for determining the building inside
+Vector (v.*)
+ParameterVector|input|Input vector (v.lidar.edgedetection output|-1|False
+ParameterVector|first|Name of the first pulse vector map|-1|False
+ParameterNumber|tj|Threshold for cell object frequency in region growing|None|None|0.2
+ParameterNumber|td|Threshold for double pulse in region growing|None|None|0.6
+OutputVector|output|Name for output vector map
+----
+v.mkgrid
+v.mkgrid - Creates a GRASS vector map of a user-defined grid.
+Vector (v.*)
+ParameterString|grid|Number of rows and columns in grid|10,10
+ParameterSelection|position|Where to place the grid|region;coor
+ParameterString|coor|Lower left easting and northing coordinates of map|
+ParameterString|box|Width and height of boxes in grid|
+ParameterString|angle|Angle of rotation (in degrees counter-clockwise)|0
+ParameterBoolean|-p|Create grid of points instead of areas and centroids|False
+OutputVector|map|Name for output vector map
+----
+v.neighbors
+v.neighbors - Makes each cell value a function of attribute values and stores in an output raster map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|size|Neighborhood diameter in map units|None|None|0.1
+OutputRaster|output|Name for output raster map
+----
+v.normal
+v.normal - Tests for normality for points.
+Vector (v.*)
+ParameterVector|map|point vector defining sample points|-1|False
+ParameterString|tests|Lists of tests (1-15): e.g. 1,3-8,13|1-3
+ParameterTableField|column|Attribute column|map|-1
+ParameterBoolean|-r|Use only points in current region|True
+ParameterBoolean|-l|lognormal|False
+----
+v.out.dxf
+v.out.dxf - Exports GRASS vector map layers to DXF file format.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+OutputFile|output|Name of DXF output file
+----
+v.out.pov
+v.out.pov - Converts to POV-Ray format, GRASS x,y,z -> POV-Ray x,z,y
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterString|type|Feature type|point,line,area,face
+ParameterString|zmod|Modifier for z coordinates, this string is appended to each z coordinate|
+ParameterString|objmod|Object modifier (OBJECT_MODIFIER in POV-Ray documentation)|
+OutputFile|output|Output file
+----
+v.outlier
+v.outlier - Removes outliers from vector point data.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|soe|Interpolation spline step value in east direction|None|None|10
+ParameterNumber|son|Interpolation spline step value in north direction|None|None|10
+ParameterNumber|lambda_i|Tykhonov regularization weight|None|None|0.1
+ParameterNumber|thres_o|Threshold for the outliers|None|None|50
+ParameterBoolean|-e|Estimate point density and distance|False
+OutputVector|output|Name for output vector map
+OutputVector|outlier|Name for output outlier vector map
+----
+v.overlay
+v.overlay - Overlays two vector maps.
+Vector (v.*)
+ParameterVector|ainput|Name of input vector map (A)|2|False
+ParameterVector|binput|Name of input vector map (B)|2|False
+ParameterSelection|operator|Operator to use|and;or;not;xor
+ParameterBoolean|-t|Do not create attribute table|False
+OutputVector|output|Name for output vector map
+----
+v.parallel
+v.parallel - Creates parallel line to input vector lines.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|distance|Offset along major axis in map units|None|None|1
+ParameterNumber|minordistance|Offset along minor axis in map units|None|None|1
+ParameterNumber|angle|Angle of major axis in degrees|None|None|0
+ParameterSelection|side|Side|left;right;both
+ParameterNumber|tolerance|Tolerance of arc polylines in map units|None|None|1
+ParameterBoolean|-r|Make outside corners round|False
+ParameterBoolean|-b|Create buffer-like parallel lines|False
+OutputVector|output|Name for output vector map
+----
+v.patch
+v.patch - Create a new vector map layer by combining other vector map layers.
+Vector (v.*)
+ParameterMultipleInput|input|Name of input vector maps|-1.0|False
+ParameterBoolean|-e|Copy also attribute table|True
+OutputVector|output|Name for output vector map
+OutputVector|bbox|Name for output vector map where bounding boxes of input vector maps are written to
+----
+v.perturb
+v.perturb - Random location perturbations of GRASS vector points
+Vector (v.*)
+ParameterVector|input|Vector points to be spatially perturbed|-1|False
+ParameterSelection|distribution|Distribution of perturbation|uniform;normal
+ParameterString|parameters|Parameter(s) of distribution (uniform: maximum; normal: mean and stddev)|
+ParameterNumber|minimum|Minimum deviation in map units|None|None|0.0
+ParameterNumber|seed|Seed for random number generation|None|None|0
+OutputVector|output|Name for output vector map
+----
+v.qcount
+v.qcount - Indices for quadrat counts of sites lists.
+Vector (v.*)
+ParameterVector|input|Vector of points defining sample points|0|False
+ParameterNumber|n|Number of quadrats|0.0|None|4
+ParameterNumber|r|Quadrat radius|0.0|None|10
+OutputVector|output|Output quadrant centres, number of points is written as category
+----
+v.random
+v.random - Randomly generate a 2D/3D vector points map.
+Vector (v.*)
+ParameterNumber|n|Number of points to be created|None|None|100
+ParameterNumber|zmin|Minimum z height for 3D output|None|None|0.0
+ParameterNumber|zmax|Maximum z height for 3D output|None|None|0.0
+ParameterString|column|Column for Z values|z
+ParameterBoolean|-d|Use drand48() function instead of rand()|False
+OutputVector|output|Name for output vector map
+----
+v.rast.stats
+v.rast.stats - Calculates univariate statistics from a raster map based on vector polygons and uploads statistics to new attribute columns.
+Vector (v.*)
+ParameterVector|vector|Name of vector polygon map|-1|False
+ParameterRaster|raster|Name of raster map to calculate statistics from|False
+ParameterString|colprefix|Column prefix for new attribute columns|
+ParameterNumber|percentile|Percentile to calculate|0.0|100.0|90
+ParameterBoolean|-c|Continue if upload column(s) already exist|False
+ParameterBoolean|-e|Calculate extended statistics|False
+----
+v.reclass
+v.reclass - Changes vector category values for an existing vector map according to results of SQL queries or a value in attribute table column.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterString|type|Feature type|point,line,boundary,centroid
+ParameterTableField|column|The name of the column whose values are to be used as new categories|input|-1
+ParameterFile|rules|Full path to the reclass rule file|False
+OutputVector|output|Name for output vector map
+----
+v.report
+v.report - Reports geometry statistics for vectors.
+Vector (v.*)
+ParameterVector|map|Name of input vector map|-1|False
+ParameterSelection|option|Value to calculate|area;length;coor
+ParameterSelection|units|units|miles;feet;meters;kilometers;acres;hectares;percent
+ParameterBoolean|-r|Reverse sort the result|False
+ParameterBoolean|-s|Sort the result|False
+----
+v.sample
+v.sample - Samples a raster map at vector point locations.
+Vector (v.*)
+ParameterVector|input|Vector map defining sample points|-1|False
+ParameterTableField|column|Vector map attribute column to use for comparison|input|-1
+ParameterRaster|raster|Raster map to be sampled|False
+ParameterNumber|z|Sampled raster values will be multiplied by this factor|None|None|1.0
+ParameterBoolean|-b|Bilinear interpolation (default is nearest neighbor)|False
+ParameterBoolean|-c|Cubic convolution interpolation (default is nearest neighbor)|False
+OutputVector|output|Vector map to store differences
+----
+v.segment
+v.segment - Creates points/segments from input vector lines and positions.
+Vector (v.*)
+ParameterVector|input|Name of input vector map containing lines|1|False
+ParameterFile|file|Name of file containing segment rules|False
+OutputVector|output|Name for output vector map with segments
+----
+v.select
+v.select - Selects features from vector map (A) by features from other vector map (B).
+Vector (v.*)
+ParameterVector|ainput|Name of input vector map (A)|-1|False
+ParameterVector|binput|Name of input vector map (B)|-1|False
+OutputVector|output|Name for output vector map
+----
+v.split
+v.split - Split lines to shorter segments.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|length|Maximum segment length|None|None|10.0
+ParameterNumber|vertices|Maximum number of vertices in segment|None|None|10
+OutputVector|output|Name for output vector map
+----
+v.surf.bspline
+v.surf.bspline - Bicubic or bilinear spline interpolation with Tykhonov regularization.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterVector|sparse|Name of input vector map of sparse points|-1|False
+ParameterNumber|sie|Length of each spline step in the east-west direction|None|None|4
+ParameterNumber|sin|Length of each spline step in the north-south direction|None|None|4
+ParameterSelection|method|Spline interpolation algorithm|bilinear;bicubic
+ParameterNumber|lambda_i|Tykhonov regularization parameter (affects smoothing)|None|None|1
+ParameterTableField|column|Attribute table column with values to interpolate|input|-1
+ParameterBoolean|-c|Find the best Tykhonov regularizing parameter using a "leave-one-out" cross validation method|False
+ParameterBoolean|-e|Estimate point density and distance|False
+OutputVector|output|Name for output vector map
+OutputRaster|raster|Name for output raster map
+----
+v.surf.idw
+v.surf.idw - Surface interpolation from vector point data by Inverse Distance Squared Weighting.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterNumber|npoints|Number of interpolation points|None|None|12
+ParameterNumber|power|Power parameter; greater values assign greater influence to closer points|None|None|2.0
+ParameterTableField|column|Attribute table column with values to interpolate|input|-1
+ParameterBoolean|-n|Don't index points by raster cell|False
+OutputRaster|output|Name for output raster map
+----
+v.surf.rst
+v.surf.rst.cvdev - Spatial approximation and topographic analysis using regularized spline with tension.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterRaster|maskmap|Name of the raster map used as mask|True
+ParameterTableField|zcolumn|Name of the attribute column with values to be used for approximation|input|-1
+ParameterNumber|tension|Tension parameter|None|None|40
+ParameterNumber|segmax|Maximum number of points in a segment|None|None|40
+ParameterNumber|npmin|Minimum number of points for approximation in a segment (>segmax)|None|None|300
+ParameterNumber|dmin|Minimum distance between points (to remove almost identical points)|None|None|0.001
+ParameterNumber|dmax|Maximum distance between points on isoline (to insert additional points)|None|None|2.5
+ParameterNumber|theta|Anisotropy angle (in degrees counterclockwise from East)|0.0|360.0|0
+ParameterNumber|scalex|Anisotropy scaling factor|None|None|0
+ParameterBoolean|-c|-c[leave this as True]|True
+OutputVector|cvdev|Output cross-validation errors vector point file
+----
+v.surf.rst
+v.surf.rst - Spatial approximation and topographic analysis using regularized spline with tension.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterRaster|maskmap|Name of the raster map used as mask|True
+ParameterTableField|zcolumn|Name of the attribute column with values to be used for approximation|input|-1
+ParameterNumber|tension|Tension parameter|None|None|40
+ParameterNumber|segmax|Maximum number of points in a segment|None|None|40
+ParameterNumber|npmin|Minimum number of points for approximation in a segment (>segmax)|None|None|300
+ParameterNumber|dmin|Minimum distance between points (to remove almost identical points)|None|None|0.001
+ParameterNumber|dmax|Maximum distance between points on isoline (to insert additional points)|None|None|2.5
+ParameterNumber|zmult|Conversion factor for values used for approximation|None|None|1.0
+ParameterNumber|theta|Anisotropy angle (in degrees counterclockwise from East)|0.0|360.0|0
+ParameterNumber|scalex|Anisotropy scaling factor|None|None|0
+ParameterBoolean|-t|Use scale dependent tension|False
+ParameterBoolean|-d|Output partial derivatives instead of topographic parameters|False
+OutputRaster|elev|Output surface raster map
+OutputRaster|slope|Output slope raster map
+OutputRaster|aspect|Output aspect raster map
+OutputRaster|pcurv|Output profile curvature raster map
+OutputRaster|tcurv|Output tangential curvature raster map
+OutputRaster|mcurv|Output mean curvature raster map
+----
+v.to.3d
+v.to.3d - Performs transformation of 2D vector features to 3D.
+Vector (v.*)
+ParameterVector|input|Name of input 2D vector map|-1|False
+ParameterString|type|Feature type|point,line,boundary,centroid
+ParameterNumber|height|Fixed height for 3D vector features|None|None|0.0
+ParameterTableField|column|Name of attribute column used for height|input|-1
+ParameterBoolean|-r|Reverse transformation; 3D vector features to 2D|False
+OutputVector|output|Name for output 3D vector map
+----
+v.to.points
+v.to.points - Create points along input lines in new vector with 2 layers.
+Vector (v.*)
+ParameterVector|input|Input vector map containing lines|-1|False
+ParameterString|dmax|Maximum distance between points in map units|100
+ParameterBoolean|-n|Write line nodes|False
+ParameterBoolean|-v|Write line vertices|True
+ParameterBoolean|-i|Interpolate points between line vertices|False
+OutputVector|output|Output vector map where points will be written
+----
+v.to.rast
+v.to.rast.attribute - Converts (rasterize) a vector map into a raster map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterSelection|use|Source of raster values|attr
+ParameterTableField|column|Name of column for 'attr' parameter (data type must be numeric)|input|-1
+OutputRaster|output|Name for output raster map
+----
+v.to.rast
+v.to.rast.value - Converts (rasterize) a vector map into a raster map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterSelection|use|Source of raster values|val
+ParameterNumber|value|Raster value|None|None|1.0
+OutputRaster|output|Name for output raster map
+----
+v.transform
+v.transform - Performs an affine transformation (shift, scale and rotate, or GPCs) on vector map.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|-1|False
+ParameterNumber|xshift|X shift|None|None|0.0
+ParameterNumber|yshift|Y shift|None|None|0.0
+ParameterNumber|zshift|Z shift|None|None|0.0
+ParameterNumber|xscale|X scale|None|None|1.0
+ParameterNumber|yscale|Y scale|None|None|1.0
+ParameterNumber|zscale|Z scale|None|None|1.0
+ParameterNumber|zrot|Rotation around z axis in degrees counterclockwise|None|None|0.0
+ParameterFile|pointsfile|Name of input text file with GCPs|False
+OutputVector|output|Name for output vector map
+----
+v.univar
+v.univar - Calculates univariate statistics for attribute. Variance and standard deviation is calculated only for points if specified.
+Vector (v.*)
+ParameterVector|map|Name of input vector map|-1|False
+ParameterString|type|Feature type|point,line,area
+ParameterTableField|column|Column name|map|-1
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterString|percentile|Percentile to calculate|90
+ParameterBoolean|-g|Print the stats in shell script style|True
+ParameterBoolean|-e|Calculate extended statistics|False
+----
+v.vol.rst
+v.vol.rst - Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm.
+Vector (v.*)
+ParameterVector|input|Name of the vector map with input x,y,z,w|-1|False
+ParameterRaster|cellinp|Name of the surface raster map for cross-section|False
+ParameterTableField|wcolumn|Name of the column containing w attribute to interpolate|input|-1
+ParameterNumber|tension|Tension parameter|None|None|40.0
+ParameterNumber|smooth|Smoothing parameter|None|None|0.1
+ParameterTableField|scolumn|Name of the column with smoothing parameters|input|-1
+ParameterString|where|WHERE conditions of SQL statement without 'where' keyword|
+ParameterRaster|maskmap|Name of the raster map used as mask|False
+ParameterString|segmax|Maximum number of points in a segment|50
+ParameterString|npmin|Minimum number of points for approximation in a segment (>segmax)|200
+ParameterString|dmin|Minimum distance between points (to remove almost identical points)|0.500000
+ParameterString|wmult|Conversion factor for w-values used for interpolation|1.0
+ParameterString|zmult|Conversion factor for z-values|1.0
+ParameterBoolean|-c|Perform a cross-validation procedure without volume interpolation|False
+OutputVector|devi|Output deviations vector point file
+OutputVector|cvdev|Output cross-validation vector map
+OutputRaster|cellout|Output cross-section raster map
+----
+v.voronoi
+v.voronoi - Creates a Voronoi diagram from an input vector map containing points or centroids.
+Vector (v.*)
+ParameterVector|input|Name of input vector map|0|False
+ParameterBoolean|-l|Output tessellation as a graph (lines), not areas|False
+ParameterBoolean|-t|Do not create attribute table|False
+OutputVector|output|Name for output vector map
+----

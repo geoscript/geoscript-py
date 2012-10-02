@@ -62,6 +62,9 @@ registerTypeUnmapping(int, java.lang.Integer)
 registerTypeMapping(java.lang.Long, long)
 registerTypeUnmapping(long, java.lang.Long)
 
+registerTypeMapping(java.lang.Boolean, bool)
+registerTypeUnmapping(bool, java.lang.Boolean)
+
 registerTypeMapping(java.lang.String, str)
 registerTypeUnmapping(str, java.lang.String)
 registerTypeUnmapping(unicode, java.lang.String)

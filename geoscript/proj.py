@@ -3,7 +3,7 @@ The :mod:`proj` module provides support for coordinate reference system transfor
 """
 from org.geotools.geometry.jts import GeometryCoordinateSequenceTransformer as GeometryTX
 from org.geotools.referencing import CRS as crs
-from org.opengis.referencing.crs import CoordinateReferenceSystem
+from org.opengis.referencing.crs import CoordinateReferenceSystem, GeographicCRS
 from geoscript import core
 
 CRS = CoordinateReferenceSystem
@@ -122,6 +122,9 @@ class Projection(object):
 
   def __eq__(self, other):
     return crs.equalsIgnoreMetadata(self._crs, other._crs)
+    
+  def isgeographic(self):
+    return issubclass(self._crs, GeographicCRS)
 
 def transform(obj, src, dst):
   """
@@ -156,6 +159,7 @@ def projections():
      except:
        # todo: log this
        pass
+ 
 
 core.registerTypeMapping(CRS, Projection)
 core.registerTypeUnmapping(Projection, CRS, lambda x: x._crs)
