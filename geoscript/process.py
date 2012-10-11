@@ -13,9 +13,9 @@ class Process(object):
 
   A process is typically obtained by name:
 
-  >>> p = Process.lookup('gs:Snap')
+  >>> p = Process.lookup('JTS:splitPolygon')
   >>> p.description
-  Snap to the nearest feature
+  Splits a polygon by a linestring
   """
 
   @staticmethod
@@ -34,15 +34,15 @@ class Process(object):
     Static method that looks up a process by name. The *name* parameter is 
     specified as a tuple of (prefix, localName):
 
-    >>> p = Process.lookup(('gs', 'Snap'))
+    >>> p = Process.lookup(('JTS', 'splitPolygon'))
     >>> p.description
-    Snap to the nearest feature
+    Splits a polygon by a linestring
     
     *name* may also be specified as a colon delimited string:
 
-    >>> p = Process.lookup('gs:Snap')
+    >>> p = Process.lookup('JTS:splitPolygon')
     >>> p.description
-    Snap to the nearest feature
+    Splits a polygon by a linestring
     """
     n = Name(*name) if isinstance(name,(tuple,list)) else Name(*name.split(':'))
     pf = Processors.createProcessFactory(n)
