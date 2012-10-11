@@ -97,14 +97,16 @@ class Color(Expression):
     Interpolates a set of color values beteen this color and the specified
     *color*. 
 
-    The *n* parameter specifies how many values to interpolate. The 
-    interpolation is inclusive of this and the specified color. 
+    The *n* parameter specifies how many values to interpolate, specifically the
+    number of classes resulting from the interpolation. The interpolation is 
+    inclusive of this and the specified color and returns a list of *n*+1 
+    values.
     """  
     hsl1,hsl2 = self.hsl, color.hsl 
     dhsl = map(lambda x: x[1]-x[0], zip(hsl1,hsl2)) 
 
     return [Color.fromHSL(map(lambda x,y: x + (r/float(n))*y,hsl1,dhsl)) 
-      for r in range(0,n)]
+      for r in range(0,n+1)]
 
   @classmethod
   def fromHSL(cls, hsl):
