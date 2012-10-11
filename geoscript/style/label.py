@@ -1,3 +1,4 @@
+from geoscript.util import deprecated
 from geoscript.style import util
 from geoscript.style.expression import Expression
 from geoscript.style.font import Font
@@ -21,10 +22,13 @@ class Label(Symbolizer):
   Label(property=foo)
   """
 
-  def __init__(self, property, font=None, color=None):
+  def __init__(self, property, font=None, color=None, priority=None, 
+               options=None):
     Symbolizer.__init__(self)
     self.property = Property(property)
     self.color = Color(color) if color else None
+    self.priority = Property(priority) if priority else None
+    self.options = options if options else {}
     self._font = Font(font) if font else None
     self._halo = None
     self._placement = None
@@ -71,14 +75,17 @@ class Label(Symbolizer):
 
     >>> label = Label('foo').point((0.5,0), (0,5))
     """
-    f = self.factory
-    ap = f.createAnchorPoint(Expression(anchor[0]).expr,Expression(anchor[1]).expr)
-    dp = f.createDisplacement(Expression(displace[0]).expr, 
-      Expression(displace[1]).expr)
-    self._placement = f.createPointPlacement(ap, dp, Expression(rotate).expr)
+    self._placement = self._pointPlacement(anchor, displace, rotate)
     return self
 
+  @deprecated
   def linear(self, offset=0, gap=None, igap=None, align=False, follow=False, 
+             group=False, displace=None, repeat=None):
+    """Use :func:`geoscript.style.Label.line`"""
+
+    return self.line(offset, gap, igap, align, follow, group, displace, repeat)
+
+  def line(self, offset=0, gap=None, igap=None, align=False, follow=False, 
              group=False, displace=None, repeat=None):
     """
     Sets the label placement relative to a line. 
@@ -102,12 +109,27 @@ class Label(Symbolizer):
       lp.setInitialGap(Expression(igap).expr)
     self._placement = lp
 
-    self.options = {'followLine': follow, 'group': group}
+    self.options['followLine'] = follow
+    self.options['group'] = group
     if displace:
       self.options['maxDisplacement'] = displace
     if repeat:
       self.options['repeat'] = repeat
     return self
+
+  def polygon(self, anchor=(0.5,0.5), displace=(0,0), rotate=0, wrap=None):
+    self._placement = self._pointPlacement(anchor, displace, rotate)
+    if wrap:
+      self.options['autoWrap'] = wrap
+    return self
+
+  def _pointPlacement(self, anchor, displace, rotate):
+    f = self.factory
+    ap = f.createAnchorPoint(
+      Expression(anchor[0]).expr,Expression(anchor[1]).expr)
+    dp = f.createDisplacement(
+      Expression(displace[0]).expr, Expression(displace[1]).expr)
+    return f.createPointPlacement(ap, dp, Expression(rotate).expr)
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, TextSymbolizer)
@@ -125,6 +147,9 @@ class Label(Symbolizer):
 
     if self.color:
       sym.setFill(Fill(self.color)._fill())
+
+    if self.priority:
+      sym.setPriority(self.priority.expr)
 
     if self._placement:
       sym.setLabelPlacement(self._placement)
