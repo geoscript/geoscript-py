@@ -11,7 +11,7 @@ _renderers = {
 
 class Map:
 
-   def __init__(self, layers, styles=(), title=None):
+   def __init__(self, layers, styles=[], title=None):
      self.layers = layers if isinstance(layers, list) else [layers]
      self.styles = styles if isinstance(styles, list) else [styles]
 
