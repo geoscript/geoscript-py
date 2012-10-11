@@ -8,7 +8,12 @@ class Window(RendererBase):
 
    def _encode(self, img, g, size, **options):
       p = Panel(img, size)
-      self.window = awt.Frame(windowClosing=lambda e: e.getWindow().dispose())
+
+      def onWindowClose(e):
+        e.getWindow().dispose()
+        self.dispose()
+
+      self.window = awt.Frame(windowClosing=onWindowClose)
       if options.has_key('title'):
         self.window.setTitle(options['title'])
       self.window.add(p)
