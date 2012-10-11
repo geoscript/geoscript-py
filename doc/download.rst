@@ -39,15 +39,21 @@ Doc
      * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-doc.zip>`_ 
 
 
-Experimental
-------------
+Latest
+------
 
-The latest experimental release is 1.2-20121010.
+The latest tagged build is 1.2-20121010.
 
     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.tar.gz>`_ 
     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.zip>`_
 
 .. warning::
 
-   Experimental releases are unstable in nature and contain api that is subject to change without deprecation. 
+   The latest builds can be unstable and contain api that is subject to change without deprecation. 
 
+Nightly
+-------
+
+Nightly builds of GeoScript-PY are also available.
+
+    * http://gridlock.opengeo.org/geoscript/py/
