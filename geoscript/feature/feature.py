@@ -159,6 +159,9 @@ class Feature(object):
   def __getitem__(self, key):
     return self.get(key)
 
+  def __setitem__(self, key, value):
+    self.set(key, value)
+
   def __iter__(self):
     return self.schema.__iter__()
 
