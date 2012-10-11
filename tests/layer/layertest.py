@@ -125,3 +125,26 @@ class LayerTest:
     assert 'Wisconsin' == c.next()['STATE_NAME']
     assert 'West Virginia' == c.next()['STATE_NAME']
     c.close()
+
+  def testUpdate(self):
+    c = self.l.cursor("STATE_NAME = 'New York'")
+    f = c.next()
+    c.close()
+
+    f['STATE_NAME'] = 'Newer York'
+    self.l.update(f)
+
+    assert 0 == self.l.count("STATE_NAME = 'New York'")
+    assert 1 == self.l.count("STATE_NAME = 'Newer York'")
+
+    c = self.l.cursor("STATE_NAME = 'Newer York'")
+    f = c.next()
+    c.close()
+    
+    assert 'NY' == f['STATE_ABBR']
+    f['STATE_NAME'] = 'New York'
+    self.l.update(f, ['STATE_NAME'])
+
+    assert 1 == self.l.count("STATE_NAME = 'New York'")
+    assert 0 == self.l.count("STATE_NAME = 'Newer York'")
+

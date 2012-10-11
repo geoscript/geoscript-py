@@ -276,6 +276,33 @@ class Layer(object):
     #r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     return Cursor(fcol, self)
 
+  def first(self, filter=None, sort=None):
+    """
+    Returns the first :class:`Feature <geoscript.feature.feature.Feature>` that
+    matches a query.
+
+    *filter* is a optional :class:`Filter <geoscript.filter.Filter>` to 
+    constrain the features iterated over.
+
+    *sort* is an optional tuple or ``list`` of tuples that defined the order in
+    which features are iterated over. The first value of each tuple is the name
+    of a field to sort on. The second value is one of the strings 'ASC' or 
+    'DESC', representing ascending and decending sort order respectively. 
+
+    >>> l = Layer()
+    >>> from geoscript import geom
+    >>> l.add([geom.Point(1,2)])
+    >>> l.add([geom.Point(3,4)])
+    >>> l.first().geom
+    POINT (1 2)
+    >>> l.first('INTERSECTS(geom,POINT(3 4))').geom
+    POINT (3 4)
+    """
+    c = self.cursor(filter, sort)
+    f = c.next() 
+    c.close()
+    return f
+    
   def delete(self, filter):
     """
     Deletes features from the layer which match the specified constraint.
@@ -339,6 +366,35 @@ class Layer(object):
     fc.add(f._feature)
     self._source.addFeatures(fc)
 
+  def update(self, feature, fields=None):
+    """
+    Updates a :class:`Feature <geoscript.feature.Feature>` of the layer.
+
+    *feature* is the feature to update. *fields* is an optional ``list`` of 
+    field names (as ``str`` objects) to update.
+    
+    >>> from geoscript import geom
+    >>> l = Layer()
+    >>> l.add([geom.Point(0,0)])
+    >>> f = l.first()
+    >>> f.geom
+    POINT (0 0)
+    >>> f.geom = geom.Point(1,1)
+    >>> l.update(f)
+    >>> f = l.first()
+    >>> f.geom
+    POINT (1 1)
+    """
+    if self.readonly:
+      raise Exception('Layer is read-only')
+
+    f = Filter("IN ('%s')" % feature.id)
+    if not fields:
+      fields = feature.schema.keys()
+
+    vals = [feature._feature.getAttribute('%s' % fld) for fld in fields]
+    self._source.modifyFeatures(fields, vals, f._filter)
+    
   def reproject(self, prj, name=None, chunk=1000):
     """
     Reprojects a layer.
