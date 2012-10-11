@@ -82,3 +82,29 @@ def deprecated(f):
   wrapper.__dict__.update(f.__dict__)
   return wrapper
 
+def interpolate(low, high, n, method):
+  """
+  Interpolates between two numeric values.
+
+  The *n* parameter specifies the number of values to interpoluate. 
+  Specifically the number of classes that will result from  the interpolated
+  values.
+
+  The *method* parameter specifies the interpolation method. By default
+  a linear method is used. The values 'exp' (exponential) and 'log' 
+  (logarithmic) methods are also supported.
+
+  This function returns n+1 values.
+  """
+  delta = high - low
+  if method == 'linear':
+    fx = lambda x: delta * x
+  elif method == 'exp':
+    fx = lambda x: math.exp(x * math.log(1+delta)) - 1
+  elif method == 'log':
+    fx = lambda x: delta * math.log((x+1))/math.log(2)
+  else:
+    raise Exception('Interpolation method %s not supported' % method)
+      
+  fy = lambda x : low + fx(x)
+  return map(fy, [x/float(n) for x in range(0,n+1)])

@@ -5,7 +5,7 @@ import sys, math
 from java import io
 from java import net
 from cursor import Cursor
-from geoscript import core, geom, proj, feature
+from geoscript import core, geom, proj, feature, util
 from geoscript.filter import Filter
 from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
@@ -503,20 +503,8 @@ class Layer(object):
    
     """
     min, max = self.minmax(att)
+    return util.interpolate(min, max, classes, method)
   
-    delta = max-min
-    if method == 'linear':
-      fx = lambda x: delta * x
-    elif method == 'exp':
-      fx = lambda x: math.exp(x * math.log(1+delta)) - 1
-    elif method == 'log':
-      fx = lambda x: delta * math.log((x+1))/math.log(2)
-    else:
-      raise Exception('Interpolation method %s not supported' % method)
-      
-    fy = lambda x : min + fx(x)
-    return map(fy, [x/float(classes) for x in range(0,classes+1)])
-
   def histogram(self, att, classes=10):
     """
     Generates the histogram of values for an attribute of the layer.
