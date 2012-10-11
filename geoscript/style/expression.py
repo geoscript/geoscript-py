@@ -1,4 +1,5 @@
 from geoscript.style.factory import StyleFactory
+from org.opengis.filter.expression import Literal
 
 class Expression(object):
   """
@@ -12,6 +13,14 @@ class Expression(object):
     else:
       self.expr = self._expr(e)
    
+  def literal(self):
+    """
+    Returns the literal value of the expression, or None if the expression is
+    not a literal.
+    """
+    if isinstance(self.expr, Literal):
+      return self.expr.getValue()
+
   def _expr(self, e):
     return self.factory.filter.literal(e)
 
