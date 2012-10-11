@@ -1,4 +1,5 @@
 from geoscript.filter import Filter
+from geoscript.util import interpolate
 from geoscript.style import util
 from geoscript.style.color import Color
 from geoscript.style.expression import Expression
@@ -59,6 +60,18 @@ class Stroke(Symbolizer):
     """
     self._hatch = Hatch(name, stroke, size)
     return self
+
+  def interpolate(self, stroke, n=10):
+    colors = self.color.interpolate(stroke.color, n)
+    w1 = self.width.literal()
+    w2 = stroke.width.literal()
+
+    if w1 != None and w2 != None:
+      widths = interpolate(w1, w2, n, 'linear') 
+    else:
+      widths = [self.width] * n
+
+    return map(lambda x: Stroke(x[0], x[1]), zip(colors, widths))
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, LineSymbolizer)
