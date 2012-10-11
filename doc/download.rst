@@ -42,10 +42,10 @@ Doc
 Experimental
 ------------
 
-The latest experimental release is 1.2-20110915.
+The latest experimental release is 1.2-20121010.
 
-    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20110915.tar.gz>`_ 
-    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20110915.zip>`_
+    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.tar.gz>`_ 
+    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.zip>`_
 
 .. warning::
 
