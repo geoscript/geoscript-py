@@ -505,7 +505,7 @@ class Layer(object):
     min, max = self.minmax(att)
     return util.interpolate(min, max, classes, method)
   
-  def histogram(self, att, classes=10):
+  def histogram(self, att, classes=10, low=None, high=None):
     """
     Generates the histogram of values for an attribute of the layer.
 
@@ -517,7 +517,10 @@ class Layer(object):
     range, the second value is the number of values within that range.
     
     """
-    low, high = self.minmax(att)
+    if low is None or high is None:  
+      minmax = self.minmax(att)
+      low = minmax[0] if low is None else low
+      high = minmax[1] if high is None else high
 
     rnge = high - low
     dx = rnge/float(classes)
