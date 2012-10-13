@@ -20,14 +20,6 @@ def xy(data, name='', xlabel='', ylabel=''):
     PlotOrientation.VERTICAL, True, True, False)
   return Chart(chart)
 
-def interval(data, name='xy'):
-  """
-  Creates an xy bars chart, whit bars defining intervals. 
-  Input is a list of tuples in the form ((lo,hi),y), *lo* and *hi* being
-  the lower and upper limits of the interval and *y* the count on that interval
-  """
-  pass
-
 def category(data, name='', xlabel='', ylabel='', stacked=False, trid=False):
   """
   Creates a category bar chart.
@@ -39,7 +31,7 @@ def category(data, name='', xlabel='', ylabel='', stacked=False, trid=False):
   series names and values are a ``dict`` of category names to numerical values.
 
   Setting *stacked* to ``True`` results in a stacked bar char. Setting *trid*
-  to ``True`` results in a 3D bar char.
+  to ``True`` results in a 3D bar chart.
   """ 
   dataset = DefaultCategoryDataset();
   for k,v in data.iteritems():    
