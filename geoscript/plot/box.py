@@ -6,7 +6,7 @@ def box(data):
   """
   Creates a box and whiskers plot.
 
-  *data* is a ``dict`` whose keys are category names and values are ``list`` of
+  *data* is a ``dict`` whose keys are category names and values are list of
   numeric values.
   """
   dataset  = DefaultBoxAndWhiskerCategoryDataset()

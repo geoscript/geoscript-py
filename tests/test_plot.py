@@ -46,3 +46,6 @@ def testRegression():
 
 def testScatter():
   render(plot.scatterplot(zip(randoms(),randoms())))
+
+def testBox():
+  render(plot.box(dict(zip(cats, [randoms() for i in range(len(cats))]))))
