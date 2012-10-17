@@ -99,10 +99,15 @@ class Filter(object):
     return self._filter.toString()
 
   def __add__(self, other):
-    if self._filter == _Filter.INCLUDE:
-       return Filter(other)
+    oth = Filter(other) if other is not None else None
 
-    return Filter(_factory.and(self._filter, Filter(other)._filter))
+    if oth is None or oth._filter == _Filter.INCLUDE:
+       return Filter(self._filter)
+
+    if self._filter == _Filter.INCLUDE:
+       return oth
+
+    return Filter(_factory.and(self._filter, oth._filter))
 
 Filter.PASS = Filter(_Filter.INCLUDE)
 Filter.FAIL = Filter(_Filter.EXCLUDE)
