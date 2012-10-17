@@ -7,6 +7,7 @@ from java import net
 from cursor import Cursor
 from geoscript import core, geom, proj, feature, util
 from geoscript.filter import Filter
+from geoscript.layer.stats import Stats
 from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
 from org.geotools.data import FeatureSource, FeatureStore
@@ -490,6 +491,9 @@ class Layer(object):
 
     return flayer
 
+  def stats(self, filter=None):
+    return Stats(self, filter)
+
   def interpolate(self, att, classes=10, method='linear'):
     """
     Generates a set of interpolated values for an attribute of the layer.
@@ -517,28 +521,7 @@ class Layer(object):
     range, the second value is the number of values within that range.
     
     """
-    if low is None or high is None:  
-      minmax = self.minmax(att)
-      low = minmax[0] if low is None else low
-      high = minmax[1] if high is None else high
-
-    rnge = high - low
-    dx = rnge/float(classes)
-    values = [0]*classes
-
-    fil = Filter('%s BETWEEN %s AND %s' % (att, low, high))
-    fit = self._source.getFeatures(fil._filter).features()
-    try:
-      while fit.hasNext():
-        f = fit.next()
-        val = f.getAttribute(att)
-        #import pdb; pdb.set_trace()
-        values[min(classes-1, int( (val-low)/float(rnge)*classes ))] += 1
-    finally:
-      fit.close()
-
-    keys = [round(low + x * dx, 2) for x in range(0,classes+1)]
-    return zip([(keys[i-1],keys[i]) for i in range(1,len(keys))], values)
+    return Stats(self, att, classes, low, high)
 
   def minmax(self, att, low=None, high=None):
     """
@@ -547,27 +530,7 @@ class Layer(object):
     *att* specifies the attribute. *low* and *high* are used to constrain
     the value space. 
     """
-    # build a filter based on specified min/max values
-    fil = ['%s >= %s' % (att, low)] if low != None else []
-    fil += ['%s <= %s' % (att, high)] if high != None else []
-    fil = ' AND '.join(fil)
-     
-    q = DefaultQuery(self.name)
-    if len(fil) > 0:
-      q.setFilter(Filter(fil)._filter)
-
-    min, max = None, None
-    fit = self._source.getFeatures(q).features()
-    try:
-      while fit.hasNext():
-        f = fit.next() 
-        val = f.getAttribute(att)
-        min = val if min == None or val < min else min
-        max = val if max == None or val > max else max
-    finally:
-      fit.close()
-
-    return (min,max)
+    return Stats(self).extrema(att, low, high)
 
   def __eq__(self, other):
     return other and self.schema == other.schema
