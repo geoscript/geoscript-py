@@ -34,12 +34,17 @@ class Stroke(Symbolizer):
   The ``cap`` argument specifies how lines should be capped. Supported values include 
   "butt", "round", and "square". The ``join``argument specifies how two lines should be
   joined. Supported values include "miter", "round", and "bevel".
+
+  The ``opacity`` argument is a float between 0 and 1 specifying the opaqueness of 
+  the stroke.
   """
 
-  def __init__(self, color='#000000', width=1, dash=None, cap=None, join=None):
+  def __init__(self, color='#000000', width=1, dash=None, cap=None, join=None,
+               opacity=1.0):
     Symbolizer.__init__(self)
     self.color = Color(color)
     self.width = Expression(width)
+    self.opacity = Expression(opacity)
     self.dash = dash
     self.cap = Expression(cap) if cap else None
     self.join = Expression(join) if join else None
@@ -74,9 +79,9 @@ class Stroke(Symbolizer):
     return map(lambda x: Stroke(x[0], x[1]), zip(colors, widths))
 
   def _prepare(self, rule):
-    syms = util.symbolizers(rule, LineSymbolizer)
-    for sym in syms:
-      self._apply(sym)
+    sym = self.factory.createLineSymbolizer()
+    self._apply(sym) 
+    rule.addSymbolizer(sym)
     
   def _apply(self, sym):
     Symbolizer._apply(self, sym)
@@ -84,7 +89,7 @@ class Stroke(Symbolizer):
 
   def _stroke(self):
     f = self.factory
-    stroke = f.createStroke(self.color.expr, self.width.expr)
+    stroke = f.createStroke(self.color.expr, self.width.expr, self.opacity.expr)
     #stroke = f.createStroke(f.filter.literal(util.color(self.color)), 
     #  f.filter.literal(self.width))
 
