@@ -19,7 +19,7 @@ class Composite(Symbolizer):
   
   def zindex(self, z):
     for part in self.parts:
-      part.z = z
+      part.zindex(z)
     return self
 
   def __repr__(self):
