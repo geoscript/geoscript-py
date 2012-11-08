@@ -48,7 +48,7 @@ class Style_Test:
     sym = syms[0]
     assert isinstance(sym, PolygonSymbolizer)
     col = sym.getFill().getColor().evaluate(None)
-    assert (0,255,0) == (col.red, col.green, col.blue)
+    assert (0,128,0) == (col.red, col.green, col.blue)
 
   def testScale(self):
     s = (Fill('red') + Stroke('blue')).range(-1, 1000) + Fill('green').range(1000,-1)
