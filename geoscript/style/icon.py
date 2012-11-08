@@ -4,6 +4,7 @@ from geoscript.style import util
 from geoscript.style.symbolizer import Symbolizer
 from geoscript.style.expression import Expression
 from org.geotools.styling import PointSymbolizer, PolygonSymbolizer
+from org.geotools.styling import TextSymbolizer
 
 class Icon(Symbolizer):
   """
@@ -26,7 +27,7 @@ class Icon(Symbolizer):
     self.size = Expression(size) if size else None
 
   def _prepare(self, rule):
-    syms = util.symbolizers(rule, PointSymbolizer)
+    syms = util.symbolizers(rule, (PointSymbolizer, TextSymbolizer))
     for sym in syms:
       self._apply(sym)
     
