@@ -20,7 +20,10 @@ def toURL(o):
     try:
       return net.URL(o)
     except net.MalformedURLException:
-      return io.File(o).toURL()
+      try:
+        return net.URL('file:%s' % o)
+      except net.MalformedURLException:
+        return io.File(o).toURL()
 
 def toFile(o):
   """
