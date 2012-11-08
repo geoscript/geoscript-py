@@ -45,6 +45,11 @@ def graphic(sym):
     if not sym.getFill().getGraphicFill():    
       sym.getFill().setGraphicFill(_builder.createGraphic())
     return sym.getFill().getGraphicFill()
+ 
+  elif isinstance(sym, TextSymbolizer):
+    if not sym.getGraphic():
+     sym.setGraphic(_builder.createGraphic())
+    return sym.getGraphic()
 
 def stroke(col, width):
   st = _builder.createStroke()
@@ -55,6 +60,9 @@ def stroke(col, width):
 def symbolizers(rule, clazz):
   syms = filter(lambda s: isinstance(s, clazz), rule.symbolizers()) 
   if len(syms) == 0:
+    if isinstance(clazz, (list,tuple)):
+      clazz = clazz[0]
+
     sym = _syms[clazz](None)
     rule.symbolizers().add(sym)
     syms.append(sym)
