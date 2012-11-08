@@ -5,6 +5,7 @@ from geoscript.style.font import Font
 from geoscript.style.fill import Fill
 from geoscript.style.halo import Halo
 from geoscript.style.color import Color
+from geoscript.style.icon import Icon
 from geoscript.style.property import Property
 from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import TextSymbolizer
@@ -31,6 +32,7 @@ class Label(Symbolizer):
     self.options = options if options else {}
     self._font = Font(font) if font else None
     self._halo = None
+    self._icon = None
     self._placement = None
 
   def font(self, font):
@@ -76,6 +78,16 @@ class Label(Symbolizer):
     >>> label = Label('foo').point((0.5,0), (0,5))
     """
     self._placement = self._pointPlacement(anchor, displace, rotate)
+    return self
+
+  def icon(self, url, format=None, size=None):
+    """
+    Composes this label as an :class:`Icon <geoscript.style.icon.Icon>`.
+
+    The ``url`` argument is the url/file containing the image. The ``format`` argument
+    is the format or mime type of the image.
+    """
+    self._icon = Icon(url, format, size)
     return self
 
   @deprecated
@@ -144,6 +156,8 @@ class Label(Symbolizer):
       self._font._apply(sym)
     if self._halo:
       self._halo._apply(sym)
+    if self._icon:
+      self._icon._apply(sym)
 
     if self.color:
       sym.setFill(Fill(self.color)._fill())
@@ -153,7 +167,8 @@ class Label(Symbolizer):
 
     if self._placement:
       sym.setLabelPlacement(self._placement)
-
+    else:
+      sym.setLabelPlacement(None)
 
   def __repr__(self):
     return self._repr('property')
