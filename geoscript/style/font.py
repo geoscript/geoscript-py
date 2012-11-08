@@ -2,6 +2,7 @@ import re
 from geoscript.style import util
 from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import TextSymbolizer
+from org.geotools.renderer.style import FontCache
 
 _weights = ['normal', 'bold']
 _styles = ['normal', 'italic', 'oblique']
@@ -30,6 +31,14 @@ class Font(Symbolizer):
   Font(style=normal,weight=normal,size=10,family=Times New Roman,Arial,serif)
   """
 
+  @staticmethod
+  def list():
+    """
+    Returns a generator of all available Font names.
+    """
+    for f in sorted(FontCache.getDefaultInstance().getAvailableFonts()):
+      yield f
+    
   def __init__(self, font=None, style='normal', weight='normal', size=10, 
                family='serif'):
     Symbolizer.__init__(self)
