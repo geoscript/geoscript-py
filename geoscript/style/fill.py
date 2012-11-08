@@ -30,7 +30,7 @@ class Fill(Symbolizer):
     self._icon = None
     self._hatch = None
 
-  def icon(self, url, format):
+  def icon(self, url, format=None, size=None):
     """
     Composes this fill as an :class:`Icon <geoscript.style.icon.Icon>`.
 
@@ -39,7 +39,7 @@ class Fill(Symbolizer):
 
     >>> fill = Fill().icon('work/colorblocks.png', 'image/png')
     """
-    self._icon = Icon(url, format)
+    self._icon = Icon(url, format, size)
     return self
 
   def hatch(self, name, stroke=None, size=None): 
