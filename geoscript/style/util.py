@@ -41,6 +41,11 @@ def graphic(sym):
       sym.setGraphic(_builder.createGraphic())
     return sym.getGraphic()
 
+  elif isinstance(sym, LineSymbolizer):
+    if not sym.getStroke().getGraphicStroke():
+      sym.getStroke().setGraphicStroke(_builder.createGraphic())
+    return sym.getStroke().getGraphicStroke()
+
   elif isinstance(sym, PolygonSymbolizer):
     if not sym.getFill().getGraphicFill():    
       sym.getFill().setGraphicFill(_builder.createGraphic())

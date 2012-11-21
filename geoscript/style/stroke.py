@@ -4,6 +4,7 @@ from geoscript.style import util
 from geoscript.style.color import Color
 from geoscript.style.expression import Expression
 from geoscript.style.hatch import Hatch
+from geoscript.style.icon import Icon
 from geoscript.style.symbolizer import Symbolizer
 from org.geotools.styling import LineSymbolizer
 
@@ -49,6 +50,7 @@ class Stroke(Symbolizer):
     self.cap = Expression(cap) if cap else None
     self.join = Expression(join) if join else None
     self._hatch = None
+    self._icon = None
 
   def hatch(self, name, stroke=None, size=None):
     """
@@ -64,6 +66,16 @@ class Stroke(Symbolizer):
     >>> stroke = Stroke().hatch('vertline')
     """
     self._hatch = Hatch(name, stroke, size)
+    return self
+
+  def icon(self, url, format=None, size=None):
+    """
+    Composes this stroke as an :class:`Icon <geoscript.style.icon.Icon>`.
+
+    The ``url`` argument is the url/file containing the image. The ``format`` argument
+    is the format or mime type of the image.
+    """
+    self._icon = Icon(url, format, size)
     return self
 
   def interpolate(self, stroke, n=10):
@@ -87,6 +99,9 @@ class Stroke(Symbolizer):
     Symbolizer._apply(self, sym)
     sym.setStroke(self._stroke())
 
+    if self._icon:
+      self._icon._apply(sym)
+    
   def _stroke(self):
     f = self.factory
     stroke = f.createStroke(self.color.expr, self.width.expr, self.opacity.expr)
