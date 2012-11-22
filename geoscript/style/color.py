@@ -1,5 +1,5 @@
 import string
-from java import awt
+from java import awt, lang
 from geoscript.style.expression import Expression
 
 _colors = {}
@@ -211,6 +211,10 @@ class Color(Expression):
     col = self._color
     return (col.red, col.green, col.blue)
   rgb = property(getrgb,None,None,"The RGB value of the color")
+
+  def gethex(self):
+    return ''.join([lang.String.format('%02x', x) for x in self.rgb])
+  hex = property(gethex,None,None,"The hex value of the color")
 
   def gethsl(self): 
     r,g,b = [x/255.0 for x in self.rgb]
