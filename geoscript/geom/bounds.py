@@ -1,3 +1,4 @@
+import math
 from org.geotools.geometry.jts import ReferencedEnvelope
 from geoscript.util import deprecated
 from geoscript import core, proj
@@ -122,7 +123,12 @@ class Bounds(ReferencedEnvelope):
    return Polygon([(self.west,self.south), (self.west,self.north), 
       (self.east,self.north), (self.east,self.south), (self.west,self.south)])
 
-  def tile(self, res):
+  def ntiles(self, res):
+   dx = self.width * res
+   dy = self.height * res
+   return (int(self.width / dx), int(self.height / dy))
+
+  def tiles(self, res, bounds=None):
    """
    Partitions the bounding box into a set of smaller bounding boxes.
 
@@ -132,13 +138,26 @@ class Bounds(ReferencedEnvelope):
    dx = self.width * res
    dy = self.height * res
 
-   y = self.south
-   while y < self.north:
-     x = self.west
-     while x < self.east:
-       yield Bounds(x,y,min(x+dx,self.east),min(y+dy,self.north),self.proj)
+   b = self
+   if bounds is not None and self.intersects(bounds):
+     x1 = math.floor(max(bounds.west - self.west, 0)/dx) * dx + self.west
+     x2 = math.ceil(min(bounds.east - self.west, self.width) / dx) * dx + self.west
+     y1 = math.floor(max(bounds.south - self.south, 0)/dy) * dy + self.south
+     y2 = math.ceil(min(bounds.north - self.south, self.height) / dy) * dy + self.south
+     b = Bounds(x1, y1, x2, y2) 
+
+   y = b.south
+   while y < b.north:
+     x = b.west
+     while x < b.east:
+       yield Bounds(x,y,min(x+dx,b.east),min(y+dy,b.north),self.proj)
        x += dx
      y += dy
+
+  def tile(self, res, x, y):
+    dx, dy = self.width*res, self.height*res
+    return Bounds(self.west + dx*x, self.south + dy*y, 
+      self.west + dx*(x+1), self.south + dy*(y+1))
 
   def __add__(self, other):
     b = Bounds(env=self)
