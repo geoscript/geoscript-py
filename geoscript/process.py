@@ -13,7 +13,7 @@ class Process(object):
 
   A process is typically obtained by name:
 
-  >>> p = Process.lookup('JTS:splitPolygon')
+  >>> p = Process.lookup('geo:splitPolygon')
   >>> p.description
   Splits a polygon by a linestring
   """
@@ -34,13 +34,13 @@ class Process(object):
     Static method that looks up a process by name. The *name* parameter is 
     specified as a tuple of (prefix, localName):
 
-    >>> p = Process.lookup(('JTS', 'splitPolygon'))
+    >>> p = Process.lookup(('geo', 'splitPolygon'))
     >>> p.description
     Splits a polygon by a linestring
     
     *name* may also be specified as a colon delimited string:
 
-    >>> p = Process.lookup('JTS:splitPolygon')
+    >>> p = Process.lookup('geo:splitPolygon')
     >>> p.description
     Splits a polygon by a linestring
     """
@@ -69,7 +69,7 @@ class Process(object):
     specified by the :attr:`inputs` property. The output arguments names are 
     specified by the :attr:`outputs` property. 
 
-    >>> p = Process.lookup('gs:Reproject')
+    >>> p = Process.lookup('vec:Reproject')
 
     >>> from geoscript import geom, proj
     >>> l = Layer()
