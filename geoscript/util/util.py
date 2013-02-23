@@ -111,3 +111,13 @@ def interpolate(low, high, n, method):
       
   fy = lambda x : low + fx(x)
   return map(fy, [x/float(n) for x in range(0,n+1)])
+
+def catch(f):
+  """
+  Utility function to run some code and catch the java exception.
+  Used to get around jython not printing source exceptions to console.
+  """
+  try: 
+    return f()
+  except lang.Exception, e:
+    return e
