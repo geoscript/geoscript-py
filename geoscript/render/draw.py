@@ -38,4 +38,4 @@ def draw(obj, style=None, bounds=None, size=None, format=None, **options):
     bounds = layer.bounds().scale(1.1)
 
   map = Map([layer], [style] if style else [])
-  map.render(format=format, bounds=bounds, size=size, **options) 
+  return map.render(format=format, bounds=bounds, size=size, **options) 
