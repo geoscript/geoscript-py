@@ -58,6 +58,9 @@ def toInputStream(o):
   if isinstance(o, (str,unicode)):
     return io.ByteArrayInputStream(lang.String(o).getBytes())
 
+  if type(o).__name__ == 'array':
+    return io.ByteArrayInputStream(o)
+
 def doOutput(fn, out):
   os = toOutputStream(out)
   try:  
