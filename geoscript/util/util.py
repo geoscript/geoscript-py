@@ -3,8 +3,9 @@ util module -- Various utility functions
 """
 
 import math, warnings
-from java import io, lang, net
+from java import io, lang, net, util
 from java.lang.String import format
+from javax.xml.bind import DatatypeConverter
 
 def toURL(o):
   """
@@ -124,3 +125,25 @@ def catch(f):
     return f()
   except lang.Exception, e:
     return e
+
+def dateToStr(obj):
+  """
+  Encodes a java.util.Date or java.util.Calendar object to an ISO8601 
+  formatted datetime string.
+  """
+  cal = None
+  if isinstance(obj, util.Calendar):
+    cal = obj
+  elif isinstance(obj, util.Date):
+    cal = util.Calendar.getInstance()
+    cal.setTime(obj)
+  else:
+    raise Exception('Unable to turn %s into date' % obj)
+
+  return DatatypeConverter.printDateTime(cal)
+  
+def strToDate(s):
+  """
+  Parses a ISO8601 formatted datetime string into a java.util.Calendar object.
+  """
+  return DatatypeConverter.parseDateTime(s)
