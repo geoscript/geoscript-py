@@ -1,6 +1,7 @@
 import string
 from java import awt, lang
 from geoscript.style.expression import Expression
+from geoscript import util
 
 _colors = {}
 _colors['aliceblue'] = awt.Color(240,248,255)
@@ -237,7 +238,7 @@ class Color(Expression):
     return [x for x in [h, s, l]];        
   hsl = property(gethsl,None,None,"The HSL/HLS value of the color")
 
-  def interpolate(self, color, n=10):
+  def interpolate(self, color, n=10, method='linear'):
     """  
     Interpolates a set of color values beteen this color and the specified
     *color*. 
@@ -251,7 +252,7 @@ class Color(Expression):
     dhsl = map(lambda x: x[1]-x[0], zip(hsl1,hsl2)) 
 
     return [Color.fromHSL(map(lambda x,y: x + (r/float(n))*y,hsl1,dhsl)) 
-      for r in range(0,n+1)]
+      for r in util.interpolate(0, n, n, method)]
 
   @classmethod
   def fromHSL(cls, hsl):

@@ -1,5 +1,5 @@
 from geoscript.feature import Feature
-from geoscript.layer import Layer
+from geoscript.layer import Layer, Raster
 from geoscript.render import Map
 from geoscript.style import Stroke
 from geoscript.workspace import Memory
@@ -17,7 +17,7 @@ def draw(obj, style=None, bounds=None, size=None, format=None, **options):
   *format* is the format or renderer to use for rendering.
   """
 
-  if isinstance(obj, (Layer)):
+  if isinstance(obj, (Layer,Raster)):
     layer = obj
   else:
     obj = obj if isinstance(obj, list) else [obj]

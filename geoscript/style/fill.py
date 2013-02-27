@@ -57,8 +57,8 @@ class Fill(Symbolizer):
     self._hatch = Hatch(name, stroke, size)
     return self
 
-  def interpolate(self, fill, n=10):
-    return [Fill(col) for col in self.color.interpolate(fill.color, n)]
+  def interpolate(self, fill, n=10, method='linear'):
+    return [Fill(col) for col in self.color.interpolate(fill.color, n, method)]
 
   def _prepare(self, rule):
     syms = util.symbolizers(rule, PolygonSymbolizer)

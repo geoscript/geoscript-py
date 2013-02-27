@@ -3,6 +3,7 @@ import threading, time
 from geoscript.style import *
 from geoscript.render import Map
 from geoscript.layer import Shapefile
+from geoscript.layer import GeoTIFF
 
 def points():
    return Shapefile('work/point.shp')
@@ -12,6 +13,9 @@ def lines():
 
 def polygons():
    return Shapefile('work/polygon.shp')
+
+def raster():
+   return GeoTIFF('data/sfdem.tif')
 
 class Worker(threading.Thread):
 
@@ -47,7 +51,8 @@ tests = [
   (Fill()+Label('name'), polygons, "polygon with label"),
   #  (Fill() + Label('name').font('16px "Times New Roman"').halo(), polygons,  "polygon label with halo") ,
   (Fill().hatch('backslash'), polygons, "polygon with hatch"),
-  (Icon('data/hospital16.png'), points, 'simple icon')
+  (Icon('data/hospital16.png'), points, 'simple icon'),
+  (ColorMap(zip([0,1000,2000],['red','green','blue'])), raster, 'color map')
 ]
 
 def test():

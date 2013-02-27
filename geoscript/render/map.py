@@ -1,5 +1,6 @@
 from geoscript import geom, proj
-from geoscript.style import Stroke, Shape
+from geoscript.layer import Raster
+from geoscript.style import Stroke, Shape, Opacity
 from geoscript.render.window import Window
 from geoscript.render.mapwindow import MapWindow
 from geoscript.render.png import PNG
@@ -25,13 +26,16 @@ class Map:
          if hasattr(l, 'style'):
            style = l.style
          else:
-           if l.schema.geom.typ.__name__ in ['Point', 'MultiPoint']:
-             style = Shape()
+           if isinstance(l, Raster):
+               style = Opacity()
            else:
-             style = Stroke()
+             if l.schema.geom.typ.__name__ in ['Point', 'MultiPoint']:
+               style = Shape()
+             else:
+               style = Stroke()
          self.styles.append(style)
 
-     self.title = title if title else layers[0].schema.name
+     self.title = title if title else layers[0].name
 
    def render(self, format=None, bounds=None, size=None, **options):
      if not bounds:

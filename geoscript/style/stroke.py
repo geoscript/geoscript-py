@@ -78,13 +78,13 @@ class Stroke(Symbolizer):
     self._icon = Icon(url, format, size)
     return self
 
-  def interpolate(self, stroke, n=10):
-    colors = self.color.interpolate(stroke.color, n)
+  def interpolate(self, stroke, n=10, method='linear'):
+    colors = self.color.interpolate(stroke.color, n, method)
     w1 = self.width.literal()
     w2 = stroke.width.literal()
 
     if w1 != None and w2 != None:
-      widths = interpolate(w1, w2, n, 'linear') 
+      widths = interpolate(w1, w2, n, method) 
     else:
       widths = [self.width] * n
 

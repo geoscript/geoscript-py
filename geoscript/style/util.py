@@ -1,6 +1,7 @@
 from java import awt
 from org.geotools.styling import StyleBuilder, PointSymbolizer, LineSymbolizer
 from org.geotools.styling import PolygonSymbolizer, TextSymbolizer
+from org.geotools.styling import  RasterSymbolizer
 
 _builder = StyleBuilder()
 
@@ -12,6 +13,7 @@ _colors['blue'] = awt.Color(0, 0, 255)
 _syms = {}
 _syms[PointSymbolizer] = lambda x: _builder.createPointSymbolizer()
 _syms[LineSymbolizer] = lambda x: _builder.createLineSymbolizer()
+_syms[RasterSymbolizer] = lambda x: _builder.createRasterSymbolizer()
 
 def _createPolySymbolizer(x): 
   ps = _builder.createPolygonSymbolizer()

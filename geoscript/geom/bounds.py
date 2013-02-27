@@ -1,3 +1,4 @@
+from org.geotools.geometry import GeneralEnvelope
 from org.geotools.geometry.jts import ReferencedEnvelope
 from geoscript.util import deprecated
 from geoscript import core, proj
@@ -11,6 +12,9 @@ class Bounds(ReferencedEnvelope):
       prj = proj.Projection(prj)
 
     if env:
+      if isinstance(env, GeneralEnvelope):
+        env = ReferencedEnvelope(env)
+
       if prj:
         ReferencedEnvelope.__init__(self, env, prj._crs)
       elif hasattr(env, 'crs') and env.crs():
