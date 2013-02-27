@@ -4,9 +4,11 @@ from geoscript.render.window import Window
 from geoscript.render.mapwindow import MapWindow
 from geoscript.render.png import PNG
 from geoscript.render.jpeg import JPEG
+from geoscript.render.gif import GIF
 
 _renderers = {
-  'window': Window, 'mapwindow': MapWindow, 'png': PNG, 'jpeg': JPEG
+  'window': Window, 'mapwindow': MapWindow, 'png': PNG, 'jpeg': JPEG,
+  'gif': GIF
 }
 
 class Map:
