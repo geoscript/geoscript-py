@@ -1,4 +1,6 @@
 from org.geotools.feature import FeatureCollection
+from org.geotools.data.simple import SimpleFeatureCollection
+from org.geoscript.util import PyFeatureCollection
 from geoscript import core
 from geoscript.feature import Feature
 from geoscript.filter import Filter
@@ -50,3 +52,11 @@ class Cursor(object):
 
   def __iter__(self):
     return self
+
+def toCollection(c):
+  if c.layer is not None:
+     return PyFeatureCollection(c, c.layer.schema._type)
+  return PyFeatureCollection(c)
+
+core.registerTypeUnmapping(Cursor, FeatureCollection, toCollection)
+core.registerTypeUnmapping(Cursor, SimpleFeatureCollection, toCollection)

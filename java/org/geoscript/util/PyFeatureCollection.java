@@ -9,6 +9,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.python.core.PyException;
 import org.python.core.PyGenerator;
+import org.python.core.PyObject;
 
 /**
  * Utility collection class for wrapping a python feature generator in a gt FeatureCollection.
@@ -17,11 +18,20 @@ import org.python.core.PyGenerator;
  */
 public class PyFeatureCollection extends SimpleProcessingCollection {
 
-    PyGenerator gen;
+    PyObject gen;
     SimpleFeature next;
+    SimpleFeatureType schema;
 
-    public PyFeatureCollection(PyGenerator gen) {
+    public PyFeatureCollection(PyObject gen) {
+        this(gen, null);
+    }
+
+    public PyFeatureCollection(PyObject gen, SimpleFeatureType schema) {
+        this.schema = schema;
         this.gen = gen;
+        if (gen.__getattr__("next") == null) {
+            throw new IllegalArgumentException("Object has no 'next' attribute");
+        }
     }
 
     @Override
@@ -41,6 +51,10 @@ public class PyFeatureCollection extends SimpleProcessingCollection {
 
     @Override
     protected SimpleFeatureType buildTargetFeatureType() {
+        if (schema != null) {
+            return schema;
+        }
+
         SimpleFeature next = getNext();
         return next != null ? next.getFeatureType() : null;
     }
@@ -55,11 +69,12 @@ public class PyFeatureCollection extends SimpleProcessingCollection {
 
     SimpleFeature readNext() {
         try {
-            return (SimpleFeature) gen.next().__getattr__("_feature").__tojava__(SimpleFeature.class);
+            PyObject n = gen.__getattr__("next").__call__();
+            return (SimpleFeature) n.__getattr__("_feature").__tojava__(SimpleFeature.class);
+            //return (SimpleFeature) gen.next().__getattr__("_feature").__tojava__(SimpleFeature.class);
         }
         catch(Exception e) {
-            //TODO: there has to be some better way to check for specific python exception type
-            if (e instanceof PyException && "StopIteration".equals(e.toString().trim())) {
+            if (isStopIteration(e)) {
                 return null;
             }
             else {
@@ -69,6 +84,23 @@ public class PyFeatureCollection extends SimpleProcessingCollection {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    boolean isStopIteration(Exception e) {
+        //TODO: there has to be some better way to check for specific python exception type
+        if (e instanceof PyException) {
+            PyException pye = (PyException)e;
+
+            if ("StopIteration".equals(e.toString().trim())) {
+                return true;
+            }
+
+
+            if (pye.type.toString().contains("exceptions.StopIteration")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     class PyFeatureIterator implements SimpleFeatureIterator {
