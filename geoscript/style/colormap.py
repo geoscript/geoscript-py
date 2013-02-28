@@ -52,7 +52,11 @@ class ColorMap(Symbolizer):
     for v in self.values:
       entry = f.createColorMapEntry()
       entry.setQuantity(Expression(v[0]).expr)
-      entry.setColor(Color(v[1]).expr)
+
+      col = Color(v[1])
+      entry.setColor(col.expr)
+      entry.setOpacity(Expression(col._color.alpha/255.0).expr)
+
       map.addColorMapEntry(entry)
 
     return map
