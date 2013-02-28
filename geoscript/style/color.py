@@ -192,10 +192,19 @@ class Color(Expression):
          else:
            # try as hex string
            val = val[1:] if val[0] == "#" else val
+
            # convert 3 digit to 6
            if len(val) == 3:
              val = ''.join([val[i]+val[i] for i in range(0,3)])
-           col = awt.Color(*[int('0x'+x,0) for x in val[0:2],val[2:4],val[4:6]])
+
+           # support 8 and 6 digit
+           if len(val) == 8:
+             # move alpha to end
+             val = val[2:] + val[:2]
+
+           col = awt.Color(*[int('0x'+x,0) 
+             for x in [val[i:i+2] for i in range(0, len(val), 2)]])
+             #for x in val[0:2],val[2:4],val[4:6]])
       else:
          # default
          col = awt.Color(0,0,0)
@@ -213,9 +222,26 @@ class Color(Expression):
     return (col.red, col.green, col.blue)
   rgb = property(getrgb,None,None,"The RGB value of the color")
 
+  def getrgba(self):
+    col = self._color
+    return (col.red, col.green, col.blue, col.alpha)
+  rgba = property(getrgba,None,None,"The RGBA value of the color")
+   
+  def getargb(self):
+    col = self._color
+    return (col.alpha, col.red, col.green, col.blue)
+  argb = property(getrgba,None,None,"The ARGB value of the color")
+
   def gethex(self):
-    return ''.join([lang.String.format('%02x', x) for x in self.rgb])
+    return self._hex(self.rgb)
   hex = property(gethex,None,None,"The hex value of the color")
+
+  def getahex(self):
+    return self._hex(self.argb)
+  ahex = property(gethex,None,None,"The hex value, with alpha, of the color")
+
+  def _tohex(self, vals):
+    return ''.join([lang.String.format('%02x', x) for x in vals])
 
   def gethsl(self): 
     r,g,b = [x/255.0 for x in self.rgb]
@@ -237,6 +263,9 @@ class Color(Expression):
 
     return [x for x in [h, s, l]];        
   hsl = property(gethsl,None,None,"The HSL/HLS value of the color")
+
+  def alpha(self, a):
+    return Color(tuple(list(self.rgb) + [a]))
 
   def interpolate(self, color, n=10, method='linear'):
     """  
