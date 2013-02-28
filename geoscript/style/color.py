@@ -264,6 +264,9 @@ class Color(Expression):
     return [x for x in [h, s, l]];        
   hsl = property(gethsl,None,None,"The HSL/HLS value of the color")
 
+  def opacity(self, o):
+    return self.alpha(int(255*o))
+
   def alpha(self, a):
     return Color(tuple(list(self.rgb) + [a]))
 
@@ -277,11 +280,17 @@ class Color(Expression):
     inclusive of this and the specified color and returns a list of *n*+1 
     values.
     """  
+    color = Color(color)
     hsl1,hsl2 = self.hsl, color.hsl 
     dhsl = map(lambda x: x[1]-x[0], zip(hsl1,hsl2)) 
 
-    return [Color.fromHSL(map(lambda x,y: x + (r/float(n))*y,hsl1,dhsl)) 
+    colors = [Color.fromHSL(map(lambda x,y: x + (r/float(n))*y,hsl1,dhsl)) 
       for r in util.interpolate(0, n, n, method)]
+    if self._color.alpha != color._color.alpha:
+      alphas = util.interpolate(self._color.alpha,color._color.alpha,n,method)
+      colors = map(lambda (c,a): c.alpha(int(a)), zip(colors, alphas))      
+
+    return colors
 
   @classmethod
   def fromHSL(cls, hsl):
