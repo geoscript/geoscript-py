@@ -233,7 +233,7 @@ class Color(Expression):
   argb = property(getrgba,None,None,"The ARGB value of the color")
 
   def gethex(self):
-    return self._hex(self.rgb)
+    return self._tohex(self.rgb)
   hex = property(gethex,None,None,"The hex value of the color")
 
   def getahex(self):
@@ -311,6 +311,18 @@ class Color(Expression):
       b = Color._hue2rgb(p, q, h - 1/3.0);
 
     return Color(tuple([int(round(255*x)) for x in [r,g,b]]))
+
+  @classmethod
+  def random(cls, n):
+    """
+    Returns a generator of random colors.
+
+    *n* is the number of colors to generate.
+    """
+    colors = _colors.values()
+    from random import randint
+    for i in range(n):
+      yield Color(colors[randint(0,len(colors)-1)])
 
   @classmethod
   def _hue2rgb(cls, p, q, t):
