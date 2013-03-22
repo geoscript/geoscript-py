@@ -36,7 +36,7 @@ class DocCmd(Command):
           self.distribution.dist_files.append(file)
 
 
-ver='1.2-20121010'
+ver='1.2-20130322'
 jars = ['jars/%s' % (f) for f in os.listdir('jars')]
 setup(cmdclass={'src': SrcCmd, 'doc': DocCmd}, 
       name='geoscript',
