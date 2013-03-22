@@ -25,7 +25,7 @@ Source
 
   .. cssclass:: external  
 
-     * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-src.tar.gz`_
+     * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-src.tar.gz>`_
      * `zip <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-src.zip>`_
 
 Doc
