@@ -6,7 +6,7 @@ Downloads
 Stable
 ------
 
-The current stable release of GeoScript PY is 1.1. Select a file to download from below.
+The current stable release of GeoScript PY is 1.2. Select a file to download from below.
 
 Full
 ^^^^
@@ -15,8 +15,8 @@ Full
 
   .. cssclass:: external  
 
-    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.tar.gz>`_ 
-    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.zip>`_
+    * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2.tar.gz>`_
+    * `zip <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2.zip>`_
          
 Source 
 ^^^^^^
@@ -25,8 +25,8 @@ Source
 
   .. cssclass:: external  
 
-     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-src.tar.gz>`_ 
-     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-src.zip>`_ 
+     * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-src.tar.gz`_
+     * `zip <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-src.zip>`_
 
 Doc
 ^^^
@@ -35,17 +35,17 @@ Doc
 
   .. cssclass:: external  
         
-     * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-doc.tar.gz>`_ 
-     * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.1-doc.zip>`_ 
+     * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-doc.tar.gz>`_
+     * `zip <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2-doc.zip>`_
 
 
 Latest
 ------
 
-The latest tagged build is 1.2-20121010.
+The latest tagged build is 1.3-20130322.
 
-    * `tar.gz <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.tar.gz>`_ 
-    * `zip <http://github.com/downloads/jdeolive/geoscript-py/geoscript-1.2-20121010.zip>`_
+    * `tar.gz <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.3-20130322.tar.gz>`_ 
+    * `zip <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.3-20130322.zip>`_
 
 .. warning::
 

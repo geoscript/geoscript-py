@@ -6,7 +6,5 @@ process
 
   .. automodule:: geoscript.process
 
-      .. autofunction:: Process.lookup
-
       .. autoclass:: Process
          :members: list, lookup, inputs, outputs, run
