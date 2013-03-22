@@ -38,15 +38,18 @@ Install Setuptools
 Install GeoScript
 -----------------
 
-#. Download `GeoScript <http://cloud.github.com/downloads/jdeolive/geoscript-py/geoscript-1.1.zip>`_
+#. Download `GeoScript <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.2.zip>`_
+
+   .. note:: Some newer features are only avaialble in the 
+     `latest 1.3 build <http://gridlock.opengeo.org/geoscript/py/release/geoscript-1.3-latest.zip>`_, which is still considered experimental.
 
 #. Unpack the GeoScript archive::
 
-     unzip geoscript-1.1.zip 
+     unzip geoscript-1.2.zip 
 
 #. Change directory into the root of the unpacked tarball and execute :file:`setup.py`::
 
-     cd geoscript-1.1
+     cd geoscript-1.2
      jython setup.py install
      
    .. note:: 
