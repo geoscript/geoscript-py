@@ -24,7 +24,12 @@ A JRE can be downloaded from `Sun Microsystems <http://java.sun.com/javase/downl
 Install Jython
 --------------
 
-Jython version greater than *2.5.1* is required for GeoScript. The current version can be downloaded from http://www.jython.org/.
+Jython version greater than *2.5.1* is required for GeoScript. The current version can be downloaded from http://www.jython.org/. After install ensure that 
+the Jython :file:`bin` directory is on the path::
+
+  export PATH=$PATH:<JYTHON_DIR>/bin
+
+Where `<JYTHON_DIR>` is the root Jython installation directory. 
 
 Install Setuptools
 ------------------
@@ -47,7 +52,7 @@ Install GeoScript
 
      unzip geoscript-1.2.zip 
 
-#. Change directory into the root of the unpacked tarball and execute :file:`setup.py`::
+#. Change directory into the root of the unpacked archive and execute :file:`setup.py`::
 
      cd geoscript-1.2
      jython setup.py install
