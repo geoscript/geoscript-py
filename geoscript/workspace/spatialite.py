@@ -25,3 +25,22 @@ class SpatiaLite(Workspace):
 
     params = {'database': db, 'dbtype': 'spatialite'}
     Workspace.__init__(self, SpatiaLiteDataStoreFactory(), params)
+
+  def version(self):
+    """
+    Provides version info about the SpatiaLite, Proj, and GEOS libraries.
+    """
+    cx = self._store.getDataSource().getConnection()
+    try:
+      st = cx.createStatement();
+      rs = st.executeQuery(
+        "SELECT spatialite_version(), proj4_version(), geos_version()"); 
+      rs.next()
+      return {
+        'spatialite': rs.getString(1), 
+        'proj': rs.getString(2), 
+        'geos': rs.getString(3)
+      }
+    finally:
+      cx.close()
+  
