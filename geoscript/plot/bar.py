@@ -16,6 +16,11 @@ def xy(data, name='', xlabel='', ylabel=''):
     series.add(x,y)
 
   dataset =  XYSeriesCollection(series)
+  if len(data) > 1:
+    # hack to set interval width
+    x0, x1 = data[0][0], data[1][0]
+    dataset.setIntervalWidth(x1 - x0)
+
   chart = ChartFactory.createXYBarChart(None, xlabel, False, ylabel, dataset,
     PlotOrientation.VERTICAL, True, True, False)
   return Chart(chart)
