@@ -312,7 +312,7 @@
   </profiles>
 
   <properties>
-    <gt.version>10-SNAPSHOT</gt.version>
+    <gt.version>11-SNAPSHOT</gt.version>
   </properties>
 
 </project>
