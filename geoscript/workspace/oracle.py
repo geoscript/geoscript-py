@@ -2,10 +2,10 @@
 The :mod:`workspace.oracle` module a workspace implementation based on the contents of a Oracle database.
 """
 from java.lang.System import getProperty as sysprop
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.oracle import OracleNGDataStoreFactory
 
-class Oracle(Workspace):
+class Oracle(DB):
   """
   A subclass of :class:`Workspace <geoscript.workspace.workspace.Workspace>` for a Oracle database. Layers of the workspace correspond to tables in the database.
 

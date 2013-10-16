@@ -12,7 +12,7 @@ from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
 from org.geotools.data import FeatureSource, FeatureStore
 from org.geotools.data import DefaultQuery, Query, Transaction
-from org.geotools.factory import CommonFactoryFinder
+from org.geotools.factory import CommonFactoryFinder, Hints
 from org.geotools.feature import FeatureCollection, FeatureCollections
 from org.opengis.filter.sort import SortOrder
 
@@ -106,11 +106,14 @@ class Layer(object):
 
   readonly = property(getreadonly, None)
 
-  def count(self, filter=None):
+  def count(self, filter=None, params=None):
     """
     The number of features in the layer as an ``int``.
 
     *filter* is an optional :class:`Filter <geoscript.filter.Filter>` to constrains the counted set of features.
+
+    *params* is an optional ``dict`` of parameters to plug into the query. This 
+    argument is only relevant if the layer has been defined with such parameters.
 
     >>> l = Layer()
     >>> l.count()
@@ -125,7 +128,13 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    count = self._source.getCount(DefaultQuery(self.name, f._filter))
+    q = DefaultQuery(self.name, f._filter)
+
+    # virtual table parameters
+    if params is not None:
+      q.setHints(Hints(Hints.VIRTUAL_TABLE_PARAMETERS, params))
+
+    count = self._source.getCount(q)
     if count == -1:
       count = 0
       # calculate manually 
@@ -134,11 +143,14 @@ class Layer(object):
 
     return count
 
-  def bounds(self, filter=None):
+  def bounds(self, filter=None, params=None):
     """
     The :class:`Bounds <geoscript.geom.Bounds>` of the layer.
 
     *filter* is an optional :class:`Filter <geoscript.filter.Filter>` to constrains the returned bounds.
+
+    *params* is an optional ``dict`` of parameters to plug into the query. This 
+    argument is only relevant if the layer has been defined with such parameters.
 
     >>> l = Layer()
     >>> from geoscript import geom 
@@ -154,6 +166,11 @@ class Layer(object):
 
     f = Filter(filter) if filter else Filter.PASS
     q = DefaultQuery(self.name, f._filter)
+
+    # virtual table parameters
+    if params is not None:
+      q.setHints(Hints(Hints.VIRTUAL_TABLE_PARAMETERS, params))
+
     e = self._source.getBounds(q)
 
     if not e:
@@ -179,7 +196,7 @@ class Layer(object):
         fit.close()
 
 
-  def features(self, filter=None, transform=None, sort=None):
+  def features(self, filter=None, transform=None, sort=None, params=None):
     """
     Generator over the :class:`Feature <geoscript.feature.Feature>` s of the layer.
 
@@ -193,6 +210,9 @@ class Layer(object):
     which features are iterated over. The first value of each tuple is the name
     of a field to sort on. The second value is one of the strings 'ASC' or 
     'DESC', representing ascending and decending sort order respectively. 
+
+    *params* is an optional ``dict`` of parameters to plug into the query. This 
+    argument is only relevant if the layer has been defined with such parameters.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -209,7 +229,7 @@ class Layer(object):
     >>> [str(f.geom) for f in l.features(transform=tx)]
     ['POINT (2 4)', 'POINT (6 8)']
     """
-    c = self.cursor(filter, sort)
+    c = self.cursor(filter, sort, params)
     for f in c:
       if transform:
          result  = transform(f)
@@ -220,7 +240,7 @@ class Layer(object):
 
     c.close()
 
-  def cursor(self, filter=None, sort=None):
+  def cursor(self, filter=None, sort=None, params=None):
     """
     Returns a :class:`Cursor <geoscript.layer.cursor.Cursor>` over the features of the layer.
 
@@ -230,6 +250,9 @@ class Layer(object):
     which features are iterated over. The first value of each tuple is the name
     of a field to sort on. The second value is one of the strings 'ASC' or 
     'DESC', representing ascending and decending sort order respectively. 
+
+    *params* is an optional ``dict`` of parameters to plug into the query. This 
+    argument is only relevant if the layer has been defined with such parameters.
 
     >>> l = Layer()
     >>> from geoscript import geom
@@ -262,6 +285,7 @@ class Layer(object):
 
     f = Filter(filter) if filter else Filter.PASS
     q = DefaultQuery(self.name, f._filter)
+    
     if sort:
       sort = sort if isinstance(sort, list) else [sort]
       sortBy = [] 
@@ -273,11 +297,15 @@ class Layer(object):
     if self.proj:
       q.coordinateSystem = self.proj._crs
 
+    # virtual table parameters
+    if params is not None:
+      q.setHints(Hints(Hints.VIRTUAL_TABLE_PARAMETERS, params))
+
     fcol = self._source.getFeatures(q)
     #r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
     return Cursor(fcol, self)
 
-  def first(self, filter=None, sort=None):
+  def first(self, filter=None, sort=None, params=None):
     """
     Returns the first :class:`Feature <geoscript.feature.feature.Feature>` that
     matches a query.
@@ -290,6 +318,9 @@ class Layer(object):
     of a field to sort on. The second value is one of the strings 'ASC' or 
     'DESC', representing ascending and decending sort order respectively. 
 
+    *params* is an optional ``dict`` of parameters to plug into the query. This 
+    argument is only relevant if the layer has been defined with such parameters.
+
     >>> l = Layer()
     >>> from geoscript import geom
     >>> l.add([geom.Point(1,2)])
@@ -299,7 +330,7 @@ class Layer(object):
     >>> l.first('INTERSECTS(geom,POINT(3 4))').geom
     POINT (3 4)
     """
-    c = self.cursor(filter, sort)
+    c = self.cursor(filter, sort, params)
     f = c.next() 
     c.close()
     return f

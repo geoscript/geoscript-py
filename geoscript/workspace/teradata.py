@@ -1,8 +1,8 @@
 import os
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.teradata import TeradataDataStoreFactory
 
-class Teradata(Workspace):
+class Teradata(DB):
   def __init__(self, db, host='localhost', port=1025, user=None, passwd=None):
 
     user = user if user else db

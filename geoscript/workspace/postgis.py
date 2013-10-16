@@ -2,10 +2,10 @@
 The :mod:`workspace.postgis` module a workspace implementation based on the contents of a PostGIS database.
 """
 from java.lang.System import getProperty as sysprop
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.postgis import PostgisNGDataStoreFactory
 
-class PostGIS(Workspace):
+class PostGIS(DB):
   """
   A subclass of :class:`Workspace <geoscript.workspace.workspace.Workspace>` for a PostGIS database. Layers of the workspace correspond to tables in the database.
 
@@ -33,4 +33,4 @@ class PostGIS(Workspace):
               'user':user, 'passwd': passwd, 'dbtype': 'postgis', 
               'Estimated extends': estimated_extent}
     
-    Workspace.__init__(self, PostgisNGDataStoreFactory(), params)
+    DB.__init__(self, PostgisNGDataStoreFactory(), params)

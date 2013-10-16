@@ -3,10 +3,10 @@ The :mod:`workspace.mysql` module a workspace implementation based on the conten
 """
 
 from java.lang.System import getProperty as sysprop
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.mysql import MySQLDataStoreFactory
 
-class MySQL(Workspace):
+class MySQL(DB):
   """
   A subclass of :class:`Workspace <geoscript.workspace.workspace.Workspace>` for a MySQL database. Layers of the workspace correspond to tables in the database.
 

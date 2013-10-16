@@ -1,4 +1,5 @@
 import unittest
+from nose import SkipTest
 from dbexts import dbexts
 from ..util import skipIfNoDB
 from geoscript import geom, feature
@@ -52,3 +53,21 @@ class WorkspaceTest:
   def testContainer(self):
     assert self.ws.keys() == self.ws.layers() 
     assert self.ws.values() == [self.ws.get(l) for l in self.ws.layers()]
+
+  def testCreateView(self):
+    from geoscript.workspace.db import DB 
+    if not isinstance(self.ws, DB):
+      raise SkipTest()
+
+    l = self.ws.createView('foo', "SELECT * FROM states WHERE \"STATE_ABBR\" = '%abbr%'", [('abbr', 'TX')])
+    assert l
+
+    assert 1 == l.count()
+
+    f = l.first()
+    assert f 
+    assert 'Texas' == f.get('STATE_NAME')
+
+    f = l.first(params={'abbr': 'NY'})
+    assert f 
+    assert 'New York' == f.get('STATE_NAME')

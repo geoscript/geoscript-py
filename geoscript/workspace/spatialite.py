@@ -3,10 +3,10 @@ The :mod:`workspace.spatialite` module a workspace implementation based on the c
 """
 
 import os
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.spatialite import SpatiaLiteDataStoreFactory
 
-class SpatiaLite(Workspace):
+class SpatiaLite(DB):
   """
   A subclass of :class:`Workspace <geoscript.workspace.workspace.Workspace>` for a SpatiaLite database. Layers of the workspace correspond to tables in the database.
 

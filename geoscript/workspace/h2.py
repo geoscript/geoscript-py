@@ -3,11 +3,11 @@ The :mod:`workspace.h2` module a workspace implementation based on the contents 
 """
 
 import os
-from geoscript.workspace import Workspace
+from geoscript.workspace.db import DB
 from org.geotools.data.h2 import H2DataStoreFactory
 from org.h2.tools import Server
 
-class H2(Workspace):
+class H2(DB):
   """
   A subclass of :class:`Workspace <geoscript.workspace.workspace.Workspace>` for an H2 database. 
 
@@ -24,7 +24,7 @@ class H2(Workspace):
       db = os.path.join(dir, db)
 
     params = {'database': db, 'dbtype': 'h2'}
-    Workspace.__init__(self, H2DataStoreFactory(), params)
+    DB.__init__(self, H2DataStoreFactory(), params)
 
   def server(self):
     s = Server()
