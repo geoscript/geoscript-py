@@ -1,6 +1,18 @@
 geoscript-py README
 ===================
 
+Build
+---------------
+Building geoscript-py is quite easy.  You will need to have git, Java, Jython, and  Maven installed.
+
+Use git to clone the repository::
+
+    git clone https://github.com/geoscript/geoscript-py.git
+
+Use maven to build, test, and package::
+
+    mvn clean install
+
 Classpath Setup
 ---------------
 
