@@ -19,7 +19,11 @@ def xy(data, name='', xlabel='', ylabel=''):
   if len(data) > 1:
     # hack to set interval width
     x0, x1 = data[0][0], data[1][0]
-    dataset.setIntervalWidth(x1 - x0)
+    if x1 > x0:
+        w = x1 - x0
+    else:
+        w = x0 - x1
+    dataset.setIntervalWidth(w)
 
   chart = ChartFactory.createXYBarChart(None, xlabel, False, ylabel, dataset,
     PlotOrientation.VERTICAL, True, True, False)

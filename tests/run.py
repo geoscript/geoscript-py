@@ -10,6 +10,6 @@ except ImportError:
 passed = nose.run()
 if passed:
   # run doc tests
-  passed = nose.run(argv=['nosetests', '--with-doctest', '../geoscript'])
+  passed = nose.run(argv=['nosetests', '--with-doctest', '--ignore-files=spatialite.py', '--ignore-files=oracle.py', '../geoscript'])
 
 sys.exit(0 if passed else 1)
