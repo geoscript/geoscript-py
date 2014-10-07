@@ -92,6 +92,18 @@ Once the GeoTools libraries are located in the :file:`jars` directory source the
 
   $ source classpath
 
+Install Python Dependencies
+---------------------------
+GeoScript also requires a few Python dependencies.  
+
+* Easy install simplejson::
+
+     (geoscript)$ easy_install simplejson
+
+* Easy install py-dom-xpath::
+
+     (geoscript)$ easy_install py-dom-xpath
+
 Install nose
 ------------
 
