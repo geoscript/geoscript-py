@@ -56,6 +56,28 @@ class GeomTest(unittest.TestCase):
     mp = geom.MultiPolygon([ [[1,2],[3,4],[5,6],[1,2]] ])
     self.assertEqual('MULTIPOLYGON (((1 2, 3 4, 5 6, 1 2)))', str(mp))
 
+  def testCircularString(self):
+    cs = geom.CircularString([6.12, 10.0],[7.07, 7.07],[10.0, 0.0])
+    self.assertEqual('CIRCULARSTRING(6.12 10.0, 7.07 7.07, 10.0 0.0)', str(cs))
+  
+  def testCircularRing(self):
+    cr = geom.CircularRing( [2.0, 1.0], [1.0, 2.0], [0.0, 1.0], [1.0, 0.0], [2.0, 1.0])
+    self.assertEqual('CIRCULARSTRING(2.0 1.0, 1.0 2.0, 0.0 1.0, 1.0 0.0, 2.0 1.0)', str(cr))
+
+  def testCompoundCurve(self):
+    cc = geom.CompoundCurve(
+        geom.CircularString([10.0, 10.0], [0.0, 20.0], [-10.0, 10.0]),
+        geom.LineString([-10.0, 10.0], [-10.0, 0.0], [10.0, 0.0], [5.0, 5.0])
+    )
+    self.assertEqual('COMPOUNDCURVE(CIRCULARSTRING(10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 5.0 5.0))', str(cc))
+
+  def testCompoundRing(self):
+    cc = geom.CompoundRing(
+        geom.CircularString([10.0, 10.0], [0.0, 20.0], [-10.0, 10.0]),
+        geom.LineString([-10.0, 10.0], [-10.0, 0.0], [10.0, 0.0], [10.0, 10.0])
+    )
+    self.assertEqual('COMPOUNDCURVE(CIRCULARSTRING(10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 10.0 10.0))', str(cc))
+
   def testBounds(self):
     b = geom.Bounds(1.0, 2.0, 3.0, 4.0)
     self.assertEqual('(1.0, 2.0, 3.0, 4.0)', str(b))
@@ -107,6 +129,10 @@ class GeomTest(unittest.TestCase):
     self.assertEqual('Point',g.geometryType)
     self.assertEqual(1,g.x)
     self.assertEqual(2,g.y)
+
+  def testReadCurvedWKT(self):
+    g = geom.readWKT('CIRCULARSTRING(6.12 10.0, 7.07 7.07, 10.0 0.0)')
+    self.assertEqual('CircularString', g.geometryType)
 
   def testReadWKB(self):
     p = geom.Point(1,2)

@@ -5,6 +5,10 @@ from polygon import Polygon
 from multipoint import MultiPoint
 from multilinestring import MultiLineString
 from multipolygon import MultiPolygon
+from circularstring import CircularString
+from circularring import CircularRing
+from compoundcurve import CompoundCurve
+from compoundring import CompoundRing
 from bounds import Bounds
 from geom import Geometry
 from geom import prepare, simplify, transform, buffer, delaunay, voronoi
@@ -22,3 +26,7 @@ core.register(MultiPoint)
 core.register(MultiLineString)
 core.register(MultiPolygon)
 core.register(Bounds)
+core.register(CircularString)
+core.register(CircularRing)
+core.register(CompoundCurve)
+core.register(CompoundRing)

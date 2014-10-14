@@ -1,4 +1,5 @@
-from com.vividsolutions.jts.io import WKTReader, WKTWriter 
+from com.vividsolutions.jts.io import WKTWriter
+from org.geotools.geometry.jts import WKTReader2 as WKTReader
 from geoscript.util import deprecated
 
 def readWKT(wkt):
