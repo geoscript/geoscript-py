@@ -16,3 +16,5 @@ MySQL = _import('mysql', 'MySQL')
 Teradata = _import('teradata', 'Teradata')
 Property = _import('property', 'Property')
 Oracle = _import('oracle', 'Oracle')
+GeoPackage = _import('geopackage', 'GeoPackage')
+
