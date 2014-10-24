@@ -15,5 +15,9 @@ geom
      multipoint
      multilinestring
      multipolygon
+     circularstring
+     circularring
+     compoundcurve
+     compoundring
      bounds
      io/index
