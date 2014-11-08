@@ -174,3 +174,53 @@ class GeomTest(unittest.TestCase):
    
     poly = geom.Polygon([[1,2],[3,4],[5,6],[1,2]])
     assert str(poly) == str(geom.readGML(geom.writeGML(poly,ver=3.2),ver=3.2)) 
+
+  def testInterpolatePoint(self):
+    line = geom.LineString(
+        (1137466.548141059, 650434.9943107369),
+        (1175272.4129268457, 648011.541439853),
+        (1185935.6055587344, 632986.1336403737)
+    )
+
+    # start
+    point1 = line.interpolatePoint(0)
+    assert str(line.startPoint) == str(point1)
+
+    # middle
+    point2 = line.interpolatePoint(0.5)
+    assert "POINT (1165562.9204493894 648633.9448037925)" == str(point2)
+
+    # end
+    point3 = line.interpolatePoint(1.0)
+    assert str(line.endPoint) == str(point3)
+
+  def testLocatePoint(self):
+    line = geom.LineString(
+        (1137466.548141059, 650434.9943107369),
+        (1175272.4129268457, 648011.541439853),
+        (1185935.6055587344, 632986.1336403737)
+    )
+    point = geom.Point(1153461.34, 649950.30)
+    position = line.locatePoint(point)
+    self.assertAlmostEqual(0.284, position, places=3)
+
+  def testPlacePoint(self):
+    line = geom.LineString(
+        (1137466.548141059, 650434.9943107369),
+        (1175272.4129268457, 648011.541439853),
+        (1185935.6055587344, 632986.1336403737)
+    )
+    point1 = geom.Point(1153461.34, 649950.30)
+    point2 = line.placePoint(point1)
+    assert "POINT (1153426.8271476042 649411.899502625)" == str(point2)
+
+  def testSubLine(self):
+    line = geom.LineString(
+        (1137466.548141059, 650434.9943107369),
+        (1175272.4129268457, 648011.541439853),
+        (1185935.6055587344, 632986.1336403737)
+    )
+    subLine = line.subLine(0.33, 0.67)
+    assert "LINESTRING (1156010.153864557 649246.3016361536, 1175115.6870342216 648021.5879714314)" == str(subLine)
+
+
