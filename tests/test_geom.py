@@ -203,6 +203,8 @@ class GeomTest(unittest.TestCase):
     point = geom.Point(1153461.34, 649950.30)
     position = line.locatePoint(point)
     self.assertAlmostEqual(0.284, position, places=3)
+    position = line.locatePoint(1153461.34, 649950.30)
+    self.assertAlmostEqual(0.284, position, places=3)
 
   def testPlacePoint(self):
     line = geom.LineString(
@@ -213,6 +215,8 @@ class GeomTest(unittest.TestCase):
     point1 = geom.Point(1153461.34, 649950.30)
     point2 = line.placePoint(point1)
     assert "POINT (1153426.8271476042 649411.899502625)" == str(point2)
+    point3 = line.placePoint(1153461.34, 649950.30)
+    assert "POINT (1153426.8271476042 649411.899502625)" == str(point3)
 
   def testSubLine(self):
     line = geom.LineString(

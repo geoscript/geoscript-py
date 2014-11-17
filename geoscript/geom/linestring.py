@@ -41,25 +41,27 @@ class LineString(_LineString):
       coordinate = indexedLine.extractPoint(position * length)
       return Point(coordinate.x, coordinate.y)
 
-  def locatePoint(self, point):
+  def locatePoint(self, *coord):
       """
       Locate the position of the :class:`point <geoscript.geom.Point>` along this :class:`LineString <geoscript.geom.LineString>`. The position returned is a number between 0 and 1.
 
-      *point* A :class:`Point <geoscript.geom.Point>`
+      *coord* A :class:`Point <geoscript.geom.Point>` or a variable list of x,y,z arguments.
       
       """
+      point = coord[0] if isinstance(coord[0], Point) else Point(*coord)
       indexedLine = LengthIndexedLine(self)
       position = indexedLine.indexOf(point.coordinate)
       percentAlong = position / self.getLength()
       return percentAlong
   
-  def placePoint(self, point):
+  def placePoint(self, *coord):
       """
       Place or snap the :class:`point <geoscript.geom.Point>` to the `LineString <geoscript.geom.LineString>`. This method returns a new placed `Point <geoscript.geom.Point>`.
 
-      *point* A :class:`Point <geoscript.geom.Point>`
+      *coord* A :class:`Point <geoscript.geom.Point>` or a variable list of x,y,z arguments.
 
       """
+      point = coord[0] if isinstance(coord[0], Point) else Point(*coord)
       indexedLine = LengthIndexedLine(self)
       position = indexedLine.indexOf(point.coordinate)
       coord = indexedLine.extractPoint(position)
