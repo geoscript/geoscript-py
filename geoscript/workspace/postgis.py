@@ -24,13 +24,16 @@ class PostGIS(Workspace):
   *estimated_extent* is an optional flag that controls whether to use the PostGIS 
   ``estimated_extent`` function when calculating bounds.
 
+  *fetch_size* is the optional size of cursor result sets fetched from the 
+  server. The default value is 2000.
   """
 
   def __init__(self, db, host='localhost', port=5432, schema='public', 
-               user=sysprop('user.name'), passwd=None, estimated_extent=False):
+               user=sysprop('user.name'), passwd=None, estimated_extent=False,
+               fetch_size=2000):
 
     params = {'host': host, 'port': port, 'schema': schema, 'database': db,
               'user':user, 'passwd': passwd, 'dbtype': 'postgis', 
-              'Estimated extends': estimated_extent}
+              'Estimated extends': estimated_extent, 'fetch size': fetch_size}
     
     Workspace.__init__(self, PostgisNGDataStoreFactory(), params)
