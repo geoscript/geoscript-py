@@ -7,6 +7,7 @@ from com.vividsolutions.jts.geom import GeometryFactory, CoordinateFilter
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
+from com.vividsolutions.jts.densify import Densifier
 from com.vividsolutions.jts.triangulate import DelaunayTriangulationBuilder
 from com.vividsolutions.jts.triangulate import VoronoiDiagramBuilder
 from com.vividsolutions.jts.operation.buffer import BufferOp, BufferParameters
@@ -46,7 +47,19 @@ def simplify(g, tol):
   simplified geometry will be within this distance from the original geometry.
   """
   return DP.simplify(g, tol)
-   
+
+def densify(g, tol):
+  """
+  Densifies a geometry object adding verticies along the line segments of the 
+  geometry.
+
+  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to densifiy. 
+
+  *tol* is the distance tolerance such that all ine segments in the densified 
+  geometry will be no longer than the distance tolereance
+  """
+  return Densifier.densify(g, tol)
+
 def transform(g, dx=0, dy=0, sx=1, sy=1, shx=0, shy=0, r=0): 
   """
   Tranforms a geometry with an affine transformation.
