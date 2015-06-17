@@ -7,6 +7,7 @@ from com.vividsolutions.jts.geom import GeometryFactory, CoordinateFilter
 from com.vividsolutions.jts.geom import Geometry as _Geometry
 from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
 from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
+from com.vividsolutions.jts.simplify import TopologyPreservingSimplifier as TP
 from com.vividsolutions.jts.densify import Densifier
 from com.vividsolutions.jts.triangulate import DelaunayTriangulationBuilder
 from com.vividsolutions.jts.triangulate import VoronoiDiagramBuilder
@@ -37,7 +38,7 @@ def prepare(g):
   """
   return _prepfactory.create(g)
   
-def simplify(g, tol):
+def simplify(g, tol, topology=False):
   """
   Simplifies a geometry object using the Douglas-Peucker simplfication method.
   
@@ -45,8 +46,12 @@ def simplify(g, tol):
 
   *tol* is the distance tolernance such that all veriticies in the resulting
   simplified geometry will be within this distance from the original geometry.
+
+  *topology* is a flag controlling whether topology should be preserved. The 
+  default is 
   """
-  return DP.simplify(g, tol)
+  simplifier = TP if topology is True else DP
+  return simplifier.simplify(g, tol)
 
 def densify(g, tol):
   """
