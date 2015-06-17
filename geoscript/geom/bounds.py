@@ -134,15 +134,17 @@ class Bounds(ReferencedEnvelope):
    from geoscript.geom import Polygon
    return Polygon(corners + [corners[0]])
 
-  def tile(self, res):
+  def tile(self, resx, resy=None):
    """
    Partitions the bounding box into a set of smaller bounding boxes.
 
-   The ``res`` argument is the resolution to tile at and should be in the range
-   (0,1].
+   The ``resx`` argument is the horizontal resolution to tile at and should be in the range
+   (0,1]. The optional ``resy`` is the vertical resolution and defaults to the same value as
+    resx.
    """
-   dx = self.width * res
-   dy = self.height * res
+   resy = resy if resy is not None else resx
+   dx = self.width * resx
+   dy = self.height * resy
 
    y = self.south
    while y < self.north:
