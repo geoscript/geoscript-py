@@ -12,7 +12,7 @@ from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
 from org.geotools.data import FeatureSource, FeatureStore
 from org.geotools.data import DefaultQuery, Query, Transaction
-from org.geotools.factory import CommonFactoryFinder
+from org.geotools.factory import CommonFactoryFinder, Hints
 from org.geotools.feature import FeatureCollection, FeatureCollections
 from org.opengis.filter.sort import SortOrder
 
@@ -220,7 +220,7 @@ class Layer(object):
 
     c.close()
 
-  def cursor(self, filter=None, sort=None):
+  def cursor(self, filter=None, sort=None, hints=None):
     """
     Returns a :class:`Cursor <geoscript.layer.cursor.Cursor>` over the features of the layer.
 
@@ -272,6 +272,9 @@ class Layer(object):
         q.setSortBy(sortBy)
     if self.proj:
       q.coordinateSystem = self.proj._crs
+
+    if hints is not None:
+      q.setHints(Hints(hints))
 
     fcol = self._source.getFeatures(q)
     #r = self._source.dataStore.getFeatureReader(q,Transaction.AUTO_COMMIT)
