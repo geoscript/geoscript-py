@@ -1,8 +1,11 @@
 import sys, java, unittest
-import simplejson as json 
 import xpath
 from xml.dom import minidom as dom
 from geoscript import geom, proj, feature
+try:
+  import json
+except ImportError:
+  import simplejson as json
 
 class Feature_Test:
 
