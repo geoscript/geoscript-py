@@ -96,8 +96,13 @@ class Feature(object):
   """
 
   def getbounds(self):
-    if self.geom:
-       return geom.Bounds(prj=self.schema.proj, env=self.geom.getEnvelopeInternal())
+    bounds = geom.Bounds()
+    for val in self._feature.getAttributes():
+      if val is not None and isinstance(val, geom.Geometry):
+        bounds.expand(val.envelopeInternal)
+
+    if not bounds.isNull():
+      return bounds
 
   bounds = property(getbounds)
   """
