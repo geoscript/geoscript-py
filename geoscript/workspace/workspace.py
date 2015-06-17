@@ -118,6 +118,16 @@ class Workspace:
      self._store.createSchema(schema._type) 
      return self.get(name)
 
+  def remove(self, name):
+    """
+    Removes a layer from the workspace.
+
+    *name* is the name of the layer to remove.
+
+    Note: This method is not supported by all geotools stores and may throw an exception.
+    """
+    self._store.removeSchema(name)
+
   def add(self, layer, name=None, chunk=1000):
      """
      Adds an existing layer to the workspace.
