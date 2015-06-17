@@ -21,7 +21,7 @@ class ProjTest(unittest.TestCase):
     assertClose(self, 34758, int(b.west))
     assertClose(self, 359549, int(b.south))
     assertClose(self, 1883159, int(b.east))
-    assertClose(self, 1735541, int(b.north))
+    assertClose(self, 1736633, int(b.north))
     assert p == b.proj
 
     b = p.geobounds
