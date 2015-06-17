@@ -117,14 +117,22 @@ class Bounds(ReferencedEnvelope):
     """
     self.expandToInclude(other)
     return self
-   
+
+  def corners(self):
+   """
+   Returns 4 tuples representing the 4 corners of the Bounds. The ordering is:
+   (west,south), (west,north), (east, north), (east, south)
+   """
+   return [(self.west,self.south), (self.west,self.north), 
+      (self.east,self.north), (self.east,self.south)]
+
   def toPolygon(self):
    """
    Converts the bounding box to a :class:`Polygon <geoscript.geom.polygon.Polygon>`.
    """
+   corners = self.corners()
    from geoscript.geom import Polygon
-   return Polygon([(self.west,self.south), (self.west,self.north), 
-      (self.east,self.north), (self.east,self.south), (self.west,self.south)])
+   return Polygon(corners + [corners[0]])
 
   def tile(self, res):
    """
