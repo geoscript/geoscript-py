@@ -26,14 +26,14 @@
   <distributionManagement>
     <repository>
       <id>boundless</id>
-      <name>Boundless Release Repository</name>
-      <url>https://boundless.artifactoryonline.com/boundless/release/</url>
+      <name>Boundless Main Repository</name>
+      <url>http://repo.boundlessgeo.com/main/</url>
       <uniqueVersion>false</uniqueVersion>
     </repository>
     <snapshotRepository>
       <id>boundless</id>
       <name>Boundless Snapshot Repository</name>
-      <url>https://boundless.artifactoryonline.com/boundless/snapshot/</url>
+      <url>http://repo.boundlessgeo.com/snapshot/</url>
       <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
    </distributionManagement>
