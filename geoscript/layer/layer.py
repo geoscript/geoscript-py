@@ -12,7 +12,8 @@ from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
 from org.geotools.data import FeatureSource, FeatureStore
 from org.geotools.data import DefaultQuery, Query, Transaction
-from org.geotools.factory import CommonFactoryFinder, Hints
+from org.geotools.factory import CommonFactoryFinder
+from org.geotools.util.factory import Hints
 from org.geotools.feature import FeatureCollection, FeatureCollections
 from org.opengis.filter.sort import SortOrder
 
@@ -542,7 +543,7 @@ class Layer(object):
     try:
       from net.opengis.wfs import WfsFactory
       from org.geotools.wfs.v1_1 import WFS, WFSConfiguration
-      from org.geotools.xml import Encoder
+      from org.geotools.xsd import Encoder
     except ImportError:
       raise Exception('toGML() not available, GML libraries not on classpath.') 
 

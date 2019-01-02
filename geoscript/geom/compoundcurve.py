@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import Coordinate
+from org.locationtech.jts.geom import Coordinate
 from org.geotools.geometry.jts import CompoundCurve as _CompoundCurve
 from org.geotools.geometry.jts import CurvedGeometryFactory
 from linestring import LineString

@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import Coordinate
+from org.locationtech.jts.geom import Coordinate
 from org.geotools.geometry.jts import CircularRing as _CircularRing
 from org.geotools.geometry.jts import CurvedGeometryFactory
 from java.lang import Double

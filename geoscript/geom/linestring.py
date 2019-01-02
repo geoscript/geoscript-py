@@ -1,6 +1,6 @@
-from com.vividsolutions.jts.geom import Coordinate
-from com.vividsolutions.jts.geom import LineString as _LineString
-from com.vividsolutions.jts.linearref import LengthIndexedLine
+from org.locationtech.jts.geom import Coordinate
+from org.locationtech.jts.geom import LineString as _LineString
+from org.locationtech.jts.linearref import LengthIndexedLine
 from geoscript import core
 from geoscript.geom import Point
 import geom

@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.io import WKBReader, WKBWriter
+from org.locationtech.jts.io import WKBReader, WKBWriter
 from geoscript.util import bytes, deprecated
 
 def readWKB(wkb, base=16):

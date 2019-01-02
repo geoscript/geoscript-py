@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.io import WKTWriter
+from org.locationtech.jts.io import WKTWriter
 from org.geotools.geometry.jts import WKTReader2 as WKTReader
 from geoscript.util import deprecated
 

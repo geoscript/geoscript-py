@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import MultiPoint as _MultiPoint
+from org.locationtech.jts.geom import MultiPoint as _MultiPoint
 from geoscript import core
 from point import Point
 import geom

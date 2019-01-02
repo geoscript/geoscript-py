@@ -7,7 +7,7 @@ from java import io, lang
 from org.opengis.filter import Filter as _Filter
 from org.geotools.filter.text.cql2 import CQL
 from org.geotools.filter.text.ecql import ECQL
-from org.geotools.xml import Parser, Encoder
+from org.geotools.xsd import Parser, Encoder
 from org.geotools.factory import CommonFactoryFinder
 from geoscript import core
 

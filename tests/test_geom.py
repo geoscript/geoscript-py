@@ -2,7 +2,7 @@ import unittest
 from .util import assertClose
 from geoscript import geom
 from geoscript.util import bytes
-from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
+from org.locationtech.jts.geom import Coordinate, GeometryFactory
 
 class GeomTest(unittest.TestCase):
 

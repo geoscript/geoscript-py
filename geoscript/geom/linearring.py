@@ -1,5 +1,5 @@
-from com.vividsolutions.jts.geom import Coordinate
-from com.vividsolutions.jts.geom import LinearRing as _LinearRing
+from org.locationtech.jts.geom import Coordinate
+from org.locationtech.jts.geom import LinearRing as _LinearRing
 from linestring import LineString
 from geoscript import core
 import geom
