@@ -7,8 +7,8 @@ used in styles or for custom filter processing.
 import java
 import weakref
 import inspect
-from org.geotools.factory import FactoryIteratorProvider, CommonFactoryFinder
-from org.geotools.factory import GeoTools
+from org.geotools.factory import CommonFactoryFinder
+from org.geotools.util.factory import FactoryIteratorProvider, GeoTools
 from org.geotools.filter import FunctionFactory, FunctionExpressionImpl
 
 _factory = CommonFactoryFinder.getFilterFactory(None)

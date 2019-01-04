@@ -7,7 +7,7 @@ try:
 except ImportError:
   import simplejson as json
 
-class Feature_Test:
+class Feature_Test(unittest.TestCase):
 
   @classmethod
   def setUpClass(cls):
@@ -197,7 +197,7 @@ class Feature_Test:
     assert u'1' in xp.findvalues('//gsf:x', doc) 
     assert u'1.1' in xp.findvalues('//gsf:y', doc) 
     assert u'one' in xp.findvalues('//gsf:z', doc) 
-    assert u'-125.0 50.0' in xp.findvalues('//gsf:geom/gml:Point/gml:pos', doc)
+    self.assertIn(u'-125 50', xp.findvalues('//gsf:geom/gml:Point/gml:pos', doc))
 
   def testWriteGML32(self):
     g = geom.Point(-125, 50)
@@ -211,5 +211,5 @@ class Feature_Test:
     assert u'1' in xp.findvalues('//gsf:x', doc) 
     assert u'1.1' in xp.findvalues('//gsf:y', doc) 
     assert u'one' in xp.findvalues('//gsf:z', doc) 
-    assert u'-125.0 50.0' in xp.findvalues('//gsf:geom/gml:Point/gml:pos', doc)
+    self.assertIn(u'-125 50', xp.findvalues('//gsf:geom/gml:Point/gml:pos', doc))
 
