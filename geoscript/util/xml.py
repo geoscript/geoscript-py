@@ -1,11 +1,11 @@
 import sys
 from javax.xml.namespace import QName
 from util import doInput, doOutput
-from org.geotools.xml import Parser, Encoder, Configuration
+from org.geotools.xsd import Parser, Encoder, Configuration
 from org.geotools.gml2 import GMLConfiguration as GML2
 from org.geotools.gml3 import GMLConfiguration as GML3
 from org.geotools.gml3.v3_2 import GMLConfiguration as GML32
-from org.geotools.wfs.v1_0 import WFSConfiguration as WFS10
+from org.geotools.wfs.v1_0 import WFSConfiguration_1_0 as WFS10
 from org.geotools.wfs.v1_1 import WFSConfiguration as WFS11
 from org.geotools.wfs.v2_0 import WFSConfiguration as WFS20
 from org.geotools.kml import KMLConfiguration as KML

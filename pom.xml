@@ -4,7 +4,7 @@
   <groupId>org.geoscript</groupId>
   <artifactId>geoscript-py</artifactId>
   <packaging>jar</packaging>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.5-SNAPSHOT</version>
   <name>GeoScript Python</name>
 
   <repositories>
@@ -230,24 +230,7 @@
       </plugin>
       <plugin>
        <artifactId>maven-antrun-plugin</artifactId>
-       <dependencies>
-          <dependency>
-            <groupId>org.apache.ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.8.4</version>
-          </dependency>
-          <dependency>
-            <groupId>ant-contrib</groupId>
-            <artifactId>ant-contrib</artifactId>
-            <version>1.0b3</version>
-            <exclusions>
-              <exclusion>
-                <groupId>ant</groupId>
-                <artifactId>ant</artifactId>
-              </exclusion>
-            </exclusions>
-          </dependency>
-        </dependencies>
+       <version>1.8</version>
         <executions>
           <execution>
             <id>initialize</id>
@@ -262,7 +245,7 @@
             </goals>
           </execution>
           <execution>
-            <id>package</id>
+            <id>package-jars</id>
             <phase>package</phase>
             <configuration>
               <tasks>
@@ -328,7 +311,7 @@
   </profiles>
 
   <properties>
-    <gt.version>13-SNAPSHOT</gt.version>
+    <gt.version>21-SNAPSHOT</gt.version>
   </properties>
 
 </project>

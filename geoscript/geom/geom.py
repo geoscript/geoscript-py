@@ -3,15 +3,15 @@ The :mod:`geom` module provides geometry classes and utilities for the construct
 """
 
 from java.awt.geom import AffineTransform
-from com.vividsolutions.jts.geom import GeometryFactory, CoordinateFilter
-from com.vividsolutions.jts.geom import Geometry as _Geometry
-from com.vividsolutions.jts.geom.prep import PreparedGeometryFactory
-from com.vividsolutions.jts.simplify import DouglasPeuckerSimplifier as DP
-from com.vividsolutions.jts.simplify import TopologyPreservingSimplifier as TP
-from com.vividsolutions.jts.densify import Densifier
-from com.vividsolutions.jts.triangulate import DelaunayTriangulationBuilder
-from com.vividsolutions.jts.triangulate import VoronoiDiagramBuilder
-from com.vividsolutions.jts.operation.buffer import BufferOp, BufferParameters
+from org.locationtech.jts.geom import GeometryFactory, CoordinateFilter
+from org.locationtech.jts.geom import Geometry as _Geometry
+from org.locationtech.jts.geom.prep import PreparedGeometryFactory
+from org.locationtech.jts.simplify import DouglasPeuckerSimplifier as DP
+from org.locationtech.jts.simplify import TopologyPreservingSimplifier as TP
+from org.locationtech.jts.densify import Densifier
+from org.locationtech.jts.triangulate import DelaunayTriangulationBuilder
+from org.locationtech.jts.triangulate import VoronoiDiagramBuilder
+from org.locationtech.jts.operation.buffer import BufferOp, BufferParameters
 from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
 from geoscript.geom.bounds import Bounds

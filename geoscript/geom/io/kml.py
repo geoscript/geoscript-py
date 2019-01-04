@@ -1,5 +1,5 @@
 from geoscript.util import xml
-from com.vividsolutions.jts.geom import GeometryCollection
+from org.locationtech.jts.geom import GeometryCollection
 
 def writeKML(g, format=True, xmldecl=False, namespaces=True):
   """

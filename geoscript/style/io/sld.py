@@ -1,6 +1,6 @@
 import sys
 from geoscript import util
-from org.geotools.styling import SLDTransformer
+from org.geotools.xml.styling import SLDTransformer
 
 def writeSLD(style, out=sys.stdout, format=True):
   tx = SLDTransformer()

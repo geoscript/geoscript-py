@@ -9,7 +9,7 @@ from geoscript.feature import Feature
 from geoscript.layer.band import Band
 from org.opengis.parameter import GeneralParameterValue
 from org.opengis.referencing.datum import PixelInCell
-from org.geotools.factory import Hints
+from org.geotools.util.factory import Hints
 from org.geotools.geometry import DirectPosition2D
 from org.geotools.parameter import Parameter
 from org.geotools.coverage import CoverageFactoryFinder, GridSampleDimension

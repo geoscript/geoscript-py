@@ -2,7 +2,7 @@ import unittest
 from .util import assertClose
 from geoscript import geom
 from geoscript.util import bytes
-from com.vividsolutions.jts.geom import Coordinate, GeometryFactory
+from org.locationtech.jts.geom import Coordinate, GeometryFactory
 
 class GeomTest(unittest.TestCase):
 
@@ -58,25 +58,25 @@ class GeomTest(unittest.TestCase):
 
   def testCircularString(self):
     cs = geom.CircularString([6.12, 10.0],[7.07, 7.07],[10.0, 0.0])
-    self.assertEqual('CIRCULARSTRING(6.12 10.0, 7.07 7.07, 10.0 0.0)', str(cs))
+    self.assertEqual('CIRCULARSTRING (6.12 10.0, 7.07 7.07, 10.0 0.0)', str(cs))
   
   def testCircularRing(self):
     cr = geom.CircularRing( [2.0, 1.0], [1.0, 2.0], [0.0, 1.0], [1.0, 0.0], [2.0, 1.0])
-    self.assertEqual('CIRCULARSTRING(2.0 1.0, 1.0 2.0, 0.0 1.0, 1.0 0.0, 2.0 1.0)', str(cr))
+    self.assertEqual('CIRCULARSTRING (2.0 1.0, 1.0 2.0, 0.0 1.0, 1.0 0.0, 2.0 1.0)', str(cr))
 
   def testCompoundCurve(self):
     cc = geom.CompoundCurve(
         geom.CircularString([10.0, 10.0], [0.0, 20.0], [-10.0, 10.0]),
         geom.LineString([-10.0, 10.0], [-10.0, 0.0], [10.0, 0.0], [5.0, 5.0])
     )
-    self.assertEqual('COMPOUNDCURVE(CIRCULARSTRING(10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 5.0 5.0))', str(cc))
+    self.assertEqual('COMPOUNDCURVE (CIRCULARSTRING (10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 5.0 5.0))', str(cc))
 
   def testCompoundRing(self):
     cc = geom.CompoundRing(
         geom.CircularString([10.0, 10.0], [0.0, 20.0], [-10.0, 10.0]),
         geom.LineString([-10.0, 10.0], [-10.0, 0.0], [10.0, 0.0], [10.0, 10.0])
     )
-    self.assertEqual('COMPOUNDCURVE(CIRCULARSTRING(10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 10.0 10.0))', str(cc))
+    self.assertEqual('COMPOUNDCURVE (CIRCULARSTRING (10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 10.0 10.0))', str(cc))
 
   def testBounds(self):
     b = geom.Bounds(1.0, 2.0, 3.0, 4.0)

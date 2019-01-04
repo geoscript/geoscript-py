@@ -48,7 +48,7 @@ class Workspace:
     >>> l1 = ws.create('foo')
     >>> l2 = ws.create('bar')
     >>> ws.layers()
-    ['foo', 'bar']
+    ['bar', 'foo']
     """
 
     return [str(tn) for tn in self._store.typeNames]
@@ -99,7 +99,7 @@ class Workspace:
      >>> from geoscript.feature import Schema
      >>> l2 = ws.create(schema=Schema('bar', [('geom', geom.Point)]))
      >>> ws.layers()
-     ['foo', 'bar']
+     ['bar', 'foo']
      """
  
      if not name:

@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import MultiPolygon as _MultiPolygon
+from org.locationtech.jts.geom import MultiPolygon as _MultiPolygon
 from geoscript import core
 from polygon import Polygon
 import geom

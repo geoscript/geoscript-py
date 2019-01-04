@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import Polygon as _Polygon
+from org.locationtech.jts.geom import Polygon as _Polygon
 from geoscript import core
 from linearring import LinearRing
 import geom

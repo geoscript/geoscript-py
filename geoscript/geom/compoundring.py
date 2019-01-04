@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import Coordinate
+from org.locationtech.jts.geom import Coordinate
 from org.geotools.geometry.jts import CompoundRing as _CompoundRing
 from org.geotools.geometry.jts import CurvedGeometryFactory
 from linestring import LineString
@@ -14,7 +14,7 @@ class CompoundRing(_CompoundRing):
     *linestrings* is a variable list of ``LineStrings`` or ``CircularStrings`` arguments.
 
     >>> CompoundRing(CircularString([10.0, 10.0], [0.0, 20.0], [-10.0, 10.0]),LineString([-10.0, 10.0], [-10.0, 0.0], [10.0, 0.0], [10.0, 10.0]))
-    COMPOUNDCURVE(CIRCULARSTRING(10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 10.0 10.0))
+    COMPOUNDCURVE (CIRCULARSTRING (10.0 10.0, 0.0 20.0, -10.0 10.0), (-10.0 10.0, -10.0 0.0, 10.0 0.0, 10.0 10.0))
     """
 
     def __init__(self, *linestrings):

@@ -1,5 +1,5 @@
-from com.vividsolutions.jts.geom import Coordinate
-from com.vividsolutions.jts.geom import Point as _Point
+from org.locationtech.jts.geom import Coordinate
+from org.locationtech.jts.geom import Point as _Point
 from geoscript import core
 import geom
 

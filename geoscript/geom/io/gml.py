@@ -13,7 +13,7 @@ def writeGML(g, ver=2, format=True, xmldecl=False):
 
   >>> from geoscript.geom import Point 
   >>> writeGML(Point(1,2), format=False)
-  u'<gml:Point xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:gml="http://www.opengis.net/gml"><gml:coord><gml:X>1.0</gml:X><gml:Y>2.0</gml:Y></gml:coord></gml:Point>'
+  u'<gml:Point xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink"><gml:coord><gml:X>1.0</gml:X><gml:Y>2.0</gml:Y></gml:coord></gml:Point>'
   """
   el = g.getGeometryType()
   

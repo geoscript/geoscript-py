@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import MultiLineString as _MultiLineString
+from org.locationtech.jts.geom import MultiLineString as _MultiLineString
 from linestring import LineString
 from geoscript import core
 import geom

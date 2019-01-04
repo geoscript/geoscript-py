@@ -1,4 +1,4 @@
-from com.vividsolutions.jts.geom import Coordinate
+from org.locationtech.jts.geom import Coordinate
 from org.geotools.geometry.jts import CircularString as _CircularString
 from org.geotools.geometry.jts import CurvedGeometryFactory
 from java.lang import Double
@@ -12,7 +12,7 @@ class CircularString(_CircularString):
     *coords* is a variable list of ``list``/``tuple`` arguments.
 
     >>> CircularString([1,1], [5,5], [2,2])
-    CIRCULARSTRING(1.0 1.0, 5.0 5.0, 2.0 2.0)
+    CIRCULARSTRING (1.0 1.0, 5.0 5.0, 2.0 2.0)
     """
 
     def __init__(self, *coords):
