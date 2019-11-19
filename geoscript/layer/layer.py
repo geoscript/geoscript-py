@@ -11,7 +11,7 @@ from geoscript.layer.stats import Stats
 from geoscript.util.data import readFeatures
 from org.geoscript.util import CollectionDelegatingFeatureSource
 from org.geotools.data import FeatureSource, FeatureStore
-from org.geotools.data import DefaultQuery, Query, Transaction
+from org.geotools.data import Query, Transaction
 from org.geotools.factory import CommonFactoryFinder
 from org.geotools.util.factory import Hints
 from org.geotools.feature import FeatureCollection, FeatureCollections
@@ -126,7 +126,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    count = self._source.getCount(DefaultQuery(self.name, f._filter))
+    count = self._source.getCount(Query(self.name, f._filter))
     if count == -1:
       count = 0
       # calculate manually 
@@ -154,7 +154,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    q = DefaultQuery(self.name, f._filter)
+    q = Query(self.name, f._filter)
     e = self._source.getBounds(q)
 
     if not e:
@@ -262,7 +262,7 @@ class Layer(object):
     """
 
     f = Filter(filter) if filter else Filter.PASS
-    q = DefaultQuery(self.name, f._filter)
+    q = Query(self.name, f._filter)
     if sort:
       sort = sort if isinstance(sort, list) else [sort]
       sortBy = [] 
@@ -433,7 +433,7 @@ class Layer(object):
     rlayer = self.workspace.create(schema=rschema)
 
     # create a query specifying that feautres should be reprojected
-    q = DefaultQuery(self.name, Filter.PASS._filter)
+    q = Query(self.name, Filter.PASS._filter)
     if self.proj:
       q.coordinateSystem = self.proj._crs
     q.coordinateSystemReproject = prj._crs 
@@ -482,7 +482,7 @@ class Layer(object):
     # create the filtered layer
     flayer = self.workspace.create(schema=fschema)
 
-    q = DefaultQuery(self.name, f._filter)
+    q = Query(self.name, f._filter)
 
     # loop through features and add to new filtered layer
     fit = self._source.getFeatures(q).features()
