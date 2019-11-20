@@ -1,5 +1,5 @@
 from geoscript.filter import Filter
-from org.geotools.data import DefaultQuery, Query
+from org.geotools.data import Query
 
 class Stats(object):
 
@@ -52,7 +52,7 @@ class Stats(object):
     # concatenate with one passed in
     fil += self._filter(filter)
 
-    q = DefaultQuery(self.layer.name)
+    q = Query(self.layer.name)
     q.setFilter(fil._filter)
 
     min, max = None, None
