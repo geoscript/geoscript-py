@@ -1,4 +1,5 @@
 import mimetypes
+import mimetypes
 from geoscript.util import toURL
 from geoscript.style import util
 from geoscript.style.symbolizer import Symbolizer
@@ -37,7 +38,7 @@ class Icon(Symbolizer):
     g = util.graphic(sym)
     if self.size:
         g.size = self.size.expr
-    g.setMarks([])
+    g.graphicalSymbols().clear()
     if g:
       g.graphicalSymbols().add(eg)
 

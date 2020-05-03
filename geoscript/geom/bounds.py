@@ -31,7 +31,7 @@ class Bounds(ReferencedEnvelope):
         ReferencedEnvelope.__init__(self)
 
   def getwest(self):
-    return self.minX()
+    return self.getMinX()
   west = property(getwest,None,None,'The leftmost/westmost oordinate of the bounds.')
   
 
@@ -41,7 +41,7 @@ class Bounds(ReferencedEnvelope):
   l = property(get_l, None, None, "Use west.")
 
   def getsouth(self):
-    return self.minY()
+    return self.getMinY()
   south = property(getsouth,None,None,'The bottomtmost/southmost oordinate of the bounds.')
 
   @deprecated
@@ -50,7 +50,7 @@ class Bounds(ReferencedEnvelope):
   b = property(get_b, None, None, "Use south.")
 
   def geteast(self):
-    return self.maxX()
+    return self.getMaxX()
   east = property(geteast,None,None,'The rightmost/eastmost oordinate of the bounds.')
 
   @deprecated
@@ -59,7 +59,7 @@ class Bounds(ReferencedEnvelope):
   r = property(get_r, None, None, 'Use east.')
 
   def getnorth(self):
-    return self.maxY()
+    return self.getMaxY()
   north = property(getnorth,None,None,'The topmost/northmost oordinate of the bounds.')
 
   @deprecated

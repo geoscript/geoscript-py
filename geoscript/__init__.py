@@ -2,7 +2,6 @@ import sys
 from java.lang import System
 
 try:
-   import org.geotools
    from org.geotools.util.factory import Hints
 
    # by default the geotools referenceing Systemtem assumes yx or lat/lon 

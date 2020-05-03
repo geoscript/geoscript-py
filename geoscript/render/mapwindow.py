@@ -3,7 +3,7 @@ from java.awt import image
 from javax import swing
 from geoscript import geom, proj, style 
 from org.geotools.geometry.jts import ReferencedEnvelope
-from org.geotools.map import DefaultMapContext, DefaultMapLayer
+from org.geotools.map import MapContent, Layer
 from org.geotools.renderer.lite import StreamingRenderer
 from org.geotools.swing import JMapPane
 from org.geotools.swing.action import *
@@ -20,11 +20,12 @@ class MapWindow:
       pass   
 
    def render(self, layers, styles, bounds, size, **options):
-      self.map = DefaultMapContext(bounds.proj._crs)
-      self.map.setAreaOfInterest(bounds)
+      self.map = MapContent()
+      self.map.getViewport().setCoordinateReferenceSystem(bounds.proj._crs)
+      self.map.getViewport().setBounds(bounds)
 
       for i in range(len(layers)):
-        self.map.addLayer(DefaultMapLayer(layers[i]._source,styles[i]._style()))
+        self.map.addLayer(Layer(layers[i]._source,styles[i]._style()))
 
       w,h = (size[0], size[1]) 
 
