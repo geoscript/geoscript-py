@@ -8,7 +8,7 @@ class GeoTIFF_Test:
 
   def testBounds(self):
     assert self.tif.bounds() is not None
-    assert self.tif.bounds().west == 589980.0
+    assert self.tif.bounds().getwest() == 589980.0
     assert self.tif.bounds().south == 4913700.0
     assert self.tif.bounds().east == 609000.0
     assert self.tif.bounds().north == 4928010.0

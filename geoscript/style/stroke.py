@@ -93,7 +93,7 @@ class Stroke(Symbolizer):
   def _prepare(self, rule):
     sym = self.factory.createLineSymbolizer()
     self._apply(sym) 
-    rule.addSymbolizer(sym)
+    rule.symbolizers().add(sym)
     
   def _apply(self, sym):
     Symbolizer._apply(self, sym)

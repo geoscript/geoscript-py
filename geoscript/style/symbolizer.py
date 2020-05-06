@@ -93,7 +93,7 @@ class Symbolizer(object):
         for fil in ftbl.keys():
           syms = ftbl[fil]
           rule = self.factory.createRule() 
-          fts.addRule(rule)
+          fts.rules().add(rule)
           if scale[0] > -1:
             rule.setMinScaleDenominator(scale[0])
           if scale[1] > -1:

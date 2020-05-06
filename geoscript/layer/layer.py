@@ -14,7 +14,7 @@ from org.geotools.data import FeatureSource, FeatureStore
 from org.geotools.data import Query, Transaction
 from org.geotools.factory import CommonFactoryFinder
 from org.geotools.util.factory import Hints
-from org.geotools.feature import FeatureCollection, FeatureCollections
+from org.geotools.feature import FeatureCollection, DefaultFeatureCollection
 from org.opengis.filter.sort import SortOrder
 
 _filterFactory = CommonFactoryFinder.getFilterFactory(None)
@@ -162,7 +162,7 @@ class Layer(object):
       fc = self._source.getFeatures(q)
       e = fc.getBounds()
     if e:
-      if e.crs():
+      if e.getCoordinateReferenceSystem():
         return geom.Bounds(env=e)
       else:
         return geom.Bounds(env=e, prj=self.proj)
@@ -367,7 +367,7 @@ class Layer(object):
     elif isinstance(o, (dict,list)):
       f = self.schema.feature(o)
       
-    fc = FeatureCollections.newCollection() 
+    fc = DefaultFeatureCollection()
     fc.add(f._feature)
     self._source.addFeatures(fc)
 

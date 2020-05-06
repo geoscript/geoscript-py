@@ -8,11 +8,11 @@ This section describes how to set up a GeoScript development environment.
 Install Jython
 --------------
 
-Jython version 2.5.1 or greater is required for GeoScript. 
+Jython version 2.7.2 or greater is required for GeoScript.
 
 * Install `Jython <http://www.jython.org/downloads.html>`_
 
-  For the remainder of the document the Jython installation root will be referred to as ``JYTHON_HOME``.
+  For the remainder of the document the Jython installation root will be referred to as ``JYTHON_HOME_DIR``.
 
 Install setuptools 
 ------------------
@@ -20,7 +20,7 @@ Install setuptools
 #. Downlaod `ez_setup.py <http://peak.telecommunity.com/dist/ez_setup.py>`_
 #. Execute :file:`ez_setup.py` with the :command:`jython` command::
 
-     $ <JYTHON_HOME>/bin/jython ez_setup.py
+     $ <JYTHON_HOME_DIR>/bin/jython ez_setup.py
 
   Upon success :file:`<JYTYON_HOME>/bin/easy_install` will be created.
 
@@ -33,11 +33,11 @@ Install virtualenv
 
 #. Using :file:`easy_install` installed in the previous section easy install the virtualenv library::
 
-    $ <JYTHON_HOME>/bin/easy_install virtualenv
+    $ <JYTHON_HOME_DIR>/bin/easy_install virtualenv
 
 #. Create a new virtualenv named ``geoscript``::
 
-    $ <JYTHON_HOME>/bin/virtualenv geoscript
+    $ <JYTHON_HOME_DIR>/bin/virtualenv geoscript
 
 #. Activate the ``geoscript`` virtualenv::
 
@@ -102,7 +102,7 @@ GeoScript also requires a few Python dependencies.
 
 * Easy install py-dom-xpath::
 
-     (geoscript)$ easy_install py-dom-xpath
+     (geoscript)$ easy_install py-dom-xpath-redux
 
 Install nose
 ------------

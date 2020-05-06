@@ -14,3 +14,7 @@ env
 tests/dbexts.ini
 scripts
 site
+.idea/
+*.iml
+build/
+*.jython_cache

@@ -3,7 +3,7 @@ from java.awt import image
 from geoscript import geom, proj, style 
 from geoscript.layer import Raster
 from org.geotools.geometry.jts import ReferencedEnvelope
-from org.geotools.map import DefaultMapContext, DefaultMapLayer
+from org.geotools.map import MapContent, FeatureLayer, GridCoverageLayer
 from org.geotools.renderer.lite import StreamingRenderer
 
 class RendererBase:
@@ -12,13 +12,16 @@ class RendererBase:
    """
 
    def render(self, layers, styles, bounds, size, **options):
-      self.map = DefaultMapContext(bounds.proj._crs)
-      self.map.setAreaOfInterest(bounds)
+      self.map = MapContent()
+      self.map.getViewport().setCoordinateReferenceSystem(bounds.proj._crs)
+      self.map.getViewport().setBounds(bounds)
 
       for i in range(len(layers)): 
-        l = layers[i] 
+        l = layers[i]
+
         data = l._coverage if isinstance(l,Raster) else l._source
-        self.map.addLayer(DefaultMapLayer(data, styles[i]._style()))
+        mapLayer = GridCoverageLayer(data, styles[i]._style()) if isinstance(l,Raster) else FeatureLayer(data, styles[i]._style())
+        self.map.addLayer(mapLayer)
 
       w,h = (size[0], size[1]) 
 
@@ -27,7 +30,7 @@ class RendererBase:
       
       renderer = StreamingRenderer()
       renderer.setJava2DHints(awt.RenderingHints(hints))
-      renderer.setContext(self.map)
+      renderer.setMapContent(self.map)
 
       img = image.BufferedImage(w, h, image.BufferedImage.TYPE_INT_ARGB)
       g = img.getGraphics()

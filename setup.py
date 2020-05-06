@@ -44,9 +44,9 @@ setup(cmdclass={'src': SrcCmd, 'doc': DocCmd},
       description='GeoScript Python',
       author='Justin Deoliveira',
       author_email='jdeolive@opengeo.org',
-      url='http://geoscript.org',
+      url='http://geoscript.net',
       packages=find_packages(),
       data_files=[('jars', jars)],
-      scripts=['bin/geoscript-classpath', 'bin/geoscript', 'bin/geoscript.bat']
+      scripts=['bin/geoscript-py-classpath', 'bin/geoscript-py', 'bin/geoscript-py.bat']
      )
 
