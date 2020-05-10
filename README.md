@@ -6,8 +6,8 @@ Pre-requisites
 
 Running geoscript-py requires:
 
-* [Java 1.6+](https://www.java.com/en/download/)
-* [Jython 2.5.1+](http://www.jython.org/downloads.html)
+* [Java 1.8+](https://www.java.com/en/download/)
+* [Jython 2.7.1+](http://www.jython.org/downloads.html)
 
 
 Developing
