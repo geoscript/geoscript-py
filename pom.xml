@@ -4,7 +4,7 @@
     <groupId>org.geoscript</groupId>
     <artifactId>geoscript-py</artifactId>
     <packaging>jar</packaging>
-    <version>1.5.0</version>
+    <version>1.6-SNAPSHOT</version>
     <name>GeoScript Python</name>
     <repositories>
         <repository>
@@ -325,6 +325,6 @@
         </profile>
     </profiles>
     <properties>
-        <gt.version>22.0</gt.version>
+        <gt.version>23.0</gt.version>
     </properties>
 </project>
