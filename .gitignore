@@ -12,7 +12,6 @@ dist
 *.swp
 env
 tests/dbexts.ini
-scripts
 site
 .idea/
 *.iml

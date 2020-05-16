@@ -22,7 +22,6 @@ def writeJSON(obj, output=sys.stdout):
   >>> 
   >>> out = file(os.devnull, 'w')
   >>> writeJSON(l, output=out)
-  >>> writeJSON(l.cursor('INTERSECTS(geom, POINT (1 2))'), output=out)
   """
   
   fcol = obj._fcol if isinstance(obj,Cursor) else obj._source.getFeatures()
