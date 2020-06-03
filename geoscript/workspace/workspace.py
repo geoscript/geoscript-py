@@ -5,7 +5,7 @@ The :mod:`workspace.workspace` module provides layer access and manipulation.
 from org.geotools.data import DataStore
 from geoscript.layer import Layer
 from geoscript.filter import Filter
-from geoscript.util.data import readFeatures
+from geoscript.util.data import readFeatures, readFeaturesWithChangedGeometry
 from geoscript import core, geom, feature
 
 class Workspace:
@@ -168,7 +168,10 @@ class Workspace:
            if features.isEmpty():
              break
 
-           l._source.addFeatures(features)
+           if (l.schema.geom.name != layer.schema.geom.name):
+              l._source.addFeatures(readFeaturesWithChangedGeometry(features.features(), layer._source.getSchema(), l._source.getSchema(), chunk))
+           else:
+              l._source.addFeatures(features)
 
          return l
        finally:
