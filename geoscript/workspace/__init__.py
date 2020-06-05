@@ -17,4 +17,5 @@ Teradata = _import('teradata', 'Teradata')
 Property = _import('property', 'Property')
 Oracle = _import('oracle', 'Oracle')
 GeoPackage = _import('geopackage', 'GeoPackage')
+Geobuf = _import('geobuf', 'Geobuf')
 
