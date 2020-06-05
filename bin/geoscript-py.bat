@@ -21,7 +21,7 @@ FOR /f "tokens=*" %%X IN ('%JYTHON_EXE% %~dp0geoscript-py-classpath') DO (
 %JYTHON_EXE%
 SET JYTHON_EXE=
 
-:NO_JYTHON_HOME
+:NO_JYTHON_HOME_DIR
 ECHO Error, JYTHON_HOME_DIR is unset. Please set JYTHON_HOME_DIR to root of Jython installation.
 GOTO DONE
 

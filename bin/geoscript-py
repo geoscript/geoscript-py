@@ -2,7 +2,7 @@
 
 JYTHON=""
 if [ "$JYTHON_HOME_DIR" != "" ] && [ -e $JYTHON_HOME_DIR/jython ]; then
-  JYTHON=$JYTHON_HOME/bin/jython
+  JYTHON=$JYTHON_HOME_DIR/bin/jython
 else
   which jython > /dev/null
   if [ "$?" == "1" ]; then
