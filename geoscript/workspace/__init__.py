@@ -18,4 +18,4 @@ Property = _import('property', 'Property')
 Oracle = _import('oracle', 'Oracle')
 GeoPackage = _import('geopackage', 'GeoPackage')
 Geobuf = _import('geobuf', 'Geobuf')
-
+FlatGeobuf = _import('flatgeobuf', 'FlatGeobuf')
