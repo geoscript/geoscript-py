@@ -230,5 +230,4 @@ class GeomTest(unittest.TestCase):
   def testRandomPoints(self):
     polygon = geom.buffer(geom.Point(1153461.34, 649950.30), 100)
     pts = geom.randomPoints(polygon, 10)
-    print(str(pts))
     assert pts.getNumGeometries() == 10
