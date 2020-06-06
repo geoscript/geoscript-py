@@ -227,4 +227,8 @@ class GeomTest(unittest.TestCase):
     subLine = line.subLine(0.33, 0.67)
     assert "LINESTRING (1156010.153864557 649246.3016361536, 1175115.6870342216 648021.5879714314)" == str(subLine)
 
-
+  def testRandomPoints(self):
+    polygon = geom.buffer(geom.Point(1153461.34, 649950.30), 100)
+    pts = geom.randomPoints(polygon, 10)
+    print(str(pts))
+    assert pts.getNumGeometries() == 10

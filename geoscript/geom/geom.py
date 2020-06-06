@@ -14,6 +14,7 @@ from org.locationtech.jts.triangulate import VoronoiDiagramBuilder
 from org.locationtech.jts.operation.buffer import BufferOp, BufferParameters
 from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
+from org.locationtech.jts.shape.random import RandomPointsBuilder
 from geoscript.geom.bounds import Bounds
 
 _factory = GeometryFactory()
@@ -152,6 +153,19 @@ def buffer(g, distance, singleSided=False):
   bp.setSingleSided(singleSided)
   
   return BufferOp.bufferOp(g, distance, bp) 
+
+def randomPoints(g, number):
+  """
+  Create a number of random Points within the given Geometry
+
+  *g* The constraining Geometry
+
+  *number* The number of Points to create
+  """
+  builder = RandomPointsBuilder(GeometryFactory())
+  builder.setExtent(g)
+  builder.numPoints = number
+  return builder.getGeometry()
 
 def _bounds(g):
   return Bounds(env=g.getEnvelopeInternal())
