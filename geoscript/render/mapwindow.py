@@ -5,9 +5,9 @@ from geoscript import geom, proj, style
 from org.geotools.geometry.jts import ReferencedEnvelope
 from org.geotools.map import MapContent, Layer
 from org.geotools.renderer.lite import StreamingRenderer
+from org.geotools.swing.action import ZoomInAction, ZoomOutAction, PanAction, ResetAction, InfoAction
+from org.geotools.swing.control import JMapStatusBar
 from org.geotools.swing import JMapPane
-from org.geotools.swing.action import *
-from org.geotools.swing.control import *
 
 class MapWindow:
    """
