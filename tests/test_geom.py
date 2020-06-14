@@ -231,3 +231,8 @@ class GeomTest(unittest.TestCase):
     polygon = geom.buffer(geom.Point(1153461.34, 649950.30), 100)
     pts = geom.randomPoints(polygon, 10)
     assert pts.getNumGeometries() == 10
+
+  def testCreateSierpinskiCarpet(self):
+    bounds = geom.Bounds(-180,-90,180,90)
+    sierpinskiCarpet = geom.createSierpinskiCarpet(bounds, 50)
+    assert sierpinskiCarpet.getNumGeometries() > 0

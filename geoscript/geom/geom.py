@@ -15,6 +15,7 @@ from org.locationtech.jts.operation.buffer import BufferOp, BufferParameters
 from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
 from org.locationtech.jts.shape.random import RandomPointsBuilder
+from org.locationtech.jts.shape.fractal import SierpinskiCarpetBuilder
 from geoscript.geom.bounds import Bounds
 
 _factory = GeometryFactory()
@@ -165,6 +166,19 @@ def randomPoints(g, number):
   builder = RandomPointsBuilder(GeometryFactory())
   builder.setExtent(g)
   builder.numPoints = number
+  return builder.getGeometry()
+
+def createSierpinskiCarpet(b, numberOfPoints):
+  """
+  Create a Sierpinski Carpet
+
+  *g* The Bounds
+
+  *number* The number of Points
+  """
+  builder = SierpinskiCarpetBuilder(GeometryFactory())
+  builder.extent = b
+  builder.numPoints = numberOfPoints
   return builder.getGeometry()
 
 def _bounds(g):
