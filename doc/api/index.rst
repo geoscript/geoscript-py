@@ -9,6 +9,7 @@ API Reference
    proj
    feature/index
    filter
+   spatial_index
    function
    process
    layer/index
