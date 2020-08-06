@@ -16,6 +16,7 @@ from org.geotools.geometry.jts import JTS
 from org.geotools.referencing.operation.transform import AffineTransform2D
 from org.locationtech.jts.shape.random import RandomPointsBuilder
 from org.locationtech.jts.shape.fractal import SierpinskiCarpetBuilder
+from org.locationtech.jts.operation.buffer import VariableBuffer
 from geoscript.geom.bounds import Bounds
 
 _factory = GeometryFactory()
@@ -154,6 +155,21 @@ def buffer(g, distance, singleSided=False):
   bp.setSingleSided(singleSided)
   
   return BufferOp.bufferOp(g, distance, bp) 
+
+def variableBuffer(g, distances):
+  """
+  Computes a buffer with variable distances.
+
+  *g* is the :class:`Geometry <geoscript.geom.Geometry>` to buffer.
+
+  *distances* is an array of buffer distances
+  """
+  if len(distances) == 2:
+    return VariableBuffer.buffer(g, distances[0], distances[1])
+  elif len(distances) == 3:
+    return VariableBuffer.buffer(g, distances[0], distances[1], distances[2])
+  else:
+    return VariableBuffer.buffer(g, distances)
 
 def randomPoints(g, number):
   """

@@ -236,3 +236,14 @@ class GeomTest(unittest.TestCase):
     bounds = geom.Bounds(-180,-90,180,90)
     sierpinskiCarpet = geom.createSierpinskiCarpet(bounds, 50)
     assert sierpinskiCarpet.getNumGeometries() > 0
+
+  def testVariableBuffer(self):
+    line = geom.LineString((1,2), (10,20), (30,50), (100, 150))
+    buffer = geom.variableBuffer(line, [10,50])
+    assert str(buffer).startswith("POLYGON")
+
+    buffer = geom.variableBuffer(line, [10, 20, 50])
+    assert str(buffer).startswith("POLYGON")
+
+    buffer = geom.variableBuffer(line, [10, 20, 50, 75])
+    assert str(buffer).startswith("POLYGON")
