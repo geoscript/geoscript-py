@@ -11,7 +11,11 @@ from compoundcurve import CompoundCurve
 from compoundring import CompoundRing
 from bounds import Bounds
 from geom import Geometry
-from geom import prepare, simplify, densify, transform, buffer, delaunay, voronoi, randomPoints, createSierpinskiCarpet, variableBuffer
+from geom import prepare, simplify, densify, transform, buffer, delaunay, voronoi, randomPoints, \
+    createSierpinskiCarpet, \
+    variableBuffer, \
+    getLargestEmptyCircle, \
+    getMaximumInscribedCircle
 from io.wkt import readWKT, writeWKT, fromWKT
 from io.wkb import readWKB, writeWKB, fromWKB, toWKB
 from io.json import writeJSON, readJSON

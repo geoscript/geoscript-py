@@ -237,6 +237,22 @@ class GeomTest(unittest.TestCase):
     sierpinskiCarpet = geom.createSierpinskiCarpet(bounds, 50)
     assert sierpinskiCarpet.getNumGeometries() > 0
 
+  def testGetLargestEmptyCircle(self):
+    g = geom.readWKT("POLYGON ((-122.38855361938475 47.5805786829606, -122.38636493682861 47.5783206388176, " +
+                                     "-122.38700866699219 47.5750491969984, -122.38177299499512 47.57502024527343, " +
+                                     "-122.38481998443604 47.5780600889959, -122.38151550292969 47.5805786829606, " +
+                                     "-122.38855361938475 47.5805786829606))")
+    circle = geom.getLargestEmptyCircle(g)
+    assert str(circle).startswith("POLYGON")
+
+  def testGetMaximumInscribedCircle(self):
+      g = geom.readWKT("POLYGON ((-122.38855361938475 47.5805786829606, -122.38636493682861 47.5783206388176, " +
+                                       "-122.38700866699219 47.5750491969984, -122.38177299499512 47.57502024527343, " +
+                                       "-122.38481998443604 47.5780600889959, -122.38151550292969 47.5805786829606, " +
+                                       "-122.38855361938475 47.5805786829606))")
+      circle = geom.getMaximumInscribedCircle(g)
+      assert str(circle).startswith("POLYGON")
+
   def testVariableBuffer(self):
     line = geom.LineString((1,2), (10,20), (30,50), (100, 150))
     buffer = geom.variableBuffer(line, [10,50])
