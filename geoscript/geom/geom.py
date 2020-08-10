@@ -17,6 +17,8 @@ from org.geotools.referencing.operation.transform import AffineTransform2D
 from org.locationtech.jts.shape.random import RandomPointsBuilder
 from org.locationtech.jts.shape.fractal import SierpinskiCarpetBuilder
 from org.locationtech.jts.operation.buffer import VariableBuffer
+from org.locationtech.jts.algorithm.construct import LargestEmptyCircle
+from org.locationtech.jts.algorithm.construct import MaximumInscribedCircle
 from geoscript.geom.bounds import Bounds
 
 _factory = GeometryFactory()
@@ -196,6 +198,18 @@ def createSierpinskiCarpet(b, numberOfPoints):
   builder.extent = b
   builder.numPoints = numberOfPoints
   return builder.getGeometry()
+
+def getLargestEmptyCircle(g, tolerance = 1.0):
+  algorithm = LargestEmptyCircle(g, tolerance)
+  radiusLineString = algorithm.getRadiusLine()
+  centerPoint = radiusLineString.getStartPoint()
+  return centerPoint.buffer(radiusLineString.getLength())
+
+def getMaximumInscribedCircle(g, tolerance = 1.0):
+  algorithm = MaximumInscribedCircle(g, tolerance)
+  radiusLineString = algorithm.getRadiusLine()
+  centerPoint = radiusLineString.getStartPoint()
+  return centerPoint.buffer(radiusLineString.getLength())
 
 def _bounds(g):
   return Bounds(env=g.getEnvelopeInternal())
