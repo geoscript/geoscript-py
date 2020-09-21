@@ -10,6 +10,6 @@ The current stable release of GeoScript PY is 1.7.0. Select a file to download f
 
 .. cssclass:: external
 
-    * `tar.gz <https://github.com/geoscript/geoscript-py/releases/download/v1.6.0/geoscript-1.7.0.tar.gz>`_
+    * `tar.gz <https://github.com/geoscript/geoscript-py/releases/download/v1.7.0/geoscript-1.7.0.tar.gz>`_
 
-    * `zip <https://github.com/geoscript/geoscript-py/releases/download/v1.6.0/geoscript-1.7.0.zip>`_
+    * `zip <https://github.com/geoscript/geoscript-py/releases/download/v1.7.0/geoscript-1.7.0.zip>`_
