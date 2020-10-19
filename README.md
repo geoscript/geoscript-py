@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/geoscript/geoscript-py.svg?branch=master)](https://travis-ci.org/geoscript/geoscript-py)
 
+[![Build Status](https://github.com/geoscript/geoscript-py/workflows/Maven%20Build/badge.svg)](https://github.com/geoscript/geoscript-py/actions)
+
 geoscript-py README
 ===================
 
