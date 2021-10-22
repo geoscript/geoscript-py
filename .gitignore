@@ -17,3 +17,4 @@ site
 *.iml
 build/
 *.jython_cache
+.DS_Store

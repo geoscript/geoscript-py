@@ -6,7 +6,7 @@ import os
 from java import io, net
 from geoscript import util
 from geoscript.workspace import Workspace
-from org.geotools.data.flatgeobuf import FlatgeobufDataStoreFactory
+from org.geotools.data.flatgeobuf import FlatGeobufDataStoreFactory
 
 class FlatGeobuf(Workspace):
   """
@@ -17,8 +17,8 @@ class FlatGeobuf(Workspace):
 
   def __init__(self, dir=None):
     dir = dir or os.getcwd()
-    params = {'flatgeobuf-file': util.toFile(dir)}
-    Workspace.__init__(self, FlatgeobufDataStoreFactory(), params)
+    params = {'url': util.toURL(util.toFile(dir))}
+    Workspace.__init__(self, FlatGeobufDataStoreFactory(), params)
 
   def __repr__(self):
     return 'FlatGeobuf[%s]' % str(self._store.info.source.path)
