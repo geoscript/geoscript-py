@@ -8,7 +8,7 @@ This section describes how to set up a GeoScript development environment.
 Install Jython
 --------------
 
-Jython version 2.7.2 or greater is required for GeoScript.
+Jython version 2.7.3 or greater is required for GeoScript.
 
 * Install `Jython <http://www.jython.org/downloads.html>`_
 
